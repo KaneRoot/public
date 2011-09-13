@@ -6,8 +6,11 @@
 int main(int argc, char * argv[])
 {
 	SARBIN * truc = (SARBIN *) malloc(sizeof(SARBIN));
+	truc->g =  (SARBIN *) malloc(sizeof(SARBIN));
+	truc->d =  (SARBIN *) malloc(sizeof(SARBIN));
+	*truc->g->s = 10;
 	truc->s = 15;
-	printf("%d ;\n",truc->s);
+	printf("%d ;\n",(*truc->g->s));
 	free(truc);
 
 	return EXIT_SUCCESS;
