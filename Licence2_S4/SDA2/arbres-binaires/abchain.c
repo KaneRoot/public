@@ -10,10 +10,10 @@ typedef struct arbin
 } SARBIN;
 typedef SARBIN * sarbin;
 
-void main(int argc, char * argv[])
+int main(int argc, char * argv[])
 {
 	sarbin truc = (sarbin) malloc(sizeof(sarbin));
 	truc->s = 15;
 	printf("%d ;\n",truc->s);
-	exit(EXIT_SUCCESS);
+	return EXIT_SUCCESS;
 }
