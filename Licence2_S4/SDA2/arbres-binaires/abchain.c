@@ -1,18 +1,12 @@
+#include "abchain.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "abchain.h"
 
 int main(int argc, char * argv[])
 {
-	SARBIN * truc = (SARBIN *) malloc(sizeof(SARBIN));
-	truc->g =  (SARBIN *) malloc(sizeof(SARBIN));
-	truc->d =  (SARBIN *) malloc(sizeof(SARBIN));
-	*truc->g->s = 10;
-	truc->s = 15;
-	printf("%d ;\n",(*truc->g->s));
-	free(truc);
-
+	SARBIN * truc = creation_arbin();
+	printf("%d ;\n", truc->s);
 	return EXIT_SUCCESS;
 }
 
@@ -40,9 +34,13 @@ int r(SARBIN *a)
 }
 bool v(SARBIN *a)
 {
-	bool b = FAUX;
-	if( a->s == -1)
-		b = VRAI;
-
-	return b;
+	return (a == NULL) ? VRAI : FAUX;
+}
+SARBIN * creation_arbin()
+{
+	SARBIN * a = (SARBIN *) malloc(sizeof(SARBIN));
+	a->s = -1;
+	a->g = NULL;
+	a->d = NULL;
+	return a;
 }
