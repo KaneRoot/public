@@ -12,6 +12,9 @@ $(EXEC) : $(EXEC).o
 $(EXEC).o : $(EXEC).c $(EXEC).h
 	$(CC) -o $@ -c $< $(OPTIONS)
 
+%.o : %.c 
+	$(CC) -o $@ -c $< $(OPTIONS)
+
 clean:
 	@rm -rf *.o *.out
 mrproper: clean
