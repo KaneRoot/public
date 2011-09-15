@@ -21,3 +21,4 @@ SARBIN * creation_noeud(void);
 void ecrire(int);
 SARBIN * creation_arbre_trie(int*);
 SARBIN * insr(SARBIN *,int);
+void vidage(SARBIN *);
