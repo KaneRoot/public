@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#define NB_ELEMENTS_ARBRE 30
+#define NB_ELEMENTS_ARBRE 5
 
 int main(int argc, char * argv[])
 {
@@ -20,10 +20,15 @@ int main(int argc, char * argv[])
 	fprintf(stdout, "Création de l'arbre\n");
 	fprintf(stdout, "-------------------\n");
 	truc = creation_arbre_trie(x);
-	fprintf(stdout, "Parcours de l'arbre\n");
-	fprintf(stdout, "-------------------\n");
+	fprintf(stdout, "Parcours de l'arbre");
+	fprintf(stdout, "\n------INFIXE-------\n");
 	infixe(truc, ecrire);
+	fprintf(stdout, "\n------PREFIXE------\n");
+	prefixe(truc, ecrire);
+	fprintf(stdout, "\n------POSTFIXE-----\n");
+	postfixe(truc, ecrire);
 
+	fprintf(stdout, "\n-FIN DU PROGRAMME-\n");
 	free(x);
 	vidage(truc);
 
@@ -39,7 +44,25 @@ void infixe(SARBIN *a, void (*pr)(int))
 		infixe(ad(a),pr);
 	}
 }
+void prefixe(SARBIN *a, void (*pr)(int))
+{
+	if( v(a) == FAUX )
+	{
+		(*pr)(r(a));
+		prefixe(ag(a),pr);
+		prefixe(ad(a),pr);
+	}
+}
 
+void postfixe(SARBIN *a, void (*pr)(int))
+{
+	if( v(a) == FAUX )
+	{
+		postfixe(ag(a),pr);
+		postfixe(ad(a),pr);
+		(*pr)(r(a));
+	}
+}
 SARBIN * ag(SARBIN *a)
 {
 	return a->g;
@@ -66,7 +89,7 @@ SARBIN * creation_noeud()
 }
 void ecrire(int x)
 {
-	printf(" %d \n", x);
+	printf(" %d :", x);
 }
 SARBIN * creation_arbre_trie(int *x)
 {
@@ -81,7 +104,6 @@ SARBIN * creation_arbre_trie(int *x)
 }
 SARBIN * insr(SARBIN * a, int x)
 {
-	printf("insr : %d\n", x);
 	if( v(a) == VRAI )
 	{
 		a = creation_noeud();

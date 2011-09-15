@@ -13,6 +13,8 @@ typedef struct arbin
 } SARBIN;
 
 void infixe(SARBIN * a, void (*pr)(int));
+void prefixe(SARBIN * a, void (*pr)(int));
+void postfixe(SARBIN * a, void (*pr)(int));
 SARBIN * ag(SARBIN *);
 SARBIN * ad(SARBIN *);
 int r(SARBIN *);
