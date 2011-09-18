@@ -49,15 +49,10 @@ void test_ega()
 	int x3[] = { 14, 28, 35 };
 	int x4[] = { 14, 28, 35, 35 };
 
-	printf("a1\n");
 	SARBIN * a1 = creation_arbre_trie(x1,2);
-	printf("a2\n");
 	SARBIN * a2 = creation_arbre_trie(x1,2);
-	printf("a3\n");
 	SARBIN * a3 = creation_arbre_trie(x2,3);
-	printf("a4\n");
 	SARBIN * a4 = creation_arbre_trie(x3,3);
-	printf("a5\n");
 	SARBIN * a5 = creation_arbre_trie(x4,4);
 
 	assertion_ega(a1,a2,VRAI);
