@@ -6,7 +6,7 @@ EXEC = abchain
 
 all: $(EXEC)
 
-$(EXEC) : $(EXEC).o
+$(EXEC) : $(EXEC).o abchain-tests.o
 	$(CC) -o $@ $^ $(OPTIONS)
 
 $(EXEC).o : $(EXEC).c $(EXEC).h

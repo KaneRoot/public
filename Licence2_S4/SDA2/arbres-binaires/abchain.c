@@ -5,35 +5,19 @@
  *
  */
 #include "abchain.h"
+#include "abchain-tests.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#define NB_ELEMENTS_ARBRE 5
 
 int main(int argc, char * argv[])
 {
-	int i = 0;
-	int *x = (int *) malloc(sizeof(int*)*NB_ELEMENTS_ARBRE);
-	for(i = 0 ; i < NB_ELEMENTS_ARBRE ; i++)
-		*(x + i) = (i * 9) ;
-	SARBIN * truc;
-	fprintf(stdout, "Création de l'arbre\n");
-	fprintf(stdout, "-------------------\n");
-	truc = creation_arbre_trie(x);
-	fprintf(stdout, "Parcours de l'arbre");
-	fprintf(stdout, "\n------INFIXE-------\n");
-	infixe(truc, ecrire);
-	fprintf(stdout, "\n------PREFIXE------\n");
-	prefixe(truc, ecrire);
-	fprintf(stdout, "\n------POSTFIXE-----\n");
-	postfixe(truc, ecrire);
-
-	fprintf(stdout, "\n-FIN DU PROGRAMME-\n");
-	free(x);
-	vidage(truc);
-
+	//test1();
+	test_feuille();
+	test_ega();
 	return EXIT_SUCCESS;
 }
+
 
 void infixe(SARBIN *a, void (*pr)(int))
 {
@@ -91,12 +75,12 @@ void ecrire(int x)
 {
 	printf(" %d :", x);
 }
-SARBIN * creation_arbre_trie(int *x)
+SARBIN * creation_arbre_trie(int *x, int nb_elements)
 {
-	SARBIN * tmp = creation_noeud();
+	SARBIN * tmp = NULL;
 	int i;
 
-	for(i = 0 ; i < NB_ELEMENTS_ARBRE; i++)
+	for(i = 0 ; i < nb_elements ; i++)
 	{
 		tmp = insr(tmp,*(x + i));
 	}
@@ -110,9 +94,9 @@ SARBIN * insr(SARBIN * a, int x)
 		a->s = x;
 	}
 	else if(a->s > x)
-		 a->g = insr(ag(a),x);
+		a->g = insr(ag(a),x);
 	else
-		 a->d = insr(ad(a),x);
+		a->d = insr(ad(a),x);
 
 	return a;
 }
@@ -125,4 +109,26 @@ void vidage(SARBIN * a)
 			vidage(ad(a));
 			free(a);
 		}
+}
+bool feuille(SARBIN *a)
+{
+	return (v(a) == VRAI) ? FAUX : ((v(ag(a)) == VRAI) && (v(ad(a)) == VRAI)) ? VRAI : FAUX;
+}
+bool ega(SARBIN * a1, SARBIN * a2)
+{
+	bool res = VRAI;
+	if(v(a1) == VRAI && v(a2) == VRAI)
+		res = VRAI;
+	else if(v(a1) != v(a2))
+		res = FAUX;
+	else
+	{
+		printf("a1 -- a2 : %d -- %d\n",a1->s,a2->s);
+		if(a1->s != a2->s || 
+				ega(ag(a1),ag(a2)) == FAUX || 
+				ega(ad(a1),ad(a2)) == FAUX)
+			res = FAUX;
+	}
+
+	return res;
 }
