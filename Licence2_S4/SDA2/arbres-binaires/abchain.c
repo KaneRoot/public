@@ -4,6 +4,7 @@
  * 13/09/11
  *
  */
+#include "global.h"
 #include "abchain.h"
 #include "abchain-tests.h"
 #include <stdio.h>
@@ -14,7 +15,8 @@ int main(int argc, char * argv[])
 {
 	//test1();
 	//test_feuille();
-	test_ega();
+	//test_ega();
+	test_hauteur();
 	return EXIT_SUCCESS;
 }
 
@@ -129,4 +131,21 @@ bool ega(SARBIN * a1, SARBIN * a2)
 	}
 
 	return res;
+}
+int max(int a, int b)
+{
+	return (a>b) ? a : b;
+}
+int hauteur(SARBIN *a)
+{
+	int i = -1;
+	if( ! v(a))
+	{
+		i = 1 + max(hauteur(ag(a)),hauteur(ad(a)));
+	}
+	return i;	
+}
+bool complet(SARBIN *a)
+{
+	return VRAI;
 }

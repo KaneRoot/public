@@ -1,3 +1,4 @@
+#include "global.h"
 #include "abchain-tests.h"
 #include "abchain.h"
 #include <stdio.h>
@@ -44,6 +45,7 @@ void test_feuille()
 }
 void test_ega()
 {
+	int x[] = {};
 	int x1[] = { 14, 35 };
 	int x2[] = { 14, 35, 28 };
 	int x3[] = { 14, 28, 35 };
@@ -54,11 +56,14 @@ void test_ega()
 	SARBIN * a3 = creation_arbre_trie(x2,3);
 	SARBIN * a4 = creation_arbre_trie(x3,3);
 	SARBIN * a5 = creation_arbre_trie(x4,4);
+	SARBIN * a = creation_arbre_trie(x,0);
 
 	assertion_ega(a1,a2,VRAI);
 	assertion_ega(a1,a3,FAUX);
 	assertion_ega(a3,a4,FAUX);
 	assertion_ega(a4,a5,FAUX);
+	assertion_ega(a,a,VRAI);
+	assertion_ega(a, a2, FAUX);
 
 	vidage(a1);
 	vidage(a2);
@@ -72,4 +77,23 @@ void assertion_ega(SARBIN * a1, SARBIN * a2, bool b)
 		fprintf(stderr, "Erreur ega\n");
 	else
 		fprintf(stdout, "OK\n");
+}
+void test_hauteur()
+{
+	int x[] = { 15 };
+	SARBIN * a = creation_arbre_trie(x, 1);
+	printf("Hauteur trouvée %d\n",hauteur(a));
+}
+void test_completude()
+{
+	int x[] = { 15,10,14 };
+	SARBIN * a = creation_arbre_trie(x, 3);
+	assertion_completude(a,VRAI);
+}
+void assertion_completude(SARBIN * a, bool b)
+{
+	if( complet(a) == b)
+		fprintf(stdout, "completude : OK\n");
+	else
+		fprintf(stderr, "complétude : ERREUR\n");
 }

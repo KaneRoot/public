@@ -4,14 +4,6 @@
  *	13/09/11
  */
 
-typedef enum { FAUX, VRAI=1 } bool;
-typedef struct arbin
-{
-	struct SARBIN *g;
-	int s;
-	struct SARBIN *d;
-} SARBIN;
-
 void infixe(SARBIN * a, void (*pr)(int));
 void prefixe(SARBIN * a, void (*pr)(int));
 void postfixe(SARBIN * a, void (*pr)(int));
@@ -26,3 +18,6 @@ SARBIN * insr(SARBIN *,int);
 void vidage(SARBIN *);
 bool feuille(SARBIN *);
 bool ega(SARBIN *,SARBIN *);
+int max(int,int);
+int hauteur(SARBIN *a);
+bool complet(SARBIN *);
