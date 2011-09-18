@@ -5,5 +5,7 @@
  *
  */
 
-void test1(void);
+void test1();
 void test_feuille();
+void test_ega();
+void test2();

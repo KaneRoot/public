@@ -49,40 +49,32 @@ void test_ega()
 	int x3[] = { 14, 28, 35 };
 	int x4[] = { 14, 28, 35, 35 };
 
+	printf("a1\n");
 	SARBIN * a1 = creation_arbre_trie(x1,2);
+	printf("a2\n");
 	SARBIN * a2 = creation_arbre_trie(x1,2);
+	printf("a3\n");
 	SARBIN * a3 = creation_arbre_trie(x2,3);
+	printf("a4\n");
 	SARBIN * a4 = creation_arbre_trie(x3,3);
+	printf("a5\n");
 	SARBIN * a5 = creation_arbre_trie(x4,4);
 
-	printf("INFIXE\n");
-	infixe(a1,ecrire); printf("\n");
-	infixe(a2,ecrire); printf("\n");
-	infixe(a3,ecrire); printf("\n");
-	infixe(a4,ecrire); printf("\n");
-	infixe(a5,ecrire); printf("\n");
-	printf("\n- INFIXE\n");
-
-	if(ega(a1,a2))
-		fprintf(stdout, "ega VRAI - JUSTE\n");
-	else
-		fprintf(stderr, "ega FAUX  - ERREUR\n");
-	if(ega(a1,a3))
-		fprintf(stderr,"ega VRAI - FAUX\n");
-	else
-		fprintf(stdout,"ega FAUX - JUSTE\n");
-	if(ega(a3,a4))
-		fprintf(stdout, "ega VRAI - JUSTE\n");
-	else
-		fprintf(stderr, "ega FAUX  - ERREUR\n");
-	if(ega(a4,a5))
-		fprintf(stderr,"ega VRAI - ERREUR\n");
-	else
-		fprintf(stdout,"ega FAUX - JUSTE\n");
+	assertion_ega(a1,a2,VRAI);
+	assertion_ega(a1,a3,FAUX);
+	assertion_ega(a3,a4,FAUX);
+	assertion_ega(a4,a5,FAUX);
 
 	vidage(a1);
 	vidage(a2);
 	vidage(a3);
 	vidage(a4);
 	vidage(a5);
+}
+void assertion_ega(SARBIN * a1, SARBIN * a2, bool b)
+{
+	if(ega(a1,a2) != b)
+		fprintf(stderr, "Erreur ega\n");
+	else
+		fprintf(stdout, "OK\n");
 }

@@ -13,7 +13,7 @@
 int main(int argc, char * argv[])
 {
 	//test1();
-	test_feuille();
+	//test_feuille();
 	test_ega();
 	return EXIT_SUCCESS;
 }
@@ -81,9 +81,8 @@ SARBIN * creation_arbre_trie(int *x, int nb_elements)
 	int i;
 
 	for(i = 0 ; i < nb_elements ; i++)
-	{
 		tmp = insr(tmp,*(x + i));
-	}
+
 	return tmp;
 }
 SARBIN * insr(SARBIN * a, int x)
@@ -103,27 +102,26 @@ SARBIN * insr(SARBIN * a, int x)
 
 void vidage(SARBIN * a)
 {
-		if( v(a) == FAUX )
-		{
-			vidage(ag(a));
-			vidage(ad(a));
-			free(a);
-		}
+	if( v(a) == FAUX )
+	{
+		vidage(ag(a));
+		vidage(ad(a));
+		free(a);
+	}
 }
 bool feuille(SARBIN *a)
 {
-	return (v(a) == VRAI) ? FAUX : ((v(ag(a)) == VRAI) && (v(ad(a)) == VRAI)) ? VRAI : FAUX;
+	return (v(a)) ? FAUX : (v(ag(a)) && v(ad(a))) ? VRAI : FAUX;
 }
 bool ega(SARBIN * a1, SARBIN * a2)
 {
 	bool res = VRAI;
-	if(v(a1) == VRAI && v(a2) == VRAI)
+	if(v(a1) && v(a2))
 		res = VRAI;
 	else if(v(a1) != v(a2))
 		res = FAUX;
 	else
 	{
-		printf("a1 -- a2 : %d -- %d\n",a1->s,a2->s);
 		if(a1->s != a2->s || 
 				ega(ag(a1),ag(a2)) == FAUX || 
 				ega(ad(a1),ad(a2)) == FAUX)
