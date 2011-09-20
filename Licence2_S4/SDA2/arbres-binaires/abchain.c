@@ -84,12 +84,10 @@ SARBIN * creation_arbre_trie(int *x, int nb_elements)
 SARBIN * insertion(SARBIN * a, int x)
 {
 	if( vide(a) == VRAI )
-	{
 		a = enracinement(NULL, x, NULL);
-	}
 	else if(a->s > x)
 		a->g = insertion(arbre_gauche(a),x);
-	else
+	else if(a->s < x)
 		a->d = insertion(arbre_droit(a),x);
 
 	return a;
@@ -189,4 +187,32 @@ SARBIN * extremite_droit(SARBIN *a)
 	else
 		tmp = a;
 	return tmp;
+}
+PAIRE * couper(SARBIN * a, int x)
+{
+	PAIRE * p = NULL;
+	PAIRE * tmp = NULL;
+	if(vide(a))
+		p = creation_paire(NULL, NULL);
+	else if (racine(a) == x)
+		p = creation_paire(arbre_gauche(a),arbre_droit(a));
+	else if (racine(a) > x)
+	{
+		tmp = couper(arbre_gauche(a),x);
+		p = creation_paire(tmp->a,enracinement(tmp->b,x,arbre_droit(a)));
+	}
+	else
+	{
+		tmp = couper(arbre_droit(a),x);
+		p = creation_paire(tmp->b,enracinement(arbre_gauche(a),x,tmp->a));
+	}
+
+	return p;
+}
+PAIRE * creation_paire(SARBIN * a, SARBIN * b)
+{
+	PAIRE * p = malloc(sizeof(PAIRE));
+	p->a = a;
+	p->b = b;
+	return p;
 }

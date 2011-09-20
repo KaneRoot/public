@@ -11,3 +11,8 @@ typedef struct arbin
 	int s;
 	struct arbin *d;
 } SARBIN;
+typedef struct paire
+{
+	struct arbin *a;
+	struct arbin *b;
+} PAIRE;

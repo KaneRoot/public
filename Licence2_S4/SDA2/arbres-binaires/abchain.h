@@ -25,3 +25,5 @@ SARBIN * recherche(SARBIN *, int);
 SARBIN * arbre_vide();
 SARBIN * extremite_gauche(SARBIN *);
 SARBIN * extremite_droit(SARBIN *);
+PAIRE * couper(SARBIN *, int);
+PAIRE * creation_paire(SARBIN *, SARBIN *);
