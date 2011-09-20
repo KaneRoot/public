@@ -38,7 +38,7 @@ void test_feuille()
 
 	if(feuille(arbin) == VRAI)
 		printf("FEUILLE ARBIN - ERREUR\n");
-	if(feuille(ad(arbin)) == VRAI)
+	if(feuille(arbre_droit(arbin)) == VRAI)
 		printf("FEUILLE AD(ARBIN) == VRAI ; JUSTE \n");
 
 	vidage(arbin);
@@ -83,6 +83,7 @@ void test_hauteur()
 	int x[] = { 15 };
 	SARBIN * a = creation_arbre_trie(x, 1);
 	printf("Hauteur trouvée %d\n",hauteur(a));
+	vidage(a);
 }
 void test_completude()
 {
@@ -96,4 +97,16 @@ void assertion_completude(SARBIN * a, bool b)
 		fprintf(stdout, "completude : OK\n");
 	else
 		fprintf(stderr, "complétude : ERREUR\n");
+}
+void test_extremites()
+{
+	int x[] = { 14, 16, 30, 20, 25 };
+	SARBIN * a = creation_arbre_trie(x, 5);
+	SARBIN * b = extremite_droit(a);
+	infixe(a,ecrire);
+	printf("\n");
+	infixe(b,ecrire);
+	printf("\n");
+	printf("Extremite droit : %d \n",racine(b));
+	vidage(a);
 }
