@@ -185,14 +185,8 @@ SARBIN * extremite_droit(SARBIN *a)
 {
 	SARBIN * tmp = NULL;
 	if(! vide(a) && ! vide(arbre_droit(a)))
-	{
-		printf("RACINE a : %d\n",racine(a));
 		tmp = extremite_droit(arbre_droit(a));
-	}
 	else
-	{
-		printf("ELSE\n");
 		tmp = a;
-	}
 	return tmp;
 }
