@@ -16,7 +16,7 @@ int main(int argc, char * argv[])
 	//test1();
 	//test_feuille();
 	//test_ega();
-	test_hauteur();
+	//test_hauteur();
 	return EXIT_SUCCESS;
 }
 
@@ -25,8 +25,8 @@ void infixe(SARBIN *a, void (*pr)(int))
 {
 	if( v(a) == FAUX )
 	{
-		infixe(ag(a),pr);
-		(*pr)(r(a));
+		infixe(arbre_gauche(a),pr);
+		(*pr)(racine(a));
 		infixe(ad(a),pr);
 	}
 }
@@ -34,8 +34,8 @@ void prefixe(SARBIN *a, void (*pr)(int))
 {
 	if( v(a) == FAUX )
 	{
-		(*pr)(r(a));
-		prefixe(ag(a),pr);
+		(*pr)(racine(a));
+		prefixe(arbre_gauche(a),pr);
 		prefixe(ad(a),pr);
 	}
 }
@@ -44,12 +44,12 @@ void postfixe(SARBIN *a, void (*pr)(int))
 {
 	if( v(a) == FAUX )
 	{
-		postfixe(ag(a),pr);
+		postfixe(arbre_gauche(a),pr);
 		postfixe(ad(a),pr);
-		(*pr)(r(a));
+		(*pr)(racine(a));
 	}
 }
-SARBIN * ag(SARBIN *a)
+SARBIN * arbre_gauche(SARBIN *a)
 {
 	return a->g;
 }
@@ -57,21 +57,13 @@ SARBIN * ad(SARBIN *a)
 {
 	return a->d;
 }
-int r(SARBIN *a)
+int racine(SARBIN *a)
 {
 	return a->s;
 }
 bool v(SARBIN *a)
 {
 	return (a == NULL) ? VRAI : FAUX;
-}
-SARBIN * creation_noeud()
-{
-	SARBIN * a = (SARBIN *) malloc(sizeof(SARBIN));
-	a->s = -1;
-	a->g = NULL;
-	a->d = NULL;
-	return a;
 }
 void ecrire(int x)
 {
@@ -91,11 +83,10 @@ SARBIN * insr(SARBIN * a, int x)
 {
 	if( v(a) == VRAI )
 	{
-		a = creation_noeud();
-		a->s = x;
+		a = enracinement(NULL, x, NULL);
 	}
 	else if(a->s > x)
-		a->g = insr(ag(a),x);
+		a->g = insr(arbre_gauche(a),x);
 	else
 		a->d = insr(ad(a),x);
 
@@ -106,14 +97,14 @@ void vidage(SARBIN * a)
 {
 	if( v(a) == FAUX )
 	{
-		vidage(ag(a));
+		vidage(arbre_gauche(a));
 		vidage(ad(a));
 		free(a);
 	}
 }
 bool feuille(SARBIN *a)
 {
-	return (v(a)) ? FAUX : (v(ag(a)) && v(ad(a))) ? VRAI : FAUX;
+	return (v(a)) ? FAUX : (v(arbre_gauche(a)) && v(ad(a))) ? VRAI : FAUX;
 }
 bool ega(SARBIN * a1, SARBIN * a2)
 {
@@ -125,7 +116,7 @@ bool ega(SARBIN * a1, SARBIN * a2)
 	else
 	{
 		if(a1->s != a2->s || 
-				ega(ag(a1),ag(a2)) == FAUX || 
+				ega(arbre_gauche(a1),arbre_gauche(a2)) == FAUX || 
 				ega(ad(a1),ad(a2)) == FAUX)
 			res = FAUX;
 	}
@@ -141,11 +132,41 @@ int hauteur(SARBIN *a)
 	int i = -1;
 	if( ! v(a))
 	{
-		i = 1 + max(hauteur(ag(a)),hauteur(ad(a)));
+		i = 1 + max(hauteur(arbre_gauche(a)),hauteur(ad(a)));
 	}
 	return i;	
 }
 bool complet(SARBIN *a)
 {
 	return VRAI;
+}
+SARBIN * enracinement(SARBIN *g, int x, SARBIN * d)
+{
+	SARBIN * a = (SARBIN *) malloc(sizeof(SARBIN));
+	a->s = x;
+	a->g = g;
+	a->d = d;
+	return a;
+}
+SARBIN * recherche(SARBIN * a, int x)
+{
+	SARBIN * tmp = NULL;
+	if(v(a))
+	{
+		tmp = arbre_vide();
+	}
+	else
+	{
+		if(racine(a) > x)
+			tmp = recherche(arbre_gauche(a),x);
+		else if(racine(a) == x)
+			tmp = a;
+		else
+			tmp = recherche(ad(a),x);
+	}
+	return tmp;
+}
+SARBIN * arbre_vide()
+{
+	return NULL;
 }

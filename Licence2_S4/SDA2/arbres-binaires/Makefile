@@ -9,7 +9,7 @@ all: $(EXEC)
 $(EXEC) : $(EXEC).o abchain-tests.o
 	$(CC) -o $@ $^ $(OPTIONS)
 
-$(EXEC).o : $(EXEC).c $(EXEC).h
+$(EXEC).o : $(EXEC).c $(EXEC).h global.h
 	$(CC) -o $@ -c $< $(OPTIONS)
 
 %.o : %.c 
