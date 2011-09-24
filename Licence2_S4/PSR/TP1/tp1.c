@@ -6,6 +6,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <dirent.h>
 
 #define MAXBUF_GETCHAR2 10 // pour getchar2 
 
@@ -14,7 +15,8 @@ int main(int argc, char * argv[])
 	//printf("EOF : %d\n",EOF);
 	//test_getchar1();
 	//test_getchar2();
-	mystat(argc,argv);
+	//test_print_ls(argc,argv);
+	test_liste_rep(argc,argv);
 	return EXIT_SUCCESS;
 }
 void test_getchar2()
@@ -53,7 +55,7 @@ int getchar1(void)
 		return (int) c;
 	return EOF;
 }
-void mystat(int argc, char * argv[])
+void test_print_ls(int argc, char * argv[])
 {
 	if(argc != 2)
 	{
@@ -64,7 +66,6 @@ void mystat(int argc, char * argv[])
 }
 void print_ls(char * nom_du_fichier)
 {
-	char * ligne = NULL;
 	struct stat stat_buf;
 
 	if((stat(nom_du_fichier,&stat_buf)) == -1)
@@ -73,37 +74,85 @@ void print_ls(char * nom_du_fichier)
 		exit(EXIT_FAILURE); 
 	}
 
-	ligne = malloc(sizeof(char) * 150);
-
 	/* Affichage du type */
 	switch (stat_buf.st_mode & S_IFMT) 
 	{
-		case S_IFBLK:	strcat(ligne,"b");	break;
-		case S_IFCHR:	strcat(ligne,"c");	break;
-		case S_IFDIR:	strcat(ligne,"d");	break;
-		case S_IFIFO:	strcat(ligne,"p");	break;
-		case S_IFLNK:	strcat(ligne,"l");	break;
-		case S_IFREG:	strcat(ligne,"-");	break;
-		case S_IFSOCK:	strcat(ligne,"s");	break;
-		default:		strcat(ligne,"u");	break;
+		case S_IFBLK:	printf("b");	break;
+		case S_IFCHR:	printf("c");	break;
+		case S_IFDIR:	printf("d");	break;
+		case S_IFIFO:	printf("p");	break;
+		case S_IFLNK:	printf("l");	break;
+		case S_IFREG:	printf("-");	break;
+		case S_IFSOCK:	printf("s");	break;
+		default:		printf("u");	break;
 	}
 
 	/* Affichage des droits */
-	(stat_buf.st_mode & S_IRUSR) ? strcat(ligne,"r") : strcat(ligne,"-");
-	(stat_buf.st_mode & S_IWUSR) ? strcat(ligne,"w") : strcat(ligne,"-");
-	(stat_buf.st_mode & S_IXUSR) ? strcat(ligne,"x") : strcat(ligne,"-");
+	(stat_buf.st_mode & S_IRUSR) ? printf("r") : printf("-");
+	(stat_buf.st_mode & S_IWUSR) ? printf("w") : printf("-");
+	(stat_buf.st_mode & S_IXUSR) ? printf("x") : printf("-");
 
-	(stat_buf.st_mode & S_IRGRP) ? strcat(ligne,"r") : strcat(ligne,"-");
-	(stat_buf.st_mode & S_IWGRP) ? strcat(ligne,"w") : strcat(ligne,"-");
-	(stat_buf.st_mode & S_IXGRP) ? strcat(ligne,"x") : strcat(ligne,"-");
+	(stat_buf.st_mode & S_IRGRP) ? printf("r") : printf("-");
+	(stat_buf.st_mode & S_IWGRP) ? printf("w") : printf("-");
+	(stat_buf.st_mode & S_IXGRP) ? printf("x") : printf("-");
 
-	(stat_buf.st_mode & S_IROTH) ? strcat(ligne,"r") : strcat(ligne,"-");
-	(stat_buf.st_mode & S_IWOTH) ? strcat(ligne,"w") : strcat(ligne,"-");
-	(stat_buf.st_mode & S_IXOTH) ? strcat(ligne,"x") : strcat(ligne,"-");
+	(stat_buf.st_mode & S_IROTH) ? printf("r") : printf("-");
+	(stat_buf.st_mode & S_IWOTH) ? printf("w") : printf("-");
+	(stat_buf.st_mode & S_IXOTH) ? printf("x") : printf("-");
 
-	strcat(ligne, " ");
-	strcat(ligne, nom_du_fichier);
+	printf(" %s\n",nom_du_fichier);
 
-	printf("%s\n",strcat(ligne,"\0"));
-	free(ligne);
+}
+void liste_rep(char * nom_repertoire)
+{
+	DIR * repertoire;
+	struct dirent * element;
+
+	if((repertoire = opendir(nom_repertoire)) == NULL)
+	{
+		perror("");
+		exit(EXIT_FAILURE);
+	}
+	while((element = readdir(repertoire)))
+	{
+		print_ls(element->d_name);
+	}
+	closedir(repertoire);
+}
+void test_liste_rep(int argc, char * argv[])
+{
+	int i;
+	if(argc < 2)
+	{
+		fprintf(stderr, "USAGE : %s dir [ dir ... ]\n", argv[0]);
+		exit(EXIT_FAILURE);
+	}
+	for(i = 1 ; i < argc ; i++)
+	{
+		if(is_dir(argv[i]))
+			liste_rep(argv[i]);
+		else
+			printf("%s n'est pas un répertoire\n", argv[i]);
+	}
+}
+int is_dir(char * nom)
+{
+	int res;
+	struct stat stat_buf;
+
+	if((stat(nom,&stat_buf)) == -1)
+	{	
+		perror("stat");		
+		exit(EXIT_FAILURE); 
+	}
+	switch (stat_buf.st_mode & S_IFMT) 
+	{
+		case S_IFDIR:	
+			res = 1;
+			break;
+		default:
+			res = 0;	
+			break;
+	}
+	return res;
 }

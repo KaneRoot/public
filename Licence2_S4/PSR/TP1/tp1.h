@@ -2,8 +2,12 @@ int getchar1(void);
 int getchar2(void);
 void test_getchar1();
 void test_getchar2();
-void mystat(int,char**);
+void test_print_ls(int,char**);
 void print_ls(char *);
+void liste_rep(char *);
+void test_liste_rep(int,char **);
+int is_dir(char *);
+
 /*
 S_IRWXU    00700     mask for file owner permissions
 S_IRUSR    00400     owner has read permission
