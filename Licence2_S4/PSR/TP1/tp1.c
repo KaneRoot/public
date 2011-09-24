@@ -3,11 +3,11 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <time.h>
+#include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 #define MAXBUF_GETCHAR2 10 // pour getchar2 
-#define __USE_GNU
 
 int main(int argc, char * argv[])
 {
@@ -57,27 +57,53 @@ void mystat(int argc, char * argv[])
 {
 	if(argc != 2)
 	{
-		fprintf(stderr, "USAGE : %s file\n",argv[0]);
-		exit(EXIT_FAILURE);
+		fprintf(stderr, "USAGE : %s file\n",argv[0]); 
+		exit(EXIT_FAILURE); 
 	}
+	print_ls(argv[1]);
+}
+void print_ls(char * nom_du_fichier)
+{
+	char * ligne = NULL;
 	struct stat stat_buf;
-	if((stat(argv[1],&stat_buf)) == -1)
-	{
-		perror("stat");
-		exit(EXIT_FAILURE);
+
+	if((stat(nom_du_fichier,&stat_buf)) == -1)
+	{	
+		perror("stat");		
+		exit(EXIT_FAILURE); 
 	}
-	/*
+
+	ligne = malloc(sizeof(char) * 150);
+
+	/* Affichage du type */
 	switch (stat_buf.st_mode & S_IFMT) 
 	{
-		case S_IFBLK:  printf("block device\n");            break;
-		case S_IFCHR:  printf("character device\n");        break;
-		case S_IFDIR:  printf("directory\n");               break;
-		case S_IFIFO:  printf("FIFO/pipe\n");               break;
-		case S_IFLNK:  printf("symlink\n");                 break;
-		case S_IFREG:  printf("regular file\n");            break;
-		case S_IFSOCK: printf("socket\n");                  break;
-		default:       printf("unknown?\n");                break;
+		case S_IFBLK:	strcat(ligne,"b");	break;
+		case S_IFCHR:	strcat(ligne,"c");	break;
+		case S_IFDIR:	strcat(ligne,"d");	break;
+		case S_IFIFO:	strcat(ligne,"p");	break;
+		case S_IFLNK:	strcat(ligne,"l");	break;
+		case S_IFREG:	strcat(ligne,"-");	break;
+		case S_IFSOCK:	strcat(ligne,"s");	break;
+		default:		strcat(ligne,"u");	break;
 	}
-	*/
-	printf("\n");
+
+	/* Affichage des droits */
+	(stat_buf.st_mode & S_IRUSR) ? strcat(ligne,"r") : strcat(ligne,"-");
+	(stat_buf.st_mode & S_IWUSR) ? strcat(ligne,"w") : strcat(ligne,"-");
+	(stat_buf.st_mode & S_IXUSR) ? strcat(ligne,"x") : strcat(ligne,"-");
+
+	(stat_buf.st_mode & S_IRGRP) ? strcat(ligne,"r") : strcat(ligne,"-");
+	(stat_buf.st_mode & S_IWGRP) ? strcat(ligne,"w") : strcat(ligne,"-");
+	(stat_buf.st_mode & S_IXGRP) ? strcat(ligne,"x") : strcat(ligne,"-");
+
+	(stat_buf.st_mode & S_IROTH) ? strcat(ligne,"r") : strcat(ligne,"-");
+	(stat_buf.st_mode & S_IWOTH) ? strcat(ligne,"w") : strcat(ligne,"-");
+	(stat_buf.st_mode & S_IXOTH) ? strcat(ligne,"x") : strcat(ligne,"-");
+
+	strcat(ligne, " ");
+	strcat(ligne, nom_du_fichier);
+
+	printf("%s\n",strcat(ligne,"\0"));
+	free(ligne);
 }
