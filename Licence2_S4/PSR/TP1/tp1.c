@@ -7,9 +7,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <dirent.h>
+#include <fcntl.h>
 
 #define TAILLE_CHAINE 150
 #define MAXBUF_GETCHAR2 10 // pour getchar2 
+#define LEXIQUE "lexique"
 
 int main(int argc, char * argv[])
 {
@@ -18,8 +20,9 @@ int main(int argc, char * argv[])
 	//test_getchar2();
 	//test_print_ls(argc,argv);
 	//test_liste_rep(argc,argv);
-	lecture_entree_standard_fonctions_bibliotheque();
+	//lecture_entree_standard_fonctions_bibliotheque();
 	//lecture_entree_standard_primitives_systeme(512);
+	test_recherche_dichotomique();	
 	return EXIT_SUCCESS;
 }
 void test_getchar2()
@@ -191,4 +194,40 @@ void lecture_entree_standard_primitives_systeme(int taille_buffer)
 		write(1,c,n);
 	free(c);
 	printf("\n");
+}
+int recherche_dichotomique(char * nom_a_chercher)
+{
+	int retour = 0,fd,taille_fichier;
+	char * lexique = LEXIQUE;
+	struct stat stat_buf;
+
+	if((stat(lexique,&stat_buf)) == -1)
+	{	
+		perror("stat");		
+		exit(EXIT_FAILURE); 
+	}
+
+	taille_fichier = stat_buf.st_size;
+	printf("TAILLE FICHIER : %d \n",taille_fichier);
+
+	if((fd = open(lexique,O_RDONLY)) <=0)
+	{
+		perror("open");
+		exit(EXIT_FAILURE);
+	}
+
+	close(fd);
+	return retour;
+}
+void test_recherche_dichotomique()
+{
+	int n = 0;
+	char buf[6];
+	while((n = read(0,buf,5)) != 0)
+	{
+		if(recherche_dichotomique(buf))
+			printf("Ce mot existe dans le lexique : %s\n",buf);
+		else
+			printf("Ce mot n'existe pas dans le lexique : %s\n",buf);
+	}
 }
