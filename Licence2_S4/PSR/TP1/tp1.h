@@ -7,6 +7,9 @@ void print_ls(char *);
 void liste_rep(char *);
 void test_liste_rep(int,char **);
 int is_dir(char *);
+void vider_chaine(char *);
+void lecture_entree_standard_fonctions_bibliotheque();
+void lecture_entree_standard_primitives_systeme(int);
 
 /*
 S_IRWXU    00700     mask for file owner permissions

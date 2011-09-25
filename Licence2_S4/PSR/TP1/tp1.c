@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <dirent.h>
 
+#define TAILLE_CHAINE 150
 #define MAXBUF_GETCHAR2 10 // pour getchar2 
 
 int main(int argc, char * argv[])
@@ -16,7 +17,9 @@ int main(int argc, char * argv[])
 	//test_getchar1();
 	//test_getchar2();
 	//test_print_ls(argc,argv);
-	test_liste_rep(argc,argv);
+	//test_liste_rep(argc,argv);
+	lecture_entree_standard_fonctions_bibliotheque();
+	//lecture_entree_standard_primitives_systeme(512);
 	return EXIT_SUCCESS;
 }
 void test_getchar2()
@@ -107,6 +110,7 @@ void liste_rep(char * nom_repertoire)
 {
 	DIR * repertoire;
 	struct dirent * element;
+	char * emplacement = NULL;
 
 	if((repertoire = opendir(nom_repertoire)) == NULL)
 	{
@@ -115,7 +119,16 @@ void liste_rep(char * nom_repertoire)
 	}
 	while((element = readdir(repertoire)))
 	{
-		print_ls(element->d_name);
+		if(element->d_name[0] == '.')
+			continue;
+		emplacement = malloc(sizeof(char) * TAILLE_CHAINE);
+		strncpy(emplacement, nom_repertoire, strlen(nom_repertoire));
+		if(emplacement[strlen(nom_repertoire) - 1] != '/')
+			emplacement[strlen(nom_repertoire)] = '/';
+		strcat(emplacement, element->d_name);
+		print_ls(emplacement);
+		vider_chaine(emplacement);
+		emplacement = NULL;
 	}
 	closedir(repertoire);
 }
@@ -155,4 +168,27 @@ int is_dir(char * nom)
 			break;
 	}
 	return res;
+}
+/* Sans ça, emplacement ne se vide pas correctement */
+void vider_chaine(char * chaine)
+{
+	int i;
+	for(i = 0 ; i < strlen(chaine) ; i++)
+		chaine[i] = '\0';
+}
+void lecture_entree_standard_fonctions_bibliotheque()
+{
+	int c;
+	while((c = getchar()) != EOF)
+		putchar((char) c);
+	printf("\n");
+}
+void lecture_entree_standard_primitives_systeme(int taille_buffer)
+{
+	int n;
+	char * c = malloc(sizeof(char) * taille_buffer);
+	while(( n = read(0, c, taille_buffer)) != 0 )
+		write(1,c,n);
+	free(c);
+	printf("\n");
 }
