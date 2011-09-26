@@ -1,4 +1,4 @@
-#include "global.h"
+#include "base.h"
 #include "abchain-tests.h"
 #include "abchain.h"
 #include <stdio.h>

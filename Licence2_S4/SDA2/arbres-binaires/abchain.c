@@ -4,7 +4,7 @@
  * 13/09/11
  *
  */
-#include "global.h"
+#include "base.h"
 #include "abchain.h"
 #include "abchain-tests.h"
 #include <stdio.h>
