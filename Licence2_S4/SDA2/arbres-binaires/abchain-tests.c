@@ -107,6 +107,9 @@ void test_extremites()
 	printf("\n");
 	parcours_infixe(b,ecrire);
 	printf("\n");
+	printf("Et en plus, le nombre de noeuds est : %d\n",nombre_noeuds(a));
+	printf("Et en plus, le nombre de noeuds internes est : %d\n",nombre_noeuds_internes(a));
+	printf("Et en plus, le nombre de feuilles est : %d\n",nombre_feuilles(a));
 	printf("Extremite droit : %d \n",racine(b));
 	vidage(a);
 }

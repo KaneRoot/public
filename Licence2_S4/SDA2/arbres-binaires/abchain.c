@@ -11,10 +11,10 @@
 
 int main(int argc, char * argv[])
 {
-	test1();
-	test_feuille();
-	test_ega();
-	test_hauteur();
+//	test1();
+//	test_feuille();
+//	test_ega();
+//	test_hauteur();
 	test_extremites();
 
 	return EXIT_SUCCESS;
