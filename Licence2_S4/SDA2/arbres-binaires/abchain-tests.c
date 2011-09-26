@@ -18,9 +18,9 @@ void test1()
 	truc = creation_arbre_trie(x,NB_ELEMENTS_ARBRE);
 	fprintf(stdout, "Parcours de l'arbre");
 	fprintf(stdout, "\n------INFIXE-------\n");
-	infixe(truc, ecrire);
+	parcours_infixe(truc, ecrire);
 	fprintf(stdout, "\n------PREFIXE------\n");
-	prefixe(truc, ecrire);
+	parcours_prefixe(truc, ecrire);
 	fprintf(stdout, "\n------POSTFIXE-----\n");
 	postfixe(truc, ecrire);
 
@@ -33,7 +33,7 @@ void test_feuille()
 	int x[] = { 14, 35 };
 	SARBIN * arbin = creation_arbre_trie(x,2);
 	printf("INFIXE arbin\n");
-	infixe(arbin,ecrire);
+	parcours_infixe(arbin,ecrire);
 	printf("\n");
 
 	if(feuille(arbin) == VRAI)
@@ -103,9 +103,9 @@ void test_extremites()
 	int x[] = { 14, 16, 30, 20, 25 };
 	SARBIN * a = creation_arbre_trie(x, 5);
 	SARBIN * b = extremite_droit(a);
-	infixe(a,ecrire);
+	parcours_infixe(a,ecrire);
 	printf("\n");
-	infixe(b,ecrire);
+	parcours_infixe(b,ecrire);
 	printf("\n");
 	printf("Extremite droit : %d \n",racine(b));
 	vidage(a);

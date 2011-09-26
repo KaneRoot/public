@@ -4,13 +4,19 @@
  *
  */
 
+
+typedef unsigned int Nat;
+typedef int Ent;
+typedef float Rat;
 typedef enum { FAUX = 0, VRAI = 1 } bool;
+
 typedef struct arbin
 {
 	struct arbin *g;
-	int s;
+	Nat s;
 	struct arbin *d;
-} SARBIN;
+} SARBIN, *Arbin;
+
 typedef struct paire
 {
 	struct arbin *a;

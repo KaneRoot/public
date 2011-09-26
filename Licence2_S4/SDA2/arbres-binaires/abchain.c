@@ -1,8 +1,6 @@
 /*
  * arbin.c
  *
- * 13/09/11
- *
  */
 #include "base.h"
 #include "abchain.h"
@@ -13,32 +11,32 @@
 
 int main(int argc, char * argv[])
 {
-//	test1();
-//	test_feuille();
-//	test_ega();
-//	test_hauteur();
-//	test_extremites();
+	test1();
+	test_feuille();
+	test_ega();
+	test_hauteur();
+	test_extremites();
 
 	return EXIT_SUCCESS;
 }
 
 
-void infixe(SARBIN *a, void (*pr)(int))
+void parcours_infixe(SARBIN *a, void (*pr)(int))
 {
-	if( vide(a) == FAUX )
+	if( ! vide(a))
 	{
-		infixe(arbre_gauche(a),pr);
+		parcours_infixe(arbre_gauche(a),pr);
 		(*pr)(racine(a));
-		infixe(arbre_droit(a),pr);
+		parcours_infixe(arbre_droit(a),pr);
 	}
 }
-void prefixe(SARBIN *a, void (*pr)(int))
+void parcours_prefixe(SARBIN *a, void (*pr)(int))
 {
 	if( vide(a) == FAUX )
 	{
 		(*pr)(racine(a));
-		prefixe(arbre_gauche(a),pr);
-		prefixe(arbre_droit(a),pr);
+		parcours_prefixe(arbre_gauche(a),pr);
+		parcours_prefixe(arbre_droit(a),pr);
 	}
 }
 
@@ -136,6 +134,7 @@ int hauteur(SARBIN *a)
 	}
 	return i;	
 }
+/* PAS FAIT  */
 bool complet(SARBIN *a)
 {
 	return VRAI;
@@ -215,4 +214,30 @@ PAIRE * creation_paire(SARBIN * a, SARBIN * b)
 	p->a = a;
 	p->b = b;
 	return p;
+}
+int nombre_noeuds(SARBIN * a)
+{
+	int retour;
+	if(vide(a))
+		retour = 0;
+	else
+		retour = 1 + nombre_noeuds(arbre_gauche(a)) + nombre_noeuds(arbre_droit(a));
+
+	return retour;
+}
+int nombre_feuilles(SARBIN *a)
+{
+	int retour;
+	if(vide(a))
+		retour = 0;
+	else if (feuille(a))
+		retour = 1;
+	else
+		retour = nombre_feuilles(arbre_gauche(a)) + nombre_feuilles(arbre_droit(a));
+
+	return retour;
+}
+int nombre_noeuds_internes(SARBIN *a)
+{
+	return nombre_noeuds(a) - nombre_feuilles(a);
 }
