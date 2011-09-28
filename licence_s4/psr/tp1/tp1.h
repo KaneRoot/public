@@ -12,3 +12,4 @@ void lecture_entree_standard_fonctions_bibliotheque();
 void lecture_entree_standard_primitives_systeme(int);
 int recherche_dichotomique(char *);
 void test_recherche_dichotomique();
+int correction_getchar();

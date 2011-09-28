@@ -12,6 +12,7 @@
 #define TAILLE_CHAINE 150
 #define MAXBUF_GETCHAR2 10 // pour getchar2 
 #define LEXIQUE "lexique"
+#define TAILLE_LIGNES 9
 
 int main(int argc, char * argv[])
 {
@@ -23,12 +24,13 @@ int main(int argc, char * argv[])
 	//lecture_entree_standard_fonctions_bibliotheque();
 	//lecture_entree_standard_primitives_systeme(512);
 	test_recherche_dichotomique();	
+
 	return EXIT_SUCCESS;
 }
 void test_getchar2()
 {
 	int c;
-	while((c = getchar2()) != EOF)
+	while((c = correction_getchar()) != EOF)
 		putchar(c);
 }
 int getchar2(void)
@@ -127,7 +129,7 @@ void liste_rep(char * nom_repertoire)
 		emplacement = malloc(sizeof(char) * TAILLE_CHAINE);
 		strncpy(emplacement, nom_repertoire, strlen(nom_repertoire));
 		if(emplacement[strlen(nom_repertoire) - 1] != '/')
-			emplacement[strlen(nom_repertoire)] = '/';
+			emplacement[strlen(nom_repertoire)]= '/';
 		strcat(emplacement, element->d_name);
 		print_ls(emplacement);
 		vider_chaine(emplacement);
@@ -153,7 +155,6 @@ void test_liste_rep(int argc, char * argv[])
 }
 int is_dir(char * nom)
 {
-	int res;
 	struct stat stat_buf;
 
 	if((stat(nom,&stat_buf)) == -1)
@@ -161,16 +162,7 @@ int is_dir(char * nom)
 		perror("stat");		
 		exit(EXIT_FAILURE); 
 	}
-	switch (stat_buf.st_mode & S_IFMT) 
-	{
-		case S_IFDIR:	
-			res = 1;
-			break;
-		default:
-			res = 0;	
-			break;
-	}
-	return res;
+	return (stat_buf.st_mode & S_IFDIR) ? 1 : 0; 
 }
 /* Sans ça, emplacement ne se vide pas correctement */
 void vider_chaine(char * chaine)
@@ -195,34 +187,86 @@ void lecture_entree_standard_primitives_systeme(int taille_buffer)
 	free(c);
 	printf("\n");
 }
+int correction_getchar()
+{
+	static char correction_getchar_buffer[MAXBUF_GETCHAR2];
+	static int ncar = 0;
+	static int correction_getchar_indice;
+
+	if(ncar == 0)
+	{
+		ncar = read(0,correction_getchar_buffer,MAXBUF_GETCHAR2);
+		correction_getchar_indice = 0;
+	}
+	return (ncar-- > 0) ? correction_getchar_buffer[correction_getchar_indice++] : EOF;
+}
 int recherche_dichotomique(char * nom_a_chercher)
 {
-	int retour = 0,fd,taille_fichier;
+	int fd,taille_fichier, nb_lignes,trouve = 0,ecart;
+	int car_lus, retour_strcmp;
+	int ligne_courante, ligne_precedente,ligne_precedente2;
+	char buffer[5];
 	char * lexique = LEXIQUE;
 	struct stat stat_buf;
 
 	if((stat(lexique,&stat_buf)) == -1)
 	{	
 		perror("stat");		
-		exit(EXIT_FAILURE); 
+		exit(EXIT_FAILURE);
 	}
 
 	taille_fichier = stat_buf.st_size;
 	printf("TAILLE FICHIER : %d \n",taille_fichier);
+	nb_lignes = taille_fichier / TAILLE_LIGNES;
+	printf("nombre de lignes : %d \n", nb_lignes);
 
-	if((fd = open(lexique,O_RDONLY)) <=0)
+
+	if((fd = open(lexique,O_RDONLY)) <= 0)
 	{
 		perror("open");
 		exit(EXIT_FAILURE);
 	}
 
+	ecart = nb_lignes / 2;
+	ligne_suivante = nb_lignes / 2;
+	while(ligne_suivante != ligne_precedente || trouve)
+	{
+		if((lseek(fd,ligne_suivante * TAILLE_LIGNES + 1, SEEK_SET)) < 0)
+		{
+			perror("");
+			exit(EXIT_FAILURE);
+		}
+		if((car_lus = read(fd, buffer, 5)) < 0)
+		{
+			perror("Impossible de lire les 5 caractères");
+			exit(EXIT_FAILURE);
+		}
+		else if (car_lus == 5)
+		{
+			retour_strcmp = strcmp(nom_a_chercher,buffer);
+			if( retour_strcmp == 0 ) 
+				trouve = 1;
+			else if (retour_strcmp < 0)
+			{
+				ligne_suivante = ligne_suivante - ecart;
+			}
+			else
+			{
+				ligne_suivante = ligne_suivante + ecart;
+			}
+		}
+		ecart = (ecart == 1) ? 1 : ecart / 2;
+
+	}
+
 	close(fd);
-	return retour;
+	return trouve;
 }
 void test_recherche_dichotomique()
 {
 	int n = 0;
 	char buf[6];
+	buf[5] = '\0';
 	while((n = read(0,buf,5)) != 0)
 	{
 		if(recherche_dichotomique(buf))
