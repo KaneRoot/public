@@ -13,3 +13,7 @@ void lecture_entree_standard_primitives_systeme(int);
 int recherche_dichotomique(char *);
 void test_recherche_dichotomique();
 int correction_getchar();
+void print_derniers_car(char *);
+void print_derniers_car_simple(char *);
+void mon_toupper(char *);
+void mon_tolower(char *);
