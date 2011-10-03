@@ -1,0 +1,48 @@
+collections 
+{
+	group 
+	{
+		name: "interface";
+		parts 
+		{
+			part 
+			{
+				name: "text";
+				type: TEXT;
+				description 
+				{
+					state: "default" 0.0;
+					color: 255 255 255 100;
+					text 
+					{
+						font: "Sans-serif";
+						text: "Hello world !";
+						size: 18;
+					}
+				}
+			}
+			part
+			{
+				name: "autretexte";
+				type: TEXT;
+				description
+				{
+					state: "default" 0.0;
+					color: 255 0 0 100; // R V B A
+					text
+					{
+						font: "Sans-serif";
+						text: "Coucou";
+						size: 30;
+					}
+					rel2
+					{
+						to_y: "text";
+						offset: 250 0;
+					}
+				}
+			}
+		}
+	}
+}
+
