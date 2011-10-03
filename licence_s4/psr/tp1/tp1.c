@@ -8,11 +8,13 @@
 #include <stdlib.h>
 #include <dirent.h>
 #include <fcntl.h>
+#include <ctype.h>
 
 #define TAILLE_CHAINE 150
 #define MAXBUF_GETCHAR2 10 // pour getchar2 
 #define LEXIQUE "lexique"
 #define TAILLE_LIGNES 9
+#define TAILLE_BUFFER_DERNIER_CAR 10
 
 int main(int argc, char * argv[])
 {
@@ -23,7 +25,9 @@ int main(int argc, char * argv[])
 	//test_liste_rep(argc,argv);
 	//lecture_entree_standard_fonctions_bibliotheque();
 	//lecture_entree_standard_primitives_systeme(512);
-	test_recherche_dichotomique();	
+	//test_recherche_dichotomique();	
+	//print_derniers_car_simple(argv[1]);
+	mon_tolower(argv[1]);
 
 	return EXIT_SUCCESS;
 }
@@ -202,6 +206,8 @@ int correction_getchar()
 }
 int recherche_dichotomique(char * nom_a_chercher)
 {
+	/*
+	 *
 	int fd,taille_fichier, nb_lignes,trouve = 0,ecart;
 	int car_lus, retour_strcmp;
 	int ligne_courante, ligne_precedente,ligne_precedente2;
@@ -255,15 +261,20 @@ int recherche_dichotomique(char * nom_a_chercher)
 				ligne_suivante = ligne_suivante + ecart;
 			}
 		}
-		ecart = (ecart == 1) ? 1 : ecart / 2;
+		ecart = (ecart <= 1) ? 1 : ecart / 2;
 
 	}
 
 	close(fd);
 	return trouve;
+	 *
+	*/
+	return 0;
 }
 void test_recherche_dichotomique()
 {
+	/*
+	 *
 	int n = 0;
 	char buf[6];
 	buf[5] = '\0';
@@ -274,4 +285,111 @@ void test_recherche_dichotomique()
 		else
 			printf("Ce mot n'existe pas dans le lexique : %s\n",buf);
 	}
+	 *
+	*/
+	printf("non implantée : %s\n", __func__);
+
+}
+void print_derniers_car(char * nom_du_fichier)
+{
+	int fd, n, i, premiere_fois = 0;
+	char buffer[TAILLE_BUFFER_DERNIER_CAR];
+	char chaine_finale[TAILLE_BUFFER_DERNIER_CAR + 1];
+	if((fd = open(nom_du_fichier, O_RDONLY)) < 0)
+	{
+		perror("");
+		exit(EXIT_FAILURE);
+	}
+	while(( n = read(fd, buffer, TAILLE_BUFFER_DERNIER_CAR)) > 0)
+	{
+		if(n == TAILLE_BUFFER_DERNIER_CAR || premiere_fois == 0)
+		{
+			strcpy(chaine_finale,buffer);
+			chaine_finale[n] = '\0';
+			premiere_fois = 1;
+		}
+		else
+		{
+			buffer[n] = '\0';
+			for(i = 0 ; (i + n) < TAILLE_BUFFER_DERNIER_CAR ; i++)
+				chaine_finale[i] = chaine_finale[i+n];
+			for(i = 0 ; i < n ; i++)
+				chaine_finale[TAILLE_BUFFER_DERNIER_CAR - n + i] = buffer[i];
+		}
+	}
+	close(fd);
+	chaine_finale[TAILLE_BUFFER_DERNIER_CAR] = '\0';
+	printf("Les %d derniers caractères de %s : %s\n",
+			TAILLE_BUFFER_DERNIER_CAR,
+			nom_du_fichier,
+			chaine_finale);
+}
+void print_derniers_car_simple(char * nom_du_fichier)
+{
+	int fd, n, i,k;
+	char buffer[1];
+	char chaine_finale[TAILLE_BUFFER_DERNIER_CAR + 1];
+	if((fd = open(nom_du_fichier, O_RDONLY)) < 0)
+	{
+		perror("");
+		exit(EXIT_FAILURE);
+	}
+	for(i = 0 ; i < TAILLE_BUFFER_DERNIER_CAR +1 ; i++)
+		chaine_finale[i] = '\0';
+	i = 0;
+	while(( n = read(fd, buffer, 1)) > 0)
+	{
+		if(i >= TAILLE_BUFFER_DERNIER_CAR)
+		{
+			for(k = 0 ; k < TAILLE_BUFFER_DERNIER_CAR ; k++)
+				chaine_finale[k] = chaine_finale[k+1];
+			chaine_finale[k] = buffer[0];
+		}
+		else
+			i++;	
+	}
+	close(fd);
+	chaine_finale[TAILLE_BUFFER_DERNIER_CAR] = '\0';
+	printf("Les %d derniers caractères de %s : %s\n",
+			TAILLE_BUFFER_DERNIER_CAR,
+			nom_du_fichier,
+			chaine_finale);
+}
+void mon_toupper(char * nom_du_fichier)
+{
+	int fd;
+	char c[1];
+	if((fd = open(nom_du_fichier, O_RDWR)) < 0)
+	{
+		perror("");
+		exit(EXIT_FAILURE);
+	}
+	lseek(fd, 0, SEEK_SET);
+	while((read(fd, c, 1)))
+	{
+		lseek(fd, -1 , SEEK_CUR);
+		c[0] = toupper(c[0]);
+		write(fd, c, 1);
+	}
+	close(fd);
+	printf("FINI\n");
+}
+void mon_tolower(char * nom_du_fichier)
+{
+	int fd;
+	char c[1];
+	if((fd = open(nom_du_fichier, O_RDWR)) < 0)
+	{
+		perror("");
+		exit(EXIT_FAILURE);
+	}
+	lseek(fd, 0, SEEK_SET);
+	while((read(fd, c, 1)))
+	{
+		lseek(fd, -1 , SEEK_CUR);
+		c[0] = tolower(c[0]);
+		write(fd, c, 1);
+	}
+	close(fd);
+	printf("FINI\n");
 }
