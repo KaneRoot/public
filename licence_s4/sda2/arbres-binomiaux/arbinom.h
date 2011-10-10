@@ -11,8 +11,6 @@ typedef struct arbinom
 
 /* prototypes */
 
-// enracinement des arbres binaires
-
 // nn
 Ent nombre_noeuds(Arbinom *a);
 // ni
