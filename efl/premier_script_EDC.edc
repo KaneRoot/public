@@ -12,7 +12,7 @@ collections
 				description 
 				{
 					state: "default" 0.0;
-					color: 255 255 255 100;
+					color: 200 200 200 100;
 					text 
 					{
 						font: "Sans-serif";
@@ -31,14 +31,17 @@ collections
 					color: 255 0 0 100; // R V B A
 					text
 					{
-						font: "Sans-serif";
+						font: "monospace";
 						text: "Coucou";
 						size: 30;
 					}
+					rel1
+					{
+						to: "text";
+					}
 					rel2
 					{
-						to_y: "text";
-						offset: 250 0;
+						to: "text";
 					}
 				}
 			}
