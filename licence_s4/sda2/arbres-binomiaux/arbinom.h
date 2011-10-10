@@ -6,20 +6,32 @@ typedef struct arbinom
 {
 	struct arbinom * premier_fils;
 	struct arbinom * autres_fils;
-	Nat x;
+	Nat s;
 } Arbinom;
 
 /* prototypes */
+
+// nn
 Ent nombre_noeuds(Arbinom *a);
+// ni
 Ent nombre_noeuds_internes(Arbinom *a);
+// nf
 Ent nombre_feuilles(Arbinom *a);
+// r
 Ent racine(Arbinom * a);
+// ef
 bool est_feuille(Arbinom *a);
+// ^
 Arbinom * arbre_vide();
+// l
 Arbinom * lier(Arbinom * a1, Arbinom * a2);
+// f
 Arbinom * feuille(Ent x);
+// h
 Ent hauteur(Arbinom *a);
-Arbinom * premier_fils(Arbinom *a);
+// pf
+Arbinom * premier_fils(Arbinom *a);			
+// af
 Arbinom * autres_fils(Arbinom *a);
 
 #endif
