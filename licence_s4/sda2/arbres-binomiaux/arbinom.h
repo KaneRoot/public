@@ -6,10 +6,12 @@ typedef struct arbinom
 {
 	struct arbinom * premier_fils;
 	struct arbinom * autres_fils;
-	Nat s;
+	Ent s;
 } Arbinom;
 
 /* prototypes */
+
+// enracinement des arbres binaires
 
 // nn
 Ent nombre_noeuds(Arbinom *a);
