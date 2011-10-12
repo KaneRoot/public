@@ -3,12 +3,16 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
+// Pour cet exercice, tout est dans le main
 int main(int argc, char * argv[])
 {
 	int palpha[2],pdigit[2],nb_chiffres = 0, nb_lettres = 0;
 	char c;
 	char buf[1];
+	int status; // pour la fin des fils
 
 	// premier fils, alpha
 	pipe(palpha);
@@ -23,7 +27,7 @@ int main(int argc, char * argv[])
 		printf("nb de lettres = %d\n", nb_lettres);
 		exit(EXIT_SUCCESS);
 	}
-	close(palpha[0]);
+	close(palpha[0]); // ne nous sert plus
 
 	// second fils, digit
 	pipe(pdigit);
@@ -47,6 +51,10 @@ int main(int argc, char * argv[])
 	}
 	close(palpha[1]);
 	close(pdigit[1]);
+
+	// On attend la fin des fils
+	wait(&status);
+	wait(&status);
 	return EXIT_SUCCESS;
 }
 

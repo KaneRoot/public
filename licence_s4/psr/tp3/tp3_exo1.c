@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+// Les 3 manières de créer des processus sont dans des fonctions différentes
 void ex1_famille_proc1()
 {
 	int i,status;
@@ -16,7 +17,7 @@ void ex1_famille_proc1()
 					i+1,
 					getpid(),
 					getppid());
-			exit(0);
+			exit(EXIT_SUCCESS);
 		}
 	}
 	for(i = 0; i < 3 ; i++)
@@ -41,13 +42,13 @@ void ex1_famille_proc2()
 				printf("Je suis fils3 mon numero est le : %d, mon père est le : %d\n",
 						getpid(),
 						getppid());
-				exit(0);
+				exit(EXIT_SUCCESS);
 			}
 			wait(&status);
-			exit(0);
+			exit(EXIT_SUCCESS);
 		}
 		wait(&status);
-		exit(0);
+		exit(EXIT_SUCCESS);
 	}
 	wait(&status);
 }
@@ -72,7 +73,7 @@ void ex1_famille_proc3()
 					exit(0); // fin du second fils
 				}
 				wait(&status);
-				exit(0);
+				exit(EXIT_SUCCESS);
 			}
 		}
 		else // création du fils 3
@@ -82,11 +83,11 @@ void ex1_famille_proc3()
 				printf("Je suis fils3 mon numero est le : %d, mon père est le : %d\n",
 						getpid(),
 						getppid());
-				exit(0);
+				exit(EXIT_SUCCESS);
 			}
 		}
 	}
-	for(i = 0 ; i < 2 ; i++)
+	for(i = 0 ; i < 2 ; i++) // Attente de la fin des 2 fils
 		wait(&status);
 }
 
