@@ -2,15 +2,16 @@ CC = gcc
 CFLAGS = -Wall -g -std=c99
 LDFLAGS = 
 OPTIONS = $(CFLAGS) $(LDFLAGS)
-EXEC = tp3_exo1
+EXO1 = tp3_exo1
+EXO2 = tp3_exo2
 
-all: $(EXEC)
+all: $(EXO1) $(EXO2)
 
-$(EXEC) : $(EXEC).o 
+
+$(EXO1) : $(EXO1).o 
 	$(CC) -o $@ $^ $(OPTIONS)
-
-$(EXEC).o : $(EXEC).c # $(EXEC).h
-	$(CC) -o $@ -c $< $(OPTIONS)
+$(EXO2) : $(EXO2).o 
+	$(CC) -o $@ $^ $(OPTIONS)
 
 %.o : %.c 
 	$(CC) -o $@ -c $< $(OPTIONS)
@@ -18,4 +19,4 @@ $(EXEC).o : $(EXEC).c # $(EXEC).h
 clean:
 	@rm -rf *.o *.out
 mrproper: clean
-	@rm $(EXEC) 2>/dev/null
+	@rm $(EXO1) $(EXO2) 2>/dev/null
