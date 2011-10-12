@@ -53,7 +53,41 @@ void ex1_famille_proc2()
 }
 void ex1_famille_proc3()
 {
-
+	int i,status;
+	for(i = 0 ; i < 2 ; i++)
+	{
+		// i == 0 : création du premier fils qui créera un second
+		if(i == 0)
+		{
+			if(fork() == 0) // premier fils
+			{
+				printf("Je suis fils1 mon numero est le : %d, mon père est le : %d\n",
+						getpid(),
+						getppid());
+				if(fork() == 0)
+				{
+					printf("Je suis fils2 mon numero est le : %d, mon père est le : %d\n",
+							getpid(),
+							getppid());
+					exit(0); // fin du second fils
+				}
+				wait(&status);
+				exit(0);
+			}
+		}
+		else // création du fils 3
+		{
+			if(fork() == 0) // fils 3
+			{
+				printf("Je suis fils3 mon numero est le : %d, mon père est le : %d\n",
+						getpid(),
+						getppid());
+				exit(0);
+			}
+		}
+	}
+	for(i = 0 ; i < 2 ; i++)
+		wait(&status);
 }
 
 int main(int argc, char * argv[])
