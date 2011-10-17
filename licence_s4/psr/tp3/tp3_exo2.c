@@ -10,13 +10,14 @@
 int main(int argc, char * argv[])
 {
 	int palpha[2],pdigit[2],nb_chiffres = 0, nb_lettres = 0;
+	int pidalpha,piddigit;
 	char c;
 	char buf[1];
-	int status; // pour la fin des fils
+	int status1,status2; // pour la fin des fils
 
 	// premier fils, alpha
 	pipe(palpha);
-	if(fork() == 0)
+	if((pidalpha = fork()) == 0)
 	{
 		close(0); 
 		close(palpha[1]);
@@ -24,14 +25,13 @@ int main(int argc, char * argv[])
 		{
 			nb_lettres++;
 		}
-		printf("nb de lettres = %d\n", nb_lettres);
-		exit(EXIT_SUCCESS);
+		exit(nb_lettres);
 	}
 	close(palpha[0]); // ne nous sert plus
 
 	// second fils, digit
 	pipe(pdigit);
-	if(fork() == 0)
+	if((piddigit = fork()) == 0)
 	{
 		close(0); 
 		close(palpha[1]);
@@ -40,8 +40,7 @@ int main(int argc, char * argv[])
 		{
 			nb_chiffres++;
 		}
-		printf("nb de chiffres = %d\n", nb_chiffres);
-		exit(EXIT_SUCCESS);
+		exit(nb_chiffres);
 	}
 	while((c = getchar()) != EOF)
 	{
@@ -53,8 +52,10 @@ int main(int argc, char * argv[])
 	close(pdigit[1]);
 
 	// On attend la fin des fils
-	wait(&status);
-	wait(&status);
+	waitpid(piddigit, &status1, 0);
+	printf("nb de chiffres = %d\n", WEXITSTATUS(status1));
+	waitpid(pidalpha, &status2, 0);
+	printf("nb de lettres = %d\n", WEXITSTATUS(status2));
 	return EXIT_SUCCESS;
 }
 
