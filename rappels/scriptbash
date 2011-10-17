@@ -1,0 +1,38 @@
+#!/bin/bash
+
+var='truc'
+mypwd=`pwd`
+mypwd2=$(pwd)
+numerique=13
+numerique2=0
+
+#	if [ condition ] 
+#	then
+#		...
+#	elif [ condition ]
+#		...
+#	else
+#		...
+#	fi
+#	
+#	for var in `seq 1 1000`
+#	do
+#		...
+#	done
+
+## EXAMPLES
+
+# echo ${mypwd}
+# echo $(pwd)
+
+#	[ ${var} = "truc" ] && echo "COUCOU" || echo "bidule"
+#	
+#	-eq = ; -gt > ; -ge >= ; -lt < ; -le <= ; -ne != 
+#	[ 0 -eq ${numerique2} ] && echo "la variable ${numerique2} vaut 0" || echo "ou pas"
+
+#	for i in $(seq 1 1000)
+#	do
+#		echo $i
+#		[ $i -eq 10 ] && break
+#	done
+
