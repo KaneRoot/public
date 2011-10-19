@@ -13,6 +13,9 @@
  */
 int n = 0;
 int val_defaut = 0;
+int u0;
+
+//
 void hand_exo2(int s)
 {
 	printf("\n");
@@ -48,8 +51,8 @@ void hand_exo3_int(int s)
 	int nb_alea1 = 0;
 	int nb_alea2 = 0;
 	srand(time(NULL));
-	nb_alea1 = rand() % 7;
-	nb_alea2 = rand() % 7;
+	nb_alea1 = (rand() % 6)+1;
+	nb_alea2 = (rand() % 6)+1;
 	printf("%d %d\n",nb_alea1,nb_alea2);
 	if(n <= 0)
 		exit(EXIT_SUCCESS);
@@ -74,10 +77,21 @@ void exo3()
 		sigsuspend(&signaux);
 	}
 }
+void syracuse()
+{
+	
+}
 int main(int argc, char * argv[])
 {
+	int i;
 	//exo2(atoi(argv[1]));
 	exo3();
+	//printf("%d \n",syracuse(10));
+	for(i = 1 ; i < INT_MAX ; i++)
+	{
+		u0 = i;
+		syracuse();
+	}
 	
 	return EXIT_SUCCESS;
 }
