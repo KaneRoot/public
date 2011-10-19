@@ -2,7 +2,7 @@ CC = gcc
 CFLAGS = -Wall -g -std=c99
 LDFLAGS = 
 OPTIONS = $(CFLAGS) $(LDFLAGS)
-EXEC = tp2
+EXEC = tp3
 
 all: $(EXEC)
 
