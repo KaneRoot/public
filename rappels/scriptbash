@@ -1,10 +1,7 @@
 #!/bin/bash
 
-var='truc'
-mypwd=`pwd`
-mypwd2=$(pwd)
-numerique=13
-numerique2=0
+mypwd=`pwd` # $(pwd)
+var=13
 
 #	if [ condition ] 
 #	then
@@ -28,7 +25,7 @@ numerique2=0
 #	[ ${var} = "truc" ] && echo "COUCOU" || echo "bidule"
 #	
 #	-eq = ; -gt > ; -ge >= ; -lt < ; -le <= ; -ne != 
-#	[ 0 -eq ${numerique2} ] && echo "la variable ${numerique2} vaut 0" || echo "ou pas"
+#	[ 0 -eq ${var} ] && echo "la variable ${var} vaut 0" || echo "ou pas"
 
 #	for i in $(seq 1 1000)
 #	do
