@@ -27,6 +27,28 @@ void affich_mat( float** mat, int nbl, int nbc )
 		printf( " %2d |", i );	
 		for ( j = 0 ; j < nbc ; j++ )
 			printf( " %2.2f", mat[i][j] );
+		printf( "\n" );
+	}
+	printf( "\n" );
+}
+
+void display_matrix(matrice_s * m) 
+{
+	int i, j;
+
+	printf( "     " );
+	for ( i = 0 ; i < m->nbc ; i++ ) 
+		printf( " %4d", i ); 
+	printf( "\n     " );
+	for ( i = 0 ; i < m->nbc ; i++ ) 
+		printf( "-----" ); 
+	printf( "\n" );
+
+	for ( i = 0 ; i < m->nbl ; i++ ) 
+	{
+		printf( " %2d |", i );	
+		for ( j = 0 ; j < m->nbc ; j++ )
+			printf( " %2.2f", m->matrice[i][j] );
 
 		printf( "\n" );
 	}
@@ -84,15 +106,27 @@ float** lire_mat( int nbl, int nbc )
 	t = (float **) malloc(nbl * sizeof(float*));
 	for(i=0;i<nbl;i++)
 		t[i] = malloc(nbc * sizeof(float));
-	for(i=0;i<nbl;i++)
+	for(i = 0 ; i < nbl ; i++ )
 	{
-		for(j=0;j<nbc;j++)
+		for(j = 0 ; j < nbc ; j++)
 		{
 			printf("Ligne %2d Colonne %2d : ",i,j);
 			scanf("%f", &t[i][j]);
 		}
 	}
 	return t;
+}
+matrice_s * add_matrix(matrice_s * m1, matrice_s * m2)
+{
+	int i, j;
+	matrice_s * somme = malloc(sizeof(matrice_s*));
+	somme->nbc = m1->nbc;
+	somme->nbl = m1->nbl;
+
+	for(i = 0 ; i < m1->nbl ; i++)
+		for(j = 0 ; j < m1->nbc ; j++)
+			somme->matrice[i][j] = m1->matrice[i][j] + m2->matrice[i][j];
+	return somme;
 }
 
 // Les 2 matrices + nb de lignes + nb de colonnes
