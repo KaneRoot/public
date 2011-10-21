@@ -2,6 +2,14 @@
 #include <stdlib.h>
 #include <string.h>
 
+
+typedef struct
+{
+	int nbl;
+	int nbc;
+	float **matrice;
+} matrice_s;
+
 void affich_mat( float** mat, int nbl, int nbc ) 
 {
 	int i, j;
@@ -23,6 +31,41 @@ void affich_mat( float** mat, int nbl, int nbc )
 		printf( "\n" );
 	}
 	printf( "\n" );
+}
+matrice_s * create_matrix(int nbl, int nbc)
+{
+	int i;
+	float **t;
+	t = (float **) malloc(nbl * sizeof(float*));
+	for(i = 0 ; i < nbl ; i++)
+		t[i] = (float*)malloc(nbc * sizeof(float));
+
+	matrice_s * m = malloc(sizeof(matrice_s*));
+	m->matrice = t;
+	m->nbl = nbl;
+	m->nbc = nbc;
+	return m;
+}
+matrice_s * read_matrix( int nbl, int nbc ) 
+{
+	int i,j;
+	float **t;
+	t = (float **) malloc(nbl * sizeof(float*));
+	matrice_s * m = malloc(sizeof(matrice_s *));
+	m->nbc = nbc;
+	m->nbl = nbl;
+	for(i=0;i<nbl;i++)
+		t[i] = malloc(nbc * sizeof(float));
+	for(i=0;i<nbl;i++)
+	{
+		for(j=0;j<nbc;j++)
+		{
+			printf("Ligne %2d Colonne %2d : ",i,j);
+			scanf("%f", &t[i][j]);
+		}
+	}
+	m->matrice = t;
+	return m;
 }
 float** creer_matrice(int nbl, int nbc)
 {
