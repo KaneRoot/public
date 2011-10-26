@@ -11,6 +11,7 @@
  * et le père envoie à son fils le signal USR1 pour que son fils se termine, il attend son retour
  * et affiche sa valeur de retour
  */
+#define INT_MAX 1e3
 int n = 0;
 int val_defaut = 0;
 int u0;

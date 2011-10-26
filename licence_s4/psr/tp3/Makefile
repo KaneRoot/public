@@ -3,8 +3,9 @@ CFLAGS = -Wall -g #-std=c99
 LDFLAGS = 
 OPTIONS = $(CFLAGS) $(LDFLAGS)
 EXEC = tp3
+EXEC2 = exo1
 
-all: $(EXEC)
+all: $(EXEC) $(EXEC2)
 
 $(EXEC) : $(EXEC).o 
 	$(CC) -o $@ $^ $(OPTIONS)
@@ -18,4 +19,4 @@ $(EXEC).o : $(EXEC).c
 clean:
 	@rm -rf *.o *.out
 mrproper: clean
-	@rm $(EXEC) 2>/dev/null
+	@rm $(EXEC) $(EXEC2) 2>/dev/null

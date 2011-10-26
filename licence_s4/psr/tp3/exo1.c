@@ -16,7 +16,6 @@ void hand_sigusr1(int sig)
 int main() 
 {
 	pid_t pid;
-	int i = 0;
 	int status;
 	action.sa_handler=hand_sigusr1;
 	sigaction(SIGUSR1,&action,NULL);
@@ -24,7 +23,7 @@ int main()
 	{
 		printf("Je suis le fils de PID %d\n", getpid());
 		/* processus fils bouclant */
-		while(1) { i = 0; };
+		while(1) { };
 	}
 	printf("Je suis le pere de PID %d\n", getpid());
 	if(kill(pid,0)==-1) // test d'existance
