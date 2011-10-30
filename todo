@@ -1,4 +1,5 @@
 # Apprendre le LUA : http://www.luteus.biz/Download/LoriotPro_Doc/LUA/LUA_Training_FR/Introduction_Programmation.html
+# Apprendre LÖVE
 # Boot PXE + tuto
 # Faire un script d'ajout d'utilisateur git+trac + page web
 # Installer NickServ + autres outils + faire un post sur karchnu.fr
@@ -6,8 +7,8 @@
 # Configurer un Trac + git
 # Apprendre à utiliser les EFL
 # Mettre le serveur sous Debian
-# Faire une liste de tout ce que je met en place sur le serveur
-# Remettre les backup en place
+	# Faire une liste de tout ce que je met en place sur le serveur
+	# Remettre les backup en place
 # Pour la création de dépôts : mettre une conf' pour Debian
 # Apprendre à virtualiser avec libvirt
 # Faire le document "Ordinateur" + "Utilisation" pour moman
@@ -31,6 +32,5 @@
 # GRO
 # Faire l'anglais
 # Finir le "Personal File"
-# Faire le projet en SDA
 # Anglais : mettre l'image DL de 4chan sur le wiki
 # Anglais : mettre à jour oz s2
