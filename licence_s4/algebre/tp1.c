@@ -47,6 +47,49 @@ matrice_s * create_matrix(int nbl, int nbc)
 	m->nbc = nbc;
 	return m;
 }
+void free_matrix(matrice_s * m)
+{
+	int i;
+	for(i = 0 ; i < m->nbl ; i++)
+		free(m->matrice[i]);
+	free(m->matrice);
+	free(m);
+}
+
+float calcul_determinant_nxn(matrice_s *m)
+{
+	if(m->nbl == 2 && m->nbc == 2)
+		return (m->matrice[0][0] * m->matrice[1][1]) - (m->matrice[1][0] * m->matrice[0][1]);
+
+	float somme = 0;
+	int i, j,k,l;
+	matrice_s * tmp;
+	for(i = 0 ; i < m->nbl ; i++)
+	{
+		for(j = 0 ; j < m->nbc ; j++)
+		{
+			tmp = create_matrix(m->nbl -1, m->nbc -1);
+			for(k = 0 ; k < m->nbl ; k++)
+			{
+				if(k == i)
+					k++;
+				for(l = 0 ; l < m->nbc ; l++)
+				{
+					if(l == j)
+						l++;
+					tmp->matrice[k][l] = m->matrice[k][l];
+				}
+			}
+			if((i % 2) == 0)
+				somme += (m->matrice[i][j] * calcul_determinant_nxn(tmp));
+			else
+				somme -= (m->matrice[i][j] * calcul_determinant_nxn(tmp));
+
+			free_matrix(tmp);
+		}
+	}
+	return somme;
+}
 matrice_s * read_matrix( int nbl, int nbc ) 
 {
 	int i,j;
@@ -107,14 +150,6 @@ matrice_s * transposee_matrix(matrice_s *m)
 			t->matrice[j][i] = m->matrice[i][j];
 	return t;
 }
-void free_matrix(matrice_s * m)
-{
-	int i;
-	for(i = 0 ; i < m->nbl ; i++)
-		free(m->matrice[i]);
-	free(m->matrice);
-	free(m);
-}
 int main(int argc, char * argv[])
 {
 	matrice_s *m1, *m2,*m3,*multiplication, *transposee;
@@ -136,6 +171,8 @@ int main(int argc, char * argv[])
 	printf("Transposée de m1 \n");
 	transposee = transposee_matrix(m1);
 	display_matrix(transposee);
+
+	printf("Déterminant de la première matrice : %f\n",calcul_determinant_nxn(m1));
 
 	free_matrix(m1);
 	free_matrix(m2);
