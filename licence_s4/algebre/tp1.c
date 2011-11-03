@@ -98,9 +98,26 @@ matrice_s * multiplication_matrices(matrice_s *m1, matrice_s *m2)
 	}
 	return m;
 }
+matrice_s * transposee_matrix(matrice_s *m)
+{
+	int i,j;
+	matrice_s * t = create_matrix(m->nbc, m->nbl);
+	for(i = 0 ; i < m->nbl ; i++)
+		for(j = 0 ; j < m->nbc ; j++)
+			t->matrice[j][i] = m->matrice[i][j];
+	return t;
+}
+void free_matrix(matrice_s * m)
+{
+	int i;
+	for(i = 0 ; i < m->nbl ; i++)
+		free(m->matrice[i]);
+	free(m->matrice);
+	free(m);
+}
 int main(int argc, char * argv[])
 {
-	matrice_s *m1, *m2,*m3,*multiplication;
+	matrice_s *m1, *m2,*m3,*multiplication, *transposee;
 
 	printf("Création des matrices\n");
 	m1 = read_matrix(2,2);
@@ -116,10 +133,15 @@ int main(int argc, char * argv[])
 	printf("Multiplication de m1 et m2\n");
 	multiplication = multiplication_matrices(m1,m2);
 	display_matrix(multiplication);
+	printf("Transposée de m1 \n");
+	transposee = transposee_matrix(m1);
+	display_matrix(transposee);
 
+	free_matrix(m1);
+	free_matrix(m2);
+	free_matrix(m3);
+	free_matrix(multiplication);
+	free_matrix(transposee);
 
-	//test_somme();
-	//test_transposee();
-	//test_multiplication();
 	return EXIT_SUCCESS;
 }
