@@ -41,7 +41,7 @@ void exo2()
 		if(fork() == 0)
 		{
 			char * tmp[] = { "date", NULL };
-			execve("date", tmp, NULL);
+			execve("/bin/date", tmp, NULL);
 			exit(1); // execve ne s'est pas bien exécuté
 		}
 		else
