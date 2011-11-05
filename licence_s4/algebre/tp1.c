@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 
 typedef struct
@@ -15,7 +16,7 @@ void display_matrix(matrice_s * m)
 {
 	int i, j;
 
-	printf( "     " );
+	printf( "    " );
 	for ( i = 0 ; i < m->nbc ; i++ ) 
 		printf( " %4d", i ); 
 	printf( "\n     " );
@@ -50,14 +51,24 @@ matrice_s * create_matrix(int nbl, int nbc)
 void free_matrix(matrice_s * m)
 {
 	int i;
-	for(i = 0 ; i < m->nbl ; i++)
-		free(m->matrice[i]);
-	free(m->matrice);
-	free(m);
+	if(m != NULL)
+	{
+		for(i = 0 ; i < m->nbl ; i++)
+		{
+			if(m->matrice[i] != NULL)
+				free(m->matrice[i]);
+		}
+		if(m->matrice != NULL)
+			free(m->matrice);
+		free(m);
+	}
 }
 
 float calcul_determinant_nxn(matrice_s *m)
 {
+	if(m == NULL || m->nbc != m->nbl)
+		return -1.0;
+
 	if(m->nbl == 2 && m->nbc == 2)
 		return (m->matrice[0][0] * m->matrice[1][1]) - (m->matrice[1][0] * m->matrice[0][1]);
 
@@ -68,14 +79,16 @@ float calcul_determinant_nxn(matrice_s *m)
 	{
 		for(j = 0 ; j < m->nbc ; j++)
 		{
-			tmp = create_matrix(m->nbl -1, m->nbc -1);
+			tmp = create_matrix((m->nbl-1), (m->nbc -1));
 			for(k = 0 ; k < m->nbl ; k++)
 			{
+				
 				if(k == i)
 				{
 					k++;
 					tmpk++;
 				}
+				if(k >= m->nbl) break;
 				for(l = 0 ; l < m->nbc ; l++)
 				{
 					if(l == j)
@@ -83,11 +96,12 @@ float calcul_determinant_nxn(matrice_s *m)
 						l++;
 						tmpl++;
 					}
+					if(l >= m->nbc) break;
 					tmp->matrice[k - tmpk][l - tmpl] = m->matrice[k][l];
 				}
+				tmpl = 0;
 			}
 			tmpk = 0;
-			tmpl = 0;
 			if((i % 2) == 0)
 				somme += (m->matrice[i][j] * calcul_determinant_nxn(tmp));
 			else
@@ -158,6 +172,44 @@ matrice_s * transposee_matrix(matrice_s *m)
 			t->matrice[j][i] = m->matrice[i][j];
 	return t;
 }
+void remplir_alea(matrice_s * m)
+{
+	int i,j;
+	static int remplir_alea_first = 0;
+
+	if (remplir_alea_first == 0)
+	{
+		srand (time (NULL));
+		remplir_alea_first = 1;
+	}
+	for( i = 0 ; i < m->nbl ; i++)
+		for(j = 0 ; j < m->nbc ; j++)
+			m->matrice[i][j] = (rand() + 1) % 6;
+}
+void test_determinant()
+{
+	float f;
+	matrice_s *m;
+
+	printf("Test de calcul du déterminant \n");
+
+	m = create_matrix(3,3);
+	remplir_alea(m);
+	printf("Création d'une matrice 4x4\n");
+	printf("Display Matrix\n");
+	display_matrix(m);
+	f = calcul_determinant_nxn(m);
+	printf("Déterminant de la matrice : %f\n",f);
+
+	free_matrix(m);
+}
+void test()
+{
+	matrice_s * t = create_matrix(10,10);
+	remplir_alea(t);
+	display_matrix(t);
+	free_matrix(t);
+}
 int main(int argc, char * argv[])
 {
 	/*
@@ -182,11 +234,8 @@ int main(int argc, char * argv[])
 	display_matrix(transposee);
 
 	*/
-	printf("Création d'une matrice 4x4\n");
-	matrice_s *m = read_matrix(4,4);
-	printf("Déterminant de la : %f\n",calcul_determinant_nxn(m));
-
-	free_matrix(m);
+	test_determinant();
+	//test();
 	/*
 	free_matrix(m1);
 	free_matrix(m2);
