@@ -2,17 +2,18 @@ CC = gcc
 CFLAGS = -Wall -g #-std=c99
 LDFLAGS = 
 OPTIONS = $(CFLAGS) $(LDFLAGS)
-EXEC = tp1
+EXEC = tests
+FICHIERSO = calculs_base.o base.o determinant.o
 
-all: $(EXEC)
+all: calculs_base.o base.o determinant.o $(EXEC) 
 
 $(EXEC) : $(EXEC).o 
-	$(CC) -o $@ $^ $(OPTIONS)
+	$(CC) -o $@ $^ $(FICHIERSO) $(OPTIONS)
 
 $(EXEC).o : $(EXEC).c
 	$(CC) -o $@ -c $< $(OPTIONS)
 
-%.o : %.c 
+%.o : %.c %.h
 	$(CC) -o $@ -c $< $(OPTIONS)
 
 clean:
