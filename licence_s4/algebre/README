@@ -1,0 +1,24 @@
+TP n°2:
+- Ecrire un algorithme calculant le déterminant d'une matrice nxn
+- Ecrire un algorithme qui calcule la matrice inverse étant donnée une matrice nxn.
+
+
+Fait : 
+Ecrire un programme qui effectue :
+- La transposée d’une matrice
+- La somme de 2 matrices
+- La multiplication de 2 matrices de tailles différentes.
+
+Doute :
+- Le Déterminant d'une matrice de taille nxn.
+
+À faire : 
+- L' Inversion d’une matrice :
+	. Par la comatrice
+	. Par le pivot de Gauss
+- La résolution d’un système par pivot de Gauss
+- Calcul des valeurs propres d’une matrice (détermination de l’équation caractéristique = det (A – lambda I) puis résolution par pivot.
+		Envoyer le fichier source ainsi qu'un petit rapport sous LaTeX expliquant comment fonctionnent vos programmes.
+		Remarque: on s'attachera à rendre le programme le plus convivial possible
+
+À rendre jusqu'au:	dimanche 18 décembre 2011, 00:00
