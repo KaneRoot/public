@@ -102,6 +102,8 @@ float calcul_determinant_nxn(matrice_s *m)
 				tmpl = 0;
 			}
 			tmpk = 0;
+			//display_matrix(tmp);
+			//if(m->nbl == 3) printf("\t");
 			if((i % 2) == 0)
 				somme += (m->matrice[i][j] * calcul_determinant_nxn(tmp));
 			else
@@ -184,7 +186,7 @@ void remplir_alea(matrice_s * m)
 	}
 	for( i = 0 ; i < m->nbl ; i++)
 		for(j = 0 ; j < m->nbc ; j++)
-			m->matrice[i][j] = (rand() + 1) % 6;
+			m->matrice[i][j] = (rand() + 4) % 20;
 }
 void test_determinant()
 {
@@ -203,27 +205,21 @@ void test_determinant()
 
 	free_matrix(m);
 }
-void test()
+void test_multiplication_addition()
 {
-	matrice_s * t = create_matrix(10,10);
-	remplir_alea(t);
-	display_matrix(t);
-	free_matrix(t);
-}
-int main(int argc, char * argv[])
-{
-	/*
 	matrice_s *m1, *m2,*m3,*multiplication, *transposee;
 
-	printf("Création des matrices\n");
-	m1 = read_matrix(2,2);
-	m2 = read_matrix(2,2);
+	printf("Création + remplissage de 2 matrices\n");
+	m1 = create_matrix(3,3);
+	m2 = create_matrix(3,3);
+	remplir_alea(m1);
+	remplir_alea(m2);
+
 	printf("Affichage des matrices\n");
 	display_matrix(m1);
 	display_matrix(m2);
 	printf("Addition des matrices précédentes : \n");
 	m3 = add_matrix(m1,m2);
-	// Affichage 
 	display_matrix(m3);
 
 	printf("Multiplication de m1 et m2\n");
@@ -233,16 +229,16 @@ int main(int argc, char * argv[])
 	transposee = transposee_matrix(m1);
 	display_matrix(transposee);
 
-	*/
-	test_determinant();
-	//test();
-	/*
 	free_matrix(m1);
 	free_matrix(m2);
 	free_matrix(m3);
 	free_matrix(multiplication);
 	free_matrix(transposee);
-	*/
+}
+int main(int argc, char * argv[])
+{
+	//test_multiplication_addition();
+	test_determinant();
 
 	return EXIT_SUCCESS;
 }
