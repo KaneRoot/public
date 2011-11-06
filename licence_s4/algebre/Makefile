@@ -3,9 +3,9 @@ CFLAGS = -Wall -g #-std=c99
 LDFLAGS = 
 OPTIONS = $(CFLAGS) $(LDFLAGS)
 EXEC = tests
-FICHIERSO = calculs_base.o base.o determinant.o
+FICHIERSO = calculs_base.o base.o determinant.o inversion.o
 
-all: calculs_base.o base.o determinant.o $(EXEC) 
+all: calculs_base.o base.o determinant.o inversion.o $(EXEC) 
 
 $(EXEC) : $(EXEC).o 
 	$(CC) -o $@ $^ $(FICHIERSO) $(OPTIONS)

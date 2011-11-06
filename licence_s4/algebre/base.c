@@ -93,5 +93,5 @@ void remplir_alea(matrice_s * m)
 	}
 	for( i = 0 ; i < m->nbl ; i++)
 		for(j = 0 ; j < m->nbc ; j++)
-			m->matrice[i][j] = (rand() + 4) % 20;
+			m->matrice[i][j] = (rand() % 3) +1;
 }

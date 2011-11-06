@@ -6,8 +6,10 @@
 #include "base.h"
 #include "calculs_base.h"
 #include "determinant.h"
+#include "inversion.h"
 
 #define TAILLE_MATRICE_MULTIPLICATION 4
+#define TAILLE_MATRICE_DETERMINANT 7
 
 
 void test_determinant()
@@ -17,7 +19,7 @@ void test_determinant()
 
 	printf("Test de calcul du déterminant \n");
 
-	m = create_matrix(4,4);
+	m = create_matrix(TAILLE_MATRICE_DETERMINANT,TAILLE_MATRICE_DETERMINANT);
 	remplir_alea(m);
 	printf("Création d'une matrice 4x4\n");
 	printf("Display Matrix\n");
@@ -27,7 +29,7 @@ void test_determinant()
 
 	free_matrix(m);
 }
-void test_multiplication_addition()
+void tests_calculs_base()
 {
 	matrice_s *m1, *m2,*m3,*multiplication, *transposee;
 
@@ -59,7 +61,7 @@ void test_multiplication_addition()
 }
 int main(int argc, char * argv[])
 {
-	//test_multiplication_addition();
+	//tests_calculs_base();
 	test_determinant();
 
 	return EXIT_SUCCESS;
