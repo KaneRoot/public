@@ -87,3 +87,27 @@ Rel * comp(Rel * r1, Rel * r2)
 	}
 	return r3;
 }
+Rel * sym(Rel * r1)
+{
+	Nat	i, j;
+	Rel * r2 = nouvelle_relation();
+	for(i = 0 ; i < TAILLE ; i++)
+	{
+		for(j = 0; j < TAILLE ; j++)
+		{
+			if(ea(r1,i,j))
+				r2 = aa(r2,j,i);
+		}
+	}
+}
+// Union
+Rel * Un(Rel * r1, Rel * r2)
+{
+	Nat i, j;
+	for(i = 0 ; i < TAILLE ; i++)
+	{
+		for(j = 0; j < TAILLE ; j++)
+		{
+		}
+	}
+}
