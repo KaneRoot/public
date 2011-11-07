@@ -9,6 +9,7 @@ int main(int argc, char * argv[])
 	Arbinom * a = lier(feuille(3),feuille(15));
 	printf("hauteur de a : %d\n", hauteur(a));
 	printf("hauteur de premier_fils(a) : %d\n", hauteur(premier_fils(a)));
+	printf("hauteur de autres_fils(a) : %d\n", hauteur(autres_fils(a)));
 	printf("est_feuille de a : %d\n", est_feuille(a));
 	printf("est_feuille de feuille(x) : %d\n", est_feuille(feuille(1)));
 	printf("racine de a : %d\n", racine(a));
