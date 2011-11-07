@@ -34,4 +34,6 @@ Arbinom * premier_fils(Arbinom *a);
 // af
 Arbinom * autres_fils(Arbinom *a);
 
+void affichage(Arbinom *a);
+
 #endif
