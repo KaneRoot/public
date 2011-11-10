@@ -1,31 +1,58 @@
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "base.h"
 
-typedef Rel int[];
+#define TAILLE 15
+
+typedef int RELATION;
 
 typedef struct
 {
-	 * relations;
-	int n;
+	RELATION * relations;
 } graphe_s;
 
-graphe_s * irg(rel * r)
+graphe_s * nouveau_graphe(Nat taille)
 {
+	int i;
+	graphe_s * g = NULL;
+	g = malloc(sizeof(graphe_s));
+	if(g == NULL)
+	{
+		fprintf(stderr, "malloc(sizeof(graphe_s)) -- error\n");
+		exit(EXIT_FAILURE);
+	}
+	g->relations = (RELATION *) malloc(sizeof(int)*taille*taille);
+	if(g->relations == NULL)
+	{
+		fprintf(stderr, "malloc(sizeof(int)*taille*taille) -- error\n");
+		exit(EXIT_FAILURE);
+	}
+	for(i = 0 ; i < taille*taille ; i++)
+		g->relations[i] = 0;
+	return g;
 }
-Rel * igr(graphe_s * g)
+graphe_s * irg(RELATION * r) 
 {
+	graphe_s * g = nouveau_graphe(TAILLE);
+	free(g->relations);
+	g->relations = r;
+
+	return g;
+}
+RELATION * igr(graphe_s * g) {
+	return g->relations;
 }
 void adja(graphe_s * g, Nat a, Nat b)
 {
-	if(a >= 0 && b >= 0)
-		g.relations[a*b] = VRAI;
+	if(a >= 0 && b >= 0 && a < TAILLE && b < TAILLE)
+		g->relations[a*b] = VRAI;
 }
 void supa(graphe_s * g, Nat a, Nat b)
 {
-	if(a >= 0 && b >= 0)
+	if(a >= 0 && b >= 0 && a < TAILLE && b < TAILLE)
 		g->relations[a*b] = FAUX;
 }
 int exa(graphe_s * g, Nat a, Nat b)
@@ -40,3 +67,47 @@ int main(int argc, char * argv[])
 	return EXIT_SUCCESS;
 }
 
+// Fait en cours
+
+Rel * comp(Rel * r1, Rel * r2)
+{
+	Nat i, j, k;
+	Rel * r3 = rv(); // Relation vide
+	bool x = FAUX;
+	
+	for(i = 0 ; i < TAILLE ; i++)
+	{
+		for(k = 0 ; k < TAILLE ; k++)
+		{
+			x = x || (ea(r1,i,k) && ea(r2,k,j));
+		}
+		if(x)
+			r3 = aa(r3,i,j);
+		}
+	}
+	return r3;
+}
+Rel * sym(Rel * r1)
+{
+	Nat	i, j;
+	Rel * r2 = nouvelle_relation();
+	for(i = 0 ; i < TAILLE ; i++)
+	{
+		for(j = 0; j < TAILLE ; j++)
+		{
+			if(ea(r1,i,j))
+				r2 = aa(r2,j,i);
+		}
+	}
+}
+// Union
+Rel * Un(Rel * r1, Rel * r2)
+{
+	Nat i, j;
+	for(i = 0 ; i < TAILLE ; i++)
+	{
+		for(j = 0; j < TAILLE ; j++)
+		{
+		}
+	}
+}
