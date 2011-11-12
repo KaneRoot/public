@@ -7,6 +7,7 @@
 #include "calculs_base.h"
 #include "determinant.h"
 #include "inversion.h"
+#include "comatrice.h"
 
 #define TAILLE_MATRICE_MULTIPLICATION 4
 #define TAILLE_MATRICE_DETERMINANT 4
@@ -14,8 +15,7 @@
 
 void test_determinant()
 {
-	float f;
-	matrice_s *m;
+	matrice_s *m, *co;
 
 	printf("Test de calcul du déterminant \n");
 
@@ -24,8 +24,9 @@ void test_determinant()
 	printf("Création d'une matrice 4x4\n");
 	printf("Display Matrix\n");
 	display_matrix(m);
-	f = calcul_determinant_nxn(m);
-	printf("Déterminant de la matrice : %f AUTRE : %f\n",f, det_nxn(m));
+	co = comatrice(m);
+	display_matrix(co);
+	printf("Déterminant de la matrice : %f\n",det_nxn(m));
 
 	free_matrix(m);
 }
