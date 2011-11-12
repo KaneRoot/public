@@ -9,7 +9,7 @@
 #include "inversion.h"
 
 #define TAILLE_MATRICE_MULTIPLICATION 4
-#define TAILLE_MATRICE_DETERMINANT 7
+#define TAILLE_MATRICE_DETERMINANT 4
 
 
 void test_determinant()
@@ -25,7 +25,7 @@ void test_determinant()
 	printf("Display Matrix\n");
 	display_matrix(m);
 	f = calcul_determinant_nxn(m);
-	printf("Déterminant de la matrice : %f\n",f);
+	printf("Déterminant de la matrice : %f AUTRE : %f\n",f, det_nxn(m));
 
 	free_matrix(m);
 }

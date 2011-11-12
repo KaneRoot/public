@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -g #-std=c99
-LDFLAGS = 
+LDFLAGS = -lm
 OPTIONS = $(CFLAGS) $(LDFLAGS)
 EXEC = tests
 FICHIERSO = calculs_base.o base.o determinant.o inversion.o
