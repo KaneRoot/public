@@ -59,13 +59,13 @@ fin:
 
 # affiche une valeur, fonction de type stem
 write_int_nl:	
-	sub $sp, $sp, 4
-	sw $ra, ($sp)
+	sub $sp, $sp, 4				# soustrait 4 au pointeur de pile
+	sw $ra, ($sp)				# sauvegarde ra dans la pile
 	li $v0, 1					# appel système n. 1
 	syscall						# lit un entier dans a0
 	jal write_nl				# écriture d'un retour à la ligne
-	lw $ra, ($sp)
-	addu $sp, $sp, 4
+	lw $ra, ($sp)				# charge ra depuis la pile
+	addu $sp, $sp, 4			# ajoute 4 au pointeur de pile
 	j $ra						# retour à l'instruction appelante
 
 # écrit un retour à la ligne, fonction de type leaf
@@ -82,8 +82,8 @@ write_int_space:
 	syscall						# lit un entier dans a0
 	la $a0, str_space_bar		# chargement de l'@ de str_space_bar
 	jal write_string			# écriture de la chaîne
-	lw $ra, ($sp)
-	addu $sp, $sp, 4
+	lw $ra, ($sp)				# charge ra depuis la pile
+	addu $sp, $sp, 4			# ajoute 4 au pointeur de pile
 	j $ra						# retour à l'instruction appelante
 
 write_string:		
@@ -92,12 +92,12 @@ write_string:
 	j $ra						# retour à l'instruction appelante
 
 write_space_bar:
-	sub $sp, $sp, 4
-	sw $ra, ($sp)
+	sub $sp, $sp, 4				# soustrait 4 au pointeur de pile
+	sw $ra, ($sp)				# sauvegarde ra dans la pile
 	la $a0, str_space_bar
 	jal write_string
-	lw $ra, ($sp)
-	addu $sp, $sp, 4
+	lw $ra, ($sp)				# charge ra depuis la pile
+	addu $sp, $sp, 4			# ajoute 4 au pointeur de pile
 	j $ra
 
 malloc:							# procédure d'allocation dynamique
@@ -106,14 +106,14 @@ malloc:							# procédure d'allocation dynamique
 	j  $ra						# retourne le pointeur dans v0
 
 create_array:
-	sub $sp, $sp, 4
-	sw $ra, ($sp)
+	sub $sp, $sp, 4				# soustrait 4 au pointeur de pile
+	sw $ra, ($sp)				# sauvegarde ra dans la pile
 	li $a0, 168					# taille du tableau : 6*7*4 octets
 	jal malloc					# appel à la fonction d'allocation mémoire
 	move $s0, $v0				# on sauvegarde le pointeur dans s0
 	jal init_array				# on initialise toutes les cases à 0
-	lw $ra, ($sp)
-	addu $sp, $sp, 4
+	lw $ra, ($sp)				# charge ra depuis la pile
+	addu $sp, $sp, 4			# ajoute 4 au pointeur de pile
 	j $ra						# retour à l'instruction appelante
 
 get_int:
@@ -123,8 +123,8 @@ get_int:
 	j $ra						# retour à l'instruction appelante
 
 init_array:
-	sub $sp, $sp, 4
-	sw $ra, ($sp)
+	sub $sp, $sp, 4				# soustrait 4 au pointeur de pile
+	sw $ra, ($sp)				# sauvegarde ra dans la pile
 	li $t0, 42					# t0 = nombre de cases du tableau
 init_array_loop:
 	sub $t0, $t0, 1				# t0 = t0 - 1
@@ -132,13 +132,13 @@ init_array_loop:
 	add $t2, $t1, $s0			# @ de la case : t1 + @ 1ère case
 	sw $0, ($t2)				# on écrit 0 dans la case
 	bgt $t0, $0, init_array_loop# tant que t0 != 0 on continue la boucle
-	lw $ra, ($sp)
-	addu $sp, $sp, 4
+	lw $ra, ($sp)				# charge ra depuis la pile
+	addu $sp, $sp, 4			# ajoute 4 au pointeur de pile
 	j $ra						# retour à l'instruction appelante
 
 display_array:
-	sub $sp, $sp, 4
-	sw $ra, ($sp)
+	sub $sp, $sp, 4				# soustrait 4 au pointeur de pile
+	sw $ra, ($sp)				# sauvegarde ra dans la pile
 	li $t3, 24					# 24 = nb octets pour changement de colonne
 	li $t4, 164					# 164 = offcet max tableau
 	move $t0, $s0				# on met s0 dans t0
@@ -155,6 +155,6 @@ display_array_loop:
 	sub $t2, $t2, 4
 	add $t0, $t0, $t2
 	bge $t2, $0, display_array_loop
-	lw $ra, ($sp)
-	addu $sp, $sp, 4
+	lw $ra, ($sp)				# charge ra depuis la pile
+	addu $sp, $sp, 4			# ajoute 4 au pointeur de pile
 	j $ra
