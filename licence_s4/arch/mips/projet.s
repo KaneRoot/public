@@ -98,7 +98,7 @@ write_space_bar:
 	jal write_string
 	lw $ra, ($sp)				# charge ra depuis la pile
 	addu $sp, $sp, 4			# ajoute 4 au pointeur de pile
-	j $ra
+	j $ra						# retour à l'instruction appelante
 
 malloc:							# procédure d'allocation dynamique
 	li $v0, 9					# appel système n. 9 
@@ -140,21 +140,20 @@ display_array:
 	sub $sp, $sp, 4				# soustrait 4 au pointeur de pile
 	sw $ra, ($sp)				# sauvegarde ra dans la pile
 	li $t3, 24					# 24 = nb octets pour changement de colonne
-	li $t4, 164					# 164 = offcet max tableau
+	li $t4, 164					# 164 = offset max tableau
 	move $t0, $s0				# on met s0 dans t0
 	li $t2, 20					# t2 = offset
-	add $t0, $t0, $t2
+	add $t0, $t0, $t2			# t0 = t0 + offset (dernière ligne)
 display_array_loop:
 	lw $a0, ($t0)				# chargement de la valeur à l'@ t0
 	jal write_int_space			# écriture de la valeur de a0
 	add $t0, $t0, $t3			# ajout de la taille d'un offset à t0
 	sub $t1, $t0, $s0			# t1 = t0 - s0
-	bge $t4, $t1, display_array_loop
-	jal write_nl				# écriture d'une 
-	move $t0, $s0
-	sub $t2, $t2, 4
-	add $t0, $t0, $t2
-	bge $t2, $0, display_array_loop
+	bge $t4, $t1, display_array_loop	# ((t0-s0) < offsetmax) ? loop
+	jal write_nl				# écriture d'un retour à la ligne
+	sub $t2, $t2, 4				# offset de ligne décrémenté de 4 octets (1L)
+	add $t0, $s0, $t2			# t0 = pointeur de tableau + offset
+	bge $t2, $0, display_array_loop	# tant que t2 >= 0 : loop
 	lw $ra, ($sp)				# charge ra depuis la pile
 	addu $sp, $sp, 4			# ajoute 4 au pointeur de pile
-	j $ra
+	j $ra						# retour à l'instruction appelante
