@@ -4,7 +4,7 @@
 # spim -notrap -file programme.s
 
 .data
-str_choix_pvp_pvai:	.asciiz "Vous avez le choix : \n0) P VS P\n1) P VS AI\n2) Je veux sortir d'ici !!!\n"
+str_choix_pvp_pvai:	.asciiz "Vous avez le choix : \n1) P VS P\n2) P VS AI\n3) Je veux sortir d'ici !!!\n"
 str_init_array_loop: .asciiz "Loop init_array\n"
 str_display_array_loop: .asciiz "Loop display_array\n"
 str_display_array: .asciiz "Display Array !!! \n"
@@ -25,9 +25,9 @@ wrong_choice:
 	la $a0, str_choix_pvp_pvai	# demande de choix
 	jal write_string			# écriture de la chaîne
 	jal get_int					# on lit un entier, retour sur a0
-	beq $0, $a0, choix_pvp		# si a0 est à 0 => choix pvp
-	beq $a0, 1, choix_pvai		# si a0 est à 1 => choix pvai
-	beq $a0, 2, fin				# si a0 est à 2 => on quitte le programme
+	beq $a0, 1, choix_pvp		# si a0 est à 0 => choix pvp
+	beq $a0, 2, choix_pvai		# si a0 est à 1 => choix pvai
+	beq $a0, 3, fin				# si a0 est à 2 => on quitte le programme
 	# On s'est trompé de choix
 	la $a0, str_wrong_choice	# chargement de la chaîne "mauvais choix"
 	jal write_string			# écriture de la chaîne
@@ -36,12 +36,8 @@ wrong_choice:
 choix_pvp:	
 	la $a0, str_pvp				# chaîne "choix pvp"
 	jal write_string			# écriture de la chaîne
-	
-	move $t9, $ra
-	jal create_array
-	move $ra, $t9
-	jal display_array
-	move $ra, $t9
+	jal create_array			# création du tableau
+	jal display_array			# affichage du tableau
 
 	j fin						# jump au label 'fin'
 
