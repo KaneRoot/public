@@ -8,7 +8,18 @@
 # Apprendre à utiliser les EFL
 # Mettre le serveur sous Debian - FAIT
 	# Faire une liste de tout ce que je met en place sur le serveur
-	# Remettre les backup en place
+		# transmission-daemon
+		# apache2
+			# WordPress
+			# dépôt - TODO
+			# Nanoblog
+			# 
+		# git via ssh
+		# screen sur karchnu all time
+		# dhcp daemon - TODO
+	# Remettre les backup en place - TODO
+		# Archivage des comptes
+		# Musique à sync 
 # Pour la création de dépôts : mettre une conf' pour Debian
 # Apprendre à virtualiser avec libvirt
 # Faire le document "Ordinateur" + "Utilisation" pour moman
