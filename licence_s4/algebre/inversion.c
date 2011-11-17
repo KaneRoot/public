@@ -28,7 +28,7 @@ matrice_s * inversion_comatrices(matrice_s * m)
 	co = comatrice(m);
 	tmp = transposee_matrix(co);
 	
-	free(co);
+	free_matrix(co);
 
 	for(i = 0 ; i < m->nbl ; i++)
 		for(j = 0 ; j < m->nbc ; j++)
