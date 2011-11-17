@@ -10,7 +10,7 @@
 #include "comatrice.h"
 
 #define TAILLE_MATRICE_MULTIPLICATION 4
-#define TAILLE_MATRICE_DETERMINANT 4
+#define TAILLE_MATRICE_DETERMINANT 3
 
 
 void test_determinant()
