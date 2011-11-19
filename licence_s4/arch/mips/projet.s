@@ -1,13 +1,21 @@
-# Programme en MIPS
-
 # Interpréteur : SPIM
 # spim -notrap -file programme.s
+# 
+#
+# convention : 
+#	$s0 = pointeur vers le tableau représentant le plateau de jeu
+#	$s1 = Numéro du joueur courant, 1 ou 2
+#	$s2 = Numéro du gagnant
+#	$s4 = nb lignes
+#	$s5 = nb colonnes
+#	$s6 = taille d'une case
 
 .data
 str_choix_pvp_pvai:	.asciiz "Vous avez le choix : \n1) P VS P\n2) P VS AI\n3) Je veux sortir d'ici !!!\n"
 str_init_array_loop: .asciiz "Loop init_array\n"
 str_display_array_loop: .asciiz "Loop display_array\n"
 str_display_array: .asciiz "Display Array !!! \n"
+str_columns: .asciiz "1   2   3   4   5   6   7\n"
 str_pvp:	.asciiz "Vous avez choisi le PVP, GOOD LUCK\n"
 str_pvai:	.asciiz "Vous avez choisi le PVAI, GOOD LUCK\n"
 str_test:	.asciiz "Test d'écriture dans le tas\n"
@@ -15,6 +23,15 @@ str_wrong_choice: .asciiz "Mauvais choix, on recommence ! \n"
 str_space_bar:	.asciiz " | "
 str_endl:	.asciiz "\n"
 str_fin:	.asciiz "Fin du programme\n"
+str_demande_choix_1: .asciiz "Au joueur "
+str_demande_choix_2: .asciiz " de jouer : "
+str_win:	.asciiz "Le vainqueur est : "
+player_1:	.word	1
+player_2:	.word	2
+taille_case: .word	4
+lines:	.word	6
+columns:	.word	7
+
 
 .text
 .globl __start
@@ -36,8 +53,13 @@ wrong_choice:
 choix_pvp:	
 	la $a0, str_pvp				# chaîne "choix pvp"
 	jal write_string			# écriture de la chaîne
-	jal create_array			# création du tableau
+	jal init_game				# création du tableau + initialisation variables
+choix_pvp_loop:
 	jal display_array			# affichage du tableau
+	jal ask_player_choice
+	jal add_val_array
+	beqz $s2, choix_pvp_loop
+	jal print_win
 
 	j fin						# jump au label 'fin'
 
@@ -72,14 +94,19 @@ write_nl:
 	j $ra						# retour à l'instruction appelante
 
 write_int_space:	
-	sub $sp, $sp, 4
-	sw $ra, ($sp)
+	sub $sp, $sp, 4				# soustrait 4 au pointeur de pile
+	sw $ra, ($sp)				# sauvegarde ra dans la pile
 	li $v0, 1					# appel système n. 1
 	syscall						# lit un entier dans a0
 	la $a0, str_space_bar		# chargement de l'@ de str_space_bar
 	jal write_string			# écriture de la chaîne
 	lw $ra, ($sp)				# charge ra depuis la pile
 	addu $sp, $sp, 4			# ajoute 4 au pointeur de pile
+	j $ra						# retour à l'instruction appelante
+
+write_int:	
+	li $v0, 1					# appel système n. 1
+	syscall						# lit un entier dans a0
 	j $ra						# retour à l'instruction appelante
 
 write_string:		
@@ -101,13 +128,18 @@ malloc:							# procédure d'allocation dynamique
 	syscall						# alloue une taille a0 et
 	j  $ra						# retourne le pointeur dans v0
 
-create_array:
+init_game:
 	sub $sp, $sp, 4				# soustrait 4 au pointeur de pile
 	sw $ra, ($sp)				# sauvegarde ra dans la pile
 	li $a0, 168					# taille du tableau : 6*7*4 octets
 	jal malloc					# appel à la fonction d'allocation mémoire
 	move $s0, $v0				# on sauvegarde le pointeur dans s0
 	jal init_array				# on initialise toutes les cases à 0
+	lw $s1, player_1			# on initialise $s1 à l'identifiant du premier joueur
+	li $s2, 0					# s2 = 0 c'est le joueur qui a gagné
+	lw $s4, lines				# s4 : nb de lignes
+	lw $s5, columns				# s5 : nb de colonnes
+	lw $s6, taille_case			# s6 : taille d'une case
 	lw $ra, ($sp)				# charge ra depuis la pile
 	addu $sp, $sp, 4			# ajoute 4 au pointeur de pile
 	j $ra						# retour à l'instruction appelante
@@ -149,7 +181,81 @@ display_array_loop:
 	jal write_nl				# écriture d'un retour à la ligne
 	sub $t2, $t2, 4				# offset de ligne décrémenté de 4 octets (1L)
 	add $t0, $s0, $t2			# t0 = pointeur de tableau + offset
-	bge $t2, $0, display_array_loop	# tant que t2 >= 0 : loop
+	bgez $t2, display_array_loop# tant que t2 >= 0 : loop
+	la $a0, str_columns
+	jal write_string
+	lw $ra, ($sp)				# charge ra depuis la pile
+	addu $sp, $sp, 4			# ajoute 4 au pointeur de pile
+	j $ra						# retour à l'instruction appelante
+
+display_choice_question:
+	sub $sp, $sp, 4				# soustrait 4 au pointeur de pile
+	sw $ra, ($sp)				# sauvegarde ra dans la pile
+	la $a0, str_demande_choix_1 # affichage du début de la question
+	jal write_string			# faire l'affichage
+	move $a0, $s1				# affichage du numéro de joueur
+	jal write_int				# faire l'affichage
+	la $a0, str_demande_choix_2 # affichage de la fin de la question
+	jal write_string			# faire l'affichage
+	lw $ra, ($sp)				# charge ra depuis la pile
+	addu $sp, $sp, 4			# ajoute 4 au pointeur de pile
+	j $ra						# retour à l'instruction appelante
+
+ask_player_choice:				# retourne le choix en a0
+	sub $sp, $sp, 4				# soustrait 4 au pointeur de pile
+	sw $ra, ($sp)				# sauvegarde ra dans la pile
+	jal display_choice_question # affichage de la question
+	jal get_int					# on récupère le choix
+	move $a0, $v0				# on place le choix dans a0
+	lw $ra, ($sp)				# charge ra depuis la pile
+	addu $sp, $sp, 4			# ajoute 4 au pointeur de pile
+	j $ra						# retour à l'instruction appelante
+
+add_val_array:					# a0 = choix colonne
+	sub $sp, $sp, 4				# soustrait 4 au pointeur de pile
+	sw $ra, ($sp)				# sauvegarde ra dans la pile
+add_val_array_loop_choice_0:
+	bge $0, $a0, add_val_array_loop_choice_1 # si a0 <= 0
+	bgt $a0, $s5, add_val_array_loop_choice_1# si a0 > nb de colonnes
+	j add_val_array_loop_choice_end
+add_val_array_loop_choice_1:
+	jal ask_player_choice		# on redemande la colonne
+	j add_val_array_loop_choice_0
+add_val_array_loop_choice_end:	# La valeur est bonne, on l'ajoute
+	li $t3, 0					# t3 = ligne courante
+	move $t0, $s0				# chargement du pointeur de tableau dans t0
+	sub $a0, 1					# on décrémente le numéro de colonne donné
+	mul $t1, $s4, $a0			# t1 = incrément à ajouter au pointeur du tableau
+	mul $t1, $s6, $t1			# t1 * taille d'une case
+	addu $t0, $t0, $t1			# t0 += t1
+add_val_array_loop_0:
+	lw $t2, ($t0)				# t2 = valeur de la case courante
+	beqz $t2, add_val_array_loop_end
+	add $t3, 1
+	add $t0, $t0, $s6
+	bgt $s4, $t3, add_val_array_loop_0
+	j add_val_array_loop_choice_1
+add_val_array_loop_end:			# ajout de la valeur s1 à l'emplacement t0
+	sw $s1, ($t0)
+	lw $t0, player_1			# on charge l'identifiant du joueur 1
+	lw $t1, player_2			# on charge l'identifiant du joueur 2
+	beq $s1, $t0, add_array_1	# si s1 est le joueur 1
+	move $s1, $t0
+	j add_array_end
+add_array_1:
+	move $s1, $t1
+add_array_end:
+	lw $ra, ($sp)				# charge ra depuis la pile
+	addu $sp, $sp, 4			# ajoute 4 au pointeur de pile
+	j $ra						# retour à l'instruction appelante
+	
+print_win:
+	sub $sp, $sp, 4				# soustrait 4 au pointeur de pile
+	sw $ra, ($sp)				# sauvegarde ra dans la pile
+	la $a0, str_win
+	jal write_string
+	move $a0, $s2
+	jal write_int_nl
 	lw $ra, ($sp)				# charge ra depuis la pile
 	addu $sp, $sp, 4			# ajoute 4 au pointeur de pile
 	j $ra						# retour à l'instruction appelante
