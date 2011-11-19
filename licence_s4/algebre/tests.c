@@ -10,12 +10,12 @@
 #include "comatrice.h"
 
 #define TAILLE_MATRICE_MULTIPLICATION 4
-#define TAILLE_MATRICE_DETERMINANT 4
+#define TAILLE_MATRICE_DETERMINANT 3
 
 
 void test_determinant()
 {
-	matrice_s *m, *co;
+	matrice_s *m, *co,*inverse;
 
 	printf("Test de calcul du déterminant \n");
 
@@ -28,6 +28,15 @@ void test_determinant()
 	display_matrix(co);
 	printf("Déterminant de la matrice : %f\n",det_nxn(m));
 
+	inverse = inversion_comatrices(m);
+	if(inverse != NULL)
+		display_matrix(inverse);
+	else
+		printf("Déterminant == 0 donc on ne fait pas d'inversion car impossible\n");
+
+	
+	free_matrix(co);
+	free_matrix(inverse);
 	free_matrix(m);
 }
 void tests_calculs_base()
