@@ -81,7 +81,7 @@ RELATION * rv()
 RELATION * comp(RELATION * r1, RELATION * r2)
 {
 	Nat i, j, k;
-	RELATION * r3 = rv(); // Relation vide
+	RELATION * r3 = nouvelle_relation();
 	bool x = FAUX;
 	
 	for(i = 0 ; i < TAILLE ; i++)
@@ -179,6 +179,10 @@ int main(int argc, char * argv[])
 	r3 = sym(r1);
 	write_relation(r3);
 
+	free(r3);
+	printf("Comp de r1 et r2\n");
+	r3 = comp(r1,r2);
+	write_relation(r3);
 	
 	return EXIT_SUCCESS;
 }
