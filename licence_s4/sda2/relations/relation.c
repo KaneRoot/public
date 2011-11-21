@@ -151,6 +151,15 @@ void write_relation(RELATION * r)
 		printf("\n");
 	}
 }
+RELATION * relation_binaire_pleine()
+{
+	RELATION * r = nouvelle_relation();
+	int i, j;
+	for(i = 0 ; i < TAILLE ; i++)
+		for(j = 0 ; j < TAILLE ; j++)
+			r[TAILLE*i+j] = 1;
+	return r;
+}
 
 int main(int argc, char * argv[])
 {

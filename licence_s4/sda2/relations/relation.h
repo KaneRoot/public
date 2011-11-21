@@ -15,6 +15,7 @@ void adja(graphe_s * g, Nat a, Nat b);			// ajout arc
 void supa(graphe_s * g, Nat a, Nat b);			// suppr. arc
 int exa(graphe_s * g, Nat a, Nat b);			// test arc
 RELATION * rv();								// relation vide
+RELATION * relation_binaire_pleine();			// relation binaire pleine
 RELATION * comp(RELATION * r1, RELATION * r2);	// composition
 RELATION * sym(RELATION * r1);					// symétrie
 RELATION * Un(RELATION * r1, RELATION * r2);	// union
