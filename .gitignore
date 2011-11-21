@@ -2,3 +2,5 @@
 *.out
 *.pdf
 *.odt
+*.class
+*.gch
