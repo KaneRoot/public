@@ -16,7 +16,12 @@ typedef struct
 
 RELATION * nouvelle_relation()
 {
-	return (RELATION *) malloc(sizeof(RELATION) * TAILLE* TAILLE);
+	int i,j;
+	RELATION * r = (RELATION *) malloc(sizeof(RELATION) * TAILLE* TAILLE);
+	for(i = 0 ; i < TAILLE ; i++)
+		for(j = 0 ; j < TAILLE ; j++)
+			r[TAILLE*i+j] = 0;
+	return r;
 }
 graphe_s * nouveau_graphe()
 {
@@ -52,18 +57,18 @@ RELATION * igr(graphe_s * g) {
 void adja(RELATION * r, Nat a, Nat b)
 {
 	if(a >= 0 && b >= 0 && a < TAILLE && b < TAILLE)
-		r[a*b] = VRAI;
+		r[TAILLE*a+b] = VRAI;
 }
 void supa(RELATION * r, Nat a, Nat b)
 {
 	if(a >= 0 && b >= 0 && a < TAILLE && b < TAILLE)
-		r[a*b] = FAUX;
+		r[TAILLE*a+b] = FAUX;
 }
 int exa(RELATION * r, Nat a, Nat b)
 {
 	if(a < 0 || b < 0)
 		return -1;
-	return r[a*b];
+	return r[TAILLE*a+b];
 }
 
 
@@ -116,6 +121,20 @@ RELATION * Un(RELATION * r1, RELATION * r2)
 	{
 		for(j = 0; j < TAILLE ; j++)
 		{
+			if(exa(r1,i,j) || exa(r2,i,j))
+				adja(r3,i,j);
+		}
+	}
+	return r3;
+}
+RELATION * Intersection(RELATION * r1, RELATION * r2)
+{
+	Nat i, j;
+	RELATION * r3 = nouvelle_relation();
+	for(i = 0 ; i < TAILLE ; i++)
+	{
+		for(j = 0; j < TAILLE ; j++)
+		{
 			if(exa(r1,i,j) && exa(r2,i,j))
 				adja(r3,i,j);
 		}
@@ -135,7 +154,31 @@ void write_relation(RELATION * r)
 
 int main(int argc, char * argv[])
 {
-	RELATION * r = nouvelle_relation();
-	write_relation(r);
+	RELATION *r1, *r2, *r3;
+	r1 = nouvelle_relation();
+	r2 = nouvelle_relation();
+	printf("r1 : ajout de (1,2),(2,3)\n");
+	adja(r1, 1,2);
+	adja(r1, 2,3);
+	printf("r2 : ajout de (2,2),(2,3)\n");
+	adja(r2, 2,2);
+	adja(r2, 2,3);
+
+	write_relation(r1);
+	printf("Seconde relation\n");
+	write_relation(r2);
+	printf("Intersection des deux\n");
+	r3 = Intersection(r1,r2);
+	write_relation(r3);
+	free(r3);
+	printf("Union des deux\n");
+	r3 = Un(r1,r2);
+	write_relation(r3);
+	free(r3);
+	printf("Sym de r1\n");
+	r3 = sym(r1);
+	write_relation(r3);
+
+	
 	return EXIT_SUCCESS;
 }

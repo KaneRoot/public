@@ -18,6 +18,7 @@ RELATION * rv();								// relation vide
 RELATION * comp(RELATION * r1, RELATION * r2);	// composition
 RELATION * sym(RELATION * r1);					// symétrie
 RELATION * Un(RELATION * r1, RELATION * r2);	// union
+RELATION * Intersection(RELATION * r1, RELATION * r2);
 
 #endif
 
