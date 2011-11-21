@@ -259,3 +259,10 @@ print_win:
 	lw $ra, ($sp)				# charge ra depuis la pile
 	addu $sp, $sp, 4			# ajoute 4 au pointeur de pile
 	j $ra						# retour à l'instruction appelante
+
+# calcul la valeur à ajouter pour passer à la case de droite
+calcul_taille_offset:			
+	mul $a0, $s4, $s6
+	j $ra						# retour à l'instruction appelante
+
+
