@@ -265,4 +265,18 @@ calcul_taille_offset:
 	mul $a0, $s4, $s6
 	j $ra						# retour à l'instruction appelante
 
+pattern_detector_inc:
+	sub $sp, $sp, 4				# soustrait 4 au pointeur de pile
+	sw $ra, ($sp)				# sauvegarde ra dans la pile
+	jal calcul_taille_offset
+	move $t0, $a0				# t0 représente l'ajout à faire pour passer à la ligne suivante
+	addu $t0, $t0, $s6			# t0 représente la case de droite + une case au dessus
+	li $t1, 3
+	sub $t1, $s4, $t1			# nb lignes - 3 = ligne à partir de laquelle on arrête de chercher
+	li $t2, 3
+	sub $t2, $s5, $t2			# nb colonnes - 3 = colonne à partir de laquelle on arrête de chercher
+	lw $ra, ($sp)				# charge ra depuis la pile
+	addu $sp, $sp, 4			# ajoute 4 au pointeur de pile
+	j $ra						# retour à l'instruction appelante
+
 
