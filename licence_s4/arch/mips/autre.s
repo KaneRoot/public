@@ -1,72 +1,122 @@
+
 # Programme en MIPS
 
 # Interpréteur : SPIM
 # spim -notrap -file programme.s
 
 .data
-	str_test:	.asciiz "Test d'écriture dans le tas\n"
-	str:	.asciiz	"Leur multiplication : "
-	endl:	.asciiz "\n"
-	fini:	.asciiz "On a fini\n"
+	val1:	.asciiz	"Entrez la valeur 1 : "
+	val2:	.asciiz	"Entrez la valeur 2 : "
+	str_space_bar:	.asciiz " | "
+	res:	.asciiz "Le résultat est : "
+	str_fin:	.asciiz "Fin du programme\n"
+	str_endl:	.asciiz "\n"
 
 .text
 .globl __start
 
-__start:	
-	# Début du programme
-	# Affichage d'une chaîne
-	la $a0, str_test
-	jal write_string
+__start:	li $v0, 4
+			la $a0, val1
+			syscall
+			
+			jal get_int
+			move $t0, $a0
 
-	li $a0, 168
-	jal malloc
-	move $t0, $v0
-	li $t1, 10
-	sw $t1, 0($t0)
-	li $t1, 15
-	sw $t1, 4($t0)
+label2:		li $v0, 4
+			la $a0, val2
+			syscall
 
-	la $a0, str_test
-	jal write_string
-	lw $a0, ($t0)
-	jal writeval
-	add $t0, $t0, 4
-	lw $a0, ($t0)
-	jal writeval
+			jal get_int
+			move $t1, $a0
+			jal write_int_space
 
-	li $v0, 5
-	syscall
-
-	j fin
-
-fin:		
-	# fin du programme
-	li $v0, 10 # appel système 10
-	syscall 
+afficheres:	li $v0, 4
+			la $a0, res
+			syscall
+			add $t2, $t1,$t0
+			li $v0, 1
+			move $a0, $t2
+			syscall
+			li $v0, 4
+			la $a0, str_endl
+			syscall
+			jal truc
+fin:	
+	la $a0, str_fin				# chargement de la chaîne str_fin
+	jal write_string			# écriture de 'fin du programme'
+	li $v0, 10					# appel système n. 10
+	syscall						# fin du programme
 
 # affiche une valeur, fonction de type stem
-writeval:	
-	li $v0, 1
-	syscall
-	move $s4, $ra
-	jal writenl
-	move $ra, $s4
-	jr $ra
+write_int_nl:	
+	li $v0, 1					# appel système n. 1
+	syscall						# lit un entier dans a0
+	move $t4, $ra				# chargement de ra dans t4 pour sauvegarde
+	jal write_nl				# écriture d'un retour à la ligne
+	move $ra, $t4				# replacement de l'ancienne valeur de ra
+	j $ra						# retour à l'instruction appelante
+
 # écrit un retour à la ligne, fonction de type leaf
-writenl:	
-	li $v0, 4
-	la $a0, endl
-	syscall
-	jr $ra
+write_nl:	
+	li $v0, 4					# appel système n. 4
+	la $a0, str_endl			# chargement d'une chaîne (\n)
+	syscall						# écriture de la chaîne
+	j $ra						# retour à l'instruction appelante
+
+write_int_space:	
+	sub $sp, $sp, 4
+	sw $ra, ($sp)
+	li $v0, 1					# appel système n. 1
+	syscall						# lit un entier dans a0
+	la $a0, str_space_bar		# chargement de l'@ de str_space_bar
+	jal write_string			# écriture de la chaîne
+	lw $ra, ($sp)
+	addu $sp, $sp, 4
+	j $ra						# retour à l'instruction appelante
 
 write_string:		
-	li $v0, 4
-	syscall
-	jr $ra
+	li $v0, 4					# appel système n. 4
+	syscall						# écriture de la chaîne
+	j $ra						# retour à l'instruction appelante
 
-malloc:			# procédure d'allocation dynamique
-	li $v0, 9	# appel système n. 9 
-	syscall     # alloue une taille a0 et
-	j  $ra      # retourne le pointeur dans v0
-write_p4line:	# affichage d'une ligne du puissance4
-				# prend en paramètre a0 : numéro de ligne
+write_space_bar:
+	sub $sp, $sp, 4
+	sw $ra, ($sp)
+	la $a0, str_space_bar
+	jal write_string
+	lw $ra, ($sp)
+	addu $sp, $sp, 4
+	j $ra
+truc:
+	sub $sp, $sp, 4
+	sw $ra, ($sp)
+	jal truc2
+	lw $ra, ($sp)
+	add $sp, 4
+	j $ra
+truc2:
+	sub $sp, $sp, 4
+	sw $ra, ($sp)
+	jal truc3
+	lw $ra, ($sp)
+	add $sp, 4
+	j $ra
+
+truc3:
+	sub $sp, $sp, 4
+	sw $ra, ($sp)
+	li $a0, 15
+	jal write_int_nl
+	lw $ra, ($sp)
+	add $sp, 4
+	j $ra
+
+get_int:
+	sub $sp, $sp, 4
+	sw $ra, ($sp)
+	li $v0, 5					# appel système n. 5
+	syscall						# on lit un entier
+	move $a0, $v0				# on met la réponse dans a0
+	lw $ra, ($sp)
+	addu $sp, $sp, 4
+	j $ra						# retour à l'instruction appelante

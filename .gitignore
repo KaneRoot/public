@@ -1,1 +1,6 @@
 *.[ao]
+*.out
+*.pdf
+*.odt
+*.class
+*.gch

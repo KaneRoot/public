@@ -56,7 +56,7 @@ float det_nxn(matrice_s * m)
 		return determinant_i_j(m,0,0);
 	for(i = 0 ; i < m->nbc ; i++)
 	{
-		printf("Retour : %f \n", determinant_i_j(m,0,i));
+		//printf("Retour : %f \n", determinant_i_j(m,0,i));
 		retour += determinant_i_j(m, 0, i);
 	}
 
