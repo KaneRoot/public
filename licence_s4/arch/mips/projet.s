@@ -237,6 +237,7 @@ add_val_array_loop_0:
 	j add_val_array_loop_choice_1
 add_val_array_loop_end:			# ajout de la valeur s1 à l'emplacement t0
 	sw $s1, ($t0)
+# Changement de joueur !!! À faire ailleurs !
 	lw $t0, player_1			# on charge l'identifiant du joueur 1
 	lw $t1, player_2			# on charge l'identifiant du joueur 2
 	beq $s1, $t0, add_array_1	# si s1 est le joueur 1
@@ -248,7 +249,18 @@ add_array_end:
 	lw $ra, ($sp)				# charge ra depuis la pile
 	addu $sp, $sp, 4			# ajoute 4 au pointeur de pile
 	j $ra						# retour à l'instruction appelante
-	
+
+changement_joueur:
+	lw $t0, player_1			# on charge l'identifiant du joueur 1
+	lw $t1, player_2			# on charge l'identifiant du joueur 2
+	beq $s1, $t0, changement_joueur_1	# si s1 est le joueur 1
+	move $s1, $t0				# on place le joueur 1 dans s1
+	j changement_joueur_end		# puis on sort de la fonction
+changement_joueur_1:
+	move $s1, $t1				# on place le joueur 2 dans s1
+changement_joueur_end:
+	j $ra
+
 print_win:
 	sub $sp, $sp, 4				# soustrait 4 au pointeur de pile
 	sw $ra, ($sp)				# sauvegarde ra dans la pile
@@ -262,7 +274,33 @@ print_win:
 
 # calcul la valeur à ajouter pour passer à la case de droite
 calcul_taille_offset:			
-	mul $a0, $s4, $s6
+	mul $a0, $s4, $s6			# lignes * taillecase = ajout pour passer à la colonne suivante, même ligne
+	j $ra						# retour à l'instruction appelante
+
+# t0 : pointeur case courante
+# t1 : ligne à laquelle on arrête de chercher
+# t2 : colonne à laquelle on arrête de chercher
+# t4 : ligne courante
+# t5 : colonne courante
+# t6 : nb suite (1 à 4)
+# t9 : offset passer à la colonne suivante, ligne courante + 1
+pattern_detector_inc:
+	sub $sp, $sp, 4				# soustrait 4 au pointeur de pile
+	sw $ra, ($sp)				# sauvegarde ra dans la pile
+	jal calcul_taille_offset
+	move $t7, $a0				# t7 offset pour passer à la colonne suivante (même ligne)
+	add $t7, $t7, $s6			# t7 représente la case de droite + une case au dessus
+	li $t1, 3
+	sub $t1, $s4, $t1			# t1 = nblignes - 3 = ligne à partir de laquelle on arrête de chercher
+	li $t2, 3
+	sub $t2, $s5, $t2			# nb colonnes - 3 = colonne à partir de laquelle on arrête de chercher
+	li $t0, 0					# t0 : pointeur case courante
+	li $t4, 0					# t4 : ligne courante
+	li $t5, 0					# t5 : colonne courante
+	li $t6, 1					# nb suite (1 à 4)
+
+	lw $ra, ($sp)				# charge ra depuis la pile
+	addu $sp, $sp, 4			# ajoute 4 au pointeur de pile
 	j $ra						# retour à l'instruction appelante
 
 
