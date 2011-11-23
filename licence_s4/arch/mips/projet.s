@@ -58,6 +58,7 @@ choix_pvp_loop:
 	jal display_array			# affichage du tableau
 	jal ask_player_choice
 	jal add_val_array
+	jal changement_joueur
 	beqz $s2, choix_pvp_loop
 	jal print_win
 
@@ -237,15 +238,6 @@ add_val_array_loop_0:
 	j add_val_array_loop_choice_1
 add_val_array_loop_end:			# ajout de la valeur s1 à l'emplacement t0
 	sw $s1, ($t0)
-# Changement de joueur !!! À faire ailleurs !
-	lw $t0, player_1			# on charge l'identifiant du joueur 1
-	lw $t1, player_2			# on charge l'identifiant du joueur 2
-	beq $s1, $t0, add_array_1	# si s1 est le joueur 1
-	move $s1, $t0
-	j add_array_end
-add_array_1:
-	move $s1, $t1
-add_array_end:
 	lw $ra, ($sp)				# charge ra depuis la pile
 	addu $sp, $sp, 4			# ajoute 4 au pointeur de pile
 	j $ra						# retour à l'instruction appelante
