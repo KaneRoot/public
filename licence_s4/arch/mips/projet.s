@@ -279,18 +279,36 @@ calcul_taille_offset:
 pattern_detector_inc:
 	sub $sp, $sp, 4				# soustrait 4 au pointeur de pile
 	sw $ra, ($sp)				# sauvegarde ra dans la pile
-	jal calcul_taille_offset
-	move $t7, $a0				# t7 offset pour passer à la colonne suivante (même ligne)
-	add $t7, $t7, $s6			# t7 représente la case de droite + une case au dessus
+	jal calcul_taille_offset	# taille pr passer à la colonne suivante (même ligne)
+	move $t7, $a0				# t7 = colonne suivante (même ligne)
+	add $t7, $t7, $s6			# t7 = la case de droite + une case au dessus
 	li $t1, 3
-	sub $t1, $s4, $t1			# t1 = nblignes - 3 = ligne à partir de laquelle on arrête de chercher
+	sub $t1, $s4, $t1			# t1 = nblignes - 3 = ligne arrêt recherche
 	li $t2, 3
-	sub $t2, $s5, $t2			# nb colonnes - 3 = colonne à partir de laquelle on arrête de chercher
+	sub $t2, $s5, $t2			# t2 = nbcolonnes - 3 = colonne arrêt recherche
 	li $t0, 0					# t0 : pointeur case courante
 	li $t4, 0					# t4 : ligne courante
 	li $t5, 0					# t5 : colonne courante
 	li $t6, 1					# nb suite (1 à 4)
-
+	li $t8, 4					# utile pour t6 == 4 = win
+pattern_detector_inc_loop_ligne:
+pattern_detector_inc_loop_col:
+pattern_detector_inc_test:
+	lw $t3, ($t0)
+	bne $t3, $s1, pattern_detector_inc_test_end
+pattern_detector_inc_test_end:
+	add $t5, $t5, 1				# incrémentation colonne courante
+	bgt $t2, $t5, pattern_detector_inc_loop_col	# tant que t2 > t5
+pattern_detector_inc_loop_col_end:
+	li $t5, 0					# t5 : colonne courante
+	beq $t6, $t8, pattern_detector_inc_win	# joueur s1 a gagné
+	add $t4, $t4, 1				# incrémentation ligne courante
+	bgt $t1, $t4, pattern_detector_inc_loop_ligne # tant que t1 > t4
+pattern_detector_inc_loop_ligne_end:
+	b pattern_detector_inc_end	# saut à la fin du programme
+pattern_detector_inc_win:
+	move $s2, $s1
+pattern_detector_inc_end:
 	lw $ra, ($sp)				# charge ra depuis la pile
 	addu $sp, $sp, 4			# ajoute 4 au pointeur de pile
 	j $ra						# retour à l'instruction appelante
