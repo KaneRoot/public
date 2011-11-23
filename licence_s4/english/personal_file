@@ -153,4 +153,8 @@ A link to this article was on slashdot.org .
 20 minutes.
 
 I read an article about "self publishing" : http://www.guardian.co.uk/books/2011/nov/16/penguin-self-publishing
+
 With the technology, anyone can publish their own book. I don't know if 'Penguin' is a good thing, but nobody needs this compagny to publish their books either.
+
+I read this article : http://www.leidinger.net/blog/category/freebsd/jails/
+It is about BSDs operating systems and their "jail" system, to secure the system from an attack on a service. If an application is compromised, the system is safe. It's like "LXC" (Linux Containers) on Linux based systems.
