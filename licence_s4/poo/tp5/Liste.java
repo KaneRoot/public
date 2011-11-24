@@ -1,6 +1,7 @@
 public class Liste
 {
 	private Noeud debut;
+	private Noeud dernier;
 	public Liste(String s)
 	{
 		this.debut = new Noeud(s);
@@ -8,11 +9,13 @@ public class Liste
 	public Liste()
 	{
 		this.debut = null;
+		this.dernier = null;
 	}
 	public void insererDebut(String s)
 	{
 		Noeud tmp = new Noeud(this.debut, s);
 		this.debut = tmp;
+		tmp.setPrecedent(this.debut);
 	}
 	@Override
 	public String toString()
@@ -37,20 +40,30 @@ public class Liste
 		}
 		return t;
 	}
+	public void insererFin(String s)
+	{
+		if(this.dernier == null)
+		{
+			this.dernier = new Noeud(s);
+		}
+		this.dernier.setSuivant(new Noeud(s));
+		this.dernier.getSuivant().setPrecedent(this.dernier);
+		this.dernier = this.dernier.getSuivant();
+
+	}
 	public void insererPositionDonnee(String s, int pos)
 	{
 		Noeud n = new Noeud(s);
 		Noeud tmp = this.debut;
 		Noeud tmp2 = this.debut;
-		if(pos == 0)
+		if(pos == 0 || this.debut == null)
 		{
-			n.setSuivant(this.debut);
-			this.debut = n;
+			this.insererDebut(s);
 			return;
 		}
-		if(this.debut == null)
+		if(pos > this.taille())
 		{
-			this.debut = n;
+			this.insererFin(s);
 			return;
 		}
 		while(tmp != null && (pos-1) > 0)
@@ -62,6 +75,8 @@ public class Liste
 		// On se trouve à la position qu'on veut insérer
 		tmp2.setSuivant(n);
 		n.setSuivant(tmp);
+		n.setPrecedent(tmp2);
+		tmp.setPrecedent(n);
 	}
 }
 
@@ -69,6 +84,7 @@ class Noeud
 {
 	private String donnee;
 	private Noeud suivant;
+	private Noeud precedent;
 	public Noeud(Noeud s, String donnee)
 	{
 		this.suivant = s;
@@ -77,6 +93,10 @@ class Noeud
 	public Noeud(String donnee)
 	{
 		this(null,donnee);
+	}
+	public Noeud getPrecedent()
+	{
+		return this.precedent;
 	}
 	public Noeud getSuivant()
 	{
@@ -90,9 +110,13 @@ class Noeud
 	{
 		this.donnee = s;
 	}
-	public void setSuivant(Noeud s)
+	public void setPrecedent(Noeud n)
 	{
-		this.suivant = s;
+		this.precedent = n;
+	}
+	public void setSuivant(Noeud n)
+	{
+		this.suivant = n;
 	}
 	@Override
 	public String toString()
