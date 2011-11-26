@@ -16,8 +16,8 @@ str_choix_pvp_pvai:	.asciiz "Vous avez le choix : \n1) P VS P\n2) P VS AI\n3) Je
 str_init_array_loop: .asciiz "Loop init_array\n"
 str_display_array_loop: .asciiz "Loop display_array\n"
 str_display_array: .asciiz "Display Array !!! \n"
-str_columns: .asciiz "1   2   3   4   5   6   7\n"
-str_pvp:	.asciiz "Vous avez choisi le PVP, GOOD LUCK\n"
+str_columns: .asciiz "\033[43m\033[31m1   2   3   4   5   6   7  \033[00m\n"
+str_pvp:	.asciiz "\033[32mVous avez choisi le PVP, GOOD LUCK\033[00m\n"
 str_pvai:	.asciiz "Vous avez choisi le PVAI, GOOD LUCK\n"
 str_test:	.asciiz "Test d'écriture dans le tas\n"
 str_wrong_choice: .asciiz "Mauvais choix, on recommence ! \n"
@@ -26,7 +26,8 @@ str_endl:	.asciiz "\n"
 str_fin:	.asciiz "Fin du programme\n"
 str_demande_choix_1: .asciiz "Au joueur "
 str_demande_choix_2: .asciiz " de jouer : "
-str_win:	.asciiz "Le vainqueur est : "
+str_win_0:	.asciiz "Le vainqueur est :\033[31m "
+str_win_1:	.asciiz	" \033[00m"
 player_1:	.word	1
 player_2:	.word	2
 taille_case: .word	4
@@ -258,10 +259,12 @@ changement_joueur_end:
 print_win:
 	sub $sp, $sp, 4				# soustrait 4 au pointeur de pile
 	sw $ra, ($sp)				# sauvegarde ra dans la pile
-	la $a0, str_win
+	la $a0, str_win_0
 	jal write_string
 	move $a0, $s2
 	jal write_int_nl
+	la $a0, str_win_1
+	jal write_string
 	lw $ra, ($sp)				# charge ra depuis la pile
 	addu $sp, $sp, 4			# ajoute 4 au pointeur de pile
 	j $ra						# retour à l'instruction appelante
@@ -281,9 +284,6 @@ calcul_taille_offset:
 pattern_detector_inc:
 	sub $sp, $sp, 4				# soustrait 4 au pointeur de pile
 	sw $ra, ($sp)				# sauvegarde ra dans la pile
-	jal calcul_taille_offset	# taille pr passer à la colonne suivante (même ligne)
-	move $t7, $a0				# t7 = colonne suivante (même ligne)
-	add $t7, $t7, $s6			# t7 = la case de droite + une case au dessus
 	li $t1, 3
 	sub $t1, $s4, $t1			# t1 = nblignes - 3 = ligne arrêt recherche
 	li $t2, 3
@@ -292,7 +292,6 @@ pattern_detector_inc:
 	li $t4, 0					# t4 : ligne courante
 	li $t5, 0					# t5 : colonne courante
 	li $t6, 0					# nb suite (1 à 4)
-	li $t8, 4					# utile pour t6 == 4 = win
 pattern_detector_inc_loop_ligne:
 	mul $t9, $t4, $s6			# t9 = n°ligne * taillecase
 	add $t0, $s0, $t9			# t0 = s0 + t9
@@ -325,10 +324,61 @@ pattern_detector_inc_end:
 	addu $sp, $sp, 4			# ajoute 4 au pointeur de pile
 	j $ra						# retour à l'instruction appelante
 
+# t0 : pointeur case courante
+# t1 : ligne à laquelle on arrête de chercher
+# t2 : colonne à laquelle on arrête de chercher
+# t4 : ligne courante
+# t5 : colonne courante
+# t6 : nb suite (1 à 4)
+# t9 : offset passer à la colonne suivante, ligne courante + 1
+pattern_detector_dec:
+	sub $sp, $sp, 4				# soustrait 4 au pointeur de pile
+	sw $ra, ($sp)				# sauvegarde ra dans la pile
+	li $t1, 3					# t1 = 3 : ligne arrêt recherche
+	li $t2, 3
+	sub $t2, $s5, $t2			# t2 = nbcolonnes - 3 = colonne arrêt recherche
+	move $t4, $s4				# t4 = s4 : ligne courante, début par la fin
+	li $t5, 0					# t5 : colonne courante
+	li $t6, 0					# nb suite (1 à 4)
+pattern_detector_dec_loop_ligne:
+	mul $t9, $t4, $s6			# t9 = n°ligne * taillecase
+	sub $t9, $t9, $s6
+	add $t0, $s0, $t9			# t0 = s0 + t9
+	li $t5, 0
+pattern_detector_dec_loop_col:
+	li $t6, 0
+pattern_detector_dec_test:
+	lw $t3, ($t0)				# on charge ce qu'il y a à t0 dans t3
+	bne $t3, $s1, pattern_detector_dec_test_end	# t3 != joueur courant, on sort
+	add $t6, $t6, 1				# t6++
+	li $t9, 4
+	beq $t6, $t9, pattern_detector_dec_win	# t6 == 4 : win
+	sub $t0, $t0, $s6			# décallage en bas
+	add $t0, $t0, $s7			# décallage à droite
+	b pattern_detector_dec_test	# On recommence
+pattern_detector_dec_test_end:
+	add $t5, $t5, 1				# incrémentation colonne courante
+	add $t0, $t0, $s7			# colonne de droite, même ligne
+	bgt $t2, $t5, pattern_detector_dec_loop_col	# tant que t2 > t5
+pattern_detector_dec_loop_col_end:
+	li $t5, 0					# t5 : colonne courante
+	sub $t4, $t4, 1				# décrémentation ligne courante
+	bgt $t4, $t1, pattern_detector_dec_loop_ligne # tant que t4 > t1
+pattern_detector_dec_loop_ligne_end:
+	b pattern_detector_dec_end	# saut à la fin du programme
+pattern_detector_dec_win:
+	move $s2, $s1
+pattern_detector_dec_end:
+	lw $ra, ($sp)				# charge ra depuis la pile
+	addu $sp, $sp, 4			# ajoute 4 au pointeur de pile
+	j $ra						# retour à l'instruction appelante
+
 test_patterns:
 	sub $sp, $sp, 4				# soustrait 4 au pointeur de pile
 	sw $ra, ($sp)				# sauvegarde ra dans la pile
 	jal pattern_detector_inc	# test diagonale croissante
+	bnez $s2, test_patterns_end	# Pas besoin de faire plus de tests si gagné
+	jal pattern_detector_dec	# test diagonale décroissante
 	bnez $s2, test_patterns_end	# Pas besoin de faire plus de tests si gagné
 test_patterns_end:
 	lw $ra, ($sp)				# charge ra depuis la pile
