@@ -367,8 +367,46 @@ pattern_detector_dec_loop_col_end:
 pattern_detector_dec_loop_ligne_end:
 	b pattern_detector_dec_end	# saut à la fin du programme
 pattern_detector_dec_win:
-	move $s2, $s1
+	move $s2, $s1				# joueur courant a gagné
 pattern_detector_dec_end:
+	lw $ra, ($sp)				# charge ra depuis la pile
+	addu $sp, $sp, 4			# ajoute 4 au pointeur de pile
+	j $ra						# retour à l'instruction appelante
+
+pattern_detector_line:
+	sub $sp, $sp, 4				# soustrait 4 au pointeur de pile
+	sw $ra, ($sp)				# sauvegarde ra dans la pile
+	sub $t2, $s5, 3				# on s'arrête 3 colonnes avant la dernière
+	li $t4, 0					# t4 = ligne courante
+	move $t0, $s0				# t0 = s0
+pattern_detector_line_ligne:
+	li $t5, 0					# t5 = colonne courante
+pattern_detector_line_colonne:
+	li $t6, 0
+	move $t8, $t0				# on sauvegarde t0 dans t8
+pattern_detector_line_test:
+	lw $t3, ($t0)				# on charge ce qu'il y a à t0 dans t3
+	bne $t3, $s1, pattern_detector_line_test_end	# t3 != joueur courant, on sort
+	add $t6, $t6, 1				# t6++
+	li $t9, 4
+	beq $t6, $t9, pattern_detector_line_win	# t6 == 4 : win
+	add $t0, $t0, $s7			# décallage à droite
+	b pattern_detector_line_test# On recommence
+pattern_detector_line_test_end:
+	move $t0, $t8				# on replace t8 dans t0
+	add $t5, $t5, 1				# t5++
+	add $t0, $t0, $s7			# t0 += offset 
+	bgt $t2, $t5, pattern_detector_line_colonne
+pattern_detector_line_colonne_end:
+	add $t4, $t4, 1				# t4++
+	mul $t1, $t4, $s6
+	add $t0, $s0, $t1
+	bgt $s4, $t4, pattern_detector_line_ligne
+pattern_detector_line_ligne_end:
+	b pattern_detector_line_end
+pattern_detector_line_win:
+	move $s2, $s1				# s1 victorieux
+pattern_detector_line_end:
 	lw $ra, ($sp)				# charge ra depuis la pile
 	addu $sp, $sp, 4			# ajoute 4 au pointeur de pile
 	j $ra						# retour à l'instruction appelante
@@ -376,6 +414,8 @@ pattern_detector_dec_end:
 test_patterns:
 	sub $sp, $sp, 4				# soustrait 4 au pointeur de pile
 	sw $ra, ($sp)				# sauvegarde ra dans la pile
+	jal pattern_detector_line	# test ligne
+	bnez $s2, test_patterns_end	# Pas besoin de faire plus de tests si gagné
 	jal pattern_detector_inc	# test diagonale croissante
 	bnez $s2, test_patterns_end	# Pas besoin de faire plus de tests si gagné
 	jal pattern_detector_dec	# test diagonale décroissante
