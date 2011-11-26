@@ -9,6 +9,7 @@
 #	$s4 = nb lignes
 #	$s5 = nb colonnes
 #	$s6 = taille d'une case
+#	$s7 = taille offset = nb octets séparants la même ligne de 2 colonnes
 
 .data
 str_choix_pvp_pvai:	.asciiz "Vous avez le choix : \n1) P VS P\n2) P VS AI\n3) Je veux sortir d'ici !!!\n"
@@ -58,16 +59,15 @@ choix_pvp_loop:
 	jal display_array			# affichage du tableau
 	jal ask_player_choice
 	jal add_val_array
+	jal test_patterns
 	jal changement_joueur
 	beqz $s2, choix_pvp_loop
 	jal print_win
-
 	j fin						# jump au label 'fin'
 
 choix_pvai:	
 	la $a0, str_pvai			# chaîne "choix player vs ai"
 	jal write_string			# écriture de la chaîne
-
 	j fin						# jump au label 'fin'
 
 fin:	
@@ -141,6 +141,8 @@ init_game:
 	lw $s4, lines				# s4 : nb de lignes
 	lw $s5, columns				# s5 : nb de colonnes
 	lw $s6, taille_case			# s6 : taille d'une case
+	jal calcul_taille_offset	# calcul
+	move $s7, $a0				# s7 : offset séparant même ligne de 2 col
 	lw $ra, ($sp)				# charge ra depuis la pile
 	addu $sp, $sp, 4			# ajoute 4 au pointeur de pile
 	j $ra						# retour à l'instruction appelante
@@ -289,19 +291,29 @@ pattern_detector_inc:
 	li $t0, 0					# t0 : pointeur case courante
 	li $t4, 0					# t4 : ligne courante
 	li $t5, 0					# t5 : colonne courante
-	li $t6, 1					# nb suite (1 à 4)
+	li $t6, 0					# nb suite (1 à 4)
 	li $t8, 4					# utile pour t6 == 4 = win
 pattern_detector_inc_loop_ligne:
+	mul $t9, $t4, $s6			# t9 = n°ligne * taillecase
+	add $t0, $s0, $t9			# t0 = s0 + t9
+	li $t5, 0
 pattern_detector_inc_loop_col:
+	li $t6, 0
 pattern_detector_inc_test:
-	lw $t3, ($t0)
-	bne $t3, $s1, pattern_detector_inc_test_end
+	lw $t3, ($t0)				# on charge ce qu'il y a à t0 dans t3
+	bne $t3, $s1, pattern_detector_inc_test_end	# t3 != joueur courant, on sort
+	add $t6, $t6, 1				# t6++
+	li $t9, 4
+	beq $t6, $t9, pattern_detector_inc_win	# t6 == 4 : win
+	add $t0, $t0, $s6			# décallage en haut
+	add $t0, $t0, $s7			# décallage à droite
+	b pattern_detector_inc_test	# On recommence
 pattern_detector_inc_test_end:
 	add $t5, $t5, 1				# incrémentation colonne courante
+	add $t0, $t0, $s7			# colonne de droite, même ligne
 	bgt $t2, $t5, pattern_detector_inc_loop_col	# tant que t2 > t5
 pattern_detector_inc_loop_col_end:
 	li $t5, 0					# t5 : colonne courante
-	beq $t6, $t8, pattern_detector_inc_win	# joueur s1 a gagné
 	add $t4, $t4, 1				# incrémentation ligne courante
 	bgt $t1, $t4, pattern_detector_inc_loop_ligne # tant que t1 > t4
 pattern_detector_inc_loop_ligne_end:
@@ -313,4 +325,13 @@ pattern_detector_inc_end:
 	addu $sp, $sp, 4			# ajoute 4 au pointeur de pile
 	j $ra						# retour à l'instruction appelante
 
+test_patterns:
+	sub $sp, $sp, 4				# soustrait 4 au pointeur de pile
+	sw $ra, ($sp)				# sauvegarde ra dans la pile
+	jal pattern_detector_inc	# test diagonale croissante
+	bnez $s2, test_patterns_end	# Pas besoin de faire plus de tests si gagné
+test_patterns_end:
+	lw $ra, ($sp)				# charge ra depuis la pile
+	addu $sp, $sp, 4			# ajoute 4 au pointeur de pile
+	j $ra						# retour à l'instruction appelante
 
