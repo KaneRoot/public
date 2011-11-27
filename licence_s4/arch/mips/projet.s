@@ -16,7 +16,7 @@ str_choix_pvp_pvai:	.asciiz "Vous avez le choix : \n1) P VS P\n2) P VS AI\n3) Je
 str_init_array_loop: .asciiz "Loop init_array\n"
 str_display_array_loop: .asciiz "Loop display_array\n"
 str_display_array: .asciiz "Display Array !!! \n"
-str_columns: .asciiz "\033[43m\033[31m1   2   3   4   5   6   7  \033[00m\n"
+str_columns: .asciiz "\033[43m\033[31m 1     2     3     4     5     6     7   \033[00m\n"
 str_pvp:	.asciiz "\033[32mVous avez choisi le PVP, GOOD LUCK\033[00m\n"
 str_pvai:	.asciiz "Vous avez choisi le PVAI, GOOD LUCK\n"
 str_test:	.asciiz "Test d'écriture dans le tas\n"
@@ -26,15 +26,15 @@ str_endl:	.asciiz "\n"
 str_fin:	.asciiz "Fin du programme\n"
 str_demande_choix_1: .asciiz "Au joueur "
 str_demande_choix_2: .asciiz " de jouer : "
-str_win_0:	.asciiz "Le vainqueur est :\033[31m "
+str_win_0:	.asciiz "\n\033[32mLe vainqueur est :\033[31m "
 str_win_1:	.asciiz	"\033[00m"
 str_p_d_line: .asciiz "\033[33mFin pattern detector line\033[00m\n"
 str_p_d_column: .asciiz "\033[33mFin pattern detector column\033[00m\n"
 str_p_d_inc: .asciiz "\033[33mFin pattern detector inc\033[00m\n"
 str_p_d_dec: .asciiz "\033[33mFin pattern detector dec\033[00m\n"
-str_player_1:	.asciiz "\033[32m\033[44mx\033[00m"
-str_player_2:	.asciiz "\033[34m\033[42mO\033[00m"
-str_no_player:	.asciiz "_"
+str_player_1:	.asciiz "\033[31m\033[44m x \033[00m"
+str_player_2:	.asciiz "\033[31m\033[42m O \033[00m"
+str_no_player:	.asciiz "___"
 player_1:	.word	1
 player_2:	.word	2
 taille_case: .word	4
@@ -71,6 +71,7 @@ choix_pvp_loop:
 	jal changement_joueur
 	beqz $s2, choix_pvp_loop
 	jal print_win
+	jal display_array			# affichage du tableau
 	j fin						# jump au label 'fin'
 
 choix_pvai:	
