@@ -30,10 +30,10 @@ public class Moyenne
 	}
 	public static Integer min(Integer a, Integer b)
 	{
-		return (a.compareTo(b) <= 0) a : b;
+		return (a.compareTo(b) <= 0) ? a : b;
 	}
 	public static Integer max(Integer a, Integer b)
 	{
-		return (a.compareTo(b) >= 0) a : b;
+		return (a.compareTo(b) >= 0) ? a : b;
 	}
 }
