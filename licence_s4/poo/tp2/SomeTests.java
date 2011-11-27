@@ -4,12 +4,10 @@ public class SomeTests
 {
 	public static void main(String[] args)
 	{
-		/*
 		while(l())
 			System.out.println("On continue");
 		while(villeschaines())
 			System.out.println("On continue");
-		*/
 		dernier_exo();
 
 	}
