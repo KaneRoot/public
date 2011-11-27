@@ -176,6 +176,8 @@ display_array:
 	move $t0, $s0				# on met s0 dans t0
 	li $t2, 20					# t2 = offset
 	add $t0, $t0, $t2			# t0 = t0 + offset (dernière ligne)
+	la $a0, str_columns
+	jal write_string
 display_array_loop:
 	lw $a0, ($t0)				# chargement de la valeur à l'@ t0
 	jal write_int_space			# écriture de la valeur de a0
