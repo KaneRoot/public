@@ -15,11 +15,9 @@ public class Expression
 			if(Expression.operateur(tmp[i]))
 			{
 				p.empiler(Expression.calcul(p.depiler(),p.depiler(),tmp[i]));
-				System.out.println("Évaluation");
 			}
 			else
 			{
-				System.out.println("Empilement");
 				p.empiler(new Integer(tmp[i]));
 			}
 			i++;
@@ -35,21 +33,16 @@ public class Expression
 		}
 		catch(NumberFormatException e)
 		{
-			System.out.println("EXCEPTION");
 			b = true;
 		}
 		return b;
 	}
 	public static Integer calcul(Integer a, Integer b, String op)
 	{
-		if(op.charAt(1) == '+')
-			return new Integer(a+b);
-		if(op.charAt(1) == '-')
-			return new Integer(a-b);
-		if(op.charAt(1) == '/')
-			return new Integer(a/b);
-		if(op.charAt(1) == '*')
-			return new Integer(a*b);
+		if(op.charAt(0) == '+') return new Integer(a+b);
+		if(op.charAt(0) == '-') return new Integer(a-b);
+		if(op.charAt(0) == '/') return new Integer(a/b);
+		if(op.charAt(0) == '*') return new Integer(a*b);
 		return null;
 	}
 }
