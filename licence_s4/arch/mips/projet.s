@@ -27,7 +27,14 @@ str_fin:	.asciiz "Fin du programme\n"
 str_demande_choix_1: .asciiz "Au joueur "
 str_demande_choix_2: .asciiz " de jouer : "
 str_win_0:	.asciiz "Le vainqueur est :\033[31m "
-str_win_1:	.asciiz	" \033[00m"
+str_win_1:	.asciiz	"\033[00m"
+str_p_d_line: .asciiz "\033[33mFin pattern detector line\033[00m\n"
+str_p_d_column: .asciiz "\033[33mFin pattern detector column\033[00m\n"
+str_p_d_inc: .asciiz "\033[33mFin pattern detector inc\033[00m\n"
+str_p_d_dec: .asciiz "\033[33mFin pattern detector dec\033[00m\n"
+str_player_1:	.asciiz "\033[32m\033[44mx\033[00m"
+str_player_2:	.asciiz "\033[34m\033[42mO\033[00m"
+str_no_player:	.asciiz "_"
 player_1:	.word	1
 player_2:	.word	2
 taille_case: .word	4
@@ -95,11 +102,24 @@ write_nl:
 	syscall						# écriture de la chaîne
 	j $ra						# retour à l'instruction appelante
 
-write_int_space:	
+write_case:	
 	sub $sp, $sp, 4				# soustrait 4 au pointeur de pile
 	sw $ra, ($sp)				# sauvegarde ra dans la pile
-	li $v0, 1					# appel système n. 1
-	syscall						# lit un entier dans a0
+	lw $t8, player_1
+	lw $t9, player_2
+	beq $a0, $t8, write_case_then
+	beq $a0, $t9, write_case_else
+	b write_case_default
+write_case_then:
+	la $a0, str_player_1
+	b write_case_fi
+write_case_else:
+	la $a0, str_player_2
+	b write_case_fi
+write_case_default:
+	la $a0, str_no_player
+write_case_fi:
+	jal write_string			# écriture de la chaîne
 	la $a0, str_space_bar		# chargement de l'@ de str_space_bar
 	jal write_string			# écriture de la chaîne
 	lw $ra, ($sp)				# charge ra depuis la pile
@@ -133,10 +153,7 @@ malloc:							# procédure d'allocation dynamique
 init_game:
 	sub $sp, $sp, 4				# soustrait 4 au pointeur de pile
 	sw $ra, ($sp)				# sauvegarde ra dans la pile
-	li $a0, 168					# taille du tableau : 6*7*4 octets
-	jal malloc					# appel à la fonction d'allocation mémoire
-	move $s0, $v0				# on sauvegarde le pointeur dans s0
-	jal init_array				# on initialise toutes les cases à 0
+# initialisation des variables globales
 	lw $s1, player_1			# on initialise $s1 à l'identifiant du premier joueur
 	li $s2, 0					# s2 = 0 c'est le joueur qui a gagné
 	lw $s4, lines				# s4 : nb de lignes
@@ -144,6 +161,12 @@ init_game:
 	lw $s6, taille_case			# s6 : taille d'une case
 	jal calcul_taille_offset	# calcul
 	move $s7, $a0				# s7 : offset séparant même ligne de 2 col
+# initialisation du tableau
+	mul $a0, $s4, $s5			# taille du tableau : 6*7*4 octets
+	mul $a0, $a0, $s6
+	jal malloc					# appel à la fonction d'allocation mémoire
+	move $s0, $v0				# on sauvegarde le pointeur dans s0
+	jal init_array				# on initialise toutes les cases à 0
 	lw $ra, ($sp)				# charge ra depuis la pile
 	addu $sp, $sp, 4			# ajoute 4 au pointeur de pile
 	j $ra						# retour à l'instruction appelante
@@ -171,19 +194,22 @@ init_array_loop:
 display_array:
 	sub $sp, $sp, 4				# soustrait 4 au pointeur de pile
 	sw $ra, ($sp)				# sauvegarde ra dans la pile
-	li $t3, 24					# 24 = nb octets pour changement de colonne
-	li $t4, 164					# 164 = offset max tableau
+	move $t3, $s7				# 24 = nb octets pour changement de colonne
+	mul $t4, $s4, $s5			# t4 = nblignes * nbcolonnes
+	mul $t4, $t4, $s6			# t4 = t4 * taillecase
+	sub $t4, $t4, $s6			# t4 -= taillecase
 	move $t0, $s0				# on met s0 dans t0
-	li $t2, 20					# t2 = offset
+	mul $t2, $s4, $s6			# t2 = offset
+	sub $t2, $t2, $s6
 	add $t0, $t0, $t2			# t0 = t0 + offset (dernière ligne)
 display_array_loop:
 	lw $a0, ($t0)				# chargement de la valeur à l'@ t0
-	jal write_int_space			# écriture de la valeur de a0
+	jal write_case				# écriture de la valeur de a0
 	add $t0, $t0, $t3			# ajout de la taille d'un offset à t0
 	sub $t1, $t0, $s0			# t1 = t0 - s0
 	bge $t4, $t1, display_array_loop	# ((t0-s0) < offsetmax) ? loop
 	jal write_nl				# écriture d'un retour à la ligne
-	sub $t2, $t2, 4				# offset de ligne décrémenté de 4 octets (1L)
+	sub $t2, $t2, $s6			# offset de ligne décrémenté de s6 octets (1L)
 	add $t0, $s0, $t2			# t0 = pointeur de tableau + offset
 	bgez $t2, display_array_loop# tant que t2 >= 0 : loop
 	la $a0, str_columns
@@ -288,16 +314,14 @@ pattern_detector_inc:
 	sub $t1, $s4, $t1			# t1 = nblignes - 3 = ligne arrêt recherche
 	li $t2, 3
 	sub $t2, $s5, $t2			# t2 = nbcolonnes - 3 = colonne arrêt recherche
-	li $t0, 0					# t0 : pointeur case courante
 	li $t4, 0					# t4 : ligne courante
-	li $t5, 0					# t5 : colonne courante
 	li $t6, 0					# nb suite (1 à 4)
+	move $t0, $s0
 pattern_detector_inc_loop_ligne:
-	mul $t9, $t4, $s6			# t9 = n°ligne * taillecase
-	add $t0, $s0, $t9			# t0 = s0 + t9
-	li $t5, 0
+	li $t5, 0					# t5 = ligne courante
 pattern_detector_inc_loop_col:
-	li $t6, 0
+	li $t6, 0					# t6 : nb suite (si == 4 : gagné)
+	move $t8, $t0
 pattern_detector_inc_test:
 	lw $t3, ($t0)				# on charge ce qu'il y a à t0 dans t3
 	bne $t3, $s1, pattern_detector_inc_test_end	# t3 != joueur courant, on sort
@@ -308,12 +332,15 @@ pattern_detector_inc_test:
 	add $t0, $t0, $s7			# décallage à droite
 	b pattern_detector_inc_test	# On recommence
 pattern_detector_inc_test_end:
+	move $t0, $t8
 	add $t5, $t5, 1				# incrémentation colonne courante
 	add $t0, $t0, $s7			# colonne de droite, même ligne
 	bgt $t2, $t5, pattern_detector_inc_loop_col	# tant que t2 > t5
 pattern_detector_inc_loop_col_end:
 	li $t5, 0					# t5 : colonne courante
 	add $t4, $t4, 1				# incrémentation ligne courante
+	mul $t9, $t4, $s6			# t9 = n°ligne * taillecase
+	add $t0, $s0, $t9			# t0 = s0 + t9
 	bgt $t1, $t4, pattern_detector_inc_loop_ligne # tant que t1 > t4
 pattern_detector_inc_loop_ligne_end:
 	b pattern_detector_inc_end	# saut à la fin du programme
@@ -342,11 +369,12 @@ pattern_detector_dec:
 	li $t6, 0					# nb suite (1 à 4)
 pattern_detector_dec_loop_ligne:
 	mul $t9, $t4, $s6			# t9 = n°ligne * taillecase
-	sub $t9, $t9, $s6
+	sub $t9, $t9, $s6			# on commence à la fin
 	add $t0, $s0, $t9			# t0 = s0 + t9
-	li $t5, 0
+	li $t5, 0					# t5 : colonne courante
 pattern_detector_dec_loop_col:
 	li $t6, 0
+	move $t8, $t0
 pattern_detector_dec_test:
 	lw $t3, ($t0)				# on charge ce qu'il y a à t0 dans t3
 	bne $t3, $s1, pattern_detector_dec_test_end	# t3 != joueur courant, on sort
@@ -357,11 +385,11 @@ pattern_detector_dec_test:
 	add $t0, $t0, $s7			# décallage à droite
 	b pattern_detector_dec_test	# On recommence
 pattern_detector_dec_test_end:
+	move $t0, $t8
 	add $t5, $t5, 1				# incrémentation colonne courante
 	add $t0, $t0, $s7			# colonne de droite, même ligne
 	bgt $t2, $t5, pattern_detector_dec_loop_col	# tant que t2 > t5
 pattern_detector_dec_loop_col_end:
-	li $t5, 0					# t5 : colonne courante
 	sub $t4, $t4, 1				# décrémentation ligne courante
 	bgt $t4, $t1, pattern_detector_dec_loop_ligne # tant que t4 > t1
 pattern_detector_dec_loop_ligne_end:
@@ -452,14 +480,27 @@ pattern_detector_column_end:
 test_patterns:
 	sub $sp, $sp, 4				# soustrait 4 au pointeur de pile
 	sw $ra, ($sp)				# sauvegarde ra dans la pile
+	###################
 	jal pattern_detector_line	# test ligne
 	bnez $s2, test_patterns_end	# Pas besoin de faire plus de tests si gagné
+	la $a0, str_p_d_line
+	jal write_string
+	###################
 	jal pattern_detector_column	# test colonne
 	bnez $s2, test_patterns_end	# Pas besoin de faire plus de tests si gagné
+	la $a0, str_p_d_column
+	jal write_string
+	###################
 	jal pattern_detector_inc	# test diagonale croissante
 	bnez $s2, test_patterns_end	# Pas besoin de faire plus de tests si gagné
+	la $a0, str_p_d_inc
+	jal write_string
+	###################
 	jal pattern_detector_dec	# test diagonale décroissante
 	bnez $s2, test_patterns_end	# Pas besoin de faire plus de tests si gagné
+	la $a0, str_p_d_dec
+	jal write_string
+	###################
 test_patterns_end:
 	lw $ra, ($sp)				# charge ra depuis la pile
 	addu $sp, $sp, 4			# ajoute 4 au pointeur de pile
