@@ -202,6 +202,8 @@ display_array:
 	mul $t2, $s4, $s6			# t2 = offset
 	sub $t2, $t2, $s6
 	add $t0, $t0, $t2			# t0 = t0 + offset (dernière ligne)
+	la $a0, str_columns
+	jal write_string
 display_array_loop:
 	lw $a0, ($t0)				# chargement de la valeur à l'@ t0
 	jal write_case				# écriture de la valeur de a0
