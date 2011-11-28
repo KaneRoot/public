@@ -8,10 +8,10 @@
 # Apprendre à utiliser les EFL
 # Mettre le serveur sous Debian - FAIT
 	# Faire une liste de tout ce que je met en place sur le serveur
-		# transmission-daemon
-		# apache2
+		# transmission-daemon - FAIT
+		# apache2 - FAIT
 			# WordPress
-			# dépôt - TODO
+			# dépôt - FAIT
 			# Nanoblog
 			# 
 		# git via ssh
@@ -38,12 +38,12 @@
 #
 # Révisions
 # SDA2 projet
-# POO
+# POO - FAIT
 # PSR
 # GRO
 # Faire l'anglais
 # Finir le "Personal File"
-# Anglais : mettre l'image DL de 4chan sur le wiki
-# Anglais : mettre à jour oz s2
-# voilà
-# Anglais : faire une page récapitulant les saisons de Lost + OZ
+# Anglais : mettre l'image DL de 4chan sur le wiki - FAIT
+# Anglais : mettre à jour oz s2 - FAIT
+# Anglais : faire une page récapitulant les saisons de Lost + OZ - FAIT
+# à retenir : /usr/share/X11/xkb/symbols
