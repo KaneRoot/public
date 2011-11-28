@@ -5,7 +5,7 @@
 #include "base.h"
 #include "matrice-triangulaire-sup.h"
 
-#define N 5
+#define N 2
 #define VAL_DEFAUT 0
 
 int truc(int n)
@@ -21,7 +21,6 @@ Nat n()
 matrice zero()
 {
 	int taille = truc(n());
-	printf("On trouve une taille d'allocation de : %d \n", taille);
 	matrice m = malloc(taille * sizeof(Rat));
 	while(taille > 0)
 	{
@@ -37,13 +36,13 @@ int a(Nat i, Nat j)
 }
 Rat elem(matrice m, Nat i, Nat j)
 {
-	if(j > i) return VAL_DEFAUT;
+	if(i > j) return VAL_DEFAUT;
 	return m[a(i, j)];
 }
 
 void modt(matrice m , Nat i, Nat j, Rat x)
 {
-	if(j > i) return;
+	if(i > j) return;
 	m[a(i, j)] = x;
 }
 matrice somme(matrice m1, matrice m2)
@@ -65,7 +64,7 @@ matrice prod(matrice m1, matrice m2)
 		for(j = 0 ; j < n() ; j++)
 		{
 			for(k = i ; k < j ; k++)
-				v += elem(m1, i, k) x elem(m2, k,j);
+				v += elem(m1, i, k) * elem(m2, k,j);
 			modt(m, i, j, v);
 			v = 0;
 		}
@@ -80,10 +79,19 @@ matrice mult(matrice m, Rat x)
 			modt(m1, i, j, elem(m,i,j) * x);
 	return m1;
 }
+void affichage_matrice(matrice m)
+{
+	int i, j;
+	for(i = 0 ; i < n() ; i++)
+		for(j = 0 ; j < n() ; j++)
+			printf("Matrice %d %d = %lf\n", i, j, elem(m, i, j));
+}
 int main(int argc, char * argv[])
 {
 	matrice m = zero();
-	modt(m, 1, 2, 15);
+	modt(m, 1, 1, 15);
+	modt(m, 0, 1, 12);
+	affichage_matrice(m);
 
 	return EXIT_SUCCESS;
 }
