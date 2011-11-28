@@ -5,7 +5,7 @@
 #include "base.h"
 #include "matrice-triangulaire-sup.h"
 
-#define N 2
+#define N 3
 #define VAL_DEFAUT 0
 
 int truc(int n)
@@ -92,6 +92,29 @@ int main(int argc, char * argv[])
 	modt(m, 1, 1, 15);
 	modt(m, 0, 1, 12);
 	affichage_matrice(m);
+	
+	matrice m1, m2;
+	m1 = zero();
+	m2 = zero();
+	
+	int i, j;
+	for(i = 0 ; i < n() ; i++)
+		for(j = 0 ; j < n() ; j++)
+			modt(m1, i, j, i+j);
+	printf("Matrice m1\n");
+	affichage_matrice(m1);
+	for(i = 0 ; i < n() ; i++)
+		for(j = 0 ; j < n() ; j++)
+			modt(m2, i, j, i+j);
+	printf("Matrice m2\n");
+	affichage_matrice(m2);
 
+	printf("Matrice m3\n");
+	matrice m3 = mult(m1, 5);
+
+	affichage_matrice(m3);
+	matrice m4 = prod(m3, m1);
+	printf("Matrice m4\n");
+	affichage_matrice(m4);
 	return EXIT_SUCCESS;
 }
