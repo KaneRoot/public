@@ -1,5 +1,21 @@
 a.
 
+s : suppression
+r : remplacement
+éch : échange
+n : nb nœuds
+nf : nb feuilles
+v : étiquette à l'adresse donnée
+
+po : partiellement ordonné ou pas
+ipo : insertion partiellement ordonné
+mount : monter dans un arbre binaire parfait => renvoi l'@ du père
+
+spo : suppression dans un Abp partiellement ordonné
+desc : descendre dans un arbre binaire parfait => renvoi l'@ du fils
+imin : @ fils plus petite étiquette 
+
+
 spécification ABP étend ORDT
 	Sorte Abp
 	Opérations:
@@ -28,7 +44,7 @@ spécification ABP étend ORDT
 		n(^) = 0
 		n(i(a,s)) = 1 + n(a)
 		nf(^) = 0
-		nf(i(a,s)) = n(i(a,s)) - entierinférieur(n(i(a,s))/2)
+		nf(i(a,s)) = n(i(a,s)) - arrondiborneinférieure(n(i(a,s))/2)
 		v(i(a,s),x) = si n(i(a,s))-1 == x alors s
 										  sinon v(a,x)
 		éch(^,x,y) = ^
@@ -42,9 +58,10 @@ spécification ABPO0 étend ABP
 	Opérations:
 		po : Abp → bool
 		ipo : Abp S → Abp
-		mont : Abp → S
+		mont : Abp Nat → Nat
 
 	Préconditions:
+		pré ipo(a,s) : po(a)
 		# TODO
 	Axiomes:
 		# TODO
@@ -56,5 +73,13 @@ c.
 spécification ABPO1 étend ABPO0
 	Opérations:
 		spo : Abp Nat → Abp
-		desc : Abp → S
-		imin : 
+		desc : Abp Nat → Nat
+		imin : Abp Nat → Nat
+
+	Préconditions:
+		pré imin(a,x) : # nonfeuille(a)
+		# TODO
+	Axiomes:
+		# TODO
+
+fin spécification
