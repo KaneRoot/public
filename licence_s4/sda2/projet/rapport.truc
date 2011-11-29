@@ -1,0 +1,60 @@
+a.
+
+spécification ABP étend ORDT
+	Sorte Abp
+	Opérations:
+		^ : → Abp
+		i : Abp S → Abp
+		s : Abp → Abp
+		r : Abp Nat S → Abp
+		éch : Abp Nat Nat → Abp
+		n : Abp → Nat
+		nf : Abp → Nat
+		v : Abp Nat → S
+
+	Préconditions:
+		pré r(a, x, s) : x < n(a)
+		pré éch(a, x, y) : x et y < n(a)
+		pré v(a, x) : x < n(a)
+	
+	Axiomes:
+		s(^) = ^
+		s(i(a,s)) = a
+		r(^, x, s) = ^
+		r(i(a,s),x,s1) = a1 avec a1		init a1 = ^
+										pour i de 0 à n(a)-1
+											si i==x alors i(a1, s1)
+													sinon i(a1,v(a,i))
+		n(^) = 0
+		n(i(a,s)) = 1 + n(a)
+		nf(^) = 0
+		nf(i(a,s)) = n(i(a,s)) - entierinférieur(n(i(a,s))/2)
+		v(i(a,s),x) = si n(i(a,s))-1 == x alors s
+										  sinon v(a,x)
+		éch(^,x,y) = ^
+		éch(a,x,y) = r(r(a,x,v(a,y)),y,v(a,x))
+
+fin spécification
+
+b.
+
+spécification ABPO0 étend ABP
+	Opérations:
+		po : Abp → bool
+		ipo : Abp S → Abp
+		mont : Abp → S
+
+	Préconditions:
+		# TODO
+	Axiomes:
+		# TODO
+
+fin spécification
+
+c.
+
+spécification ABPO1 étend ABPO0
+	Opérations:
+		spo : Abp Nat → Abp
+		desc : Abp → S
+		imin : 
