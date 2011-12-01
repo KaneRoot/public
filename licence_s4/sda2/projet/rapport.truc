@@ -64,6 +64,12 @@ spécification ABPO0 étend ABP
 		pré ipo(a,s) : po(a)
 		# TODO
 	Axiomes:
+		po(^) = vrai
+		po(i(a,s)) = s >= v(i(a,s),mont(a,n(i(a,s))-1)) et po(a)
+
+		mont(^,x) = x
+		mont(i(a,s),x) = 
+		
 		# TODO
 
 fin spécification
@@ -80,6 +86,11 @@ spécification ABPO1 étend ABPO0
 		pré imin(a,x) : # nonfeuille(a)
 		# TODO
 	Axiomes:
+		desc(^,x) = x
+		desc(i(a,s),x) = 
+		imin(^,x) = x
+		imin(i(a,s),x) = si n(i(a,s))-1 < 2*x+2 alors si n(i(a,s))-1 < 2*x+1 alors x sinon 2*x+1 fsi
+												sinon si v(i(a,s),2*x+1) < v(i(a,s),2*x+2) alors 2*x+1 sinon 2*x+2 fsi fsi
 		# TODO
 
 fin spécification
