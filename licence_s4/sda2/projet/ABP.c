@@ -13,7 +13,7 @@ Abp lambda(void)
 	a->length = 0;
 	return a;
 }
-Abp i(Abp a, Rat s)
+Abp inser(Abp a, Rat s)
 {
 	if(a == NULL) a = lambda();
 	a->t[n(a)] = s;
@@ -36,7 +36,7 @@ Abp r(Abp a, Nat x, Rat s)
 }
 Abp ech(Abp a, Nat x, Nat y)
 {
-	return (x >= n(a) || y >= n(a)) ? a : r(r(a,x,v,(a,y)),y,v(a,x));
+	return (x >= n(a) || y >= n(a)) ? a : r(r(a,x,v(a,y)),y,v(a,x));
 }
 Nat nf(Abp a)
 {
@@ -52,6 +52,6 @@ Rat v(Abp a, Nat x)
 }
 Nat n(Abp a)
 {
-	if(a == NULL) return 0; // Sécurité contre les segfaults.
+	if(a == NULL) return -1; // Sécurité contre les segfaults.
 	return a->length;
 }

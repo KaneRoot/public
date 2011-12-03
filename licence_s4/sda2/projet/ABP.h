@@ -9,7 +9,7 @@ typedef struct {
 } *Abp;
 
 Abp lambda(void);	// ^
-Abp i(Abp, Rat);
+Abp inser(Abp, Rat); // insertion i
 Abp s(Abp);
 Abp r(Abp,Nat,Rat);
 Abp ech(Abp,Nat,Nat);
