@@ -11,7 +11,7 @@ Abp lambda(void)
 	a->length = 0;
 	return a;
 }
-Abp i(Abp a, Rel s)
+Abp i(Abp a, Rat s)
 {
 	if(a == NULL) a = lambda();
 	a->t[n(a)] = s;
@@ -25,7 +25,7 @@ Abp s(Abp a)
 	return a;
 }
 
-Abp r(Abp a, Nat x, Rel s)
+Abp r(Abp a, Nat x, Rat s)
 {
 	if(x >= n(a))
 		return a;
@@ -37,9 +37,11 @@ Abp ech(Abp a, Nat x, Nat y)
 }
 Nat nf(Abp a)
 {
-	
+	// n(i(a,s)) - arrondi(n(i(a,s))/2)
+	int arrondi = (int) n(a)/2;
+	return (Nat) n(a) - arrondi;
 }
-Rel v(Abp,Nat);
+Rat v(Abp,Nat);
 Nat n(Abp a)
 {
 	if(a == NULL) return 0; // Sécurité contre les segfaults.

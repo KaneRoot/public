@@ -4,18 +4,18 @@
 #define N 10
 
 typedef struct {
-	Rel t[N];
+	Rat t[N];
 	Nat length;
 } *Abp;
 
 Abp lambda(void);	// ^
-Abp i(Abp, Rel);
+Abp i(Abp, Rat);
 Abp s(Abp);
-Abp r(Abp,Nat,Rel);
+Abp r(Abp,Nat,Rat);
 Abp ech(Abp,Nat,Nat);
 Nat n(Abp);
 Nat nf(Abp);
-Rel v(Abp,Nat);
+Rat v(Abp,Nat);
 
 #endif
 
