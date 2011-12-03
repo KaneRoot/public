@@ -3,9 +3,9 @@ CFLAGS = -Wall -g #-std=c99
 LDFLAGS = -lm
 OPTIONS = $(CFLAGS) $(LDFLAGS)
 EXEC = tests
-FICHIERSO = ABP.o
+FICHIERSO = ABP.o ABPO0.o
 
-all: ABP.o $(EXEC) 
+all: ABPO0.o ABP.o $(EXEC) 
 
 $(EXEC) : $(EXEC).o 
 	$(CC) -o $@ $^ $(FICHIERSO) $(OPTIONS)

@@ -40,8 +40,7 @@ Abp ech(Abp a, Nat x, Nat y)
 }
 Nat nf(Abp a)
 {
-	// n(i(a,s)) - arrondi(n(i(a,s))/2)
-	int arrondi = (int) n(a)/2;
+	int arrondi = (int) n(a)/2; // si n(a)/2  impair, réduction à l'entier inférieur
 	return (Nat) n(a) - arrondi;
 }
 Rat v(Abp a, Nat x)
