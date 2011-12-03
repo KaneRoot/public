@@ -62,16 +62,17 @@ spécification ABPO0 étend ABP
 
 	Préconditions:
 		pré ipo(a,s) : po(a)
+		pré mount(a,x) : n(a) > x
 		# TODO
 	Axiomes:
 		po(^) = vrai
 		po(i(a,s)) = s >= v(i(a,s),mont(a,n(i(a,s))-1)) et po(a)
 
-		mont(^,x) = x
-		mont(i(a,s),x) = 
-		
-		# TODO
-
+		mont(i(a,s),x) = si paire(x) alors arrondiborneinférieure((x-1)/2)
+									 sinon arrondiborneinférieure(x/2)
+		ipo(^,s) = i(^,s)
+		ipo(a,s) = si s < v(a,mont(a,n(a))) alors ech(i(a,s),mont(a,n(a)),n(a))
+											sinon i(a,s)
 fin spécification
 
 c.
