@@ -119,5 +119,10 @@ int hauteur(Abp a)
 	return i;
 }
 
+Pour po, dans le meilleur des cas (po n'est pas partiellement ordonné) : il peut quitter dès la première comparaison (le dernier élément ajouté est plus petit que l'élément parent).
+
+Comme décrit dans ma spécification de po, po fait une comparaison du type <= n fois dans le pire des cas (si l'arbre est partiellement ordonné) :
+premièrement n(a) = n, il fait une comparaison v(a,n(a)-1) avec v(a,imont(n(a)-1)), 
+puis il recommence avec n(a) = n(a) -1 jusqu'à ce que n(a) soit égal à 1, après il n'y a plus de comparaison.
 
 
