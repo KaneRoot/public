@@ -69,24 +69,21 @@ void nb_noeuds_feuilles()
 void po_ipo_mont()
 {
 	printf("\n\033[31mTest : po_ipo_mont\033[00m\n");
-	printf("	Un arbre 'a' auquel je fais 4 ajouts de 0 à 3, test po, puis ajout de 0  via 'i' et test po.\n");
+	printf("	Un arbre 'a' auquel je fais 10 ajouts de 10 à 1 via 'i' \n");
 	Abp a = lambda();
 	int i;
-	for(i = 0 ; i < 4 ; i++)
-		inser(a,i);
+	for(i = 0 ; i < 10 ; i++)
+		inser(a,10-i);
 	afficher_arbre(a);
 	afficher_po(a);
-	inser(a,0);
-	afficher_arbre(a);
-	afficher_po(a);
-	printf("\n	Un arbre 'b' auquel je fais 10 ajouts de 10 à 1 via 'ipo' puis test po.\n");
+	printf("\n	Un arbre 'b' auquel je fais 10 ajouts de 10 à 1 via 'ipo'\n");
 	Abp b = lambda();
 	for(i = 0 ; i < 10 ; i++)
 		ipo(b, 10 - i);
 	afficher_arbre(b);
 	afficher_po(b);
-	printf("	Test v(a,imont(2)) : %2.1f\n",v(a,imont(2)));
-	printf("	Test v(a,imont(6)) : %2.1f\n",v(a,imont(6)));
+	printf("	Test v(b,imont(2)) : %2.1f\n",v(b,imont(2)));
+	printf("	Test v(b,imont(6)) : %2.1f\n",v(b,imont(6)));
 }
 void spo_desc_imin()
 {
