@@ -3,6 +3,7 @@
 
 bool po(Abp);
 Abp ipo(Abp, Rat);
-Nat mont(Abp, Nat);
+Abp mont(Abp, Nat);
+Nat imont(Abp, Nat);
 
 #endif

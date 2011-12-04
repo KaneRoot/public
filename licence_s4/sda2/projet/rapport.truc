@@ -58,7 +58,8 @@ spécification ABPO0 étend ABP
 	Opérations:
 		po : Abp → bool
 		ipo : Abp S → Abp
-		mont : Abp Nat → Nat
+		mont : Abp Nat → Abp
+		imont : Abp Nat → Nat
 
 	Préconditions:
 		pré ipo(a,s) : po(a)
@@ -68,8 +69,16 @@ spécification ABPO0 étend ABP
 		po(^) = vrai
 		po(i(a,s)) = s >= v(i(a,s),mont(a,n(i(a,s))-1)) et po(a)
 
-		mont(i(a,s),x) = si paire(x) alors arrondiborneinférieure((x-1)/2)
+		imont(^,x) = 0
+		imont(i(a,s),x) = si paire(x) alors arrondiborneinférieure((x-1)/2)
 									 sinon arrondiborneinférieure(x/2)
+		
+		mont(a,x) = a1 avec init a1 = a
+							tant que v(a1,x) < v(a1,imont(a,x))
+								ech(a1,imont(a1,x),x)
+								x = imont(a1,x)
+							fin tant que
+		
 		ipo(^,s) = i(^,s)
 		ipo(a,s) = si s < v(a,mont(a,n(a))) alors ech(i(a,s),mont(a,n(a)),n(a))
 											sinon i(a,s)
@@ -85,6 +94,8 @@ spécification ABPO1 étend ABPO0
 
 	Préconditions:
 		pré imin(a,x) : # nonfeuille(a)
+		pré desc(a,x) : x < n(a)
+
 		# TODO
 	Axiomes:
 		desc(^,x) = x

@@ -1,7 +1,7 @@
 #ifndef __ABP_H_
 #define __ABP_H_
 
-#define N 10
+#define N 15
 
 typedef struct {
 	Rat t[N];

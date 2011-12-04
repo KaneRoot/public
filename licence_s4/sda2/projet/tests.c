@@ -13,6 +13,15 @@ void afficher_arbre(Abp a)
 		printf("v(a,%d) = %f\n",i,v(a,i));
 }
 
+void afficher_po(Abp a)
+{
+	printf("L'arbre est-il partiellement ordonné ? ");
+	if(po(a) == VRAI)
+		printf("\033[31mOui\033[00m\n");
+	else
+		printf("\033[31mNon\033[00m\n");
+}
+
 void ajout_suppression_echange()
 {
 	printf("\033[31mTest : ajout_suppression_echange\033[00m\n");
@@ -46,11 +55,31 @@ void nb_noeuds_feuilles()
 	s(a);
 	printf("Nombre de nœuds : %d et de feuilles : %d\n",n(a), nf(a));
 }
-
+void po_ipo_mont()
+{
+	printf("\033[31mTest : po_ipo_mont\033[00m\n");
+	printf("	1 arbre 4 ajouts de 0 à 3, test po, puis ajouts de 0 et test po\n");
+	Abp a = lambda();
+	int i;
+	for(i = 0 ; i < 4 ; i++)
+		inser(a,i);
+	afficher_arbre(a);
+	afficher_po(a);
+	inser(a,0);
+	afficher_arbre(a);
+	afficher_po(a);
+	printf("	1 arbre 10 ajouts de 10 à 1 via ipo, test po\n"); //, puis ipo de 0 et test po\n");
+	Abp b = lambda();
+	for(i = 0 ; i < 10 ; i++)
+		ipo(b, 10 - i);
+	afficher_arbre(b);
+	afficher_po(b);
+}
 int main(int argc, char * argv[])
 {
-	ajout_suppression_echange();
-	nb_noeuds_feuilles();
+	//ajout_suppression_echange();
+	//nb_noeuds_feuilles();
+	po_ipo_mont();
 	return EXIT_SUCCESS;
 }
 
