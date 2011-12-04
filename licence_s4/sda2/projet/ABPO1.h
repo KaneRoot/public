@@ -1,8 +1,8 @@
-#ifndef __ABPO0_H_
-#define __ABPO0_H_
+#ifndef __ABPO1_H_
+#define __ABPO1_H_
 
-Abp spo(Abp,Nat);
-Abp desc(Abp, Nat);
 Nat imin(Abp, Nat);
+Abp desc(Abp, Nat);
+Abp spo(Abp,Nat);
 
 #endif

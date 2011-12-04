@@ -76,11 +76,27 @@ void po_ipo_mont()
 	afficher_arbre(b);
 	afficher_po(b);
 }
+void spo_desc_imin()
+{
+	printf("\033[31mTest : spo_desc_imin\033[00m\n");
+	printf("Ajout à l'arbre a de 10 éléments de 10 à 1\n");
+	Abp a = lambda();
+	int i;
+	for(i = 0 ; i < 10 ; i++) ipo(a,10-i);
+	afficher_arbre(a);
+	afficher_po(a);
+	printf("Suppression de l'élément 3\n");
+	spo(a,3);
+	afficher_arbre(a);
+	afficher_po(a);
+
+}
 int main(int argc, char * argv[])
 {
 	//ajout_suppression_echange();
 	//nb_noeuds_feuilles();
-	po_ipo_mont();
+	//po_ipo_mont();
+	spo_desc_imin();
 	return EXIT_SUCCESS;
 }
 
