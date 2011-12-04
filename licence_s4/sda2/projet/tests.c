@@ -10,8 +10,10 @@
 void afficher_arbre(Abp a)
 {
 	int i;
-	for(i = 0 ; i < n(a) ; i++)
-		printf("v(a,%d) = %f\n",i,v(a,i));
+	printf("[ ");
+	for(i = 0 ; i < n(a)-1 ; i++)
+		printf("%2.1f | ",v(a,i));
+	printf("%2.1f ]\n",v(a,n(a)-1));
 }
 
 void afficher_po(Abp a)
@@ -87,6 +89,12 @@ void spo_desc_imin()
 	afficher_po(a);
 	printf("Suppression de l'élément 3\n");
 	spo(a,3);
+	afficher_arbre(a);
+	afficher_po(a);
+	printf("Nombre de nœuds : %d et de feuilles : %d\n",n(a), nf(a));
+	printf("Ajout de l'élément -1 puis suppression de l'élément 2\n");
+	ipo(a,-1);
+	spo(a,2);
 	afficher_arbre(a);
 	afficher_po(a);
 

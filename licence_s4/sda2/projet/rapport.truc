@@ -9,7 +9,7 @@ v : étiquette à l'adresse donnée
 
 po : partiellement ordonné ou pas
 ipo : insertion partiellement ordonné
-mount : monter dans un arbre binaire parfait => renvoi l'@ du père
+mont : monter dans un arbre binaire parfait => renvoi l'@ du père
 
 spo : suppression dans un Abp partiellement ordonné
 desc : descendre dans un arbre binaire parfait => renvoi l'@ du fils
@@ -37,9 +37,8 @@ spécification ABP étend ORDT
 		s(^) = ^
 		s(i(a,s)) = a
 		r(^, x, s) = ^
-		r(i(a,s),x,s1) = a1 avec a1		init a1 = ^
-										pour i de 0 à n(a)-1
-											si i==x alors i(a1, s1)
+		r(i(a,s),x,s1) = a1 avec a1 init ^ pour i de 0 à n(a)-1
+												si i==x alors i(a1, s1)
 													sinon i(a1,v(a,i))
 		n(^) = 0
 		n(i(a,s)) = 1 + n(a)
@@ -59,28 +58,27 @@ spécification ABPO0 étend ABP
 		po : Abp → bool
 		ipo : Abp S → Abp
 		mont : Abp Nat → Abp
-		imont : Abp Nat → Nat
+		imont : Nat → Nat
 
 	Préconditions:
 		pré ipo(a,s) : po(a)
-		pré mount(a,x) : n(a) > x
+		pré mont(a,x) : n(a) > x
 		# TODO
 	Axiomes:
 		po(^) = vrai
-		po(i(a,s)) = s >= v(i(a,s),mont(a,n(i(a,s))-1)) et po(a)
+		po(i(a,s)) = s >= v(i(a,s),imont(n(i(a,s))-1)) et po(a)
 
-		imont(^,x) = 0
-		imont(i(a,s),x) = si paire(x) alors arrondiborneinférieure((x-1)/2)
+		imont(x) = si x==0 alors 0 sinon si paire(x) alors arrondiborneinférieure((x-1)/2)
 									 sinon arrondiborneinférieure(x/2)
 		
 		mont(a,x) = a1 avec init a1 = a
-							tant que v(a1,x) < v(a1,imont(a,x))
-								ech(a1,imont(a1,x),x)
-								x = imont(a1,x)
+							tant que v(a1,x) < v(a1,imont(x))
+								ech(a1,imont(x),x)
+								x = imont(x)
 							fin tant que
 		
 		ipo(^,s) = i(^,s)
-		ipo(a,s) = si s < v(a,mont(a,n(a))) alors ech(i(a,s),mont(a,n(a)),n(a))
+		ipo(a,s) = si s < v(a,imont(n(a))) alors mont(i(a,s),n(i(a,s))-1)
 											sinon i(a,s)
 fin spécification
 
@@ -98,11 +96,20 @@ spécification ABPO1 étend ABPO0
 
 		# TODO
 	Axiomes:
-		desc(^,x) = x
-		desc(i(a,s),x) = 
+		desc(i(a,s),x) = a1 avec init a1 = a
+							tant que v(a1,x) > v(a1,imin(a1,x))
+								ech(a1,x,imin(a1,x))
+								x = imin(a1,x)
+							fin tant que
 		imin(^,x) = x
-		imin(i(a,s),x) = si n(i(a,s))-1 < 2*x+2 alors si n(i(a,s))-1 < 2*x+1 alors x sinon 2*x+1 fsi
+		imin(i(a,s),x) = si n(i(a,s))-1 < 2*x+2 alors si n(i(a,s))-1 < 2*x+1 alors x sinon (2*x)+1 fsi
 												sinon si v(i(a,s),2*x+1) < v(i(a,s),2*x+2) alors 2*x+1 sinon 2*x+2 fsi fsi
-		# TODO
+
+		spo(^,x) = ^
+		spo(a,x) = si x >= n(a) alors a sinon avec a = s(ech(a,x,n(a)-1))
+													si v(a,x) < v(a,imont(x)) alors mont(a,x)
+													 sinon si v(a,x) > v(a,imin(a,x)) alors desc(a,x)
+		Remarque, avec ma version des spécifications de mont et desc qui ne modifient l'arbre que s'il y a besoin, on aurait pu écrire spo de cette manière :
+		spo(a,x) = si x >= n(a) alors a sinon desc(mont(s(ech(a,x,n(a)-1)),x),x)
 
 fin spécification

@@ -10,26 +10,25 @@
 bool po(Abp a)
 {
 	if(n(a) <= 0) return VRAI;
-	//return v(a,n(a)-1) >= v(inser(a,s),mount(a,n(a
 	int i;
 	bool b = VRAI;
 	for(i = 0 ; (i < n(a)) && b ; i++)
-		if(v(a,i) < v(a,imont(a,i)))
+		if(v(a,i) < v(a,imont(i)))
 			b = FAUX;
 
 	return b;
 }
-Nat imont(Abp a, Nat x)
+Nat imont(Nat x)
 {
 	if(x==0) return 0;
 	return ((x%2)==0) ? (int) (x-1)/2 : (int) x/2;
 }
 Abp mont(Abp a, Nat x)
 {
-	while(v(a,x) < v(a,imont(a,x)))
+	while(v(a,x) < v(a,imont(x)))
 	{
-		a = ech(a,imont(a,x),x);
-		x = imont(a,x);
+		a = ech(a,imont(x),x);
+		x = imont(x);
 	}
 	return a;
 }

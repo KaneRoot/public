@@ -32,6 +32,10 @@ Abp spo(Abp a, Nat x)
 {
 	if(x >= n(a)) return a;
 	a = ech(a,x,n(a)-1);
-	s(a);
-	return desc(a,x);
+	a = s(a);
+	if(v(a,x) < v(a,imont(x)))
+		a = mont(a,x);
+	else if(v(a,x) > v(a,imin(a,x)))
+		a = desc(a,x);
+	return a;
 }
