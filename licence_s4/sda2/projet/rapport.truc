@@ -74,7 +74,7 @@ spécification ABPO1 étend ABPO0
 		imin : Abp Nat → Nat
 
 	Préconditions:
-		pré imin(a,x) : # nonfeuille(a)
+		pré imin(a,x) : n(a) > x
 		pré desc(a,x) : x < n(a)
 
 	Axiomes:
@@ -100,17 +100,17 @@ fin spécification
 e.
 
 Démonstration par récurrence :
-Au rang 0 : n = 0 : bornesupérieure(0/2) = 0 : pas de feuilles.
-Au rang n = 1 : bornesupérieure(1/2) = 1 : une feuille, il n'y a qu'un nœud donc c'est une feuille. La relation est vraie au rang n.
-Au rang n + 1 : bornesupérieure(n+1/2) soit n=1 alors : bornesupérieure(1+1/2) = 1, il y a un nœud père et un nœud feuille. Cela est vrai au rang n+1 donc la relation est vraie.
+Au rang 0 : n = 0 : arrondi-supérieur(0/2) = 0 : pas de feuilles.
+Au rang n = 1 : arrondi-supérieur(1/2) = 1 : une feuille, il n'y a qu'un nœud donc c'est une feuille. La relation est vraie au rang n.
+Au rang n + 1 : arrondi-supérieur(n+1/2) soit n=1 alors : arrondi-supérieur(1+1/2) = 1, il y a un nœud père et un nœud feuille. Cela est vrai au rang n+1 donc la relation est vraie.
 
 
-La hauteur d'un arbre à n éléments est égale à x avec x tel que : 2^x <= n < 2^(x+1)
-En code :
+La hauteur d'un arbre à n éléments est égale à x avec x tel que : 2^x <= n < 2^(x+1).
+Dit autrement : la hauteur d'un arbre à n éléments est égale à arrondi-inférieur(log2(n))
+En code (sans prendre en compte n == 0) :
 int hauteur(Abp a)
 {
-	if(n(a) == 0) return 0;
-	int i = 1, x = 1;
+	int i = 0, x = 1;
 	while(x < n(a)) 
 	{
 		x = x*2; 
@@ -120,9 +120,13 @@ int hauteur(Abp a)
 }
 
 Pour po, dans le meilleur des cas (po n'est pas partiellement ordonné) : il peut quitter dès la première comparaison (le dernier élément ajouté est plus petit que l'élément parent).
-
 Comme décrit dans ma spécification de po, po fait une comparaison du type <= n fois dans le pire des cas (si l'arbre est partiellement ordonné) :
 premièrement n(a) = n, il fait une comparaison v(a,n(a)-1) avec v(a,imont(n(a)-1)), 
 puis il recommence avec n(a) = n(a) -1 jusqu'à ce que n(a) soit égal à 1, après il n'y a plus de comparaison.
 
+Pour ipo, dans le meilleur des cas il n'y a pas d'échange à faire. Si on ajoute à l'arbre un élément s qui est numériquement supérieur à son futur père, il ne fait qu'un ajout simple i(a,s).
+Dans le pire des cas, il faut monter tout en haut de l'arbre (à la racine) et donc le nombre d'échange est simplement la hauteur de l'arbre.
 
+Pour spo c'est la même chose mais on rajoute un échange avant les itérations successives dans desc.
+Autrement dit, on fait un échange entre l'élément x à supprimer et l'élément à n(a)-1, puis dans desc on fait des échanges qui peuvent valoir la hauteur de l'arbre a.
+Donc dans le pire des cas : hauteur + 1, dans le meilleur des cas il n'y a que le premier échange à faire.
