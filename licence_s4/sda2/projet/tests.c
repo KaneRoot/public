@@ -10,10 +10,10 @@
 void afficher_arbre(Abp a)
 {
 	int i;
-	printf("[ ");
+	printf("\033[31m[\033[00m ");
 	for(i = 0 ; i < n(a)-1 ; i++)
 		printf("%2.1f | ",v(a,i));
-	printf("%2.1f ]\n",v(a,n(a)-1));
+	printf("%2.1f \033[31m]\033[00m\n",v(a,n(a)-1));
 }
 
 void afficher_po(Abp a)
