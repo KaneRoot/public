@@ -47,7 +47,6 @@ spécification ABPO0 étend ABP
 	Préconditions:
 		pré ipo(a,s) : po(a)
 		pré mont(a,x) : n(a) > x
-		# TODO
 	Axiomes:
 		po(^) = vrai
 		po(i(a,s)) = s >= v(i(a,s),imont(n(i(a,s))-1)) et po(a)
@@ -97,3 +96,28 @@ spécification ABPO1 étend ABPO0
 		spo(a,x) = si x >= n(a) alors a sinon desc(mont(s(ech(a,x,n(a)-1)),x),x)
 
 fin spécification
+
+e.
+
+Démonstration par récurrence :
+Au rang 0 : n = 0 : bornesupérieure(0/2) = 0 : pas de feuilles.
+Au rang n = 1 : bornesupérieure(1/2) = 1 : une feuille, il n'y a qu'un nœud donc c'est une feuille. La relation est vraie au rang n.
+Au rang n + 1 : bornesupérieure(n+1/2) soit n=1 alors : bornesupérieure(1+1/2) = 1, il y a un nœud père et un nœud feuille. Cela est vrai au rang n+1 donc la relation est vraie.
+
+
+La hauteur d'un arbre à n éléments est égale à x avec x tel que : 2^x <= n < 2^(x+1)
+En code :
+int hauteur(Abp a)
+{
+	if(n(a) == 0) return 0;
+	int i = 1, x = 1;
+	while(x < n(a)) 
+	{
+		x = x*2; 
+		i++;
+	}
+	return i;
+}
+
+
+
