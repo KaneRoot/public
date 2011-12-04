@@ -5,6 +5,7 @@
 #include "base.h"
 #include "ABP.h"
 #include "ABPO0.h"
+#include "ABPO1.h"
 
 void afficher_arbre(Abp a)
 {
