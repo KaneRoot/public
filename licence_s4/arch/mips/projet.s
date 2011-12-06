@@ -12,7 +12,11 @@
 #	$s7 = taille offset = nb octets séparants la même ligne de 2 colonnes
 
 .data
-str_choix_pvp_pvai:	.asciiz "Vous avez le choix : \n1) P VS P\n2) P VS AI\n3) Je veux sortir d'ici !!!\n"
+str_choix_pvp_pvai:	.asciiz "\033[31mVous avez le choix\033[00m :
+1) P VS P
+2) P VS AI
+3) Je veux sortir d'ici !!!
+4) Changer les paramètres (nombre de lignes et de colonnes)\n"
 str_init_array_loop: .asciiz "Loop init_array\n"
 str_display_array_loop: .asciiz "Loop display_array\n"
 str_display_array: .asciiz "Display Array !!! \n"
@@ -35,6 +39,8 @@ str_p_d_dec: .asciiz "\033[33mFin pattern detector dec\033[00m\n"
 str_player_1:	.asciiz "\033[31m\033[44m x \033[00m"
 str_player_2:	.asciiz "\033[31m\033[42m O \033[00m"
 str_no_player:	.asciiz "___"
+str_column_full: .asciiz "COLUMN FULL\n"
+str_column_not_full: .asciiz "NOT FULL\n"
 player_1:	.word	1
 player_2:	.word	2
 taille_case: .word	4
@@ -75,8 +81,25 @@ choix_pvp_loop:
 	j fin						# jump au label 'fin'
 
 choix_pvai:	
-	la $a0, str_pvai			# chaîne "choix player vs ai"
+	la $a0, str_pvai			# chaîne "choix pvai"
 	jal write_string			# écriture de la chaîne
+	jal init_game				# création du tableau + initialisation variables
+	jal changement_joueur		# c'est le bot qui commence les hostilités
+choix_pvai_loop:
+	li $t0, 2
+	beq $t0, $s1, choix_pvai_ai	# si c'est au bot de jouer
+	jal display_array			# affichage du tableau
+	jal ask_player_choice
+	b choix_pvai_end
+choix_pvai_ai:
+	jal ai_play					# choix de l'AI (renvoie dans a0)
+choix_pvai_end:
+	jal add_val_array			# a0 en param = colonne
+	jal test_patterns
+	jal changement_joueur
+	beqz $s2, choix_pvai_loop
+	jal print_win
+	jal display_array			# affichage du tableau
 	j fin						# jump au label 'fin'
 
 fin:	
@@ -106,19 +129,19 @@ write_nl:
 write_case:	
 	sub $sp, $sp, 4				# soustrait 4 au pointeur de pile
 	sw $ra, ($sp)				# sauvegarde ra dans la pile
-	lw $t8, player_1
-	lw $t9, player_2
+	lw $t8, player_1			# on charge l'identifiant du joueur 1 (1)
+	lw $t9, player_2			# on charge l'identifiant du joueur 2 (2)
 	beq $a0, $t8, write_case_then
 	beq $a0, $t9, write_case_else
-	b write_case_default
+	b write_case_default		# sinon : case vide (___)
 write_case_then:
-	la $a0, str_player_1
-	b write_case_fi
+	la $a0, str_player_1		# on charge la chaîne
+	b write_case_fi				# go fin
 write_case_else:
-	la $a0, str_player_2
-	b write_case_fi
+	la $a0, str_player_2		# on charge la chaîne
+	b write_case_fi				# go fin
 write_case_default:
-	la $a0, str_no_player
+	la $a0, str_no_player		# case vide (___)
 write_case_fi:
 	jal write_string			# écriture de la chaîne
 	la $a0, str_space_bar		# chargement de l'@ de str_space_bar
@@ -507,3 +530,68 @@ test_patterns_end:
 	addu $sp, $sp, 4			# ajoute 4 au pointeur de pile
 	j $ra						# retour à l'instruction appelante
 
+ai_play:
+	sub $sp, $sp, 4				# soustrait 4 au pointeur de pile
+	sw $ra, ($sp)				# sauvegarde ra dans la pile
+	sub $sp, $sp, 4				# je vais stocker un compteur dans la pile
+	sw $0, ($sp)				# le compteur est à 0
+ai_play_loop:
+	lw $a0, ($sp)
+	jal test_full_column
+	beq $a1, $0, ai_play_trouve	# récupère dans a1 la valeur
+	lw $t0, ($sp)				# on récupère le numéro de ligne courante
+	add $t0, $t0, 1				# incrémentation du numéro de la ligne
+	sw $t0, ($sp)				# on écrit l'incrément dans la pile
+	bne $t0, $s5, ai_play_loop	# tq num col courant != num max
+	b ai_play_fin				# fin : toutes colonnes remplies
+ai_play_trouve:
+	lw $a0, ($sp)				# on lit le num de col dans la pile
+	add $a0, $a0, 1				# num colonne commençant à 1 non à 0
+ai_play_fin:
+	add $sp, $sp, 4				# on désalloue de la pile
+	lw $ra, ($sp)				# charge ra depuis la pile
+	addu $sp, $sp, 4			# ajoute 4 au pointeur de pile
+	j $ra						# retour à l'instruction appelante
+
+test_full_column:
+	sub $sp, $sp, 4				# soustrait 4 au pointeur de pile
+	sw $ra, ($sp)				# sauvegarde ra dans la pile
+	move $t0, $s0				# t0 = s0 = copie du pointeur
+	mul $t1, $a0, $s7			# t1: case courante, a0: colonne voulue, s7: nbl*nboctets
+	add $t0, $t1, $t0			# t0 = t0 + offset calculé (cf num de colonne)
+	li $t2, 0					# t2: numéro ligne courante
+test_full_column_loop:
+	add $t2, $t2, 1				# incrément t2: numéro ligne courante
+	lw $t3, ($t0)				# Valeur de la case dans t3
+	beq $0, $t3, test_full_column_non_rempli	# case libre : colonne non pleine
+	add $t0, $s6, $t0				# ajout nb octets à t0
+	bne $t2, $s4, test_full_column_loop	# tant que ligne courante != nb lignes
+test_full_column_loop_end:
+	li $a1, 1					# colonne pleine = a1: retour fonction = 1
+	b test_full_column_fin		# on sort
+test_full_column_non_rempli:
+	li $a1, 0					# a1: retour fonction, 0 = on peut mettre une case
+test_full_column_fin:
+	lw $ra, ($sp)				# charge ra depuis la pile
+	addu $sp, $sp, 4			# ajoute 4 au pointeur de pile
+	j $ra						# retour à l'instruction appelante
+	
+
+
+##### Fonctions de test
+test_test_full_column:
+	sub $sp, $sp, 4				# soustrait 4 au pointeur de pile
+	sw $ra, ($sp)				# sauvegarde ra dans la pile
+	li $a0, 0					# test colonne 0
+	jal test_full_column
+	beq $a0, $0, test_test_full_column_not_full
+	la $a0, str_column_full
+	jal write_string
+	b test_test_full_column_fin
+test_test_full_column_not_full:
+	la $a0, str_column_not_full
+	jal write_string
+test_test_full_column_fin:
+	lw $ra, ($sp)				# charge ra depuis la pile
+	addu $sp, $sp, 4			# ajoute 4 au pointeur de pile
+	j $ra						# retour à l'instruction appelante
