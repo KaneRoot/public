@@ -12,43 +12,46 @@
 #	$s7 = taille offset = nb octets séparants la même ligne de 2 colonnes
 
 .data
-str_choix_pvp_pvai:	.asciiz "\033[31mVous avez le choix\033[00m :
-1) P VS P
-2) P VS AI
-3) Je veux sortir d'ici !!!
-4) Changer les paramètres (nombre de lignes et de colonnes)\n"
-str_init_array_loop: .asciiz "Loop init_array\n"
-str_display_array_loop: .asciiz "Loop display_array\n"
-str_nb_lignes: .asciiz "Le nombre de lignes : "
-str_nb_colonnes: .asciiz "Le nombre de colonnes : "
-str_display_array: .asciiz "Display Array !!! \n"
-str_columns: .asciiz "\033[43m\033[31m 1     2     3     4     5     6     7   \033[00m\n"
+
+####################### Choix
+str_choix_pvp_pvai:	.asciiz "
+	\033[31mVous avez le choix\033[00m :
+	1) P VS P
+	2) P VS AI
+	3) Je veux sortir d'ici !!!
+	4) Changer les paramètres (nombre de lignes et de colonnes)\n"
 str_pvp:	.asciiz "\033[32mVous avez choisi le PVP, GOOD LUCK\033[00m\n"
 str_pvai:	.asciiz "Vous avez choisi le PVAI, GOOD LUCK\n"
-str_test:	.asciiz "Test d'écriture dans le tas\n"
-str_wrong_choice: .asciiz "Mauvais choix, on recommence ! \n"
+str_nb_lignes: .asciiz "Le nombre de lignes ( 99 > x >= 5) : "
+str_nb_colonnes: .asciiz "Le nombre de colonnes ( 99 > x >= 5) : "
+str_wrong_choice: .asciiz "\033[43m\033[31mMauvais choix, on recommence !\033[00m\n"
+####################### Affichage des cases
 str_space_bar:	.asciiz " | "
-str_endl:	.asciiz "\n"
-str_fin:	.asciiz "Fin du programme\n"
-str_demande_choix_1: .asciiz "Au joueur "
-str_demande_choix_2: .asciiz " de jouer : "
-str_win_0:	.asciiz "\n\033[32mLe vainqueur est :\033[31m "
-str_win_1:	.asciiz	"\033[00m"
+str_player_1:	.asciiz "\033[31m\033[44m x \033[00m"
+str_player_2:	.asciiz "\033[31m\033[42m O \033[00m"
+str_no_player:	.asciiz "___"
+####################### Tests
+str_column_full: .asciiz "COLUMN FULL\n"
+str_column_not_full: .asciiz "NOT FULL\n"
 str_p_d_line: .asciiz "\033[33mFin pattern detector line\033[00m\n"
 str_p_d_column: .asciiz "\033[33mFin pattern detector column\033[00m\n"
 str_p_d_inc: .asciiz "\033[33mFin pattern detector inc\033[00m\n"
 str_p_d_dec: .asciiz "\033[33mFin pattern detector dec\033[00m\n"
-str_player_1:	.asciiz "\033[31m\033[44m x \033[00m"
-str_player_2:	.asciiz "\033[31m\033[42m O \033[00m"
-str_no_player:	.asciiz "___"
-str_column_full: .asciiz "COLUMN FULL\n"
-str_column_not_full: .asciiz "NOT FULL\n"
+####################### Divers
+str_columns: .asciiz "\033[43m\033[31m 1     2     3     4     5     6     7   \033[00m\n"
+str_endl:	.asciiz "\n"
+str_demande_choix_1: .asciiz "Au joueur "
+str_demande_choix_2: .asciiz " de jouer : "
+str_win_0:	.asciiz "\n\033[32mLe vainqueur est :\033[31m "
+str_win_1:	.asciiz	"\033[00m"
+str_fin:	.asciiz "Fin du programme\n"
+####################### Paramètres
 player_1:	.word	1
 player_2:	.word	2
 taille_case: .word	4
 lines:	.word	6
 columns:	.word	7
-
+#######################
 
 .text
 .globl __start
@@ -92,33 +95,73 @@ choix_pvai_loop:
 	li $t0, 2					# pour le test qui suit
 	beq $t0, $s1, choix_pvai_ai	# si c'est au bot de jouer
 	jal display_array			# affichage du tableau
-	jal ask_player_choice
-	b choix_pvai_end
+	jal ask_player_choice		# demande de choix
+	b choix_pvai_end			# sauter le choix de l'ai
 choix_pvai_ai:
 	jal ai_play					# choix de l'AI (renvoie dans a0)
 choix_pvai_end:
 	jal add_val_array			# a0 en param = colonne
-	jal test_patterns
-	jal changement_joueur
-	beqz $s2, choix_pvai_loop
-	jal print_win
+	jal test_patterns			# est-ce que quelqu'un a gagné ?
+	jal changement_joueur		# changement du joueur courant
+	beqz $s2, choix_pvai_loop	# fin de la partie si s2 est rempli (joueur gagnant)
+	jal print_win				# affichage de qui a gagné
 	jal display_array			# affichage du tableau
 	j fin						# jump au label 'fin'
 
+#
+#	changer_param
+#	change les valeurs par défaut (ligne et colonne)
+#
+
 changer_param:
-	la $a0, str_nb_lignes
-	jal write_string
-	jal get_int
+	la $a0, str_nb_lignes		# @ de demande du choix du nb de lignes dans a0
+	la $a1, str_wrong_choice
+	li $a2, 5					# valeur minimale du nombre de lignes
+	li $a3, 99					# valeur maximale du nombre de lignes
+	jal get_int_intervale		# demande du nb de lignes
 	move $s4, $a0
-	la $a0, str_nb_colonnes
-	jal write_string
-	jal get_int
+	la $a0, str_nb_colonnes		# @ de demande du choix du nb de colonnes dans a0
+	la $a1, str_wrong_choice
+	li $a2, 5					# valeur minimale du nombre de colonnes
+	li $a3, 99					# valeur maximale du nombre de colonnes
+	jal get_int_intervale		# demande du nb de colonnes
 	move $s5, $a0
 	jal calcul_taille_offset	# calcul
 	move $s7, $a0				# s7 : offset séparant même ligne de 2 col
 	j menu_choix				# retour au menu
 
-	
+
+#
+#	get_int_intervale
+#		paramètres : 
+#	a0 : @ chaîne à afficher
+#	a1 : @ chaîne d'erreur à afficher si on se trompe
+#	a2 : valeur minimum acceptée
+#	a3 : valeur maximale acceptée
+#
+
+get_int_intervale:
+	sub $sp, $sp, 4				# soustrait 4 au pointeur de pile
+	sw $ra, ($sp)				# sauvegarde ra dans la pile
+	move $t0, $a0
+	b get_int_intervale_loop
+get_int_intervale_err:
+	move $a0, $a1
+	jal write_string
+get_int_intervale_loop:
+	move $a0, $t0
+	jal write_string
+	jal get_int
+	blt $a0, $a2, get_int_intervale_err
+	bgt $a0, $a3, get_int_intervale_err
+	lw $ra, ($sp)				# charge ra depuis la pile
+	addu $sp, $sp, 4			# ajoute 4 au pointeur de pile
+	j $ra
+
+#
+#	init_valeurs
+#	charge les valeurs par défaut dans les s* (cf convention)
+#	
 
 init_valeurs:
 	sub $sp, $sp, 4				# soustrait 4 au pointeur de pile
@@ -135,7 +178,11 @@ init_valeurs:
 	addu $sp, $sp, 4			# ajoute 4 au pointeur de pile
 	j $ra
 
-# affiche une valeur, fonction de type stem
+# 
+#	write_int_nl
+#	affiche un entier a0 puis un retour à la ligne
+#
+
 write_int_nl:	
 	sub $sp, $sp, 4				# soustrait 4 au pointeur de pile
 	sw $ra, ($sp)				# sauvegarde ra dans la pile
@@ -145,7 +192,6 @@ write_int_nl:
 	lw $ra, ($sp)				# charge ra depuis la pile
 	addu $sp, $sp, 4			# ajoute 4 au pointeur de pile
 	j $ra						# retour à l'instruction appelante
-
 
 #
 #	write_case
@@ -313,17 +359,6 @@ add_val_array_loop_end:			# ajout de la valeur s1 à l'emplacement t0
 	lw $ra, ($sp)				# charge ra depuis la pile
 	addu $sp, $sp, 4			# ajoute 4 au pointeur de pile
 	j $ra						# retour à l'instruction appelante
-
-changement_joueur:
-	lw $t0, player_1			# on charge l'identifiant du joueur 1
-	lw $t1, player_2			# on charge l'identifiant du joueur 2
-	beq $s1, $t0, changement_joueur_1	# si s1 est le joueur 1
-	move $s1, $t0				# on place le joueur 1 dans s1
-	j changement_joueur_end		# puis on sort de la fonction
-changement_joueur_1:
-	move $s1, $t1				# on place le joueur 2 dans s1
-changement_joueur_end:
-	j $ra
 
 print_win:
 	sub $sp, $sp, 4				# soustrait 4 au pointeur de pile
@@ -700,6 +735,22 @@ malloc:							# procédure d'allocation dynamique
 	li $v0, 9					# appel système n. 9 
 	syscall						# alloue une taille a0 et
 	j  $ra						# retourne le pointeur dans v0
+
+#
+#	changement_joueur
+#	switch entre les valeurs player_1 et 2 dans s1
+#
+
+changement_joueur:
+	lw $t0, player_1			# on charge l'identifiant du joueur 1
+	lw $t1, player_2			# on charge l'identifiant du joueur 2
+	beq $s1, $t0, changement_joueur_1	# si s1 est le joueur 1
+	move $s1, $t0				# on place le joueur 1 dans s1
+	j changement_joueur_end		# puis on sort de la fonction
+changement_joueur_1:
+	move $s1, $t1				# on place le joueur 2 dans s1
+changement_joueur_end:
+	j $ra
 
 #
 #	calcul_taille_offset
