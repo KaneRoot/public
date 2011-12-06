@@ -19,6 +19,8 @@ str_choix_pvp_pvai:	.asciiz "\033[31mVous avez le choix\033[00m :
 4) Changer les paramètres (nombre de lignes et de colonnes)\n"
 str_init_array_loop: .asciiz "Loop init_array\n"
 str_display_array_loop: .asciiz "Loop display_array\n"
+str_nb_lignes: .asciiz "Le nombre de lignes : "
+str_nb_colonnes: .asciiz "Le nombre de colonnes : "
 str_display_array: .asciiz "Display Array !!! \n"
 str_columns: .asciiz "\033[43m\033[31m 1     2     3     4     5     6     7   \033[00m\n"
 str_pvp:	.asciiz "\033[32mVous avez choisi le PVP, GOOD LUCK\033[00m\n"
@@ -52,18 +54,19 @@ columns:	.word	7
 .globl __start
 
 __start:
-wrong_choice: 
-	# label utile d'un point de vue sémantique
-	la $a0, str_choix_pvp_pvai	# demande de choix
+	jal init_valeurs
+menu_choix: # On affiche le choix qui peu être fait
+	la $a0, str_choix_pvp_pvai	# charge l'adressse de la question
 	jal write_string			# écriture de la chaîne
 	jal get_int					# on lit un entier, retour sur a0
-	beq $a0, 1, choix_pvp		# si a0 est à 0 => choix pvp
-	beq $a0, 2, choix_pvai		# si a0 est à 1 => choix pvai
-	beq $a0, 3, fin				# si a0 est à 2 => on quitte le programme
+	beq $a0, 1, choix_pvp		# si a0 est à 1 => choix pvp
+	beq $a0, 2, choix_pvai		# si a0 est à 2 => choix pvai
+	beq $a0, 3, fin				# si a0 est à 3 => on quitte le programme
+	beq $a0, 4, changer_param	# si a0 est à 4 => changement du nb lignes et col
 	# On s'est trompé de choix
 	la $a0, str_wrong_choice	# chargement de la chaîne "mauvais choix"
 	jal write_string			# écriture de la chaîne
-	j wrong_choice				# retour en arrière
+	j menu_choix				# retour en arrière
 
 choix_pvp:	
 	la $a0, str_pvp				# chaîne "choix pvp"
@@ -71,12 +74,12 @@ choix_pvp:
 	jal init_game				# création du tableau + initialisation variables
 choix_pvp_loop:
 	jal display_array			# affichage du tableau
-	jal ask_player_choice
-	jal add_val_array
-	jal test_patterns
-	jal changement_joueur
-	beqz $s2, choix_pvp_loop
-	jal print_win
+	jal ask_player_choice		# demande un numéro de colonne
+	jal add_val_array			# ajout du jeton dans la colonne
+	jal test_patterns			# est-ce que quelqu'un a gagné ?
+	jal changement_joueur		# on change le numéro de joueur
+	beqz $s2, choix_pvp_loop	# si un joueur a gagné, son numéro est dans s2
+	jal print_win				# affichage du gagnant
 	jal display_array			# affichage du tableau
 	j fin						# jump au label 'fin'
 
@@ -86,7 +89,7 @@ choix_pvai:
 	jal init_game				# création du tableau + initialisation variables
 	jal changement_joueur		# c'est le bot qui commence les hostilités
 choix_pvai_loop:
-	li $t0, 2
+	li $t0, 2					# pour le test qui suit
 	beq $t0, $s1, choix_pvai_ai	# si c'est au bot de jouer
 	jal display_array			# affichage du tableau
 	jal ask_player_choice
@@ -102,11 +105,35 @@ choix_pvai_end:
 	jal display_array			# affichage du tableau
 	j fin						# jump au label 'fin'
 
-fin:	
-	la $a0, str_fin				# chargement de la chaîne str_fin
-	jal write_string			# écriture de 'fin du programme'
-	li $v0, 10					# appel système n. 10
-	syscall						# fin du programme
+changer_param:
+	la $a0, str_nb_lignes
+	jal write_string
+	jal get_int
+	move $s4, $a0
+	la $a0, str_nb_colonnes
+	jal write_string
+	jal get_int
+	move $s5, $a0
+	jal calcul_taille_offset	# calcul
+	move $s7, $a0				# s7 : offset séparant même ligne de 2 col
+	j menu_choix				# retour au menu
+
+	
+
+init_valeurs:
+	sub $sp, $sp, 4				# soustrait 4 au pointeur de pile
+	sw $ra, ($sp)				# sauvegarde ra dans la pile
+# initialisation des variables globales
+	lw $s1, player_1			# on initialise $s1 à l'identifiant du premier joueur
+	li $s2, 0					# s2 = 0 c'est le joueur qui a gagné
+	lw $s4, lines				# s4 : nb de lignes
+	lw $s5, columns				# s5 : nb de colonnes
+	lw $s6, taille_case			# s6 : taille d'une case
+	jal calcul_taille_offset	# calcul
+	move $s7, $a0				# s7 : offset séparant même ligne de 2 col
+	lw $ra, ($sp)				# charge ra depuis la pile
+	addu $sp, $sp, 4			# ajoute 4 au pointeur de pile
+	j $ra
 
 # affiche une valeur, fonction de type stem
 write_int_nl:	
@@ -119,12 +146,12 @@ write_int_nl:
 	addu $sp, $sp, 4			# ajoute 4 au pointeur de pile
 	j $ra						# retour à l'instruction appelante
 
-# écrit un retour à la ligne, fonction de type leaf
-write_nl:	
-	li $v0, 4					# appel système n. 4
-	la $a0, str_endl			# chargement d'une chaîne (\n)
-	syscall						# écriture de la chaîne
-	j $ra						# retour à l'instruction appelante
+
+#
+#	write_case
+#	écrit une case du tableau (vide, joueur 1 ou 2)
+#	on lui passe la valeur de la case en a0
+#
 
 write_case:	
 	sub $sp, $sp, 4				# soustrait 4 au pointeur de pile
@@ -150,15 +177,11 @@ write_case_fi:
 	addu $sp, $sp, 4			# ajoute 4 au pointeur de pile
 	j $ra						# retour à l'instruction appelante
 
-write_int:	
-	li $v0, 1					# appel système n. 1
-	syscall						# lit un entier dans a0
-	j $ra						# retour à l'instruction appelante
 
-write_string:		
-	li $v0, 4					# appel système n. 4
-	syscall						# écriture de la chaîne
-	j $ra						# retour à l'instruction appelante
+#
+#	write_space_bar
+#	écrit une barre + des espaces (pour un bel affichage)
+#
 
 write_space_bar:
 	sub $sp, $sp, 4				# soustrait 4 au pointeur de pile
@@ -169,24 +192,17 @@ write_space_bar:
 	addu $sp, $sp, 4			# ajoute 4 au pointeur de pile
 	j $ra						# retour à l'instruction appelante
 
-malloc:							# procédure d'allocation dynamique
-	li $v0, 9					# appel système n. 9 
-	syscall						# alloue une taille a0 et
-	j  $ra						# retourne le pointeur dans v0
+#
+#	init_game
+#	initialise le plateau, demande l'allocation mémoire
+#	puis son initialisation à 0 pour toutes ses cases
+#
 
 init_game:
 	sub $sp, $sp, 4				# soustrait 4 au pointeur de pile
 	sw $ra, ($sp)				# sauvegarde ra dans la pile
-# initialisation des variables globales
-	lw $s1, player_1			# on initialise $s1 à l'identifiant du premier joueur
-	li $s2, 0					# s2 = 0 c'est le joueur qui a gagné
-	lw $s4, lines				# s4 : nb de lignes
-	lw $s5, columns				# s5 : nb de colonnes
-	lw $s6, taille_case			# s6 : taille d'une case
-	jal calcul_taille_offset	# calcul
-	move $s7, $a0				# s7 : offset séparant même ligne de 2 col
 # initialisation du tableau
-	mul $a0, $s4, $s5			# taille du tableau : 6*7*4 octets
+	mul $a0, $s4, $s5			# taille du tableau : 6*7*4 octets (partie normale)
 	mul $a0, $a0, $s6
 	jal malloc					# appel à la fonction d'allocation mémoire
 	move $s0, $v0				# on sauvegarde le pointeur dans s0
@@ -195,41 +211,44 @@ init_game:
 	addu $sp, $sp, 4			# ajoute 4 au pointeur de pile
 	j $ra						# retour à l'instruction appelante
 
-get_int:
-	li $v0, 5					# appel système n. 5
-	syscall						# on lit un entier
-	move $a0, $v0				# on met la réponse dans a0
-	j $ra						# retour à l'instruction appelante
+#
+#	init_array
+#	initialise toutes les cases du tableau à 0
+#	
 
 init_array:
 	sub $sp, $sp, 4				# soustrait 4 au pointeur de pile
 	sw $ra, ($sp)				# sauvegarde ra dans la pile
-	li $t0, 42					# t0 = nombre de cases du tableau
+	mul $t0, $s4, $s5			# t0 = nombre de cases du tableau
 init_array_loop:
 	sub $t0, $t0, 1				# t0 = t0 - 1
-	mul	$t1, $t0, 4				# t0 * 4 = @ relatif de la case
+	mul	$t1, $t0, $s6			# t0 * nb octets / case = @ relatif de la case
 	add $t2, $t1, $s0			# @ de la case : t1 + @ 1ère case
 	sw $0, ($t2)				# on écrit 0 dans la case
-	bgt $t0, $0, init_array_loop# tant que t0 != 0 on continue la boucle
+	bgt $t0, $0, init_array_loop# tant que t0 < 0 on continue la boucle
 	lw $ra, ($sp)				# charge ra depuis la pile
 	addu $sp, $sp, 4			# ajoute 4 au pointeur de pile
 	j $ra						# retour à l'instruction appelante
 
+#
+#	display_array
+#	affiche un tableau ayant s4 lignes s5 colonnes et une taille de case de s6
+#	
+
 display_array:
 	sub $sp, $sp, 4				# soustrait 4 au pointeur de pile
 	sw $ra, ($sp)				# sauvegarde ra dans la pile
-	move $t3, $s7				# 24 = nb octets pour changement de colonne
 	mul $t4, $s4, $s5			# t4 = nblignes * nbcolonnes
 	mul $t4, $t4, $s6			# t4 = t4 * taillecase
 	sub $t4, $t4, $s6			# t4 -= taillecase
 	move $t0, $s0				# on met s0 dans t0
-	mul $t2, $s4, $s6			# t2 = offset
-	sub $t2, $t2, $s6
+	mul $t2, $s4, $s6			# t2 = offset : nblignes * nb octets / case
+	sub $t2, $t2, $s6			# t2 - taille d'une case
 	add $t0, $t0, $t2			# t0 = t0 + offset (dernière ligne)
 display_array_loop:
 	lw $a0, ($t0)				# chargement de la valeur à l'@ t0
 	jal write_case				# écriture de la valeur de a0
-	add $t0, $t0, $t3			# ajout de la taille d'un offset à t0
+	add $t0, $t0, $s7			# ajout de la taille d'un offset à t0
 	sub $t1, $t0, $s0			# t1 = t0 - s0
 	bge $t4, $t1, display_array_loop	# ((t0-s0) < offsetmax) ? loop
 	jal write_nl				# écriture d'un retour à la ligne
@@ -319,10 +338,10 @@ print_win:
 	addu $sp, $sp, 4			# ajoute 4 au pointeur de pile
 	j $ra						# retour à l'instruction appelante
 
-# calcul la valeur à ajouter pour passer à la case de droite
-calcul_taille_offset:			
-	mul $a0, $s4, $s6			# lignes * taillecase = ajout pour passer à la colonne suivante, même ligne
-	j $ra						# retour à l'instruction appelante
+#
+#	pattern_detector_inc
+#	permet de détecter une suite de 4 * n. s1 en diagonale croissante
+#
 
 # t0 : pointeur case courante
 # t1 : ligne à laquelle on arrête de chercher
@@ -330,7 +349,8 @@ calcul_taille_offset:
 # t4 : ligne courante
 # t5 : colonne courante
 # t6 : nb suite (1 à 4)
-# t9 : offset passer à la colonne suivante, ligne courante + 1
+# t9 : offset pour passer à la colonne suivante avec ligne courante + 1
+
 pattern_detector_inc:
 	sub $sp, $sp, 4				# soustrait 4 au pointeur de pile
 	sw $ra, ($sp)				# sauvegarde ra dans la pile
@@ -375,13 +395,20 @@ pattern_detector_inc_end:
 	addu $sp, $sp, 4			# ajoute 4 au pointeur de pile
 	j $ra						# retour à l'instruction appelante
 
+
+#
+#	pattern_detector_dec
+#	détecte si on a une diagonale décroissante comportant 4 * n. s1 continus
+#	
+
 # t0 : pointeur case courante
 # t1 : ligne à laquelle on arrête de chercher
 # t2 : colonne à laquelle on arrête de chercher
 # t4 : ligne courante
 # t5 : colonne courante
 # t6 : nb suite (1 à 4)
-# t9 : offset passer à la colonne suivante, ligne courante + 1
+# t9 : offset pour passer à la colonne suivante avec ligne courante + 1
+
 pattern_detector_dec:
 	sub $sp, $sp, 4				# soustrait 4 au pointeur de pile
 	sw $ra, ($sp)				# sauvegarde ra dans la pile
@@ -463,6 +490,11 @@ pattern_detector_line_end:
 	addu $sp, $sp, 4			# ajoute 4 au pointeur de pile
 	j $ra						# retour à l'instruction appelante
 
+#
+#	pattern_detector_column
+#	détecte si on a une colonne comportant 4 * n. s1 continus
+#	
+
 pattern_detector_column:
 	sub $sp, $sp, 4				# soustrait 4 au pointeur de pile
 	sw $ra, ($sp)				# sauvegarde ra dans la pile
@@ -501,34 +533,47 @@ pattern_detector_column_end:
 	addu $sp, $sp, 4			# ajoute 4 au pointeur de pile
 	j $ra						# retour à l'instruction appelante
 
+
+#
+#	test_patterns
+#	teste les 4 patterns (ligne, colonne, diag montante et descendante)
+#	écrit une chaîne de debug (à décommenter)
+#
+
 test_patterns:
 	sub $sp, $sp, 4				# soustrait 4 au pointeur de pile
 	sw $ra, ($sp)				# sauvegarde ra dans la pile
 	###################
 	jal pattern_detector_line	# test ligne
 	bnez $s2, test_patterns_end	# Pas besoin de faire plus de tests si gagné
-	la $a0, str_p_d_line
-	jal write_string
+#	la $a0, str_p_d_line
+#	jal write_string
 	###################
 	jal pattern_detector_column	# test colonne
 	bnez $s2, test_patterns_end	# Pas besoin de faire plus de tests si gagné
-	la $a0, str_p_d_column
-	jal write_string
+#	la $a0, str_p_d_column
+#	jal write_string
 	###################
 	jal pattern_detector_inc	# test diagonale croissante
 	bnez $s2, test_patterns_end	# Pas besoin de faire plus de tests si gagné
-	la $a0, str_p_d_inc
-	jal write_string
+#	la $a0, str_p_d_inc
+#	jal write_string
 	###################
 	jal pattern_detector_dec	# test diagonale décroissante
 	bnez $s2, test_patterns_end	# Pas besoin de faire plus de tests si gagné
-	la $a0, str_p_d_dec
-	jal write_string
+#	la $a0, str_p_d_dec
+#	jal write_string
 	###################
 test_patterns_end:
 	lw $ra, ($sp)				# charge ra depuis la pile
 	addu $sp, $sp, 4			# ajoute 4 au pointeur de pile
 	j $ra						# retour à l'instruction appelante
+
+#
+#	ai_play
+#	programme du bot, est vraiment stupide pour le moment.
+#	Ne fait que remplir colonne par colonne le tableau
+#
 
 ai_play:
 	sub $sp, $sp, 4				# soustrait 4 au pointeur de pile
@@ -552,6 +597,12 @@ ai_play_fin:
 	lw $ra, ($sp)				# charge ra depuis la pile
 	addu $sp, $sp, 4			# ajoute 4 au pointeur de pile
 	j $ra						# retour à l'instruction appelante
+
+#
+#	test_full_column
+#	teste si une colonne a0 est pleine
+#	retourne a1 = 1 si remplie, 0 sinon
+#
 
 test_full_column:
 	sub $sp, $sp, 4				# soustrait 4 au pointeur de pile
@@ -595,3 +646,79 @@ test_test_full_column_fin:
 	lw $ra, ($sp)				# charge ra depuis la pile
 	addu $sp, $sp, 4			# ajoute 4 au pointeur de pile
 	j $ra						# retour à l'instruction appelante
+
+###	Fonctions de type LEAF
+
+#
+#	write_nl
+#	écrit un retour à la ligne
+#
+
+write_nl:	
+	li $v0, 4					# appel système n. 4
+	la $a0, str_endl			# chargement d'une chaîne (\n)
+	syscall						# écriture de la chaîne
+	j $ra						# retour à l'instruction appelante
+
+#
+#	write_int
+#	écrit un entier passé en a0
+#
+
+write_int:	
+	li $v0, 1					# appel système n. 1
+	syscall						# lit un entier dans a0
+	j $ra						# retour à l'instruction appelante
+
+#
+#	write_string
+#	écrit une chaîne passée en a0
+#
+
+write_string:		
+	li $v0, 4					# appel système n. 4
+	syscall						# écriture de la chaîne
+	j $ra						# retour à l'instruction appelante
+
+#
+#	get_int
+#	demande un entier en ligne de commande
+#
+
+get_int:
+	li $v0, 5					# appel système n. 5
+	syscall						# on lit un entier
+	move $a0, $v0				# on met la réponse dans a0
+	j $ra						# retour à l'instruction appelante
+
+#
+#	malloc
+#	se charge de l'allocation dynamique de mémoire
+#
+
+malloc:							# procédure d'allocation dynamique
+	li $v0, 9					# appel système n. 9 
+	syscall						# alloue une taille a0 et
+	j  $ra						# retourne le pointeur dans v0
+
+#
+#	calcul_taille_offset
+#	calcul la valeur à ajouter pour passer à la case de droite
+#	résultat dans a0
+#
+
+calcul_taille_offset:			
+# lignes * taillecase = ajout pour passer à la colonne suivante, même ligne
+	mul $a0, $s4, $s6			
+	j $ra						# retour à l'instruction appelante
+
+#
+#	fin
+#	fin de la partie, quitte le programme
+#
+
+fin:	
+	la $a0, str_fin				# chargement de la chaîne str_fin
+	jal write_string			# écriture de 'fin du programme'
+	li $v0, 10					# appel système n. 10
+	syscall						# fin du programme
