@@ -44,12 +44,15 @@ str_columns_2: .asciiz "   \033[00m\n"
 str_endl:	.asciiz "\n"
 str_demande_choix_1: .asciiz "Au joueur "
 str_demande_choix_2: .asciiz " de jouer : "
-str_win_0:	.asciiz "\n\033[32mLe vainqueur est :\033[31m "
-str_win_1:	.asciiz	"\033[00m"
+str_win_0:	.asciiz "\033[41m\n\n\033[31m\033[43m"
+str_win_1: .asciiz "Le vainqueur est :\033[31m\033[01m "
+str_win_2:	.asciiz	"\033[41m\n\033[00m\n\n"
+str_win_no_winner: .asciiz "Pas de gagnant !!!"
 str_fin:	.asciiz "Fin du programme\n"
 ####################### Paramètres
 player_1:	.word	1
 player_2:	.word	2
+full_array: .word 3
 taille_case: .word	4
 lines:	.word	6
 columns:	.word	7
@@ -82,6 +85,7 @@ choix_pvp_loop:
 	jal ask_player_choice		# demande un numéro de colonne
 	jal add_val_array			# ajout du jeton dans la colonne
 	jal test_patterns			# est-ce que quelqu'un a gagné ?
+	jal test_full_array			# est-ce que le plateau est rempli ?
 	jal changement_joueur		# on change le numéro de joueur
 	beqz $s2, choix_pvp_loop	# si un joueur a gagné, son numéro est dans s2
 	jal print_win				# affichage du gagnant
@@ -103,9 +107,8 @@ choix_pvai_ai:
 	jal ai_play					# choix de l'AI (renvoie dans a0)
 choix_pvai_end:
 	jal add_val_array			# a0 en param = colonne
-#	jal test_patterns			# est-ce que quelqu'un a gagné ?
-	jal test_full_array			# TODO
-	move $s2, $a0
+	jal test_patterns			# est-ce que quelqu'un a gagné ?
+	jal test_full_array			# est-ce que le plateau est rempli ?
 	jal changement_joueur		# changement du joueur courant
 	beqz $s2, choix_pvai_loop	# fin de la partie si s2 est rempli (joueur gagnant)
 	jal print_win				# affichage de qui a gagné
@@ -363,14 +366,28 @@ add_val_array_loop_end:			# ajout de la valeur s1 à l'emplacement t0
 	addu $sp, $sp, 4			# ajoute 4 au pointeur de pile
 	j $ra						# retour à l'instruction appelante
 
+#
+#	print_win
+#	Affiche le gagnant, ou égalité
+#
+
 print_win:
 	sub $sp, $sp, 4				# soustrait 4 au pointeur de pile
 	sw $ra, ($sp)				# sauvegarde ra dans la pile
 	la $a0, str_win_0
 	jal write_string
-	move $a0, $s2
-	jal write_int_nl
+	lw $t0, full_array
+	beq $t0, $s2, print_win_no_winner	# si pas de gagnant
 	la $a0, str_win_1
+	jal write_string
+	move $a0, $s2
+	jal write_int
+	b print_win_end
+print_win_no_winner:
+	la $a0, str_win_no_winner
+	jal write_string
+print_win_end:
+	la $a0, str_win_2
 	jal write_string
 	lw $ra, ($sp)				# charge ra depuis la pile
 	addu $sp, $sp, 4			# ajoute 4 au pointeur de pile
@@ -629,6 +646,7 @@ test_full_array_loop:
 	sw $t0, ($sp)				# on le réécrit dans la pile
 	blt $t0, $s5, test_full_array_loop	# tq n. colonne < nb colonnes
 	li $a0, 1					# retour a0 = 1 : plein
+	lw $s2, full_array			# s2 : joueur gagnant : egalité
 	b test_full_array_end
 test_full_array_not_full:
 	li $a0, 0					# retour a0 = 0 : pas plein
