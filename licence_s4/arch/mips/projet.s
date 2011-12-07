@@ -38,7 +38,9 @@ str_p_d_column: .asciiz "\033[33mFin pattern detector column\033[00m\n"
 str_p_d_inc: .asciiz "\033[33mFin pattern detector inc\033[00m\n"
 str_p_d_dec: .asciiz "\033[33mFin pattern detector dec\033[00m\n"
 ####################### Divers
-str_columns: .asciiz "\033[43m\033[31m 1     2     3     4     5     6     7   \033[00m\n"
+str_columns_0: .asciiz "\033[43m\033[31m "
+str_columns_1: .asciiz "     "
+str_columns_2: .asciiz "   \033[00m\n"
 str_endl:	.asciiz "\n"
 str_demande_choix_1: .asciiz "Au joueur "
 str_demande_choix_2: .asciiz " de jouer : "
@@ -101,7 +103,9 @@ choix_pvai_ai:
 	jal ai_play					# choix de l'AI (renvoie dans a0)
 choix_pvai_end:
 	jal add_val_array			# a0 en param = colonne
-	jal test_patterns			# est-ce que quelqu'un a gagné ?
+#	jal test_patterns			# est-ce que quelqu'un a gagné ?
+	jal test_full_array			# TODO
+	move $s2, $a0
 	jal changement_joueur		# changement du joueur courant
 	beqz $s2, choix_pvai_loop	# fin de la partie si s2 est rempli (joueur gagnant)
 	jal print_win				# affichage de qui a gagné
@@ -301,8 +305,7 @@ display_array_loop:
 	sub $t2, $t2, $s6			# offset de ligne décrémenté de s6 octets (1L)
 	add $t0, $s0, $t2			# t0 = pointeur de tableau + offset
 	bgez $t2, display_array_loop# tant que t2 >= 0 : loop
-	la $a0, str_columns
-	jal write_string
+	jal write_column_numbers	# écrit une ligne avec le numéro des colonnes
 	lw $ra, ($sp)				# charge ra depuis la pile
 	addu $sp, $sp, 4			# ajoute 4 au pointeur de pile
 	j $ra						# retour à l'instruction appelante
@@ -605,6 +608,37 @@ test_patterns_end:
 	j $ra						# retour à l'instruction appelante
 
 #
+#	test_full_array
+#	Fait un test pour savoir si toutes les colonnes sont pleines
+#	retourne 1 en a0 si le plateau est plein, 0 sinon
+#
+
+test_full_array:
+	sub $sp, $sp, 4				# soustrait 4 au pointeur de pile
+	sw $ra, ($sp)				# sauvegarde ra dans la pile
+	li $t0, 0					# t0 : numéro de colonne à tester
+	sub $sp, $sp, 4				# on stocke la valeur dans la pile
+	sw $0, ($sp)				# on écrit le numéro de la colonne à tester dans la pile
+	lw $t0, ($sp)
+test_full_array_loop:
+	move $a0, $t0				# on place le n. de col. dans a0 pr le passer en param.
+	jal test_full_column		# teste la colonne
+	beq $a1, 0, test_full_array_not_full	# retour a1 = 0 : colonne non remplie
+	lw $t0, ($sp)				# on charge le n. de colonne dans t0
+	add $t0, $t0, 1				# on incrémente le n. de colonne
+	sw $t0, ($sp)				# on le réécrit dans la pile
+	blt $t0, $s5, test_full_array_loop	# tq n. colonne < nb colonnes
+	li $a0, 1					# retour a0 = 1 : plein
+	b test_full_array_end
+test_full_array_not_full:
+	li $a0, 0					# retour a0 = 0 : pas plein
+test_full_array_end:
+	lw $ra, 4($sp)				# charge ra depuis la pile
+	addu $sp, $sp, 8			# désalloue 8 octets de la pile
+	j $ra						# retour à l'instruction appelante
+
+
+#
 #	ai_play
 #	programme du bot, est vraiment stupide pour le moment.
 #	Ne fait que remplir colonne par colonne le tableau
@@ -662,6 +696,36 @@ test_full_column_fin:
 	addu $sp, $sp, 4			# ajoute 4 au pointeur de pile
 	j $ra						# retour à l'instruction appelante
 	
+
+#
+#	write_column_numbers
+#	écrit le numéro des colonnes de façon dynamique (en fonction de leur nombre)
+#
+
+write_column_numbers:
+	sub $sp, $sp, 8				# soustrait 8 au pointeur de pile
+	sw $ra, 4($sp)				# sauvegarde ra dans la pile
+	la $a0, str_columns_0
+	jal write_string
+	sw $0, ($sp)				# première colonne commence à 1 (voir loop)
+write_column_numbers_loop:
+	lw $t0, ($sp)
+	add $t0, $t0, 1
+	sw $t0, ($sp)				# écriture du n. de col dans la pile
+	move $a0, $t0
+	jal write_int
+	lw $t0, ($sp)
+	beq $t0, $s5, write_column_numbers_loop_end	# espace plus petit à la fin
+	la $a0, str_columns_1		# écriture d'un espace sur la ligne de commande
+	jal write_string
+	lw $t0, ($sp)
+	blt $t0, $s5, write_column_numbers_loop	# tq n. col. < nb col.
+write_column_numbers_loop_end:
+	la $a0, str_columns_2		# on supprime les couleurs
+	jal write_string
+	lw $ra, 4($sp)				# charge ra depuis la pile
+	addu $sp, $sp, 8			# ajoute 8 au pointeur de pile
+	j $ra						# retour à l'instruction appelante
 
 
 ##### Fonctions de test
