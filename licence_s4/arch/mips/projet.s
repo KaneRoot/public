@@ -45,10 +45,10 @@ str_endl:	.asciiz "\n"
 str_demande_choix_1: .asciiz "Au joueur "
 str_demande_choix_2: .asciiz " de jouer : "
 str_win_0:	.asciiz "\033[41m\n\n\033[31m\033[43m"
-str_win_1: .asciiz "Le vainqueur est :\033[31m\033[01m "
+str_win_1: .asciiz "\t\tLe vainqueur est : \033[01m\033[05m"
 str_win_2:	.asciiz	"\033[41m\n\033[00m\n\n"
 str_win_no_winner: .asciiz "Pas de gagnant !!!"
-str_fin:	.asciiz "Fin du programme\n"
+str_fin:	.asciiz "\033[31mFin du programme\033[00m\n\n"
 ####################### Paramètres
 player_1:	.word	1
 player_2:	.word	2
@@ -60,6 +60,12 @@ columns:	.word	7
 
 .text
 .globl __start
+
+#
+#	__start
+#	programme principal, appelle la plupart des fonctions disponibles
+#	découpé en fonction des choix.
+#
 
 __start:
 	jal init_valeurs
@@ -89,7 +95,6 @@ choix_pvp_loop:
 	jal changement_joueur		# on change le numéro de joueur
 	beqz $s2, choix_pvp_loop	# si un joueur a gagné, son numéro est dans s2
 	jal print_win				# affichage du gagnant
-	jal display_array			# affichage du tableau
 	j fin						# jump au label 'fin'
 
 choix_pvai:	
@@ -112,7 +117,6 @@ choix_pvai_end:
 	jal changement_joueur		# changement du joueur courant
 	beqz $s2, choix_pvai_loop	# fin de la partie si s2 est rempli (joueur gagnant)
 	jal print_win				# affichage de qui a gagné
-	jal display_array			# affichage du tableau
 	j fin						# jump au label 'fin'
 
 #
@@ -291,6 +295,7 @@ init_array_loop:
 display_array:
 	sub $sp, $sp, 4				# soustrait 4 au pointeur de pile
 	sw $ra, ($sp)				# sauvegarde ra dans la pile
+	jal write_column_numbers	# écrit une ligne avec le numéro des colonnes
 	mul $t4, $s4, $s5			# t4 = nblignes * nbcolonnes
 	mul $t4, $t4, $s6			# t4 = t4 * taillecase
 	sub $t4, $t4, $s6			# t4 -= taillecase
@@ -374,6 +379,9 @@ add_val_array_loop_end:			# ajout de la valeur s1 à l'emplacement t0
 print_win:
 	sub $sp, $sp, 4				# soustrait 4 au pointeur de pile
 	sw $ra, ($sp)				# sauvegarde ra dans la pile
+	jal write_nl				# ligne vide
+	jal write_nl				# encore (meilleur affichage)
+	jal display_array			# affichage du tableau
 	la $a0, str_win_0
 	jal write_string
 	lw $t0, full_array
