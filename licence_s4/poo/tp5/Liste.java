@@ -5,6 +5,7 @@ public class Liste
 	public Liste(String s)
 	{
 		this.debut = new Noeud(s);
+		this.dernier = this.debut;
 	}
 	public Liste()
 	{

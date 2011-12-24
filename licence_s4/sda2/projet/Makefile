@@ -2,7 +2,7 @@ CC = gcc
 CFLAGS = -Wall -g -std=c99 
 LDFLAGS = 
 OPTIONS = $(CFLAGS) $(LDFLAGS)
-EXEC = arbres-binaires-parfaits
+EXEC = abp
 
 all: $(EXEC)
 
