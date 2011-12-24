@@ -1,21 +1,5 @@
 a.
 
-s : suppression
-r : remplacement
-éch : échange
-n : nb nœuds
-nf : nb feuilles
-v : étiquette à l'adresse donnée
-
-po : partiellement ordonné ou pas
-ipo : insertion partiellement ordonné
-mount : monter dans un arbre binaire parfait => renvoi l'@ du père
-
-spo : suppression dans un Abp partiellement ordonné
-desc : descendre dans un arbre binaire parfait => renvoi l'@ du fils
-imin : @ fils plus petite étiquette 
-
-
 spécification ABP étend ORDT
 	Sorte Abp
 	Opérations:
@@ -37,9 +21,8 @@ spécification ABP étend ORDT
 		s(^) = ^
 		s(i(a,s)) = a
 		r(^, x, s) = ^
-		r(i(a,s),x,s1) = a1 avec a1		init a1 = ^
-										pour i de 0 à n(a)-1
-											si i==x alors i(a1, s1)
+		r(i(a,s),x,s1) = a1 avec a1 init ^ pour i de 0 à n(a)-1
+												si i==x alors i(a1, s1)
 													sinon i(a1,v(a,i))
 		n(^) = 0
 		n(i(a,s)) = 1 + n(a)
@@ -58,20 +41,28 @@ spécification ABPO0 étend ABP
 	Opérations:
 		po : Abp → bool
 		ipo : Abp S → Abp
-		mont : Abp Nat → Nat
+		mont : Abp Nat → Abp
+		imont : Nat → Nat
 
 	Préconditions:
 		pré ipo(a,s) : po(a)
-		# TODO
+		pré mont(a,x) : n(a) > x
 	Axiomes:
 		po(^) = vrai
-		po(i(a,s)) = s >= v(i(a,s),mont(a,n(i(a,s))-1)) et po(a)
+		po(i(a,s)) = s >= v(i(a,s),imont(n(i(a,s))-1)) et po(a)
 
-		mont(^,x) = x
-		mont(i(a,s),x) = 
+		imont(x) = si x==0 alors 0 sinon si paire(x) alors arrondiborneinférieure((x-1)/2)
+									 sinon arrondiborneinférieure(x/2)
 		
-		# TODO
-
+		mont(a,x) = a1 avec init a1 = a
+							tant que v(a1,x) < v(a1,imont(x))
+								ech(a1,imont(x),x)
+								x = imont(x)
+							fin tant que
+		
+		ipo(^,s) = i(^,s)
+		ipo(a,s) = si s < v(a,imont(n(a))) alors mont(i(a,s),n(i(a,s))-1)
+											sinon i(a,s)
 fin spécification
 
 c.
@@ -83,14 +74,59 @@ spécification ABPO1 étend ABPO0
 		imin : Abp Nat → Nat
 
 	Préconditions:
-		pré imin(a,x) : # nonfeuille(a)
-		# TODO
+		pré imin(a,x) : n(a) > x
+		pré desc(a,x) : x < n(a)
+
 	Axiomes:
-		desc(^,x) = x
-		desc(i(a,s),x) = 
+		desc(a,x) = a1 avec init a1 = a
+							tant que v(a1,x) > v(a1,imin(a1,x))
+								ech(a1,x,imin(a1,x))
+								x = imin(a1,x)
+							fin tant que
 		imin(^,x) = x
-		imin(i(a,s),x) = si n(i(a,s))-1 < 2*x+2 alors si n(i(a,s))-1 < 2*x+1 alors x sinon 2*x+1 fsi
+		imin(i(a,s),x) = si n(i(a,s))-1 < 2*x+2 alors si n(i(a,s))-1 < 2*x+1 alors x sinon (2*x)+1 fsi
 												sinon si v(i(a,s),2*x+1) < v(i(a,s),2*x+2) alors 2*x+1 sinon 2*x+2 fsi fsi
-		# TODO
+
+		spo(^,x) = ^
+		spo(a,x) = si x >= n(a) alors a sinon avec a = s(ech(a,x,n(a)-1))
+													si v(a,x) < v(a,imont(x)) alors mont(a,x)
+													 sinon si v(a,x) > v(a,imin(a,x)) alors desc(a,x)
+
+		Remarque, avec ma version des spécifications de mont et desc qui ne modifient l'arbre que s'il y a besoin, on aurait pu écrire spo de cette manière :
+		spo(a,x) = si x >= n(a) alors a sinon desc(mont(s(ech(a,x,n(a)-1)),x),x)
 
 fin spécification
+
+e.
+
+Démonstration par récurrence :
+Au rang 0 : n = 0 : arrondi-supérieur(0/2) = 0 : pas de feuilles.
+Au rang n = 1 : arrondi-supérieur(1/2) = 1 : une feuille, il n'y a qu'un nœud donc c'est une feuille. La relation est vraie au rang n.
+Au rang n + 1 : arrondi-supérieur(n+1/2) soit n=1 alors : arrondi-supérieur(1+1/2) = 1, il y a un nœud père et un nœud feuille. Cela est vrai au rang n+1 donc la relation est vraie.
+
+
+La hauteur d'un arbre à n éléments est égale à x avec x tel que : 2^x <= n < 2^(x+1).
+Dit autrement : la hauteur d'un arbre à n éléments est égale à arrondi-inférieur(log2(n))
+En code (sans prendre en compte n == 0) :
+int hauteur(Abp a)
+{
+	int i = 0, x = 1;
+	while(x < n(a)) 
+	{
+		x = x*2; 
+		i++;
+	}
+	return i;
+}
+
+Pour po, dans le meilleur des cas (po n'est pas partiellement ordonné) : il peut quitter dès la première comparaison (le dernier élément ajouté est plus petit que l'élément parent).
+Comme décrit dans ma spécification de po, po fait une comparaison du type <= n fois dans le pire des cas (si l'arbre est partiellement ordonné) :
+premièrement n(a) = n, il fait une comparaison v(a,n(a)-1) avec v(a,imont(n(a)-1)), 
+puis il recommence avec n(a) = n(a) -1 jusqu'à ce que n(a) soit égal à 1, après il n'y a plus de comparaison.
+
+Pour ipo, dans le meilleur des cas il n'y a pas d'échange à faire. Si on ajoute à l'arbre un élément s qui est numériquement supérieur à son futur père, il ne fait qu'un ajout simple i(a,s).
+Dans le pire des cas, il faut monter tout en haut de l'arbre (à la racine) et donc le nombre d'échange est simplement la hauteur de l'arbre.
+
+Pour spo c'est la même chose mais on rajoute un échange avant les itérations successives dans desc.
+Autrement dit, on fait un échange entre l'élément x à supprimer et l'élément à n(a)-1, puis dans desc on fait des échanges qui peuvent valoir la hauteur de l'arbre a.
+Donc dans le pire des cas : hauteur + 1, dans le meilleur des cas il n'y a que le premier échange à faire.

@@ -1,18 +1,19 @@
 CC = gcc
-CFLAGS = -Wall -g -std=c99 
-LDFLAGS = 
+CFLAGS = -Wall -g #-std=c99
+LDFLAGS = -lm
 OPTIONS = $(CFLAGS) $(LDFLAGS)
-EXEC = abp
+EXEC = tests
+FICHIERSO = ABP.o ABPO0.o ABPO1.o
 
-all: $(EXEC)
+all: ABPO1.o ABPO0.o ABP.o $(EXEC) 
 
 $(EXEC) : $(EXEC).o 
-	$(CC) -o $@ $^ $(OPTIONS)
+	$(CC) -o $@ $^ $(FICHIERSO) $(OPTIONS)
 
-$(EXEC).o : $(EXEC).c $(EXEC).h base.h
+$(EXEC).o : $(EXEC).c
 	$(CC) -o $@ -c $< $(OPTIONS)
 
-%.o : %.c 
+%.o : %.c %.h
 	$(CC) -o $@ -c $< $(OPTIONS)
 
 clean:
