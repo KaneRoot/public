@@ -1,4 +1,5 @@
 #!/bin/bash
 
+make mrproper 2>/dev/null
 make
-./tests
+[ $? == 0 ] && ./tests
