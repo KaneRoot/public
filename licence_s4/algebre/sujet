@@ -1,0 +1,14 @@
+Ecrire un programme qui effectue :
+- La transposée d’une matrice								- FAIT
+- La somme de 2 matrices									- FAIT
+- La multiplication de 2 matrices de tailles différentes.	- FAIT
+- Le Déterminant d'une matrice de taille nxn.				- FAIT
+- L' Inversion d’une matrice :
+	. Par la comatrice										- FAIT
+	. Par le pivot de Gauss
+- La résolution d’un système par pivot de Gauss
+- Calcul des valeurs propres d’une matrice (détermination de l’équation caractéristique = det (A – lambda I) puis résolution par pivot.
+- Calcul des valeurs propres d'une matrice nxn par la décomposition QR.
+
+Envoyer le fichier source ainsi qu'un petit rapport sous LaTeX expliquant comment fonctionnent vos programmes.
+Remarque: on s'attachera à rendre le programme le plus convivial possible
