@@ -75,3 +75,23 @@ matrice_s * inversion_lignes(matrice_s * m , int l1, int l2)
 
 	return m;
 }
+
+matrice_s * matrice_identitee(int taille)
+{
+	int i;
+	matrice_s * m = create_matrix(taille, taille);
+	for(i = 0 ; i < taille ; i++)
+		m->matrice[i][i] = 1;
+
+	return m;
+}
+
+matrice_s * dupliquer_matrice(matrice_s * m)
+{
+	int i, j;
+	matrice_s * m2 = create_matrix(m->nbl, m->nbc);
+	for(i = 0 ; i < m->nbl ; i++)
+		for(j = 0 ; j < m->nbc ; j++)
+			m2->matrice[i][j] = m->matrice[i][j];
+	return m2;
+}
