@@ -77,6 +77,8 @@ void test_addition_lignes()
 
 	addition_lignes(m,0, 1, 2);
 	display_matrix(m);
+	inversion_lignes(m, 2,3);
+	display_matrix(m);
 
 }
 int main(int argc, char * argv[])

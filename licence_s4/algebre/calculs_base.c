@@ -53,3 +53,25 @@ matrice_s * addition_lignes(matrice_s * m, int l_depart, int l_a_mul, float coef
 
 	return m;
 }
+
+matrice_s * inversion_lignes(matrice_s * m , int l1, int l2)
+{
+	int i;
+	matrice_s * mtmp = create_matrix(2, m->nbc);
+
+	// On place dans la matrice temporaire les 2 lignes l1 et l2
+	for(i = 0 ; i < m->nbc ; i++)
+		mtmp->matrice[0][i] = m->matrice[l1][i];
+	for(i = 0 ; i < m->nbc ; i++)
+		mtmp->matrice[1][i] = m->matrice[l2][i];
+	
+	// On remplace les lignes l1 par l2 et inversement
+	for(i = 0 ; i < m->nbc ; i++)
+		m->matrice[l1][i] = mtmp->matrice[1][i];
+	for(i = 0 ; i < m->nbc ; i++)
+		m->matrice[l2][i] = mtmp->matrice[0][i];
+
+	free_matrix(mtmp); // suppression de mtmp
+
+	return m;
+}

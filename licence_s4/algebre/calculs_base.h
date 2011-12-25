@@ -8,4 +8,7 @@ matrice_s * transposee_matrix(matrice_s *m);
 // addition_lignes( matrice , ligne de départ , ligne à multiplier , coefficient multiplicateur)
 matrice_s * addition_lignes(matrice_s * , int, int, float);
 
+// Inversion de 2 lignes
+matrice_s * inversion_lignes(matrice_s * m , int l1, int l2);
+
 #endif
