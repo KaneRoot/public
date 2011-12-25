@@ -26,11 +26,12 @@ matrice_s * inversion_gauss_jordan(matrice_s * m1)
 				inversion_lignes(m, i, l_pivot);
 				inversion_lignes(inverse, i, l_pivot);
 			}
-printf("l_pivot : %d :: c_pivot : %d\n",l_pivot,c_pivot);
-printf(" m avant : \n");
-display_matrix(m);
-printf(" inverse avant : \n");
-display_matrix(inverse);
+
+			// multiplication ligne pivot par 1/pivot
+			coeff = 1/m->matrice[l_pivot][c_pivot];
+			for(j = 0 ; j < m->nbc ; j++)
+				m->matrice[l_pivot][j] *= coeff;
+
 			for(j = 0 ; j < m->nbl ; j++)
 			{
 				if(j != i && m->matrice[j][c_pivot] != 0)
@@ -40,11 +41,11 @@ display_matrix(inverse);
 					addition_lignes(inverse, i, j, coeff);
 				}
 			}
-printf(" après  m : \n");
-display_matrix(m);
-printf(" après inverse : \n");
-display_matrix(inverse);
-printf("\033[31m=========================================================\033[00m\n");
+	printf(" après  m : \n");
+	display_matrix(m);
+	printf(" après inverse : \n");
+	display_matrix(inverse);
+	printf("\033[31m=========================================\033[00m\n");
 			c_pivot++;
 		}
 	}
