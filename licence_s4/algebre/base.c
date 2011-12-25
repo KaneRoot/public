@@ -30,7 +30,7 @@ void display_matrix(matrice_s * m)
 
 matrice_s * create_matrix(int nbl, int nbc)
 {
-	int i;
+	int i,j;
 	float **t;
 	t = (float **) malloc(nbl * sizeof(float*));
 	for(i = 0 ; i < nbl ; i++)
@@ -40,6 +40,9 @@ matrice_s * create_matrix(int nbl, int nbc)
 	m->matrice = t;
 	m->nbl = nbl;
 	m->nbc = nbc;
+	for(i = 0 ; i < m->nbl ; i++)
+		for(j = 0 ; j < m->nbc ; j++)
+			m->matrice[i][j] = 0;
 	return m;
 }
 
