@@ -44,3 +44,12 @@ matrice_s * transposee_matrix(matrice_s *m)
 			t->matrice[j][i] = m->matrice[i][j];
 	return t;
 }
+// addition_lignes( matrice , ligne de départ , ligne à multiplier , coefficient multiplicateur)
+matrice_s * addition_lignes(matrice_s * m, int l_depart, int l_a_mul, float coeff)
+{
+	int i;
+	for(i = 0 ; i < m->nbc ; i++)
+		m->matrice[l_a_mul][i] = m->matrice[l_a_mul][i] + coeff * m->matrice[l_depart][i];
+
+	return m;
+}

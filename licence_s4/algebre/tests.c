@@ -69,10 +69,22 @@ void tests_calculs_base()
 	free_matrix(multiplication);
 	free_matrix(transposee);
 }
+void test_addition_lignes()
+{
+	matrice_s * m = create_matrix(TAILLE_MATRICE_MULTIPLICATION,TAILLE_MATRICE_MULTIPLICATION);
+	remplir_alea(m);
+	display_matrix(m);
+
+	addition_lignes(m,0, 1, 2);
+	display_matrix(m);
+
+}
 int main(int argc, char * argv[])
 {
 	//tests_calculs_base();
-	test_determinant();
+//	test_determinant();
+	test_addition_lignes();
+
 
 	return EXIT_SUCCESS;
 }

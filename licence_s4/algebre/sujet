@@ -3,7 +3,7 @@ Ecrire un programme qui effectue :
 - La somme de 2 matrices									- FAIT
 - La multiplication de 2 matrices de tailles différentes.	- FAIT
 - Le Déterminant d'une matrice de taille nxn.				- FAIT
-- L' Inversion d’une matrice :
+- L'inversion d’une matrice :
 	. Par la comatrice										- FAIT
 	. Par le pivot de Gauss
 - La résolution d’un système par pivot de Gauss
