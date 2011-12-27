@@ -9,7 +9,7 @@
 #include "inversion.h"
 #include "comatrice.h"
 
-#define T_MAT_MULT 4
+#define T_MAT_MULT 3
 #define T_MAT_DET 3
 #define T_MAT_INVERSE 3
 
@@ -50,10 +50,12 @@ void test_inverse_gauss()
 	matrice_s *m, *inverse;
 
 	printf("\033[31mTest de calcul de l'inverse de la matrice - GAUSS\033[00m\n");
-
-	m = create_matrix(T_MAT_INVERSE,T_MAT_INVERSE);
-	remplir_alea(m);
 	printf("Création d'une matrice %dx%d\n",T_MAT_INVERSE,T_MAT_INVERSE);
+
+//	m = create_matrix(T_MAT_INVERSE,T_MAT_INVERSE);
+//	remplir_alea(m);
+	m = read_matrix(T_MAT_INVERSE,T_MAT_INVERSE);
+
 	display_matrix(m);
 	printf("Déterminant de la matrice : %f\n",det_nxn(m));
 
@@ -150,8 +152,26 @@ void tests_divers()
 	identitee = matrice_identitee(T_MAT_MULT);
 	display_matrix(identitee);
 
+	matrice_s * autre = matrice_identitee(T_MAT_MULT);
+
+
+	printf("Test fonction 'identiques' → si 2 matrices sont identiques\n");
+	printf("Seconde matrice pour le test : \n");
+	autre->matrice[0][0] = 2; 
+	display_matrix(autre);
+
+	if(identiques(autre,identitee) == 0)
+		printf("Les 2 matrices sont identiques -- erreur\n");
+	else
+		printf("Les 2 matrices sont différentes -- fonction 'identiques' OK\n");
+
 	int ligne, colonne;
-	ligne = 2; colonne = 3;
+	ligne = 1; colonne = 2;
+	printf( "\n\033[31mTest du pivot\033[00m \n"
+			"On prend la matrice identitée pour ce test\n"
+			"On se place en ligne %d et en colonne %d" 
+			": où est le prochain pivot ?\n",
+			ligne, colonne);
 	ligne = recherche_ligne_pivot_suivant(identitee, ligne, &colonne);
 	printf("ligne trouvée : %d ::::: colonne : %d \n", ligne, colonne);
 }
@@ -161,9 +181,8 @@ int main(int argc, char * argv[])
 //	test_determinant();
 //	test_comatrice();
 //	test_addition_lignes();
-	//test_inverse_gauss(); // TODO
-	test_inverse_comatrice(); // TODO
-	//tests_divers();
-
+	test_inverse_gauss(); // TODO
+	//test_inverse_comatrice(); // TODO
+	//tests_divers(); 
 	return EXIT_SUCCESS;
 }
