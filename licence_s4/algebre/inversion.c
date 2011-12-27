@@ -31,6 +31,8 @@ matrice_s * inversion_gauss_jordan(matrice_s * m1)
 			coeff = 1/m->matrice[l_pivot][c_pivot];
 			for(j = 0 ; j < m->nbc ; j++)
 				m->matrice[l_pivot][j] *= coeff;
+			for(j = 0 ; j < m->nbc ; j++)
+				inverse->matrice[l_pivot][j] *= coeff;
 
 			for(j = 0 ; j < m->nbl ; j++)
 			{
@@ -49,6 +51,14 @@ matrice_s * inversion_gauss_jordan(matrice_s * m1)
 			c_pivot++;
 		}
 	}
+
+	matrice_s * identitee = matrice_identitee(m->nbl);
+	if(identiques(identitee, m) == 0)
+		printf("M == IDENTITEE\n");
+	else
+		printf("M != IDENTITEE !\n");
+
+	free_matrix(identitee);
 
 	return inverse;
 }
