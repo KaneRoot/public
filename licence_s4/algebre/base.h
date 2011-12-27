@@ -23,4 +23,7 @@ void remplir_alea(matrice_s * m);
 // Suppression propre des matrices
 void free_matrix(matrice_s * m);
 
+// Savoir si 2 matrices sont les mêmes
+int identiques(matrice_s *, matrice_s *);
+
 #endif

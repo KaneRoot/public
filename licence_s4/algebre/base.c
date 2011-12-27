@@ -98,3 +98,17 @@ void remplir_alea(matrice_s * m)
 		for(j = 0 ; j < m->nbc ; j++)
 			m->matrice[i][j] = (rand() % 3) +1;
 }
+
+// Vérifie si 2 matrices sont identiques
+int identiques(matrice_s * m1, matrice_s *m2)
+{
+	int i, j;
+	int b = 0;
+	if( m1->nbc != m2->nbc || m1->nbl != m2->nbl)
+		b = 1;
+	for(i = 0 ; i < m1->nbl && b == 0 ; i++)
+		for(j = 0 ; j < m1->nbc && b == 0 ; j++)
+			if(m1->matrice[i][j] != m2->matrice[i][j])
+				b = 1;
+	return b;
+}
