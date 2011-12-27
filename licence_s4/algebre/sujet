@@ -5,7 +5,7 @@ Ecrire un programme qui effectue :
 - Le Déterminant d'une matrice de taille nxn.				- FAIT
 - L'inversion d’une matrice :
 	. Par la comatrice										- FAIT
-	. Par le pivot de Gauss
+	. Par le pivot de Gauss									- FAIT
 - La résolution d’un système par pivot de Gauss
 - Calcul des valeurs propres d’une matrice (détermination de l’équation caractéristique = det (A – lambda I) puis résolution par pivot.
 - Calcul des valeurs propres d'une matrice nxn par la décomposition QR.

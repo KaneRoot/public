@@ -7,6 +7,7 @@
 #include "comatrice.h"
 #include "calculs_base.h"
 #include "inversion.h"
+#include "gauss-jordan.h"
 
 // TODO
 matrice_s * inversion_gauss_jordan(matrice_s * m1)
@@ -82,19 +83,4 @@ matrice_s * inversion_comatrices(matrice_s * m)
 			tmp->matrice[i][j] /= det;
 
 	return tmp;
-}
-
-// Recherche la ligne du prochain pivot, en partant d'une ligne et d'une colonne
-// Retourne la ligne pivot ou -1 s'il n'y a pas 
-int recherche_ligne_pivot_suivant(matrice_s * m, int l_depart, int * c_depart)
-{
-	int indice = -1,i, *j;
-
-	for( j = c_depart ; indice == -1 && *j < m->nbc ; j[0]++)
-		for(i = l_depart ; indice == -1 && i < m->nbl; i++)
-			if(m->matrice[i][*j] != 0)
-				indice = i;
-
-	j[0]--;
-	return indice;
 }

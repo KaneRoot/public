@@ -83,7 +83,13 @@ matrice_s * read_matrix( int nbl, int nbc )
 	m->matrice = t;
 	return m;
 }
-
+matrice_s * random_matrix(int nbl, int nbc)
+{
+	matrice_s * m;
+	m = create_matrix(nbl, nbc);
+	remplir_alea(m);
+	return m;
+}
 void remplir_alea(matrice_s * m)
 {
 	int i,j;
