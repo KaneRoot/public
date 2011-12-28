@@ -44,11 +44,6 @@ matrice_s * inversion_gauss_jordan(matrice_s * m1)
 					addition_lignes(inverse, i, j, coeff);
 				}
 			}
-	printf(" après  m : \n");
-	display_matrix(m);
-	printf(" après inverse : \n");
-	display_matrix(inverse);
-	printf("\033[31m=========================================\033[00m\n");
 			c_pivot++;
 		}
 	}

@@ -40,124 +40,30 @@ matrice_s * creation_matrice()
 	return m;
 }
 
-void test_determinant()
+void test_determinant_comatrice_transposee()
 {
-	matrice_s *m;
+	matrice_s *m, *co, *tr;
 
-	printf("Test : calcul du déterminant \033[31m-- création d'une matrice\033[00m\n");
+	printf(	"\033[32mdéterminant - comatrice - transposée \033[00m\n"
+			"\033[31m-- création d'une matrice\033[00m\n");
 	m = creation_matrice();
 
-	printf("Display Matrix\n");
+	printf("Matrice créée :\n");
 	display_matrix(m);
-	printf("Déterminant de la matrice : %f\n",det_nxn(m));
+	printf("Déterminant de la matrice : %.2f\n",det_nxn(m));
 
-	free_matrix(m);
-}
-void test_comatrice()
-{
-	printf("\033[31mTest de la création d'une co-matrice\033[00m\n");
-	matrice_s *m, *co;
-
-	m = random_matrix(T_MAT_DET,T_MAT_DET);
-	printf("Création d'une matrice 4x4\n");
-	display_matrix(m);
-	printf("\nSa comatrice : \n");
 	co = comatrice(m);
+	tr = transposee_matrix(m);
+
+	printf("Sa comatrice : \n");
 	display_matrix(co);
-	printf("Déterminant de la matrice : %f\n",det_nxn(m));
 
+	printf("Sa transposée : \n");
+	display_matrix(tr);
+
+	free_matrix(m);
 	free_matrix(co);
-	free_matrix(m);
-}
-void test_inverse_gauss()
-{
-	matrice_s *m, *inverse;
-
-	printf("\033[31mTest de calcul de l'inverse de la matrice - GAUSS\033[00m\n");
-	printf("Création d'une matrice %dx%d\n",T_MAT_INVERSE,T_MAT_INVERSE);
-	m = creation_matrice();
-	display_matrix(m);
-
-	printf("Déterminant de la matrice : %f\n",det_nxn(m));
-
-	printf("Inversion via Gauss-Jordan :\n");
-	inverse = inversion_gauss_jordan(m);
-	if(inverse != NULL)
-		display_matrix(inverse);
-	else
-		printf("Déterminant == 0 donc on ne fait pas d'inversion car impossible\n");
-	
-	//inversion_lignes(inverse, 0,1);
-	matrice_s * multiplication = multiplication_matrices(m,inverse);
-
-	printf("multiplication inverse et m\n");
-	display_matrix(multiplication);
-	free_matrix(inverse);
-	free_matrix(m);
-}
-void test_inverse_comatrice()
-{
-	matrice_s *m, *co, *inverse;
-
-	printf("\033[31mTest de calcul de l'inverse de la matrice - COMATRICE\033[00m\n");
-
-	m = read_matrix(T_MAT_INVERSE,T_MAT_INVERSE);
-	printf("Création d'une matrice %dx%d\n",T_MAT_INVERSE,T_MAT_INVERSE);
-	display_matrix(m);
-	printf("\nCo-matrice : \n\n");
-	co = comatrice(m);
-	display_matrix(co);
-	printf("Déterminant de la matrice : %f\n",det_nxn(m));
-
-	inverse = inversion_comatrices(m);
-	printf("Inversion via co-matrice :\n");
-	if(inverse != NULL)
-	{
-		display_matrix(inverse);
-		matrice_s * multiplication = multiplication_matrices(m,inverse);
-
-		printf("multiplication inverse et m\n");
-		display_matrix(multiplication);
-	}
-	else
-		printf("Déterminant == 0 donc on ne fait pas d'inversion car impossible\n");
-
-//	free_matrix(inverse);
-//	printf("via gauss : \n");
-//	inverse = inversion_gauss_jordan(m);
-//	display_matrix(inverse);
-
-	free_matrix(co);
-	free_matrix(inverse);
-	free_matrix(m);
-}
-void tests_calculs_base()
-{
-	matrice_s *m1, *m2,*m3,*multiplication, *transposee;
-
-	printf("\033[31mCréation + remplissage de 2 matrices\033[00m\n");
-	m1 = random_matrix(T_MAT_MULT,T_MAT_MULT);
-	m2 = random_matrix(T_MAT_MULT,T_MAT_MULT);
-
-	printf("Affichage des matrices\n");
-	display_matrix(m1);
-	display_matrix(m2);
-	printf("Addition des matrices précédentes : \n");
-	m3 = add_matrix(m1,m2);
-	display_matrix(m3);
-
-	printf("Multiplication de m1 et m2\n");
-	multiplication = multiplication_matrices(m1,m2);
-	display_matrix(multiplication);
-	printf("Transposée de m1 \n");
-	transposee = transposee_matrix(m1);
-	display_matrix(transposee);
-
-	free_matrix(m1);
-	free_matrix(m2);
-	free_matrix(m3);
-	free_matrix(multiplication);
-	free_matrix(transposee);
+	free_matrix(tr);
 }
 void test_multiplication()
 {
@@ -174,11 +80,14 @@ void test_multiplication()
 	mult = multiplication_matrices(m1,m2);
 	display_matrix(mult);
 
+	free_matrix(m1);
+	free_matrix(m2);
+	free_matrix(mult);
 }
 void test_addition_matrices()
 {
 	printf("test addition de matrices \033[31m -- création de 2 matrices \033[00m\n");
-	matrice_s * m1, *m2;
+	matrice_s * m1, *m2, *m3;
 	m1 = creation_matrice();
 	m2 = creation_matrice();
 
@@ -186,14 +95,45 @@ void test_addition_matrices()
 	display_matrix(m1);
 	display_matrix(m2);
 
-	
+	printf("L'addition des 2 matrices précédentes : \n");
+	m3 = add_matrix(m1,m2);
+	display_matrix(m3);
+
+	free_matrix(m1);
+	free_matrix(m2);
+	free_matrix(m3);
 }
-// TODO
+
 void test_inversion()
 {
-	test_inverse_comatrice();
-	test_inverse_gauss();
+	matrice_s *m, *inverseco, *inversegauss;
+	printf(	"\033[32minversion de matrice\033[00m"
+			"\033[31m-- création d'une matrice\033[00m\n");
+	m = creation_matrice();
+
+	printf("La matrice créee : \n");
+	display_matrix(m);
+
+	printf("Déterminant de la matrice : %2.2f\n",det_nxn(m));
+	printf("Via la méthode de \033[032mcomatrice :\033[00m \n");
+	inverseco = inversion_comatrices(m);
+	if(inverseco != NULL)
+		display_matrix(inverseco);
+	else
+		printf("Déterminant == 0 donc on ne fait pas d'inversion car impossible\n");
+
+	printf("Via la méthode du \033[32mpivot de Gauss :\033[00m \n");
+	inversegauss = inversion_gauss_jordan(m);
+	if(inversegauss != NULL)
+		display_matrix(inversegauss);
+	else
+		printf("impossible via le pivot de gauss\n");
+
+	free_matrix(m);
+	free_matrix(inverseco);
+	free_matrix(inversegauss);
 }
+
 void test_addition_lignes()
 {
 	printf("\033[31mAddition de 2 lignes\033[00m\n");
@@ -216,7 +156,6 @@ void tests_divers()
 	display_matrix(identitee);
 
 	matrice_s * autre = matrice_identitee(T_MAT_MULT);
-
 
 	printf("Test fonction 'identiques' → si 2 matrices sont identiques\n");
 	printf("Seconde matrice pour le test : \n");
@@ -263,12 +202,11 @@ void test_systeme_gauss()
 }
 void print_menu()
 {
-	printf(	"\n\n	\033[31mMENU\033[00m\n"
-			" 1 : déterminant d'une matrice\n"
+	printf(	"\n	\033[31mMENU\033[00m\n"
+			" 1 : déterminant - comatrice - transposée\n"
 			" 2 : addition de 2 matrices\n"
 			" 3 : multiplications de 2 matrices\n"
-			" 4 : comatrice\n"
-			" 5 : inversion - via comatrice puis par pivot\n"
+			" 4 : inversion - via comatrice puis par pivot\n"
 			"Votre choix : "
 		  );
 }
@@ -283,11 +221,10 @@ void menu()
 		scanf("%d",&choix);
 		switch(choix)
 		{
-			case 1 : test_determinant();
+			case 1 : test_determinant_comatrice_transposee(); break;
 			case 2 : test_addition_matrices(); break;
 			case 3 : test_multiplication(); break; // TODO
-			case 4 : test_comatrice(); break;
-			case 5 : test_inversion(); break; // TODO
+			case 4 : test_inversion(); break; // TODO
 			default : 
 				printf("\033[32mERREUR CHOIX\033[00m\n");
 				break;
@@ -295,13 +232,6 @@ void menu()
 		}
 	}
 
-//	tests_calculs_base();
-//	test_multiplication();
-//	test_determinant();
-//	test_comatrice();
-//	test_addition_lignes();
-//	test_inverse_comatrice();
-//	test_inverse_gauss(); // TODO
 //	tests_divers(); 
 //	test_systeme_gauss();
 
