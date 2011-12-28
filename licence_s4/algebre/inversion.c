@@ -62,20 +62,26 @@ matrice_s * inversion_gauss_jordan(matrice_s * m1)
 matrice_s * inversion_comatrices(matrice_s * m)
 {
 	int i, j;
+	matrice_s *co, *tmp;
 	float det = det_nxn(m);
-	matrice_s * co;
-	matrice_s * tmp;
+
 	if(det == 0.0)
 		return (matrice_s *) NULL;
 
 	co = comatrice(m);
 	tmp = transposee_matrix(co);
 	
-	free_matrix(co);
+	printf("DETERMINANT : %f \n",det);
 
 	for(i = 0 ; i < m->nbl ; i++)
 		for(j = 0 ; j < m->nbc ; j++)
 			tmp->matrice[i][j] /= det;
 
+	printf("COMATRICE: \n");
+	display_matrix(co);
+	printf("TRANSPOSÉE COMATRICE/DET\n");
+	display_matrix(tmp);
+
+	free_matrix(co);
 	return tmp;
 }

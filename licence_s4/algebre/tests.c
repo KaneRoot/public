@@ -29,7 +29,7 @@ matrice_s * creation_matrice()
 	printf("Création d'une matrice, \033[31m-- choix de la dimension\033[00m\n");
 	choix_nbl_nbc(&nbl, &nbc);
 	printf(	"Choix 1 : remplissage aléatoire de la matrice\n"
-			"Choix 2 : remplir soi-même\n");
+			"Choix 2 : remplir soi-même\nVotre choix : ");
 	scanf("%d",&choix);
 	switch(choix)
 	{
@@ -39,12 +39,11 @@ matrice_s * creation_matrice()
 	}
 	return m;
 }
-
 void test_determinant_comatrice_transposee()
 {
 	matrice_s *m, *co, *tr;
 
-	printf(	"\033[32mdéterminant - comatrice - transposée \033[00m\n"
+	printf(	"\033[32mdéterminant - comatrice - transposée \033[00m "
 			"\033[31m-- création d'une matrice\033[00m\n");
 	m = creation_matrice();
 
@@ -67,7 +66,8 @@ void test_determinant_comatrice_transposee()
 }
 void test_multiplication()
 {
-	printf("\033[31mtest de la multiplication : création de 2 matrices\033[00m\n");
+	printf("\033[32mmultiplication \033[00m"
+			"\033[31m-- création de 2 matrices\033[00m\n");
 	matrice_s *m1, *m2, *mult;
 	m1 = creation_matrice();
 	m2 = creation_matrice();
@@ -86,7 +86,8 @@ void test_multiplication()
 }
 void test_addition_matrices()
 {
-	printf("test addition de matrices \033[31m -- création de 2 matrices \033[00m\n");
+	printf(	"\033[32maddition \033[00m"
+			"\033[31m-- création de 2 matrices \033[00m\n");
 	matrice_s * m1, *m2, *m3;
 	m1 = creation_matrice();
 	m2 = creation_matrice();
@@ -111,7 +112,7 @@ void test_inversion()
 			"\033[31m-- création d'une matrice\033[00m\n");
 	m = creation_matrice();
 
-	printf("La matrice créee : \n");
+	printf("La matrice créee : \n");
 	display_matrix(m);
 
 	printf("Déterminant de la matrice : %2.2f\n",det_nxn(m));

@@ -7,6 +7,9 @@
 
 matrice_s * add_matrix(matrice_s * m1, matrice_s * m2)
 {
+	if(m1->nbl != m2->nbl || m1->nbc != m2->nbc)
+		return (matrice_s *) NULL;
+
 	int i, j;
 	matrice_s * somme = create_matrix(m1->nbl,m1->nbc);
 	
@@ -20,7 +23,8 @@ matrice_s * multiplication_matrices(matrice_s *m1, matrice_s *m2)
 	int i, j, k;
 	int somme;
 	if(m1->nbc != m2->nbl)
-		return NULL;
+		return (matrice_s *) NULL;
+
 	matrice_s *m = create_matrix(m1->nbl, m2->nbc);
 
 	for(i = 0 ; i < m1->nbl; i++)
