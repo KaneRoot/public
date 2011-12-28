@@ -1,24 +1,39 @@
 \chapter{Les Tests}
 
 Pour rappel, tous les tests sont présents dans un seul fichier : tests.c .
-
-
-\section{Les fonctions présentes}
-
-\subsection{Les fonctions de confort}
-
-Voici donc une liste des fonctions que j'utilise à des fins de confort : 
-\begin{itemize}
-	\item
-	\item
-\end{itemize}
-
-Ces fonctions sont simples et me permettent soit de factoriser mon code soit d'unifier l'affichage.
-
-\subsection{Les fonctions de test à proprement parler}
+Tout d'abord, je décris comment faire fonctionner le programme, puis je donne une liste détaillée des fonctions présentes dans mon programme.
 
 \section{Comment faire marcher le programme}
 
 L'ensemble des fonctions est testé via un seul fichier exécutable. Il n'y a qu'à faire make ; ./tests .
+Il n'y a qu'à lire ce qui est affiché à l'écran.
+Un menu a été mis en place pour naviguer entre les différents tests possibles.
+
+\section{Concernant les sources du programme de tests}
+\subsection{Les procédures de confort}
+
+Voici donc une liste des fonctions que j'utilise à des fins de confort : 
+\begin{itemize}
+	\item choix-nbl-nbc
+	\item creation-matrice
+	\item print-menu
+	\item menu
+\end{itemize}
+
+Ces fonctions sont simples et me permettent soit de factoriser mon code soit d'unifier l'affichage.
+
+\subsection{Les procédures de test à proprement parler}
+
+\begin{itemize}
+	\item test-determinant-comatrice-transposee
+	\item test-multiplication
+	\item test-addition-matrices
+	\item test-inversion
+	\item test-addition-lignes
+	\item tests-divers
+	\item test-systeme-gauss
+\end{itemize}
+
+Chaque test demande de créer une ou deux matrices. Le reste est affiché.
 
 \clearpage
