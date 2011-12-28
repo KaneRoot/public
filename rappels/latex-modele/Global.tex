@@ -1,0 +1,139 @@
+\documentclass[12pt,a4paper,utf8x]{report}
+\usepackage [frenchb]{babel}
+
+% Pour pouvoir utiliser 
+\usepackage{ucs}
+\usepackage[utf8x]{inputenc}
+
+\usepackage{url} % Pour avoir de belles url
+\usepackage {geometry}
+
+% Pour mettre du code source
+\usepackage {listings}
+% Pour pouvoir passer en paysage
+\usepackage{lscape}
+
+% Pour pouvoir faire plusieurs colonnes
+\usepackage {multicol}
+% POur crééer un index
+\usepackage{makeidx}
+\makeindex
+
+% Pour les entetes de page
+% \usepackage{fancyheadings}
+%\pagestyle{fancy}
+%\renewcommand{\sectionmark}[1]{\markboth{#1}{}} 
+%\renewcommand{\subsectionmark}[1]{\markright{#1}} 
+
+% Pour l'interligne de 1.5
+\usepackage {setspace}
+% Pour les marges de la page
+\geometry{a4paper, top=2.5cm, bottom=3.5cm, left=1.5cm, right=1.5cm, marginparwidth=1.2cm}
+
+\parskip=5pt %% distance entre § (paragraphe)
+\sloppy %% respecter toujours la marge de droite 
+
+% Pour les pénalités :
+\interfootnotelinepenalty=150 %note de bas de page
+\widowpenalty=150 %% veuves et orphelines
+\clubpenalty=150 
+
+%Pour la longueur de l'indentation des paragraphes
+\setlength{\parindent}{15mm}
+
+
+
+%%%% debut macro pour enlever le nom chapitre %%%%
+\makeatletter
+\def\@makechapterhead#1{%
+  \vspace*{50\p@}%
+  {\parindent \z@ \raggedright \normalfont
+    \interlinepenalty\@M
+    \ifnum \c@secnumdepth >\m@ne
+        \Huge\bfseries \thechapter\quad
+    \fi
+    \Huge \bfseries #1\par\nobreak
+    \vskip 40\p@
+  }}
+
+\def\@makeschapterhead#1{%
+  \vspace*{50\p@}%
+  {\parindent \z@ \raggedright
+    \normalfont
+    \interlinepenalty\@M
+    \Huge \bfseries  #1\par\nobreak
+    \vskip 40\p@
+  }}
+\makeatother
+%%%% fin macro %%%%
+
+%Couverture 
+
+\title
+{
+	\normalsize{DESS Xxxxx xxxx xxxxx\\
+	Université de Xxxx Xxxxxx\\
+	2004-2005}\\
+	\vspace{15mm}
+	\Huge{Titre du rapport de stage}
+}
+\author{Nom Auteur\\
+	\vspace{45mm}
+}
+
+\date{	
+	\normalsize{Lieu du stage\\
+	Adresse du stage\\
+	Ville du stage\\ 
+	\vspace{5mm}	
+	Directeur de recherche : M. DUPONT \\
+	Rapporteur universitaire : Mme DUPUIS
+	}
+}
+
+\begin{document}
+
+\maketitle
+
+\input{Remerciements}
+%\clearpage
+
+\tableofcontents
+\clearpage
+
+% Pour avoir un interligne de 1,5
+\begin{onehalfspace}
+
+\input{Intro}
+
+\input{Partie1}
+
+\input{Partie2}
+
+\input{Partie3}
+
+\input{Partie4}
+
+\input{Conclusion}
+
+% Pour finir l'interligne de 1,5
+\end{onehalfspace}
+
+%----------------------------------------
+% Pour la bibliographie
+%----------------------------------------
+% Citer tous les ouvrages/références
+\nocite{*}
+% Trier par ordre d'apparition
+%bibliographystyle{unsrt}
+% Pour le style de la biblio
+\bibliographystyle{plain.bst}
+% Ecrire la biblio ici
+\bibliography{biblio}
+
+\printindex
+
+\appendix
+
+
+\end{document}

@@ -9,7 +9,6 @@
 #include "inversion.h"
 #include "gauss-jordan.h"
 
-// TODO
 matrice_s * inversion_gauss_jordan(matrice_s * m1)
 {
 	int i, j, l_pivot = 0, c_pivot = 0;
@@ -49,12 +48,16 @@ matrice_s * inversion_gauss_jordan(matrice_s * m1)
 	}
 
 	matrice_s * identitee = matrice_identitee(m->nbl);
-	if(identiques(identitee, m) == 0)
-		printf("M == IDENTITEE\n");
-	else
-		printf("M != IDENTITEE !\n");
+	if(identiques(identitee, m) != 0)
+	{
+		free_matrix(identitee);
+		free_matrix(m);
+		free_matrix(inverse);
+		return (matrice_s *) NULL;
+	}
 
 	free_matrix(identitee);
+	free_matrix(m);
 
 	return inverse;
 }
