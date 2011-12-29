@@ -107,7 +107,7 @@ void remplir_alea(matrice_s * m)
 	}
 	for( i = 0 ; i < m->nbl ; i++)
 		for(j = 0 ; j < m->nbc ; j++)
-			m->matrice[i][j] = (rand() % 3) +1;
+			m->matrice[i][j] = (rand() % 4) +1;
 }
 
 // Vérifie si 2 matrices sont identiques
@@ -122,4 +122,49 @@ int identiques(matrice_s * m1, matrice_s *m2)
 			if(m1->matrice[i][j] != m2->matrice[i][j])
 				b = 1;
 	return b;
+}
+polynome_s * creation_poly_prem(float x1, float x)
+{
+	matrice_s * m = create_matrix(1,2);
+	m->matrice[0][0] = x;
+	m->matrice[0][1] = x1;
+
+	return (polynome_s *) m;
+}
+polynome_s * creation_poly_sec(float x2, float x1, float x)
+{
+	matrice_s * m = create_matrix(1,3);
+	m->matrice[0][2] = x;
+	m->matrice[0][1] = x1;
+	m->matrice[0][0] = x2;
+
+	return (polynome_s *) m;
+}
+pmatrice_s * create_matrix_poly(matrice_s * m)
+{
+	int i, j;
+	float tmp;
+	pmatrice_s * res = malloc(sizeof(pmatrice_s));
+	res->nbl = m->nbl;
+	res->nbc = m->nbc;
+	
+	res->matrice = (polynome_s ***) malloc(sizeof(polynome_s**) * m->nbl);
+	for(i = 0 ; i < m->nbl ; i++)
+		res->matrice[i] = (polynome_s **) malloc(sizeof(polynome_s*) * m->nbc);
+
+	for(i = 0 ; i < m->nbl ; i++)
+	{
+		for(j = 0 ; j < m->nbc ; j++)
+		{
+			// Si on est sur la diagonale, on a -delta
+			if(i == j)
+				tmp = -1;
+			else
+				tmp = 0;
+
+			res->matrice[i][j] = creation_poly_prem(tmp, m->matrice[i][j]);
+		}
+	}
+
+	return res;
 }

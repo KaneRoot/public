@@ -9,7 +9,7 @@
 #include "inversion.h"
 #include "comatrice.h"
 #include "pivot-gauss.h"
-//#include "valeurs-propres.h"
+#include "valeurs-propres.h"
 
 #define T_MAT_MULT 3
 #define T_MAT_DET 3

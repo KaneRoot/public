@@ -8,6 +8,14 @@ typedef struct
 	float **matrice;
 } matrice_s;
 
+typedef matrice_s polynome_s ;
+typedef struct
+{
+	int nbl;
+	int nbc;
+	polynome_s ***matrice;
+} pmatrice_s;
+
 // Affichage des matrices
 void display_matrix(matrice_s * m);
 
