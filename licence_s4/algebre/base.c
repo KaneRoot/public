@@ -9,7 +9,7 @@ void display_matrix(matrice_s * m)
 {
 	if(m == NULL)
 	{
-		printf("\033[31mLa matrice n'existe pas\033[00m\n");
+		printf("\033[31mLa matrice n'existe pas \033[32m-- calcul impossible ?\033[00m\n");
 		return ;
 	}
 	int i, j;
