@@ -9,10 +9,11 @@
 #include "inversion.h"
 #include "comatrice.h"
 #include "pivot-gauss.h"
+//#include "valeurs-propres.h"
 
 #define T_MAT_MULT 3
 #define T_MAT_DET 3
-#define T_MAT_INVERSE 3
+#define T_MAT_INVERSE 2
 
 void choix_nbl_nbc(int * nbl, int * nbc)
 {
@@ -28,14 +29,17 @@ matrice_s * creation_matrice()
 	int choix = 0;
 	printf("Création d'une matrice, \033[31m-- choix de la dimension\033[00m\n");
 	choix_nbl_nbc(&nbl, &nbc);
-	printf(	"Choix 1 : remplissage aléatoire de la matrice\n"
-			"Choix 2 : remplir soi-même\nVotre choix : ");
-	scanf("%d",&choix);
-	switch(choix)
+	while(choix == 0)
 	{
-		case 1 : m = random_matrix(nbl, nbc); break;
-		case 2 : m = read_matrix(nbl, nbc); break;
-		default : break;
+		printf(	"Choix 1 : remplissage aléatoire de la matrice\n"
+				"Choix 2 : remplir soi-même\nVotre choix : ");
+		scanf("%d",&choix);
+		switch(choix)
+		{
+			case 1 : m = random_matrix(nbl, nbc); break;
+			case 2 : m = read_matrix(nbl, nbc); break;
+			default : choix = 0; break;
+		}
 	}
 	return m;
 }
@@ -180,14 +184,15 @@ void test_systeme_gauss()
 {
 	matrice_s *m, *valeur;
 
-	printf("\033[32mRésolution de système via pivot de Gauss\033[00m\n");
-	printf("Création d'une matrice %dx%d\n",T_MAT_INVERSE,T_MAT_INVERSE);
+	printf("\033[32mRésolution de système via pivot de Gauss\033[00m ");
+	printf("\033[31m-- création d'une matrice\033[00m\n");
 
-	m = read_matrix(T_MAT_INVERSE,T_MAT_INVERSE);
+	m = creation_matrice();
 
+	printf("La matrice créée : \n");
 	display_matrix(m);
-	printf("Création d'une matrice %dx1\n",T_MAT_INVERSE);
-	valeur = read_matrix(T_MAT_INVERSE,1);
+	printf("Création d'une matrice %dx1\n",m->nbl);
+	valeur = read_matrix(m->nbl,1);
 
 	printf("Résolution du système via le pivot de Gauss :\n");
 
@@ -199,6 +204,15 @@ void test_systeme_gauss()
 	free_matrix(valeur);
 	free_matrix(m);
 }
+void test_valeurs_propres()
+{
+	matrice_s * m;
+	printf(	"\033[32mValeurs propres \033[00m"
+			"\033[31m-- création d'une matrice\033[00m\n");
+	m = creation_matrice();
+
+	free_matrix(m);
+}
 void print_menu()
 {
 	printf(	"\n	\033[31mMENU\033[00m\n"
@@ -206,6 +220,8 @@ void print_menu()
 			" 2 : addition de 2 matrices\n"
 			" 3 : multiplications de 2 matrices\n"
 			" 4 : inversion - via comatrice puis par pivot\n"
+			" 5 : résolution de système\n"
+			" 6 : calcul de valeurs propres d'une matrice\n"
 			"Votre choix : "
 		  );
 }
@@ -224,7 +240,8 @@ void menu()
 			case 2 : test_addition_matrices(); break;
 			case 3 : test_multiplication(); break;	
 			case 4 : test_inversion(); break;
-			case 5 : test_systeme_gauss(); break; // TODO
+			case 5 : test_systeme_gauss(); break; // TODO : test ligne à 0
+			case 6 : test_valeurs_propres(); break; // TODO
 			default : 
 				printf("\033[32mERREUR CHOIX\033[00m\n");
 				break;
