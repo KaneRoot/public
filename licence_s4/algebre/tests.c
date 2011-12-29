@@ -8,7 +8,7 @@
 #include "determinant.h"
 #include "inversion.h"
 #include "comatrice.h"
-#include "gauss-jordan.h"
+#include "pivot-gauss.h"
 
 #define T_MAT_MULT 3
 #define T_MAT_DET 3
@@ -104,7 +104,6 @@ void test_addition_matrices()
 	free_matrix(m2);
 	free_matrix(m3);
 }
-
 void test_inversion()
 {
 	matrice_s *m, *inverseco, *inversegauss;
@@ -134,7 +133,6 @@ void test_inversion()
 	free_matrix(inverseco);
 	free_matrix(inversegauss);
 }
-
 void test_addition_lignes()
 {
 	printf("\033[31mAddition de 2 lignes\033[00m\n");
@@ -182,7 +180,7 @@ void test_systeme_gauss()
 {
 	matrice_s *m, *valeur;
 
-	printf("\033[31mTest de calcul de l'valeur de la matrice - GAUSS\033[00m\n");
+	printf("\033[32mRésolution de système via pivot de Gauss\033[00m\n");
 	printf("Création d'une matrice %dx%d\n",T_MAT_INVERSE,T_MAT_INVERSE);
 
 	m = read_matrix(T_MAT_INVERSE,T_MAT_INVERSE);
@@ -193,7 +191,7 @@ void test_systeme_gauss()
 
 	printf("Résolution du système via le pivot de Gauss :\n");
 
-	if(systeme_gauss_jordan(m,valeur) == 0)
+	if(pivot_gauss_double_matrice(m,valeur) == 0)
 		display_matrix(valeur);
 	else
 		printf("impossible de résoudre ce système !\n");
@@ -224,18 +222,15 @@ void menu()
 		{
 			case 1 : test_determinant_comatrice_transposee(); break;
 			case 2 : test_addition_matrices(); break;
-			case 3 : test_multiplication(); break; // TODO
-			case 4 : test_inversion(); break; // TODO
+			case 3 : test_multiplication(); break;	
+			case 4 : test_inversion(); break;
+			case 5 : test_systeme_gauss(); break; // TODO
 			default : 
 				printf("\033[32mERREUR CHOIX\033[00m\n");
 				break;
 
 		}
 	}
-
-//	tests_divers(); 
-//	test_systeme_gauss();
-
 }
 int main(int argc, char * argv[])
 {

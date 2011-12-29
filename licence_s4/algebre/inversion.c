@@ -7,7 +7,7 @@
 #include "comatrice.h"
 #include "calculs_base.h"
 #include "inversion.h"
-#include "gauss-jordan.h"
+#include "pivot-gauss.h"
 
 matrice_s * inversion_gauss_jordan(matrice_s * m1)
 {
