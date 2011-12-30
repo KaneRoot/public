@@ -1,6 +1,8 @@
 #ifndef __VALEURS_PROPRES_H__
 #define __VALEURS_PROPRES_H__
 
+// Calcule les valeurs propres et les renvoie dans une matrice 3x1
+matrice_s * valeurs_propres(pmatrice_s * pm);
 // Permet de savoir où on a une ligne avec 2 valeurs == 0
 // retourne le numéro de ligne ou -1 s'il n'y a pas
 int pattern_detector_line(pmatrice_s * p);

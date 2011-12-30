@@ -15,6 +15,7 @@
 #define T_MAT_DET 3
 #define T_MAT_INVERSE 2
 
+// Pour afficher joliement si un polynôme est vide ou pas
 void afficher_poly_vide_ou_pas(polynome_s * p)
 {
 	printf(" Le polynôme suivant est-il nul ?\n");
@@ -31,6 +32,7 @@ void choix_nbl_nbc(int * nbl, int * nbc)
 	printf("Nombre de colonnes : ");
 	scanf("%d",nbc);
 }
+// Pour créer joliement une matrice
 matrice_s * creation_matrice()
 {
 	matrice_s * m;
@@ -216,6 +218,8 @@ void test_systeme_gauss()
 void test_polynomes()
 {	
 	polynome_s *p, *p2, *pmult;
+	pmatrice_s * pm;
+	matrice_s * m;
 	printf(	"\n\033[32mPolynômes\033[31m -- "
 			"création et affichage d'un polynôme 10.35x^2 + 15.3x - 20 \033[00m\n");
 	p = creation_poly_sec(10.35,15.3, -20.0);
@@ -238,6 +242,21 @@ void test_polynomes()
 	free_polynome(p);
 	p = creation_poly_sec(0,0,0);
 	afficher_poly_vide_ou_pas(p);
+
+	printf(	"\n\n		\033[31m Création d'une matrice 3x3 que l'on transformera en pmatrice puis qu'on affichera \033[00m \n"
+			" -- MATRICE\n");
+	m = read_matrix(3,3);
+	printf(	"La matrice : \n");
+	display_matrix(m);
+
+	printf(	"Création de la pmatrice\n");
+	pm = create_matrix_poly(m);
+	display_pmatrix(pm);
+	matrice_s * vpropres = valeurs_propres(pm);
+
+	printf("Les valeurs propres calculées : \n");
+	display_matrix(vpropres);
+
 
 	free_polynome(p);
 	free_polynome(p2);

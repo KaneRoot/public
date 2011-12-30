@@ -21,6 +21,9 @@ typedef struct
 	polynome_s ***matrice;
 } pmatrice_s;
 
+// Affichage d'une pmatrice
+void display_pmatrix(pmatrice_s * pm);
+
 // Affichage des matrices
 void display_matrix(matrice_s * m);
 
@@ -42,6 +45,9 @@ void remplir_alea(matrice_s * m);
 // Suppression propre des matrices
 void free_matrix(matrice_s * m);
 
+// Suppression propre d'un polynôme
+void free_polynome(polynome_s * p);
+
 // Savoir si 2 matrices sont les mêmes
 int identiques(matrice_s *, matrice_s *);
 
@@ -50,9 +56,6 @@ polynome_s * creation_poly_prem(float x1, float x);
 
 // Création d'un polynôme de second degré
 polynome_s * creation_poly_sec(float x2, float x1, float x);
-
-// Suppression propre d'un polynôme
-void free_polynome(polynome_s * p);
 
 // Multiplication de polynômes	!!!		de premier degré	!!!
 polynome_s * multiplication_polynomes_prem(polynome_s * p1, polynome_s * p2);
@@ -63,5 +66,11 @@ polynome_s * soustraction_polynomes_sec(polynome_s * p1, polynome_s * p2);
 // On cherche à savoir si le polynôme est vide
 // 0 si vide, 1 sinon
 int polynome_vide(polynome_s * p);
+
+// affichage brut des données d'un polynôme
+void display_polynome_core(polynome_s * p);
+
+// Créer une pmatrice_s qui est une matrice avec des polynômes sur la diagonale
+pmatrice_s * create_matrix_poly(matrice_s * m);
 
 #endif
