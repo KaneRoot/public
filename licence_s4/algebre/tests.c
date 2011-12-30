@@ -218,8 +218,7 @@ void test_systeme_gauss()
 void test_polynomes()
 {	
 	polynome_s *p, *p2, *pmult;
-	pmatrice_s * pm;
-	matrice_s * m;
+
 	printf(	"\n\033[32mPolynômes\033[31m -- "
 			"création et affichage d'un polynôme 10.35x^2 + 15.3x - 20 \033[00m\n");
 	p = creation_poly_sec(10.35,15.3, -20.0);
@@ -243,20 +242,6 @@ void test_polynomes()
 	p = creation_poly_sec(0,0,0);
 	afficher_poly_vide_ou_pas(p);
 
-	printf(	"\n\n		\033[31m Création d'une matrice 3x3 que l'on transformera en pmatrice puis qu'on affichera \033[00m \n"
-			" -- MATRICE\n");
-	m = read_matrix(3,3);
-	printf(	"La matrice : \n");
-	display_matrix(m);
-
-	printf(	"Création de la pmatrice\n");
-	pm = create_matrix_poly(m);
-	display_pmatrix(pm);
-	matrice_s * vpropres = valeurs_propres(pm);
-
-	printf("Les valeurs propres calculées : \n");
-	display_matrix(vpropres);
-
 
 	free_polynome(p);
 	free_polynome(p2);
@@ -264,10 +249,22 @@ void test_polynomes()
 }
 void test_valeurs_propres()
 {
-	matrice_s * m;
+	matrice_s *vpropres, *m;
+	pmatrice_s * pm;
 	printf(	"\033[32mValeurs propres \033[00m"
-			"\033[31m-- création d'une matrice\033[00m\n");
-	m = creation_matrice();
+			"\033[31m-- création d'une matrice 3x3\033[00m\n");
+
+	printf(	"La matrice : \n\n");
+	m = read_matrix(3,3);
+	display_matrix(m);
+
+	printf(	"Création de la pmatrice\n\n");
+	pm = create_matrix_poly(m);
+	display_pmatrix(pm);
+	vpropres = valeurs_propres(pm);
+
+	printf("Les valeurs propres calculées : \n\n");
+	display_matrix(vpropres);
 
 	free_matrix(m);
 }
@@ -276,7 +273,7 @@ void print_menu()
 	printf(	"\n	\033[31mMENU\033[00m\n"
 			" 1 : déterminant - comatrice - transposée\n"
 			" 2 : addition de 2 matrices\n"
-			" 3 : multiplications de 2 matrices\n"
+			" 3 : multiplication de 2 matrices\n"
 			" 4 : inversion - via comatrice puis par pivot\n"
 			" 5 : résolution de système\n"
 			" 6 : calcul de valeurs propres d'une matrice\n"
