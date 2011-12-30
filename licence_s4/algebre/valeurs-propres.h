@@ -11,5 +11,8 @@ int pattern_detector_line(pmatrice_s * p);
 // retourne le numéro de colonne ou -1 s'il n'y a pas
 int pattern_detector_column(pmatrice_s * p);
 
+// On résoud une équation du second degré
+matrice_s * resolution_equation_second_degre(polynome_s *p);
+
 #endif
 

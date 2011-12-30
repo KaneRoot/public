@@ -10,10 +10,13 @@
 #include <string.h>
 
 
+// On l'aura compris : calcul des valeurs propres
+// Renvoie une matrice de pm->nbl valeurs
 matrice_s * valeurs_propres(pmatrice_s * pm)
 {
 	int i, j, k, l, n = 0;
-	polynome_s * polynomes_a_multiplier[4]; //= malloc(sizeof(polynome_s *) * 4);
+	polynome_s * polynomes_a_multiplier[4];
+	polynome_s * polynomes_a_soustraire[2]; 
 	float tmp;
 	matrice_s * vpropres;
 	polynome_s * ptmp = NULL;
@@ -28,8 +31,7 @@ matrice_s * valeurs_propres(pmatrice_s * pm)
 		}
 		j--; // À la fin de la boucle on va ajouter 1 à j alors qu'on ne le souhaite pas
 		tmp = (ptmp->matrice[0][1] == 0.0) ? 1 : ptmp->matrice[0][1];
-		n = ( ((i%2 + j%2)%2) == 0 ) ? -1 : 1;
-		vpropres->matrice[0][0] = n * (ptmp->matrice[0][0]/tmp);
+		vpropres->matrice[0][0] = (-1) * (ptmp->matrice[0][0]/tmp);
 	}
 	else if((j = pattern_detector_column(pm)) != -1)
 	{
@@ -41,22 +43,38 @@ matrice_s * valeurs_propres(pmatrice_s * pm)
 		}
 		i--; // À la fin de la boucle on va ajouter 1 à i alors qu'on ne le souhaite pas
 		tmp = (ptmp->matrice[0][1] == 0.0) ? 1 : ptmp->matrice[0][1];
-		n = ( ((i%2 + j%2)%2) == 0 ) ? -1 : 1;
-		vpropres->matrice[0][0] = n * (ptmp->matrice[0][0]/tmp);
+		// n = ( ((i%2 + j%2)%2) == 0 ) ? -1 : 1;  // Serait-ce inutile ? On dirait bien.
+		vpropres->matrice[0][0] = (-1) * (ptmp->matrice[0][0]/tmp);
 	}
-	printf(" LIGNE I : %d		COLONNE J : %d\n", i, j);
 	n = 0;
 	for(k = 0 ; k < pm->nbl ; k++)
-	{
 		for(l = 0 ; l < pm->nbc ; l++)
-		{
 			if(k != i && l != j)
 				polynomes_a_multiplier[n++] = pm->matrice[k][l];
-		}
-	}
-	for(i = 0 ; i < 4 ; i++)
-		display_polynome(polynomes_a_multiplier[i]);
-	
+
+
+	polynomes_a_soustraire[0] = multiplication_polynomes_prem(polynomes_a_multiplier[0], polynomes_a_multiplier[3]);
+	polynomes_a_soustraire[1] = multiplication_polynomes_prem(polynomes_a_multiplier[1], polynomes_a_multiplier[2]);
+
+//	// TODO -- DEBUG
+//	printf("À soustraire : \n");
+//	display_polynome(polynomes_a_soustraire[0]);
+//	display_polynome(polynomes_a_soustraire[1]);
+
+	ptmp = soustraction_polynomes_sec(polynomes_a_soustraire[0],polynomes_a_soustraire[1]);
+
+	matrice_s * resolution = resolution_equation_second_degre(ptmp);
+
+	// On recopie les valeurs trouvées dans vpropres
+	// resolution ne peut avoir que 2 valeurs dans sa matrice au maximum
+	for(i = 0 ; i < resolution->nbc ; i++)
+		vpropres->matrice[i+1][0] = resolution->matrice[0][i];
+
+	// Suppression propre des éléments inutiles
+	free_polynome(polynomes_a_soustraire[0]);
+	free_polynome(polynomes_a_soustraire[1]);
+	free_matrix(resolution);
+
 	return vpropres;
 }
 // Permet de savoir où on a une ligne avec 2 valeurs == 0
@@ -67,14 +85,12 @@ int pattern_detector_line(pmatrice_s * p)
 
 	for(i = 0 ; res == -1 && i < p->nbl ; i++)
 	{
-		printf("Ligne %d  ", i);
 		n = 0;
 		for(j = 0 ; j < p->nbc ; j++)
 			if(0 == polynome_vide(p->matrice[i][j]))
 				n++;
 		if( n == 2)
 			res = i;
-		printf(" n = %d\n", n);
 	}
 
 	return res;
@@ -101,6 +117,10 @@ int pattern_detector_column(pmatrice_s * p)
 // On résoud une équation du second degré
 matrice_s * resolution_equation_second_degre(polynome_s *p)
 {
+
+	//	TODO -- DEBUG
+//	printf("Le polynôme qu'on reçoit à résoudre\n");
+//	display_polynome(p);
 	matrice_s * m;
 	float a = p->matrice[0][2];
 	float b = p->matrice[0][1];
@@ -122,7 +142,9 @@ matrice_s * resolution_equation_second_degre(polynome_s *p)
 		m->matrice[0][0] = (-b)/(2*a);
 	}
 
+	//	TODO -- DEBUG
+//	printf("En sortie : \n");
+//	display_matrix(m);
+
 	return m;
 }
-
-
