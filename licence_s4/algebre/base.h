@@ -1,6 +1,8 @@
 #ifndef __BASE_H__
 #define __BASE_H__
 
+// matrice_s : la matrice de base qui contient des floats
+// On travaillera dessus la plupart du temps
 typedef struct
 {
 	int nbl;
@@ -9,6 +11,9 @@ typedef struct
 } matrice_s;
 
 typedef matrice_s polynome_s ;
+
+// pmatrice_s = matrice comme plus haut mais avec des polynômes
+// sert uniquement pour le calcul de valeurs propres
 typedef struct
 {
 	int nbl;
@@ -18,6 +23,9 @@ typedef struct
 
 // Affichage des matrices
 void display_matrix(matrice_s * m);
+
+// Affichage d'un polynôme
+void display_polynome(polynome_s * p);
 
 // Alloue la place pour la matrice
 matrice_s * create_matrix(int nbl, int nbc);
@@ -36,5 +44,24 @@ void free_matrix(matrice_s * m);
 
 // Savoir si 2 matrices sont les mêmes
 int identiques(matrice_s *, matrice_s *);
+
+// Création d'un polynôme de premier degré
+polynome_s * creation_poly_prem(float x1, float x);
+
+// Création d'un polynôme de second degré
+polynome_s * creation_poly_sec(float x2, float x1, float x);
+
+// Suppression propre d'un polynôme
+void free_polynome(polynome_s * p);
+
+// Multiplication de polynômes	!!!		de premier degré	!!!
+polynome_s * multiplication_polynomes_prem(polynome_s * p1, polynome_s * p2);
+
+// Soustraction de polynômes de second degré
+polynome_s * soustraction_polynomes_sec(polynome_s * p1, polynome_s * p2);
+
+// On cherche à savoir si le polynôme est vide
+// 0 si vide, 1 sinon
+int polynome_vide(polynome_s * p);
 
 #endif

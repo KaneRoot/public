@@ -16,13 +16,49 @@ matrice_s * valeurs_propres(matrice_s * m)
 	return vpropres;
 }
 
+// Permet de savoir où on a une ligne avec 2 valeurs == 0
+int pattern_detector_line(pmatrice_s * p)
+{
+	int res = -1;
+	int i, j, n;
+
+	for(i = 0 ; res == -1 && i < p->nbl ; i++)
+	{
+		n = 0;
+		for(j = 0 ; j < p->nbc ; j++)
+			if(0 == polynome_vide(p->matrice[i][j]))
+				n++;
+		if( n == 2)
+			res = i;
+	}
+
+	return res;
+}
+// Permet de savoir où on a une colonne avec 2 valeurs == 0
+int pattern_detector_column(pmatrice_s * p)
+{
+	int res = -1;
+	int i, j, n;
+
+	for(i = 0 ; res == -1 && i < p->nbc ; i++)
+	{
+		n = 0;
+		for(j = 0 ; j < p->nbl ; j++)
+			if(0 == polynome_vide(p->matrice[j][i]))
+				n++;
+		if( n == 2)
+			res = i;
+	}
+
+	return res;
+}
 
 matrice_s * calcul_delta(polynome_s *p)
 {
 	matrice_s * m;
-	float a = p->matrice[2];
-	float b = p->matrice[1];
-	float c = p->matrice[0];
+	float a = p->matrice[0][2];
+	float b = p->matrice[0][1];
+	float c = p->matrice[0][0];
 	float d = b*b - 4 * a * c;
 
 	if( d < 0)
@@ -42,15 +78,5 @@ matrice_s * calcul_delta(polynome_s *p)
 
 	return m;
 }
-polynome_s * multiplication_polynomes_prem(polynome_s * p1, polynome_s * p2)
-{
-	polynome_s * resultat;
 
-	resultat = creation_poly_sec(
-			p1->matrice[0][1] * p2->matrice[0][1],
-			p1->matrice[0][0] * p2->matrice[0][1] + p1->matrice[0][1] * p2->matrice[0][0],
-			p1->matrice[0][0] * p2->matrice[0][0]);
-
-	return resultat;
-}
 

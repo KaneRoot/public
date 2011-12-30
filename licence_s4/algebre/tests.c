@@ -15,6 +15,15 @@
 #define T_MAT_DET 3
 #define T_MAT_INVERSE 2
 
+void afficher_poly_vide_ou_pas(polynome_s * p)
+{
+	printf(" Le polynôme suivant est-il nul ?\n");
+	display_polynome(p);
+	if( 0 == polynome_vide(p))
+		printf("\033[31m OUI \033[00m \n");
+	else
+		printf("\033[31m NON \033[00m \n");
+}
 void choix_nbl_nbc(int * nbl, int * nbc)
 {
 	printf("Nombre de lignes : ");
@@ -204,6 +213,36 @@ void test_systeme_gauss()
 	free_matrix(valeur);
 	free_matrix(m);
 }
+void test_polynomes()
+{	
+	polynome_s *p, *p2, *pmult;
+	printf(	"\n\033[32mPolynômes\033[31m -- "
+			"création et affichage d'un polynôme 10.35x^2 + 15.3x - 20 \033[00m\n");
+	p = creation_poly_sec(10.35,15.3, -20.0);
+	display_polynome(p);
+	printf(	"		-- désallocation puis création d'un polynôme de premier degré : 2.2x + 5.3\n");
+	free_polynome(p);
+	p = creation_poly_prem(2.2,5.3);
+	display_polynome(p);
+	printf("		-- création d'un second polynôme 2x - 2 puis \033[31m multiplication \033[00m \n");
+	p2 = creation_poly_prem(2,-2);
+	pmult = multiplication_polynomes_prem(p,p2);
+	display_polynome(pmult);
+	free_polynome(p);
+	free_polynome(p2);
+	p = creation_poly_sec(1,-2,5);
+	printf("		-- \033[31m  soustraction \033[00m de 1x^2 -2x +5 \n" );
+	p2 = soustraction_polynomes_sec(pmult, p);
+	display_polynome(p2);
+	afficher_poly_vide_ou_pas(p2);
+	free_polynome(p);
+	p = creation_poly_sec(0,0,0);
+	afficher_poly_vide_ou_pas(p);
+
+	free_polynome(p);
+	free_polynome(p2);
+	free_polynome(pmult);
+}
 void test_valeurs_propres()
 {
 	matrice_s * m;
@@ -222,6 +261,8 @@ void print_menu()
 			" 4 : inversion - via comatrice puis par pivot\n"
 			" 5 : résolution de système\n"
 			" 6 : calcul de valeurs propres d'une matrice\n"
+			" ---------------\033[34m-----DEV-------\033[00m-------------- \n"
+			" 10 : tests divers sur les polynômes\n"
 			"Votre choix : "
 		  );
 }
@@ -242,6 +283,7 @@ void menu()
 			case 4 : test_inversion(); break;
 			case 5 : test_systeme_gauss(); break; // TODO : test ligne à 0
 			case 6 : test_valeurs_propres(); break; // TODO
+			case 10 : test_polynomes(); break;
 			default : 
 				printf("\033[32mERREUR CHOIX\033[00m\n");
 				break;
