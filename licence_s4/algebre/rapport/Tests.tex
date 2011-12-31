@@ -27,6 +27,19 @@ Ces fonctions sont simples et me permettent soit de factoriser mon code soit d'u
 Les fonctions plus importantes sont affichées dans le menu lorsque l'on démarre le programme.
 D'autres sont présentes mais ne m'ont servi qu'à faire des tests unitaires de développement.
 
-Chaque test demande de créer une ou deux matrices. Le reste est affiché petit à petit.
+Chaque test demande de créer une ou deux matrices. 
+Le reste est affiché petit à petit, il n'y a qu'à se laisser guider.
+
+Concernant les tests sur les valeurs propres, voici ce qu'il se passe : 
+on rentre une matrice (A) qui est forcément une matrice 3x3 dans mon test, 
+puis il y a une création d'une "pmatrice" c'est à dire une matrice de polynômes où j'ai placé -delta sur la diagonale,
+puis il y a une recherche d'une ligne ou d'une colonne avec 2 valeurs à 0 (donc pas sur la diagonale car il y a au moins -delta !),
+si le programme en trouve une alors il fait le calcul des valeurs propres. 
+Ce calcul passe également par une résolution d'une équation du second degré (fonction disponible dans le fichier valeurs-propres.c), 
+mais également par des copies, des remplacements, des additions, multiplications de polynômes dans des matrices de polynômes ce qui fait 
+de cette fonction la plus complexe de mon programme.
+
+Ensuite j'affiche la matrice créée (les valeurs propres), puis je commence à résoudre (via le pivot de Gauss) les systèmes.
+J'affiche au fur et à mesure les valeurs trouvées.
 
 \clearpage
