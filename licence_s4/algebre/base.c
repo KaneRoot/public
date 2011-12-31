@@ -110,6 +110,30 @@ void free_matrix(matrice_s * m)
 		free(m);
 	}
 }
+// Suppression d'un polynôme
+void free_polynome(polynome_s * p)
+{
+	if( p == NULL )
+		return;
+
+	free_matrix(p);
+}
+// Suppression d'une matrice de polynôme (pmatrice_s)
+void free_pmatrice(pmatrice_s * pm)
+{
+	int i,j;
+	if(pm == NULL)
+		return ;
+	for(i = 0 ; i < pm->nbl ; i++)
+		for(j = 0 ; j < pm->nbc ; j++)
+			if(pm->matrice[i][j] != NULL)
+				free_polynome(pm->matrice[i][j]);
+	for(i = 0 ; i < pm->nbl ; i++)
+		free(pm->matrice[i]);
+
+	free(pm->matrice);
+	free(pm);
+}
 // Lire une matrice sur la ligne de comamnde
 matrice_s * read_matrix( int nbl, int nbc ) 
 {
@@ -155,19 +179,6 @@ void remplir_alea(matrice_s * m)
 		for(j = 0 ; j < m->nbc ; j++)
 			m->matrice[i][j] = (rand() % 4) +1;
 }
-// Vérifie si 2 matrices sont identiques
-int identiques(matrice_s * m1, matrice_s *m2)
-{
-	int i, j;
-	int b = 0;
-	if( m1->nbc != m2->nbc || m1->nbl != m2->nbl)
-		b = 1;
-	for(i = 0 ; i < m1->nbl && b == 0 ; i++)
-		for(j = 0 ; j < m1->nbc && b == 0 ; j++)
-			if(m1->matrice[i][j] != m2->matrice[i][j])
-				b = 1;
-	return b;
-}
 // Création d'un polynôme de premier
 polynome_s * creation_poly_prem(float x1, float x)
 {
@@ -186,14 +197,6 @@ polynome_s * creation_poly_sec(float x2, float x1, float x)
 	m->matrice[0][2] = x2;
 
 	return (polynome_s *) m;
-}
-// Suppression d'un polynôme
-void free_polynome(polynome_s * p)
-{
-	if( p == NULL )
-		return;
-
-	free_matrix(p);
 }
 // Créer une pmatrice_s qui est une matrice avec des polynômes sur la diagonale
 pmatrice_s * create_matrix_poly(matrice_s * m)
@@ -241,33 +244,4 @@ void display_polynome_core(polynome_s * p)
 		else
 			printf("%3.2lfx^%d  ", p->matrice[0][i] , i);
 	}
-}
-// Multiplication de 2 polynômes de premier degré
-polynome_s * multiplication_polynomes_prem(polynome_s * p1, polynome_s * p2)
-{
-	polynome_s * resultat;
-
-	resultat = creation_poly_sec(
-			p1->matrice[0][1] * p2->matrice[0][1],
-			p1->matrice[0][0] * p2->matrice[0][1] + p1->matrice[0][1] * p2->matrice[0][0],
-			p1->matrice[0][0] * p2->matrice[0][0]);
-
-	return resultat;
-}
-// Soustraction de polynômes de second degré
-polynome_s * soustraction_polynomes_sec(polynome_s * p1, polynome_s * p2)
-{
-	// Certes, ce n'est pas fait dans la finesse. Je manque de temps.
-	return creation_poly_sec(p1->matrice[0][2] - p2->matrice[0][2], p1->matrice[0][1] - p2->matrice[0][1] , p1->matrice[0][0] - p2->matrice[0][0]);
-}
-// On cherche à savoir si le polynôme est vide
-// 0 si vide, 1 sinon
-int polynome_vide(polynome_s * p)
-{
-	int b = 0 ,i;
-	for(i = 0 ; b == 0 && i < p->nbc ; i++)
-		if( 0 != p->matrice[0][i] )
-			b = 1;
-
-	return b;
 }

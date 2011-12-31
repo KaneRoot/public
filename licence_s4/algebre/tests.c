@@ -243,9 +243,39 @@ void test_polynomes()
 	afficher_poly_vide_ou_pas(p);
 
 
+
 	free_polynome(p);
 	free_polynome(p2);
 	free_polynome(pmult);
+}
+void test_pmatrices()
+{
+	pmatrice_s * pm;
+	matrice_s * m = random_matrix(3,3);
+
+	printf(	"\033[32mPmatrices \033[00m"
+			"\033[31m-- création aléatoire d'une matrice 3x3\033[00m\n");
+	display_matrix(m);
+	printf(	"Création d'une pmatrice à partir de cette matrice (avec -delta sur la diagonale)\n");
+	pm = create_matrix_poly(m);
+	display_pmatrix(pm);
+
+	printf(	"Inversion de 2 colonnes 1 et 2\n");
+	pmatrice_inversion_colonnes(pm, 1,2);
+	display_pmatrix(pm);
+
+	printf(	"Inversion de 2 lignes 1 et 2\n");
+	pmatrice_inversion_lignes(pm, 1,2);
+	display_pmatrix(pm);
+
+	printf(	"Ligne 0 += 3 * Ligne 2\n");
+	pmatrice_addition_lignes(pm, 0, 2, 3);
+	display_pmatrix(pm);
+
+	
+	free_matrix(m);
+	free_pmatrice(pm);
+
 }
 void test_valeurs_propres()
 {
@@ -258,7 +288,7 @@ void test_valeurs_propres()
 	m = read_matrix(3,3);
 	display_matrix(m);
 
-	printf(	"Création de la pmatrice\n\n");
+	printf(	"Création de la pmatrice (matrice de polynômes avec -delta sur la diagonale) \n\n");
 	pm = create_matrix_poly(m);
 	display_pmatrix(pm);
 	vpropres = valeurs_propres(pm);
@@ -267,6 +297,7 @@ void test_valeurs_propres()
 	display_matrix(vpropres);
 
 	free_matrix(m);
+	free_pmatrice(pm);
 }
 void print_menu()
 {
@@ -279,6 +310,7 @@ void print_menu()
 			" 6 : calcul de valeurs propres d'une matrice\n"
 			" ---------------\033[34m-----DEV-------\033[00m-------------- \n"
 			" 10 : tests divers sur les polynômes\n"
+			" 11 : tests divers sur les pmatrices\n"
 			"Votre choix : "
 		  );
 }
@@ -300,6 +332,7 @@ void menu()
 			case 5 : test_systeme_gauss(); break; // TODO : test ligne à 0
 			case 6 : test_valeurs_propres(); break; // TODO
 			case 10 : test_polynomes(); break;
+			case 11 : test_pmatrices(); break;
 			default : 
 				printf("\033[32mERREUR CHOIX\033[00m\n");
 				break;
