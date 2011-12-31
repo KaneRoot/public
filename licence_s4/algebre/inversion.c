@@ -12,7 +12,7 @@
 matrice_s * inversion_gauss_jordan(matrice_s * m1)
 {
 	matrice_s * inverse = matrice_identitee(m1->nbl);
-	if(0 != pivot_gauss_double_matrice(m1, inverse))
+	if(0 > pivot_gauss_double_matrice(m1, inverse))
 	{
 		free_matrix(inverse);
 		inverse = NULL;

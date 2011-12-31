@@ -11,9 +11,7 @@
 #include "pivot-gauss.h"
 #include "valeurs-propres.h"
 
-#define T_MAT_MULT 3
-#define T_MAT_DET 3
-#define T_MAT_INVERSE 2
+#define T_MAT 3
 
 // Pour afficher joliement si un polynôme est vide ou pas
 void afficher_poly_vide_ou_pas(polynome_s * p)
@@ -151,7 +149,7 @@ void test_inversion()
 void test_addition_lignes()
 {
 	printf("\033[31mAddition de 2 lignes\033[00m\n");
-	matrice_s * m = random_matrix(T_MAT_MULT,T_MAT_MULT);
+	matrice_s * m = random_matrix(T_MAT,T_MAT);
 	display_matrix(m);
 
 	printf("Addition de 2 lignes : l1 += l0 * 2\n\n");
@@ -160,16 +158,18 @@ void test_addition_lignes()
 	printf("Inversion de 2 lignes : la 2 et la 3\n\n");
 	inversion_lignes(m, 2,3);
 	display_matrix(m);
+
+	free_matrix(m);
 	
 }
 void tests_divers()
 {
-	printf("Matrice identitée de %d \n", T_MAT_MULT);
+	printf("Matrice identitée de %d \n", T_MAT);
 	matrice_s * identitee;
-	identitee = matrice_identitee(T_MAT_MULT);
+	identitee = matrice_identitee(T_MAT);
 	display_matrix(identitee);
 
-	matrice_s * autre = matrice_identitee(T_MAT_MULT);
+	matrice_s * autre = matrice_identitee(T_MAT);
 
 	printf("Test fonction 'identiques' → si 2 matrices sont identiques\n");
 	printf("Seconde matrice pour le test : \n");
@@ -190,11 +190,14 @@ void tests_divers()
 			ligne, colonne);
 	ligne = recherche_ligne_pivot_suivant(identitee, ligne, &colonne);
 	printf("ligne trouvée : %d ::::: colonne : %d \n", ligne, colonne);
+
+	free_matrix(identitee);
+	free_matrix(autre);
 }
 void test_systeme_gauss()
 {
 	matrice_s *m, *valeur;
-
+	int retour_fonction_pivot;
 	printf("\033[32mRésolution de système via pivot de Gauss\033[00m ");
 	printf("\033[31m-- création d'une matrice\033[00m\n");
 
@@ -207,8 +210,12 @@ void test_systeme_gauss()
 
 	printf("Résolution du système via le pivot de Gauss :\n");
 
-	if(pivot_gauss_double_matrice(m,valeur) == 0)
+	if((retour_fonction_pivot = pivot_gauss_double_matrice(m,valeur)) >= 0)
+	{
 		display_matrix(valeur);
+		if(retour_fonction_pivot != 0)
+			printf("Une valeur s'exprime en fonction des autres : %d (numéro de ligne vide)\n", retour_fonction_pivot);
+	}
 	else
 		printf("impossible de résoudre ce système !\n");
 	

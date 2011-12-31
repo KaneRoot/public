@@ -200,14 +200,9 @@ int identiques(matrice_s * m1, matrice_s *m2)
 polynome_s * multiplication_polynome_par_reel(polynome_s * p, float reel)
 {
 	int i;
-//	printf("Polynôme en entrée : \n");
-//	display_polynome(p);
 	polynome_s * resultat = dupliquer_polynome(p);
 	for(i = 0 ; i < resultat->nbc ; i++)
 		resultat->matrice[0][i] = resultat->matrice[0][i] * reel;
-
-//	printf("Polynôme en sortie : \n");
-//	display_polynome(resultat);
 
 	return resultat;
 }

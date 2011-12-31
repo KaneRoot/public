@@ -8,7 +8,7 @@
 
 int pivot_gauss_double_matrice(matrice_s * m1, matrice_s * m2)
 {
-	int i, j, l_pivot = 0, c_pivot = 0, retour = 0;
+	int i, j, booleen , l_pivot = 0, c_pivot = 0, retour = 0;
 	float coeff;
 	matrice_s * m, *identitee;
 	m = dupliquer_matrice(m1); // Pour ne pas modifier directement la matrice m1
@@ -50,7 +50,23 @@ int pivot_gauss_double_matrice(matrice_s * m1, matrice_s * m2)
 	if(identiques(identitee, m) == 0)
 		retour = 0;
 	else
-		retour = 1;
+	{
+		retour = -1;
+		for(i = 0 ; booleen == 0 && i < m->nbl ; i++)
+		{
+			booleen = 0;
+			for(j = 0 ; booleen == 0 && j < m->nbc ; j++)
+				if(m->matrice[i][j] != 0)
+					booleen = 1;
+			// Nous avons une ligne vide sur la matrice gauche => à droite ça DOIT l'être aussi
+			for(j = 0 ; booleen == 0 && j < m2->nbc ; j++)
+				if(m2->matrice[i][j] != 0)
+					booleen = -1;
+
+			if(booleen == 0)
+				retour = i;
+		}
+	}
 
 	free_matrix(m);
 	free_matrix(identitee);
