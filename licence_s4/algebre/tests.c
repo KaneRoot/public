@@ -286,10 +286,13 @@ void test_pmatrices()
 }
 void test_valeurs_propres()
 {
-	matrice_s *vpropres, *m;
+	int i,j;
+	matrice_s *vpropres, *vpropretmp, *m;
 	pmatrice_s * pm;
 	printf(	"\033[32mValeurs propres \033[00m"
-			"\033[31m-- création d'une matrice 3x3\033[00m\n");
+			"\033[31m-- création d'une matrice 3x3\033[00m\n"
+			"((( Rappel : il faut entrer une matrice qui a déjà deux zéro sur la même ligne ou colonne - la diagonale ne compte pas - )))\n"
+			);
 
 	printf(	"La matrice : \n\n");
 	m = read_matrix(3,3);
@@ -300,8 +303,34 @@ void test_valeurs_propres()
 	display_pmatrix(pm);
 	vpropres = valeurs_propres(pm);
 
-	printf("Les valeurs propres calculées : \n\n");
-	display_matrix(vpropres);
+	if( NULL != vpropres)
+	{
+		printf("Les valeurs propres calculées : \n\n");
+		display_matrix(vpropres);
+
+		printf("On va calculer les valeurs des vecteurs propres via le pivot de Gauss: \n");
+		printf("	-- pour rappel A = \n");
+		display_matrix(m);
+		
+		for(i = 0 ; i < vpropres->nbl ; i++)
+		{	
+			printf("\n Résultat pivot de Gauss pour : \n(A) ( %3.3lf %3.3lf %3.3lf )  (vecteur colonne)\n", 
+					vpropres->matrice[i][0], vpropres->matrice[i][0], vpropres->matrice[i][0]);
+			vpropretmp = create_matrix(vpropres->nbl, 1);
+			for(j = 0 ; j < vpropres->nbl ; j++)
+				vpropretmp->matrice[j][0] = vpropres->matrice[i][0];
+			if( 0 <= pivot_gauss_double_matrice(m, vpropretmp))
+			{
+				printf("Vecteur propre : \n");
+				display_matrix(vpropretmp);
+			}
+			else
+				printf("Vecteur propre impossible à trouver\n");
+			free_matrix(vpropretmp);
+		}
+	}
+	else
+		printf("\033[31mImpossible de calculer les valeurs propres ! \033[00m \n");
 
 	free_matrix(m);
 	free_pmatrice(pm);
@@ -336,8 +365,8 @@ void menu()
 			case 2 : test_addition_matrices(); break;
 			case 3 : test_multiplication(); break;	
 			case 4 : test_inversion(); break;
-			case 5 : test_systeme_gauss(); break; // TODO : test ligne à 0
-			case 6 : test_valeurs_propres(); break; // TODO
+			case 5 : test_systeme_gauss(); break;
+			case 6 : test_valeurs_propres(); break;
 			case 10 : test_polynomes(); break;
 			case 11 : test_pmatrices(); break;
 			default : 

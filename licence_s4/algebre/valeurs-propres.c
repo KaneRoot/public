@@ -35,7 +35,6 @@ matrice_s * valeurs_propres(pmatrice_s * pm)
 	}
 	else if((j = pattern_detector_column(pm)) != -1)
 	{
-
 		for(i = 0 ; ptmp == NULL && i < pm->nbl ; i++)
 		{
 			if(polynome_vide(pm->matrice[i][j]) != 0)
@@ -45,6 +44,11 @@ matrice_s * valeurs_propres(pmatrice_s * pm)
 		tmp = (ptmp->matrice[0][1] == 0.0) ? 1 : ptmp->matrice[0][1];
 		// n = ( ((i%2 + j%2)%2) == 0 ) ? -1 : 1;  // Serait-ce inutile ? On dirait bien.
 		vpropres->matrice[0][0] = (-1) * (ptmp->matrice[0][0]/tmp);
+	}
+	else
+	{
+		free_matrix(vpropres);
+		return NULL;
 	}
 	n = 0;
 	for(k = 0 ; k < pm->nbl ; k++)
@@ -56,11 +60,6 @@ matrice_s * valeurs_propres(pmatrice_s * pm)
 	polynomes_a_soustraire[0] = multiplication_polynomes_prem(polynomes_a_multiplier[0], polynomes_a_multiplier[3]);
 	polynomes_a_soustraire[1] = multiplication_polynomes_prem(polynomes_a_multiplier[1], polynomes_a_multiplier[2]);
 
-//	// TODO -- DEBUG
-//	printf("À soustraire : \n");
-//	display_polynome(polynomes_a_soustraire[0]);
-//	display_polynome(polynomes_a_soustraire[1]);
-
 	ptmp = soustraction_polynomes_sec(polynomes_a_soustraire[0],polynomes_a_soustraire[1]);
 
 	matrice_s * resolution = resolution_equation_second_degre(ptmp);
@@ -70,10 +69,10 @@ matrice_s * valeurs_propres(pmatrice_s * pm)
 	for(i = 0 ; i < resolution->nbc ; i++)
 		vpropres->matrice[i+1][0] = resolution->matrice[0][i];
 
-	// Suppression propre des éléments inutiles
+	// Suppression propre des éléments devenus inutiles
+	free_matrix(resolution);
 	free_polynome(polynomes_a_soustraire[0]);
 	free_polynome(polynomes_a_soustraire[1]);
-	free_matrix(resolution);
 
 	return vpropres;
 }
