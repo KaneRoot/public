@@ -305,7 +305,7 @@ void test_valeurs_propres()
 
 	if( NULL != vpropres)
 	{
-		printf("Les valeurs propres calculées : \n\n");
+		printf("\033[31m	Les valeurs propres calculées : \033[00m \n\n");
 		display_matrix(vpropres);
 
 		printf("On va calculer les valeurs des vecteurs propres via le pivot de Gauss: \n");
@@ -328,6 +328,7 @@ void test_valeurs_propres()
 				printf("Vecteur propre impossible à trouver\n");
 			free_matrix(vpropretmp);
 		}
+		free_matrix(vpropres);
 	}
 	else
 		printf("\033[31mImpossible de calculer les valeurs propres ! \033[00m \n");

@@ -70,6 +70,7 @@ matrice_s * valeurs_propres(pmatrice_s * pm)
 		vpropres->matrice[i+1][0] = resolution->matrice[0][i];
 
 	// Suppression propre des éléments devenus inutiles
+	free_polynome(ptmp);
 	free_matrix(resolution);
 	free_polynome(polynomes_a_soustraire[0]);
 	free_polynome(polynomes_a_soustraire[1]);
@@ -116,10 +117,6 @@ int pattern_detector_column(pmatrice_s * p)
 // On résoud une équation du second degré
 matrice_s * resolution_equation_second_degre(polynome_s *p)
 {
-
-	//	TODO -- DEBUG
-//	printf("Le polynôme qu'on reçoit à résoudre\n");
-//	display_polynome(p);
 	matrice_s * m;
 	float a = p->matrice[0][2];
 	float b = p->matrice[0][1];
@@ -140,10 +137,6 @@ matrice_s * resolution_equation_second_degre(polynome_s *p)
 		m = create_matrix(1,1);
 		m->matrice[0][0] = (-b)/(2*a);
 	}
-
-	//	TODO -- DEBUG
-//	printf("En sortie : \n");
-//	display_matrix(m);
 
 	return m;
 }
