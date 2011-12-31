@@ -8,8 +8,71 @@ Cependant si vous souhaitez en savoir plus, les fichiers ".h" sont suffisamment 
 Voici une liste simple des fichiers du projet.
 
 
+\begin{itemize}
+	\item base.c
+	\item base.h
+\end{itemize}
+Permet la création des différentes structures, les polynômes, les matrices et les matrices de polynômes.
+Permet également la destruction propre de ces mêmes structures et leur affichage.
+
+\begin{itemize}
+	\item calculs base.c
+	\item calculs base.h
+\end{itemize}
+Permet de faire des additions, multiplications de lignes sur une matrice (éventuellement de polynômes) ainsi que des additions et multiplications de polynômes.
+
+\begin{itemize}
+	\item determinant.c
+	\item determinant.h
+\end{itemize}
+Calcul du déterminant d'une matrice (det nxn).
+
+\begin{itemize}
+	\item comatrice.c
+	\item comatrice.h
+\end{itemize}
+Calcul de la comatrice (utilise le déterminant).
+
+\begin{itemize}
+	\item pivot-gauss.c
+	\item pivot-gauss.h
+\end{itemize}
+Effectue le pivot de Gauss sur une matrice en répercutant chaque addition de lignes, inversion de lignes etc. sur une seconde matrice passée en parallèle.
+Une fonction présente également est la recherche du pivot suivant dans une matrice à un emplacement donné.
+
+\begin{itemize}
+	\item inversion.c
+	\item inversion.h
+\end{itemize}
+Calcule l'inversion d'une matrice par pivot de Gauss et par comatrice.
+
+\begin{itemize}
+	\item valeurs-propres.c
+	\item valeurs-propres.h
+\end{itemize}
+Calcul des valeurs propres.
+
+\begin{itemize}
+	\item tests.c
+\end{itemize}
+L'ensemble des tests possibles sont présents dans ce fichier.
+
+\begin{itemize}
+	\item Makefile
+\end{itemize}
+Produit un unique exécutable via la commande "make".
+
 \section{Les sources du rapport}
 
 
+\begin{itemize}
+	\item biblio.bib
+	\item Conclusion.tex
+	\item Fichiers.tex
+	\item Global.pdf
+	\item Global.tex
+	\item Intro.tex
+	\item Tests.tex
+\end{itemize}
 
 \clearpage

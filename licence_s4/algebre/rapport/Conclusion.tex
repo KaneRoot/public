@@ -13,8 +13,23 @@ Les procédures basiques que j'ai testé maintes fois :
 Les procédures plus complexes qui ont été testé avec des exemples vus en cours :
 \begin{itemize}
 	\item inversion via pivot de Gauss ;
+	\item inversion via comatrice ;
 \end{itemize}
 
+À savoir également que j'ai fait énormément de fonctions qui sont des outils me permettant de répondre aux questions plus complexes.
+Cependant, je n'ai pas eu le temps de tout implanté, mais les outils sont là. 
+Comme par exemple les "pmatrice" qui sont des matrices de polynômes avec plusieurs fonctions qui y sont liées comme l'addition, la soustraction et la multiplication de polynômes.
+
+Pour la fonction de pivot de Gauss, si une ligne est égale à une autre ligne (ou une multiplication de celle-ci) alors ça ne fonctionne pas.
+J'ai fait en sorte que lorsque la matrice de gauche ne devient pas une matrice identitée alors ma fonction renvoie -1 (synonyme d'une erreur).
 
 \section{Ce qui fonctionne moins}
+
+Concernant les valeurs propres, il faut que l'on rentre une matrice A qui ait déjà une ligne (ou une colonne) avec deux valeurs = 0 (et non sur la diagonale).
+
 \section{Ce qui n'a pas été implémenté}
+\begin{itemize}
+	\item Décomposition QR.
+\end{itemize}
+La seconde partie de la question (résolution par pivot des valeurs propres).
+Ceci est juste un manque de temps.
