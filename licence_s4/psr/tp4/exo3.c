@@ -12,11 +12,9 @@ int t[MAX];
 void * faire_fibo(void * arg)
 {
 	int * n = (int *) arg;
-	int * n_1 = malloc(sizeof(int));
-	int * n_2 = malloc(sizeof(int));
-	*n_1 = *n-1;
-	*n_2 = *n-2;
-	int * retour = malloc(sizeof(int));
+	int * n_1;
+	int * n_2;
+	int * retour;
 	if(*n < 2)
 	{
 		pthread_exit(n);
@@ -24,8 +22,13 @@ void * faire_fibo(void * arg)
 	else
 	{
 		pthread_t t1,t2;
-		void *r1;// = malloc(sizeof(int));
-		void *r2;// = malloc(sizeof(int));
+		void *r1;
+		void *r2;
+		n_1 = malloc(sizeof(int));
+		n_2 = malloc(sizeof(int));
+
+		*n_1 = *n-1;
+		*n_2 = *n-2;
 		
 		if(pthread_create(&t1, NULL, faire_fibo, (void*) n_1) != 0)
 			printf("Erreur\n");
@@ -35,6 +38,7 @@ void * faire_fibo(void * arg)
 		pthread_join(t1,&r1);
 		pthread_join(t2,&r2);
 
+		retour = malloc(sizeof(int));
 		*retour = *((int*)r1) + *((int*)r2);
 		free(r1);
 		free(r2);
@@ -90,7 +94,7 @@ void * faire_fibo2(void * arg)
 }
 void fibo_2(int * n)
 {
-	void * retour;// = (void *) malloc(sizeof(int));
+	void * retour;
 	pthread_t t0;
 
 	if(pthread_create(&t0, NULL, faire_fibo2, (void*) n) != 0)
