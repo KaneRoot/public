@@ -21,6 +21,14 @@ void exo2_hand_int(int s)
 }
 void exo2_hand_alarm(int s)
 {
+	if(fork() == 0)
+	{
+		char * tmp[] = { "date", NULL };
+		execve("/bin/date", tmp, NULL);
+		exit(1); // execve ne s'est pas bien exécuté
+	}
+	else
+		wait(NULL); // le père attend la fin d'exécution de son fils
 	if(temp != 3)
 		temp++;
 }
@@ -30,6 +38,9 @@ void exo2()
 	struct sigaction action;
 	sigemptyset(&signaux);
 
+	action.sa_flags = 0;
+	sigemptyset(&action.sa_mask);
+
 	action.sa_handler = exo2_hand_int;
 	sigaction(SIGINT,&action,NULL);
 	action.sa_handler = exo2_hand_alarm;
@@ -38,14 +49,7 @@ void exo2()
 	while(1)
 	{
 		alarm(1);
-		if(fork() == 0)
-		{
-			char * tmp[] = { "date", NULL };
-			execve("/bin/date", tmp, NULL);
-			exit(1); // execve ne s'est pas bien exécuté
-		}
-		else
-			wait(NULL); // le père attend la fin d'exécution de son fils
+		sigsuspend(&signaux);
 	}
 }
 int main(int argc, char * argv[])
