@@ -24,8 +24,8 @@ void * faire_fibo(void * arg)
 	else
 	{
 		pthread_t t1,t2;
-		void *r1 = malloc(sizeof(int));
-		void *r2 = malloc(sizeof(int));
+		void *r1;// = malloc(sizeof(int));
+		void *r2;// = malloc(sizeof(int));
 		
 		if(pthread_create(&t1, NULL, faire_fibo, (void*) n_1) != 0)
 			printf("Erreur\n");
@@ -46,7 +46,7 @@ void * faire_fibo(void * arg)
 }
 void fibo_1(int * n)
 {
-	void * retour = (void *) malloc(sizeof(int));
+	void * retour;
 	pthread_t t0;
 
 	if(pthread_create(&t0, NULL, faire_fibo, (void*) n) != 0)
@@ -90,7 +90,7 @@ void * faire_fibo2(void * arg)
 }
 void fibo_2(int * n)
 {
-	void * retour = (void *) malloc(sizeof(int));
+	void * retour;// = (void *) malloc(sizeof(int));
 	pthread_t t0;
 
 	if(pthread_create(&t0, NULL, faire_fibo2, (void*) n) != 0)
