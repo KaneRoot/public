@@ -1,50 +1,52 @@
-# Apprendre le LUA : http://www.luteus.biz/Download/LoriotPro_Doc/LUA/LUA_Training_FR/Introduction_Programmation.html
-# Apprendre LÖVE
-# Boot PXE + tuto
-# Faire un script d'ajout d'utilisateur git+trac + page web
-# Installer NickServ + autres outils + faire un post sur karchnu.fr
-# Ajouter un bot d'identification au serveur IRC
-# Configurer un Trac + git
-# Apprendre à utiliser les EFL
-# Mettre le serveur sous Debian - FAIT
-	# Faire une liste de tout ce que je met en place sur le serveur
+#	LANGAGES
+	# Apprendre le LUA + LÖVE - TODO
+	# Apprendre à utiliser les EFL - TODO
+	# LateX
+		# Template rapport : http://genma.free.fr/spip.php?article307 
+		# Template également dispo sur public : rappels/latex-model
+		# latex Global.tex ; bibtex Global ; latex Global.tex (X2) ; dvipdf Global.dvi 
+
+# Pour la création de dépôts : mettre une conf' pour Debian
+# Apprendre à virtualiser avec libvirt
+# Finir mes bouquins : Dév sys + admin sys
+# Gérer toutes les conf' (à ajouter au dépôt de conf')
+# Configurer OwnCloud + faire un post sur karchnu.fr - TODO
+# Configurer un serveur CSS 
+# Configurer un serveur Mumble ?
+
+# SAVOIR FAIRE
+	# utiliser les map dans vim - FAIT (à reprendre)
+	# faire des fonctions dans vim - FAIT (à reprendre)
+	# mieux utiliser IRC et weechat
+	# faire des scripts pour IRC/weechat - FAIT (à reprendre)
+
+# à retenir : /usr/share/X11/xkb/symbols
+
+#	SERVEUR
+	# Mettre le serveur sous Debian - FAIT
+	# Faire une liste de tout ce que je met en place sur le serveur - FAIT
 		# transmission-daemon - FAIT
 		# apache2 - FAIT
 			# à retenir : awesom.eu + scripts - TODO
-			# WordPress
+			# WordPress - FAIT
 			# dépôt - FAIT
-			# Nanoblog
-			# 
-		# git via ssh
-		# screen sur karchnu all time
+			# Nanoblog - FAIT (à continuer)
+			 
+		# git via ssh - FAIT
+		# screen sur karchnu all time - FAIT
 		# dhcp daemon - TODO
 	# Remettre les backup en place - TODO
-		# Archivage des comptes
-		# Musique à sync 
-# Pour la création de dépôts : mettre une conf' pour Debian
-# Apprendre à virtualiser avec libvirt
-# Faire le document "Ordinateur" + "Utilisation" pour moman
-# Faire quelques documents avec LateX
-# Finir mes bouquins : Dév sys + admin sys
-# Apprendre à faire "Secret Prayer" + m'enregistrer
-# Apprendre un morceau au synthé
-# Gérer toutes les conf' (à ajouter au dépôt de conf')
-# Apprendre à utiliser les map dans vim - FAIT (à continuer)
-# Apprendre à faire des fonctions dans vim
-# Apprendre à mieux utiliser IRC et weechat
-# Apprendre à faire des scripts pour IRC/weechat - En partie FAIT
-# Configurer OwnCloud + faire un post sur karchnu.fr
-# Configurer un serveur CSS 
-# Configurer un serveur Mumble ?
-#
-# Révisions
-# SDA2 projet
-# POO - FAIT
-# PSR - FAIT
-# GRO
-# Finir le "Personal File"
-# Anglais : se voir avec mon groupe pour finir le script - TODO
-# Anglais : mettre l'image DL de 4chan sur le wiki - FAIT
-# Anglais : mettre à jour oz s2 - FAIT
-# Anglais : faire une page récapitulant les saisons de Lost + OZ - FAIT
-# à retenir : /usr/share/X11/xkb/symbols
+		# comptes - FAIT
+		# Musique à sync - TODO
+	# Archivage des comptes
+	# Configurer apache façon d.karchnu.fr = dépôt etc.  - TODO
+	# Boot PXE + tuto - TODO
+	# Faire un script d'ajout d'utilisateur git+trac + page web - TODO
+	# Installer NickServ + autres outils + faire un post sur karchnu.fr - TODO
+	# Ajouter un bot d'identification au serveur IRC - TODO
+	# Configurer un Trac + git (fait une fois) - ou autre service web + git - TODO
+
+#	AUTRE
+	# Apprendre à faire "Secret Prayer" + m'enregistrer
+	# Apprendre un morceau au synthé
+	# Faire le document "Ordinateur" + "Utilisation" pour moman - TODO
