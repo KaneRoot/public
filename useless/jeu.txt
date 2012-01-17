@@ -4,14 +4,14 @@ Voici le jeu comme je le conçois, mes idées et tel que je l'imagine.
 
 ===== Globalement =====
 Le jeu sera en 3D, à la manière d'un célèbre MMORPG connu pour son addictivité, mais propriétaire. On l'aura tous reconnu. 
-Le but n'étant pas de le copier en libre mais bel et bien de faire un jeu complet et apportant des idées nouvelles.
+Le but n'étant pas de le copier en libre mais bel et bien de faire un jeu complet en apportant des idées nouvelles.
 
 Pour cela, plusieurs idées me viennent à l'esprit et je vais tenter de les décrire.
 
 
 ===== Scénario =====
 Je n'ai pas spécialement de scénario en tête. 
-Je pense que c'est une partie importante, à part pour introduire certaines fonctionnalités décrites dans ce document. 
+Je ne pense pas que ce soit une partie importante pour le moment, à part pour introduire certaines fonctionnalités décrites dans ce document. 
 Je ne pense pas qu'imaginer un scénario complet pour le moment soit utile, alors je vais me contenter de l'univers qu'il y aura autour.
 
 ==== Univers ====
@@ -23,16 +23,20 @@ On aura le choix entre plusieurs races aillant chacune de __vraies__ particulari
 Pour continuer dans l'originalité, un système de classes de personnage sera également disponible.
 
 === Les races ===
-On reprend les bases : elfes, humains, nains, 
+On reprend les bases : elfes, humains, nains, orcs. Et on en ajoute autant de nouveaux. Mutant : 5 bras, dont un sur le menton qui lui gratte la tête.
 **TODO**
 === Les classes ===
 **TODO**
-=== 
+=== Les métiers ===
+**TODO**
 
 
 ===== Gameplay =====
 Le but premier : être fun à jouer. 
-Le jeu sera extrèmement complet, beaucoup de choses à faire et à découvrir mais il faut pouvoir s'amuser tout de suite et découvrir le jeu peu à peu.
+Le jeu sera extrêmement complet, beaucoup de choses à faire et à découvrir mais il faut pouvoir s'amuser tout de suite et découvrir le jeu peu à peu.
+Il serait intéressant qu'il y ait des évènements loufoques et totalement irréalistes pour ne pas se prendre au sérieux.
+
+Des évènements 
 
 ==== Combats ====
 
@@ -52,7 +56,7 @@ IRC-like. C'est le moyen le plus simple.
 
 ===== Annexe =====
 
-==== Les exploits personnels (les hauts-faits quoi) ====
+==== Les exploits personnels (les hauts faits quoi) ====
 Ça, nous les connaissons bien. Donner des défis à réaliser.
 
 ==== Le mariage et les enfants ====
@@ -65,10 +69,93 @@ que ça me ferait marrer de voir ça et que je suis globalement pour, je veux qu
 Lieu de détente… et d'accomplissement d'exploits personnels, bien évidemment. 
 
 ==== De l'aide en jeu via des PNJ ====
-Là encore, on donne dans l'originalité, on le joueur aura deux types "d'animaux de compagnie".
+Là encore, on donne dans l'originalité, le joueur aura deux types "d'animaux de compagnie".
   * Les familiers - passifs ;
   * Les compagnons - combattent avec nous ;
 Mais également un personnage non joueur pourra venir vous aider en plus du compagnon.
-Ce personnage sera globalement toujours plus faible que vous (ses caractéristiques seront basées sur les votres).
+Ce personnage sera globalement toujours plus faible que vous (ses caractéristiques seront basées sur les vôtres).
 
 Ce personnage pourra être l'un de vos enfants s'il veut être un combattant.
+
+===== Idées en vrac =====
+
+Factions : 3 ou plus.
+
+Maisons : une de départ (chez vos parents) et une qu'on achète.
+Les maisons sont dans un endroit spécial où la carte grandit au fur et à mesure (on n'y va qu'en navette).
+Ce lieu est déterminé par notre faction.
+API disponible pour avoir une carte où on retrouve notre maison.	
+La maison qu'on achète est personnalisable et rapportera des bonus.
+
+Bornes d'arcade : meubles enchantés à des fins ludiques et d'éveil pour les jeunes non expérimentés.
+  * à débloquer au niveau 5 pour la maison de départ ;
+  * d'office pour l'autre maison.
+
+Les bornes permettent d'exécuter des scripts sur l'ordinateur du client (lorsqu'il joue sur SA borne).
+Mais il y aura un endroit où l'évènement principal sera de jouer sur des bornes (et les scores seront comptabilisés).
+Cette fois les scripts sont forcément ceux des administrateurs du serveur.
+
+Pas de collisions entre personnages ni entre les animaux.
+
+Les niveaux vont de 1 à 50 dans un premier temps.
+
+Il y aura des titres que le personnage pourra choisir et débloquer au fil de l'aventure (exploits, quêtes, niveau).
+
+Plusieurs moyens de s'affronter :
+  * les jeux qualifiés de "sport" (Capture du drapeau …) où les factions n'ont pas d'importance ;
+  * les guerres de territoire ;
+  * des défis ponctuels entre joueurs ou groupes de joueurs ;
+  * des conflits constants entre factions sur des zones de combat.
+
+=== Les sports ===
+Jeux où les statistiques ont un rôle, où on joue avec notre personnage. Il y a beaucoup d'interactions avec les décors.
+Les factions sont mélangées mais on peut inscrire un groupe (inférieur à X personnes) à une épreuve du sport.
+Quelques idées : 
+  * Capture du drapeau ;
+  * Roi de la colline ;
+  * …
+
+Pour chaque épreuve : définir le temps, nombre de joueurs, récompenses…
+On y accède qu'au dernier niveau.
+
+=== Guerres de territoire ===
+On se combat dans des zones définies à l'avance pour ça. Une victoire fait que les PNJ de cet endroit sont remplacés par les PNJ de notre faction.
+La possibilité de prendre l'avantage sur une faction n'est disponible que quelques temps après la conquête du territoire.
+La prise de territoire se fait au moyen de la mise à mort d'un ou plusieurs PNJ.
+
+==== Zones =====
+Il y a trois types de zones : 
+  * zone de combat (on s'affronte entre factions pour conquérir le territoire) ;
+  * zone neutre (impossible de s'affronter, sauf défis) ;
+  * zone hostile (on peut s'attaquer entre membres de factions différentes) ; 
+
+===== Statistiques =====
+
+Il y a 4 types de statistiques :
+  * globales, partagées par tous (dextérité, endurance, intelligence, force) ;
+  * liées à la classe = combat (% précision, % parade, % critique, % blocage, %encaissement) ;
+  * de profession (crochetage, enchantement …) ;
+  * armes 
+
+===== Équipement =====
+==== Emplacements ====
+  * tête ;
+  * épaule ;
+  * torse ;
+  * jambes ;
+  * bras ;
+  * pieds ;
+  * cou ;
+  * doigts ;
+  * costume (change totalement le skin mais pas de changement de statistiques).
+  * arme main gauche et droite + à distance.
+  * x 2 si c'est un mutant.
+
+==== Attributs liés aux équipements ====
+La qualité influe sur les dégâts par seconde pour une arme, toucher, critique, précision et blocage.
+Toujours pour une arme il y a l'affutage (critique) TODO
+Pour une pièce d'armure, la qualité influe sur l'encaissement des dégâts.
+
+Pour les armes et les armures : le poids influe sur la vitesse de déplacement du personnage (contrebalancé par la force et la dextérité du personnage).
+
+==== Personnalisation ====
