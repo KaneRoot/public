@@ -14,7 +14,7 @@
 # Configurer un serveur CSS 
 # Configurer un serveur Mumble ?
 
-# SAVOIR FAIRE
+# 	SAVOIR FAIRE
 	# utiliser les map dans vim - FAIT (à reprendre)
 	# faire des fonctions dans vim - FAIT (à reprendre)
 	# mieux utiliser IRC et weechat
@@ -34,11 +34,12 @@
 			 
 		# git via ssh - FAIT
 		# screen sur karchnu all time - FAIT
-		# dhcp daemon - TODO
-	# Remettre les backup en place - TODO
+		# dhcp daemon - FAIT
+	# Remettre les backup en place + archivage - TODO
 		# comptes - FAIT
-		# Musique à sync - TODO
-	# Archivage des comptes
+		# Musique à sync - IMPOSSIBLE FOR NOW - TODO
+		# wiki.karchnu.fr
+		# WordPress
 	# Configurer apache façon d.karchnu.fr = dépôt etc.  - TODO
 	# Boot PXE + tuto - TODO
 	# Faire un script d'ajout d'utilisateur git+trac + page web - TODO
@@ -49,4 +50,4 @@
 #	AUTRE
 	# Apprendre à faire "Secret Prayer" + m'enregistrer
 	# Apprendre un morceau au synthé
-	# Faire le document "Ordinateur" + "Utilisation" pour moman - TODO
+	# Faire le document "Ordinateur" + "Utilisation" pour moman : wiki.karchnu.fr - FAIT
