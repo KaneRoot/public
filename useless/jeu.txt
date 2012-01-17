@@ -1,0 +1,74 @@
+====== MMORPG ======
+
+Voici le jeu comme je le conçois, mes idées et tel que je l'imagine.
+
+===== Globalement =====
+Le jeu sera en 3D, à la manière d'un célèbre MMORPG connu pour son addictivité, mais propriétaire. On l'aura tous reconnu. 
+Le but n'étant pas de le copier en libre mais bel et bien de faire un jeu complet et apportant des idées nouvelles.
+
+Pour cela, plusieurs idées me viennent à l'esprit et je vais tenter de les décrire.
+
+
+===== Scénario =====
+Je n'ai pas spécialement de scénario en tête. 
+Je pense que c'est une partie importante, à part pour introduire certaines fonctionnalités décrites dans ce document. 
+Je ne pense pas qu'imaginer un scénario complet pour le moment soit utile, alors je vais me contenter de l'univers qu'il y aura autour.
+
+==== Univers ====
+Nous sommes dans un temps non réellement défini. 
+L'univers sera du **médiéval-fantastique**, ce qui permet une grande liberté.
+
+==== Le personnage principal ====
+On aura le choix entre plusieurs races aillant chacune de __vraies__ particularités et qui changeront profondément l'expérience du jeu.
+Pour continuer dans l'originalité, un système de classes de personnage sera également disponible.
+
+=== Les races ===
+On reprend les bases : elfes, humains, nains, 
+**TODO**
+=== Les classes ===
+**TODO**
+=== 
+
+
+===== Gameplay =====
+Le but premier : être fun à jouer. 
+Le jeu sera extrèmement complet, beaucoup de choses à faire et à découvrir mais il faut pouvoir s'amuser tout de suite et découvrir le jeu peu à peu.
+
+==== Combats ====
+
+==== L'interface ====
+
+=== Discussion avec les PNJ ===
+Se fera au moyen d'une interface sobre et le texte sera **lisible**.
+
+**TODO**
+
+=== Discussion entre joueurs ===
+IRC-like. C'est le moyen le plus simple.
+
+**TODO**
+=== Les commandes ===
+
+
+===== Annexe =====
+
+==== Les exploits personnels (les hauts-faits quoi) ====
+Ça, nous les connaissons bien. Donner des défis à réaliser.
+
+==== Le mariage et les enfants ====
+Lorsque vous vous mariez, vous avez la possibilité de faire des enfants ou d'en adopter si vous vous mariez entre personnes du même sexe.
+Oui, cela ne s'est que rarement (jamais?) vu dans un jeu vidéo et comme ça rentre dans les mœurs, 
+que ça me ferait marrer de voir ça et que je suis globalement pour, je veux qu'il y ait ça dans le jeu.
+
+
+==== La maison ====
+Lieu de détente… et d'accomplissement d'exploits personnels, bien évidemment. 
+
+==== De l'aide en jeu via des PNJ ====
+Là encore, on donne dans l'originalité, on le joueur aura deux types "d'animaux de compagnie".
+  * Les familiers - passifs ;
+  * Les compagnons - combattent avec nous ;
+Mais également un personnage non joueur pourra venir vous aider en plus du compagnon.
+Ce personnage sera globalement toujours plus faible que vous (ses caractéristiques seront basées sur les votres).
+
+Ce personnage pourra être l'un de vos enfants s'il veut être un combattant.
