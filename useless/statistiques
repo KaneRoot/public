@@ -1,0 +1,46 @@
+
+===== Statistiques =====
+
+Il y a 4 types de statistiques :
+  * globales, partagées par tous (dextérité, endurance, intelligence, force) ;
+  * liées à la classe = combat (% précision, % parade, % critique, % blocage, %encaissement) ;
+  * de profession (crochetage, enchantement …) ;
+  * armes 
+
+Caractéristiques.
+Force : puissance d'attaque
+Agilité : augmente chance d'infliger un coup critique et augmente l'armure
+Endurance : augmente les points de vie
+Intelligence : augmente les points de mana + score de critique des sorts
+Esprit : améliore la régénération de points de vie par seconde en dehors des combats, augmente la régénération de mana quand on ne lance pas de sort
+Armure : réduit les dégâts physiques reçus
+
+Défenses.
+Armure.
+Défense : augmente les chances d'esquiver, bloquer et parer, réduit la probabilité d'être toucher et de subir des coups critiques.
+Esquive : score d'esquive.
+Parade : score de parade.
+Blocage : score de blocage qui augmente les chances de bloquer et le nombre de dégâts réduits en cas de blocage.
+Résilience : réduit la probabilité de subir un coup critique, réduit les effets des drains de mana et les dégâts critiques de X %.
+Augmente de X % supplémentaires la réduction de tous les dégâts infligés par les joueurs et leur familier ou serviteur.
+
+En mêlée.
+Dégâts : vitesse d'attaque (seconde) par main et dégâts par seconde.
+Vitesse : vitesse (% de rapidité à multiplier par la vitesse de l'arme) influencée par le score de hâte.
+Puissance : score de puissance d'attaque en mêlée et ce score augmente les points de dégâts infligés avec les armes de mêlée de X points de dégâts par seconde.
+Toucher : score de toucher qui augmente les chances de toucher en mêlée une cible de niveau X de X %. Score de pénétration d'armure, l'armure ennemie est réduite de X % au maximum.
+Critique : score de critique affiché également en pourcentage. Quand augmenté par l'équipement : on affiche le pourcentage gagné.
+Expertise : score d'expertise, diminue les chances d'être esquivé ou paré de X %.
+
+Distance = mêlée (mais pas expertise).
+
+Sortilèges.
+Bonus dégâts (sacré, feu, nature, givre, ombre, arcanes).
+Bonus soins : augmente les soins prodigués d'un maximum de X.
+Toucher : augmente de X % les chances de toucher pour les sorts d'attaque + pénétration des sorts qui réduit la résistance adverse.
+Critique : % selon le type de sort.
+Hâte : augmente la vitesse d'incantation des sorts de X%.
+Régénération de mana : X points de mana régénérés toutes les 5 secondes sans incantation et pendant une incantation.
+
+Stat : chance, charisme, persuasion (pour l'enfant, lui changer sa destinée).
+La chance peut dépendre des lieux et des objets. À limiter.

@@ -12,40 +12,6 @@ En ce qui concerne le développement, le jeu doit être fait pour Gnu/Linux et d
 Le tout en essayant de faire du code portable, pour laisser la possibilité à chacun de porter ce projet sur d'autres plateformes.
 
 
-===== Scénario =====
-Je n'ai pas spécialement de scénario en tête. 
-Je ne pense pas que ce soit une partie importante pour le moment, à part pour introduire certaines fonctionnalités décrites dans ce document. 
-Je ne pense pas qu'imaginer un scénario complet pour le moment soit utile, alors je vais me contenter de l'univers qu'il y aura autour.
-
-==== Univers ====
-Nous sommes dans un temps non réellement défini. 
-L'univers sera du **médiéval-fantastique**, ce qui permet une grande liberté.
-
-==== Le personnage principal ====
-On aura le choix entre plusieurs races aillant chacune de __vraies__ particularités et qui changeront profondément l'expérience du jeu.
-Pour continuer dans l'originalité, un système de classes de personnage sera également disponible.
-
-=== Les races ===
-On reprend les bases : elfes, humains, nains, orcs. Et on en ajoute autant de nouveaux. Mutant : 5 bras, dont un sur le menton qui lui gratte la tête.
-**TODO**
-=== Les classes ===
-Classes basiques.
-Classe pour personnage soliste. 
-**TODO**
-=== Les métiers ===
-**TODO**
-
-
-=== niveaux ====
-Par points d'expérience. Exploits, combats PvE only, exploration.
-Donne un point de caractéristique (à ajouter à l'arbre de compétences) à partir du niveau 10.
-Chaque montée de niveau augmente toutes les statistiques globales.
-
-
-=== Arbre de compétences ===
-Donne des capacités.
-Possibilité de sauvegarder des sets de compétences, et d'en changer autant de fois qu'on le souhaite hors combat.
-
 === Amis ===
 On ajoute des amis (autres joueurs).
 
@@ -56,33 +22,11 @@ Il serait intéressant qu'il y ait des évènements loufoques et totalement irr�
 
 Des évènements récurrents et hebdomadaires sont là pour rythmer le jeu et lui donner de la vie. 
 
-==== Combats ====
-Temps réel. Impossibilité de se téléporter vers une ville, foyer etc.
+==== Global ====
 
-==== Déplacements ====
-
-=== Entre grandes villes ===
-Par des mastodontes avec des nacelles accrochées dessus. Donc on peut imaginer n'importe quel type d'animal volant et immense et des véhicules volants.
-Il y aura également des espèces de trains. Ces véhicules ont une plateforme sur laquelle on peut se déplacer.
-On peut sauter et monter en marche.
-
-=== Points de déplacement rapide prédéfinis et déjà visités ===
-On prend des véhicule plus légers et individuels. Possibilité de passer l'animation.
-Payant.
-
-=== Véhicules légers et personnels ===
-Qui possèdent des bonus (possibilité d'attaque, de porter d'autres personnages…).
-Certains peuvent également voler.
-
-
-==== Monnaie ====
-PO;PA;PC en récompense de quête. Mais on n'en trouve pas sur les monstres. Uniquement les humanoïdes.
-Possibilité d'en avoir en vendant des objets.
-Et une autre monnaie pour une petite île indépendantiste (Corsica). 
-
-==== Groupements ====
-Groupe simple. Raid pour les donjons + autres types d'instance. Guilde.
-
+Vie : se régénère peu à peu.
+Pas de collisions entre personnages ni entre les animaux.
+Les niveaux vont de 1 à 50 dans un premier temps.
 
 ==== L'interface ====
 
@@ -97,6 +41,33 @@ IRC-like. C'est le moyen le plus simple.
 + groupe, raid (dépend du contexte) et guilde.
 
 Pas de barrière de langue entre joueurs de factions différentes.
+=== Combats ===
+Temps réel. Impossibilité de se téléporter vers une ville, foyer etc.
+
+=== Quand la mort frappe notre joueur ===
+Un personnage quelconque arrive et lui propose 2 choix :
+  * lui donner de l'argent (une belle somme) = ressuscite direct, même endroit mais avec des points de vie en moins.
+  * mise à l'épreuve par les dieux : ressuscite à un tombeau.
+  * se démerder : on part du tombeau et on va chercher son cadavre (avec ou sans un véhicule) et ressusciter avec de la vie en moins.
+
+L'animation pourrait être un script qui change régulièrement pour ne pas être trop monotone.
+Par exemple, la mort qui veut un gâteau super cher et qui nous propose de lui donner un peu d'argent en échange de quoi elle fait l'impasse sur notre mort.
+Encore : un nain qui nous dit que sa machine à ressusciter les gens n'est pas terminée mais qu'avec quelques piécettes il pourrait être motivé, 
+on lui donne de l'argent et avec un coup de clef à molette la machine est terminé et on ressuscite.
+L'argent à donner est en fonction du niveau du personnage, mais l'animation pourra être un script de l'utilisateur (possibilité de créer une communauté autour du jeu, on verra plus tard).
+
+==== Monnaie ====
+PO;PA;PC en récompense de quête. Mais on n'en trouve pas sur les monstres. Uniquement les humanoïdes.
+Possibilité d'en avoir en vendant des objets.
+Et une autre monnaie pour une petite île indépendantiste (Corsica). 
+
+==== Groupements ====
+Groupe simple. Raid pour les donjons + autres types d'instance. Guilde.
+
+===== PVE =====
+==== Donjons ====
+Boss selon composition groupe.
+
 
 **TODO**
 === Les commandes ===
@@ -104,56 +75,14 @@ Pas de barrière de langue entre joueurs de factions différentes.
 
 ===== Annexe =====
 
-==== Les exploits personnels ====
-Ça, nous les connaissons bien. Donner des défis à réaliser.
-
-==== Le mariage et les enfants ====
-Lorsque vous vous mariez, vous avez la possibilité de faire des enfants ou d'en adopter si vous vous mariez entre personnes du même sexe ou entre races.
-Oui, cela ne s'est que rarement (jamais?) vu dans un jeu vidéo et comme ça rentre dans les mœurs, 
-que ça me ferait marrer de voir ça et que je suis globalement pour, je veux qu'il y ait ça dans le jeu.
-En cas d'adoption : les enfants sont possiblement de races différentes.
-
-Chaque enfant aura une compétence. La persuasion peut le faire changer, sauf pour une race (humain ou nain?) par respect.
-Suivant la race, la compétence sera soit choisie au hasard, soit prédéterminée par l'ordre de naissances (le premier est guerrier car c'est dans la culture de la tribu).
-
-
-
-==== La maison ====
-Lieu de détente… et d'accomplissement d'exploits personnels, bien évidemment. 
-
-==== De l'aide en jeu via des PNJ ====
-Là encore, on donne dans l'originalité, le joueur aura deux types "d'animaux de compagnie".
-  * Les familiers - passifs ;
-  * Les compagnons - combattent avec nous ;
-Mais également un personnage non joueur pourra venir vous aider en plus du compagnon.
-Ce personnage sera globalement toujours plus faible que vous (ses caractéristiques seront basées sur les vôtres).
-
-Ce personnage pourra être l'un de vos enfants s'il veut être un combattant.
-
 ===== Idées en vrac =====
 
 Factions : 3 ou plus.
 
-Maisons : une de départ (chez vos parents) et une qu'on achète.
-Les maisons sont dans un endroit spécial où la carte grandit au fur et à mesure (on n'y va qu'en navette).
-Ce lieu est déterminé par notre faction.
-API disponible pour avoir une carte où on retrouve notre maison.	
-La maison qu'on achète est personnalisable et rapportera des bonus.
-
-Bornes d'arcade : meubles enchantés à des fins ludiques et d'éveil pour les jeunes non expérimentés.
-  * à débloquer au niveau 5 pour la maison de départ ;
-  * d'office pour l'autre maison.
-
-Les bornes permettent d'exécuter des scripts sur l'ordinateur du client (lorsqu'il joue sur SA borne).
-Mais il y aura un endroit où l'évènement principal sera de jouer sur des bornes (et les scores seront comptabilisés).
-Cette fois les scripts sont forcément ceux des administrateurs du serveur.
-
-Pas de collisions entre personnages ni entre les animaux.
-
-Les niveaux vont de 1 à 50 dans un premier temps.
 
 Il y aura des titres que le personnage pourra choisir et débloquer au fil de l'aventure (exploits, quêtes, niveau).
 
+===== PVP =====
 Plusieurs moyens de s'affronter :
   * les jeux qualifiés de "sport" (Capture du drapeau …) où les factions n'ont pas d'importance ;
   * les guerres de territoire ;
@@ -176,88 +105,6 @@ On se combat dans des zones définies à l'avance pour ça. Une victoire fait qu
 La possibilité de prendre l'avantage sur une faction n'est disponible que quelques temps après la conquête du territoire.
 La prise de territoire se fait au moyen de la mise à mort d'un ou plusieurs PNJ.
 
-==== Zones =====
-Il y a trois types de zones : 
-  * zone de combat (on s'affronte entre factions pour conquérir le territoire) ;
-  * zone neutre (impossible de s'affronter, sauf défis) ;
-  * zone hostile (on peut s'attaquer entre membres de factions différentes) ; 
-
-===== Statistiques =====
-
-Il y a 4 types de statistiques :
-  * globales, partagées par tous (dextérité, endurance, intelligence, force) ;
-  * liées à la classe = combat (% précision, % parade, % critique, % blocage, %encaissement) ;
-  * de profession (crochetage, enchantement …) ;
-  * armes 
-
-===== Équipement =====
-==== Emplacements ====
-  * tête ;
-  * épaule ;
-  * torse ;
-  * jambes ;
-  * bras ;
-  * pieds ;
-  * cou ;
-  * doigts ;
-  * costume (change totalement le skin mais pas de changement de statistiques).
-  * arme main gauche et droite + à distance.
-  * x 2 si c'est un mutant.
-
-==== Attributs liés aux équipements ====
-La qualité influe sur les dégâts par seconde pour une arme, toucher, critique, précision et blocage.
-Toujours pour une arme il y a l'affutage (critique) TODO
-Pour une pièce d'armure, la qualité influe sur l'encaissement des dégâts.
-
-Pour les armes et les armures : le poids influe sur la vitesse de déplacement du personnage (contrebalancé par la force et la dextérité du personnage).
-
-Héroïsme.
-Les équipements héroïques ne peuvent pas être vendus.
-
-Niveau minimum requis.
-
-==== Personnalisation ====
-Skin pour l'arme + costume.
-Exemple: design de biberon pour une arme, déguisement de lapin, design de grosse masse de la mort…
-Enchantement + gemmes.
-
-===== Ventes =====
-Possibilité de vendre des sets complets d'armes (groupement d'objets quelconques) et personnalisés.
-
-====== Interaction entre personnages =======
-  * vente ;
-  * défis ;
-
-
-
-Boss selon composition groupe.
-Mort à voir.
-
-Vie : se régénère peu à peu.
-Métiers loufoques TODO.
-
-Stat : charisme, persuasion (pour l'enfant, lui changer sa destinée).
-La chance peut dépendre des lieux et des objets. À limiter.
-Saisons qui changent tout les X jours/semaines/mois.
-
-
-
-==== Quêtes ====
-Possibilité de les faire en groupe.
-Partage de quêtes (on ne va pas voir un PNJ pour ça).
-Quêtes habituelles + TODO.
-Quêtes de différentes couleurs. Voir les quêtes sur la carte (un point avec des couleurs différentes).
-
-
-==== Carte ====
-Au début : une carte miniature pour le didacticiel. 
-On y gagne nos 2 premiers niveaux, on découvre les quêtes, les inventaires, nos premières armes et armures et les marchants.
-
-Ensuite : **immense**. Aussi bien en taille qu'en hauteur/profondeur, avec des tas de petits lieux du type "instance" éparpillés, voire cachés parfois.
-
-
-
-Groupes.
 
 Gains d'expérience en groupe :
 Dans que cadre d'une quête : même nombre de points d'expérience pour tous.
@@ -265,17 +112,3 @@ Dans que cadre d'une quête : même nombre de points d'expérience pour tous.
 Prémonitions : on peut décider de rentrer en "prémonition" et il y a une sauvegarde du groupe (un ou plusieurs personnages) qui se fait.
 Cette prémonition est a durée limitée (jusqu'à 5 minutes par exemple) et il faut pouvoir la limiter au maximum.
 Seul une classe de joueurs peuvent l'utiliser (guerrier ?).
-
-===== Arbre de compétences =====
-
-Prémonition : 2 minutes, 2 minutes 30, 3 minutes, 4 minutes, 5 minutes, groupe.
-
-
-===== Évènements =====
-Saisonniers : une faction en fête, une autre en deuil. Des quêtes associées. 
-
-===== Références =====
-Sur la carte : un grand espace de terrain dans les airs -> Skyrim.
-On y reprend la carte mais en version miniature.
-
-Une épée Durandil + casque Lebohaume. Une région de la carte qui serait la terre de fangh -> Donjon de naheulbeuk.
