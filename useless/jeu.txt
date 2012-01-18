@@ -3,7 +3,7 @@
 Voici le jeu comme je le conçois, mes idées et tel que je l'imagine.
 
 ===== Globalement =====
-Le jeu sera en 3D, à la manière d'un célèbre MMORPG connu pour son addictivité, mais propriétaire. On l'aura tous reconnu. 
+Le jeu sera en 3D, à la manière d'un célèbre MMORPG connu pour son caractère addictif, mais propriétaire. On l'aura tous reconnu. 
 Le but n'étant pas de le copier en libre mais bel et bien de faire un jeu complet en apportant des idées nouvelles.
 
 Pour cela, plusieurs idées me viennent à l'esprit et je vais tenter de les décrire.
@@ -31,6 +31,16 @@ On reprend les bases : elfes, humains, nains, orcs. Et on en ajoute autant de no
 **TODO**
 
 
+=== niveaux ====
+Par points d'expérience. Exploits, combats PvE only, exploration.
+Donne un point de caractéristique (à ajouter à l'arbre de compétences) à partir du niveau 10.
+Chaque montée de niveau augmente toutes les statistiques globales.
+
+
+=== Arbre de compétences ===
+Donne des capacités.
+Possibilité de sauvegarder des sets de compétences, et d'en changer autant de fois qu'on le souhaite hors combat.
+
 ===== Gameplay =====
 Le but premier : être fun à jouer. 
 Le jeu sera extrêmement complet, beaucoup de choses à faire et à découvrir mais il faut pouvoir s'amuser tout de suite et découvrir le jeu peu à peu.
@@ -39,6 +49,19 @@ Il serait intéressant qu'il y ait des évènements loufoques et totalement irr�
 Des évènements 
 
 ==== Combats ====
+Temps réel. Impossibilité de se téléporter vers une ville, foyer etc.
+
+==== Déplacements ====
+=== Entre grandes villes ===
+Par des mastodontes avec des nacelles accrochées dessus. Donc on peut imaginer n'importe quel type d'animal volant et immense et des véhicules volants.
+
+=== Points de déplacement rapide prédéfinis et déjà visités ===
+On prend des véhicule plus légers et individuels. Possibilité de passer l'animation.
+Payant.
+
+=== Véhicules légers et personnels ===
+Qui possèdent des bonus (possibilité d'attaque, de porter d'autres personnages…).
+Certains peuvent également voler.
 
 ==== L'interface ====
 
@@ -49,6 +72,10 @@ Se fera au moyen d'une interface sobre et le texte sera **lisible**.
 
 === Discussion entre joueurs ===
 IRC-like. C'est le moyen le plus simple.
+3 canaux liés à la localité : global, région, local.
++ groupe et raid.
+
+Pas de barrière de langue entre joueurs de factions différentes.
 
 **TODO**
 === Les commandes ===
@@ -159,3 +186,13 @@ Pour une pièce d'armure, la qualité influe sur l'encaissement des dégâts.
 Pour les armes et les armures : le poids influe sur la vitesse de déplacement du personnage (contrebalancé par la force et la dextérité du personnage).
 
 ==== Personnalisation ====
+Skin pour l'arme + costume.
+Exemple: design de biberon pour une arme, déguisement de lapin, design de grosse masse de la mort…
+Enchantement + gemmes.
+
+===== Ventes =====
+Possibilité de vendre des sets complets d'armes (groupement d'objets quelconques) et personnalisés.
+
+====== Interaction entre personnages =======
+  * vente ;
+  * défis ;
