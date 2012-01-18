@@ -1,13 +1,24 @@
 
-==== Carte ====
+===== Carte =====
 Au début : une carte miniature pour le didacticiel. 
 On y gagne nos 2 premiers niveaux, on découvre les quêtes, les inventaires, nos premières armes et armures et les marchants.
 
 Ensuite : **immense**. Aussi bien en taille qu'en hauteur/profondeur, avec des tas de petits lieux du type "instance" éparpillés, voire cachés parfois.
+
+Plusieurs continents, composés de plusieurs régions.
+
+==== Régions ====
+Pas de temps de chargement entre deux régions.
+
 
 ==== Zones =====
 Il y a trois types de zones : 
   * zone de combat (on s'affronte entre factions pour conquérir le territoire) ;
   * zone neutre (impossible de s'affronter, sauf défis) ;
   * zone hostile (on peut s'attaquer entre membres de factions différentes) ; 
+
+==== Climat ====
+Change suivant la région.
+Influence les caractéristiques des personnages.
+Peut être atténué par des compétences, équipement, objets divers ou consommable.
 

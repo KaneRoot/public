@@ -11,10 +11,6 @@ Pour cela, plusieurs idées me viennent à l'esprit et je vais tenter de les dé
 En ce qui concerne le développement, le jeu doit être fait pour Gnu/Linux et doit se focaliser dessus.
 Le tout en essayant de faire du code portable, pour laisser la possibilité à chacun de porter ce projet sur d'autres plateformes.
 
-
-=== Amis ===
-On ajoute des amis (autres joueurs).
-
 ===== Gameplay =====
 Le but premier : être fun à jouer. 
 Le jeu sera extrêmement complet, beaucoup de choses à faire et à découvrir mais il faut pouvoir s'amuser tout de suite et découvrir le jeu peu à peu.
@@ -28,19 +24,7 @@ Vie : se régénère peu à peu.
 Pas de collisions entre personnages ni entre les animaux.
 Les niveaux vont de 1 à 50 dans un premier temps.
 
-==== L'interface ====
 
-=== Discussion avec les PNJ ===
-Se fera au moyen d'une interface sobre et le texte sera **lisible**.
-
-**TODO**
-
-=== Discussion entre joueurs ===
-IRC-like. C'est le moyen le plus simple.
-3 canaux liés à la localité : global, région, local.
-+ groupe, raid (dépend du contexte) et guilde.
-
-Pas de barrière de langue entre joueurs de factions différentes.
 === Combats ===
 Temps réel. Impossibilité de se téléporter vers une ville, foyer etc.
 

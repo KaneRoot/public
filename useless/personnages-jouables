@@ -36,6 +36,12 @@ Possibilité de vendre des sets complets d'armes (groupement d'objets quelconque
 ==== Interaction entre personnages ====
   * vente ;
   * défis ;
+  * On ajoute des amis ;
+  * discussion entre joueurs
+	* IRC-like. C'est le moyen le plus simple.
+	* 3 canaux liés à la localité : global, région, local.
+	* 3 canaux lié au type de groupement : groupe, raid (dépend du contexte) et guilde.
+	* Pas de barrière de langue entre joueurs de factions différentes.
 
 ==== De l'aide en jeu via des PNJ ====
 Là encore, on donne dans l'originalité, le joueur aura deux types "d'animaux de compagnie".
