@@ -16,18 +16,16 @@
   * x 2 si c'est un mutant.
 
 ==== Attributs liés aux équipements ====
-La qualité influe sur les dégâts par seconde pour une arme, toucher, critique, précision et blocage.
-Toujours pour une arme il y a l'affutage (critique) TODO
-Pour une pièce d'armure, la qualité influe sur l'encaissement des dégâts.
 
-Pour les armes et les armures : le poids influe sur la vitesse de déplacement du personnage (contrebalancé par la force et la dextérité du personnage).
+Liste des attributs : 
+  * qualité : influe sur 
+    * arme : influe sur les dégâts par seconde , toucher, critique, précision et blocage ;
+	* armure : influe sur l'encaissement des dégâts ;
+  * armes : affutage : augmente les dégâts des coups critiques + la chance de faire saigner l'ennemi ;
+  * poids : influe sur la vitesse de déplacement du personnage (contrebalancé par la force et la dextérité du personnage).
+  * héroïsme : les objets héroïques ne peuvent être vendus.
+  * inscription ;
+  * gemmes (diffère selon l'équipement) ;
+  * niveau minimum à atteindre pour que ce soit utilisable ;
+  * enchantement ;
 
-Héroïsme.
-Les équipements héroïques ne peuvent pas être vendus.
-
-Niveau minimum requis.
-
-==== Personnalisation ====
-Skin pour l'arme + costume.
-Exemple: design de biberon pour une arme, déguisement de lapin, design de grosse masse de la mort…
-Enchantement + gemmes.
