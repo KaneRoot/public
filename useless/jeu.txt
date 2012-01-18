@@ -8,6 +8,9 @@ Le but n'étant pas de le copier en libre mais bel et bien de faire un jeu compl
 
 Pour cela, plusieurs idées me viennent à l'esprit et je vais tenter de les décrire.
 
+En ce qui concerne le développement, le jeu doit être fait pour Gnu/Linux et doit se focaliser dessus.
+Le tout en essayant de faire du code portable, pour laisser la possibilité à chacun de porter ce projet sur d'autres plateformes.
+
 
 ===== Scénario =====
 Je n'ai pas spécialement de scénario en tête. 
@@ -26,6 +29,8 @@ Pour continuer dans l'originalité, un système de classes de personnage sera é
 On reprend les bases : elfes, humains, nains, orcs. Et on en ajoute autant de nouveaux. Mutant : 5 bras, dont un sur le menton qui lui gratte la tête.
 **TODO**
 === Les classes ===
+Classes basiques.
+Classe pour personnage soliste. 
 **TODO**
 === Les métiers ===
 **TODO**
@@ -41,19 +46,25 @@ Chaque montée de niveau augmente toutes les statistiques globales.
 Donne des capacités.
 Possibilité de sauvegarder des sets de compétences, et d'en changer autant de fois qu'on le souhaite hors combat.
 
+=== Amis ===
+On ajoute des amis (autres joueurs).
+
 ===== Gameplay =====
 Le but premier : être fun à jouer. 
 Le jeu sera extrêmement complet, beaucoup de choses à faire et à découvrir mais il faut pouvoir s'amuser tout de suite et découvrir le jeu peu à peu.
 Il serait intéressant qu'il y ait des évènements loufoques et totalement irréalistes pour ne pas se prendre au sérieux.
 
-Des évènements 
+Des évènements récurrents et hebdomadaires sont là pour rythmer le jeu et lui donner de la vie. 
 
 ==== Combats ====
 Temps réel. Impossibilité de se téléporter vers une ville, foyer etc.
 
 ==== Déplacements ====
+
 === Entre grandes villes ===
 Par des mastodontes avec des nacelles accrochées dessus. Donc on peut imaginer n'importe quel type d'animal volant et immense et des véhicules volants.
+Il y aura également des espèces de trains. Ces véhicules ont une plateforme sur laquelle on peut se déplacer.
+On peut sauter et monter en marche.
 
 === Points de déplacement rapide prédéfinis et déjà visités ===
 On prend des véhicule plus légers et individuels. Possibilité de passer l'animation.
@@ -62,6 +73,16 @@ Payant.
 === Véhicules légers et personnels ===
 Qui possèdent des bonus (possibilité d'attaque, de porter d'autres personnages…).
 Certains peuvent également voler.
+
+
+==== Monnaie ====
+PO;PA;PC en récompense de quête. Mais on n'en trouve pas sur les monstres. Uniquement les humanoïdes.
+Possibilité d'en avoir en vendant des objets.
+Et une autre monnaie pour une petite île indépendantiste (Corsica). 
+
+==== Groupements ====
+Groupe simple. Raid pour les donjons + autres types d'instance. Guilde.
+
 
 ==== L'interface ====
 
@@ -73,7 +94,7 @@ Se fera au moyen d'une interface sobre et le texte sera **lisible**.
 === Discussion entre joueurs ===
 IRC-like. C'est le moyen le plus simple.
 3 canaux liés à la localité : global, région, local.
-+ groupe et raid.
++ groupe, raid (dépend du contexte) et guilde.
 
 Pas de barrière de langue entre joueurs de factions différentes.
 
@@ -83,13 +104,18 @@ Pas de barrière de langue entre joueurs de factions différentes.
 
 ===== Annexe =====
 
-==== Les exploits personnels (les hauts faits quoi) ====
+==== Les exploits personnels ====
 Ça, nous les connaissons bien. Donner des défis à réaliser.
 
 ==== Le mariage et les enfants ====
-Lorsque vous vous mariez, vous avez la possibilité de faire des enfants ou d'en adopter si vous vous mariez entre personnes du même sexe.
+Lorsque vous vous mariez, vous avez la possibilité de faire des enfants ou d'en adopter si vous vous mariez entre personnes du même sexe ou entre races.
 Oui, cela ne s'est que rarement (jamais?) vu dans un jeu vidéo et comme ça rentre dans les mœurs, 
 que ça me ferait marrer de voir ça et que je suis globalement pour, je veux qu'il y ait ça dans le jeu.
+En cas d'adoption : les enfants sont possiblement de races différentes.
+
+Chaque enfant aura une compétence. La persuasion peut le faire changer, sauf pour une race (humain ou nain?) par respect.
+Suivant la race, la compétence sera soit choisie au hasard, soit prédéterminée par l'ordre de naissances (le premier est guerrier car c'est dans la culture de la tribu).
+
 
 
 ==== La maison ====
@@ -185,6 +211,11 @@ Pour une pièce d'armure, la qualité influe sur l'encaissement des dégâts.
 
 Pour les armes et les armures : le poids influe sur la vitesse de déplacement du personnage (contrebalancé par la force et la dextérité du personnage).
 
+Héroïsme.
+Les équipements héroïques ne peuvent pas être vendus.
+
+Niveau minimum requis.
+
 ==== Personnalisation ====
 Skin pour l'arme + costume.
 Exemple: design de biberon pour une arme, déguisement de lapin, design de grosse masse de la mort…
@@ -196,3 +227,55 @@ Possibilité de vendre des sets complets d'armes (groupement d'objets quelconque
 ====== Interaction entre personnages =======
   * vente ;
   * défis ;
+
+
+
+Boss selon composition groupe.
+Mort à voir.
+
+Vie : se régénère peu à peu.
+Métiers loufoques TODO.
+
+Stat : charisme, persuasion (pour l'enfant, lui changer sa destinée).
+La chance peut dépendre des lieux et des objets. À limiter.
+Saisons qui changent tout les X jours/semaines/mois.
+
+
+
+==== Quêtes ====
+Possibilité de les faire en groupe.
+Partage de quêtes (on ne va pas voir un PNJ pour ça).
+Quêtes habituelles + TODO.
+Quêtes de différentes couleurs. Voir les quêtes sur la carte (un point avec des couleurs différentes).
+
+
+==== Carte ====
+Au début : une carte miniature pour le didacticiel. 
+On y gagne nos 2 premiers niveaux, on découvre les quêtes, les inventaires, nos premières armes et armures et les marchants.
+
+Ensuite : **immense**. Aussi bien en taille qu'en hauteur/profondeur, avec des tas de petits lieux du type "instance" éparpillés, voire cachés parfois.
+
+
+
+Groupes.
+
+Gains d'expérience en groupe :
+Dans que cadre d'une quête : même nombre de points d'expérience pour tous.
+
+Prémonitions : on peut décider de rentrer en "prémonition" et il y a une sauvegarde du groupe (un ou plusieurs personnages) qui se fait.
+Cette prémonition est a durée limitée (jusqu'à 5 minutes par exemple) et il faut pouvoir la limiter au maximum.
+Seul une classe de joueurs peuvent l'utiliser (guerrier ?).
+
+===== Arbre de compétences =====
+
+Prémonition : 2 minutes, 2 minutes 30, 3 minutes, 4 minutes, 5 minutes, groupe.
+
+
+===== Évènements =====
+Saisonniers : une faction en fête, une autre en deuil. Des quêtes associées. 
+
+===== Références =====
+Sur la carte : un grand espace de terrain dans les airs -> Skyrim.
+On y reprend la carte mais en version miniature.
+
+Une épée Durandil + casque Lebohaume. Une région de la carte qui serait la terre de fangh -> Donjon de naheulbeuk.
