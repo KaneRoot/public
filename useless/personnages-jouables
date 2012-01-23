@@ -4,8 +4,12 @@ On aura le choix entre plusieurs races aillant chacune de __vraies__ particulari
 Pour continuer dans l'originalité, un système de classes de personnage sera également disponible.
 
 === Les races ===
-On reprend les bases : elfes, humains, nains, orcs. Et on en ajoute autant de nouveaux. 
-Mutant : 5 bras, dont un sur le menton qui lui gratte la tête.
+On reprend les bases : elfes, humains, nains, orcs. 
+Et on en ajoute autant de nouveaux. 
+Mutant : 5 bras, dont un sur le menton qui lui gratte la tête. 
+HISTOIRE : humain normal dont la famille est resté trop près du batiment "KYLUMINE" (centrale nucléaire) lors de l'épisode de la grande illumination.
+Il y aura des emplacements d'équipement en plus pour certaines races.
+Par exemple, on va avoir des broches à accrocher aux poils d'oreilles de l'ogre.
 
 **TODO**
 === Les classes ===
@@ -16,6 +20,9 @@ Classe pour personnage soliste.
 === Les métiers ===
 Métiers loufoques TODO.
 **TODO**
+
+Métiers loufoques : 
+  * décorateur : création des objets utiles ou non qui décorent la maison, donnent des bonus.
 
 
 === niveaux ===

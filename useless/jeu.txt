@@ -11,6 +11,9 @@ Pour cela, plusieurs idées me viennent à l'esprit et je vais tenter de les dé
 En ce qui concerne le développement, le jeu doit être fait pour Gnu/Linux et doit se focaliser dessus.
 Le tout en essayant de faire du code portable, pour laisser la possibilité à chacun de porter ce projet sur d'autres plateformes.
 
+Le jeu se voudra difficile et jouer en coopération sera indispensable.
+Cependant, un mode de jeu solo sera disponible de part une race soliste (voir plus bas pour les détails).
+
 ===== Gameplay =====
 Le but premier : être fun à jouer. 
 Le jeu sera extrêmement complet, beaucoup de choses à faire et à découvrir mais il faut pouvoir s'amuser tout de suite et découvrir le jeu peu à peu.
@@ -44,6 +47,8 @@ L'argent à donner est en fonction du niveau du personnage, mais l'animation pou
 PO;PA;PC en récompense de quête. Mais on n'en trouve pas sur les monstres. Uniquement les humanoïdes.
 Possibilité d'en avoir en vendant des objets.
 Et une autre monnaie pour une petite île indépendantiste (Corsica). 
+
+Des pièces spéciales pour l'achat et la vente d'équipements spéciaux (difficile à avoir mais plus puissant).
 
 ==== Groupements ====
 Groupe simple. Raid pour les donjons + autres types d'instance. Guilde.

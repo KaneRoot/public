@@ -5,6 +5,13 @@
 		# Template rapport : http://genma.free.fr/spip.php?article307 
 		# Template également dispo sur public : rappels/latex-model
 		# latex Global.tex ; bibtex Global ; latex Global.tex (X2) ; dvipdf Global.dvi 
+#	API
+	# OpenGL brut
+	# Une API au dessus : 
+		# Allegro
+		# GLUT
+		# …
+	# OpenAsset
 
 # Pour la création de dépôts : mettre une conf' pour Debian
 # Apprendre à virtualiser avec libvirt
