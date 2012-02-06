@@ -1,3 +1,4 @@
+import java.lang.String.*;
 public class Animal
 {
 	public String nom;
@@ -11,7 +12,7 @@ public class Animal
 	}
 	public String GetPresentation()
 	{
-		if(this.nom.strcmp("") == 0)
+		if(this.nom.equals(""))
 			return "Je suis un animal sans nom. ";
 		else
 			return "Je suis un animal de nom " + this.nom + ". ";

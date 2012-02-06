@@ -12,6 +12,6 @@ public class Mammifere extends Animal
 	@Override
 	public String GetPresentation()
 	{
-		return + super.GetPresentation() + "Je suis un mammifère. ";
+		return super.GetPresentation() + "Je suis un mammifère. ";
 	}
 }

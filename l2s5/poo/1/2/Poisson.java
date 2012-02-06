@@ -11,6 +11,6 @@ public class Poisson extends Animal
 	@Override
 	public String GetPresentation()
 	{
-		return + super.GetPresentation() + "Je suis un poisson. ";
+		return super.GetPresentation() + "Je suis un poisson. ";
 	}
 }
