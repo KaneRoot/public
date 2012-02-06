@@ -48,6 +48,12 @@ void ajout_suppression_echange()
 	printf("	Inversion de 2 éléments dans a : ech(a, 2, 3)\n");
 	ech(a,2,3);
 	afficher_arbre(a);
+	printf("	Remplacer l'élément à l'emplacement 1 par 6\n");
+	a = r(a,1,6);
+	afficher_arbre(a);
+	printf("	Remplacer l'élément à l'emplacement 8 par 1\n");
+	a = r(a,8,1);
+	afficher_arbre(a);
 }
 void nb_noeuds_feuilles()
 {
