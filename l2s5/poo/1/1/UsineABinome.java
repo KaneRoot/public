@@ -10,5 +10,9 @@ public class UsineABinome
 	public static void main(String args[])
 	{
 		System.out.println("Début du programme !");
+		Binome a = CreeBinome(2.0,4.0,2.0);
+		a.CalculeRacines();
+		for(int i = 0 ; i < a.NbRacines() ; i++)
+			System.out.println("Racine " +i+ " " + a.ValeurRacine(i));
 	}
 }

@@ -11,7 +11,7 @@ public class BinomeSol2 extends Binome
 	{
 		this.racines[0] = - (super.getB() + Math.sqrt(super.getDis())) / (2*super.getA());
 		this.racines[1] = - (super.getB() - Math.sqrt(super.getDis())) / (2*super.getA());
-		System.out.println("Calcul de la racine possible (delta == 0)");
+		System.out.println("Calcul des 2 racines possibles (delta > 0)");
 	}
 	@Override
 	public int NbRacines()
