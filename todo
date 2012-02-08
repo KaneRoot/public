@@ -15,6 +15,7 @@
 
 # Pour la création de dépôts : mettre une conf' pour Debian
 # Apprendre à virtualiser avec libvirt
+# KVM - via qemu 
 # Finir mes bouquins : Dév sys + admin sys
 # Gérer toutes les conf' (à ajouter au dépôt de conf')
 # Configurer OwnCloud + faire un post sur karchnu.fr - TODO
