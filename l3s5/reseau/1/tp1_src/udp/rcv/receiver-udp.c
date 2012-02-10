@@ -60,13 +60,13 @@ int main(int argc, char **argv)
     // init local addr structure and other params
     my_addr.sin_family      = AF_INET;
     my_addr.sin_port        = htons(atoi(argv[1]));
-    my_addr.sin_addr.s_addr = htonl(INADDR_ANY);
+    my_addr.sin_addr.s_addr = htons(INADDR_ANY);
     addrlen                 = sizeof(struct sockaddr_in);
     memset(buf,'\0',1024);
 
     // bind addr structure with socket
 	// socket locale, adresse, taille
-    if(bind(sockfd, (struct sockaddr *) &my_addr.sin_addr, addrlen ) == -1)
+    if(bind(sockfd, (struct sockaddr *) &my_addr, addrlen ) == -1)
     {
         perror("bind");
         close(sockfd);
