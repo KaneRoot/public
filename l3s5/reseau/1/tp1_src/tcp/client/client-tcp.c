@@ -57,7 +57,7 @@ int main(int argc, char **argv)
 
     // init remote addr structure and other params
     server.sin_family = AF_INET;
-	server.sin_port   = htonl(atoi(argv[2]));
+	server.sin_port   = htons(atoi(argv[2]));
     addrlen           = sizeof(struct sockaddr_in);
 
     // get addr from command line and convert it

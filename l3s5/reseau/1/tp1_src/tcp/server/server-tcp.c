@@ -35,6 +35,7 @@
 #include <stdio.h>
 
 #define LISTEN_BACKLOG 100
+#define TAILLE_BUFFER 1024
 
 int main(int argc, char **argv)
 {
@@ -64,7 +65,7 @@ int main(int argc, char **argv)
     my_addr.sin_port        = htons(atoi(argv[1]));
 	my_addr.sin_addr.s_addr = htons(INADDR_ANY);;
     addrlen                 = sizeof(struct sockaddr_in);
-    memset(buf,'\0',1024);
+    memset(buf,'\0',TAILLE_BUFFER);
 
     // bind addr structure with socket
     if(bind(sockfd, (struct sockaddr *)&my_addr, addrlen) == -1)
@@ -95,7 +96,7 @@ int main(int argc, char **argv)
     printf("Connection active\n");
 
     // reception de la chaine de caracteres
-    if(recv(sockfd, buf, 1024, 0) == -1)
+    if(recv(sockfd2, buf, TAILLE_BUFFER, 0) == -1)
     {
         perror("recv");
         close(sockfd);
