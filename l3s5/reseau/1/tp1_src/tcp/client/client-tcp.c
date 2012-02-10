@@ -25,12 +25,21 @@
  * ./pg_name IPv4_addr port_number string
  */
 
-#include ...
+
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 int main(int argc, char **argv)
 {
     int sockfd;
     struct sockaddr_in server;
+	socklen_t addrlen;
 
     // check the number of args on command line
     if(argc != 4)
@@ -40,38 +49,41 @@ int main(int argc, char **argv)
     }
 
     // socket factory
-    if((sockfd = socket(...)) == -1)
+    if((sockfd = socket(AF_INET, SOCK_STREAM, 0)) == -1)
     {
-        perror(...);
+        perror("socket");
 	    exit(EXIT_FAILURE);
     }
 
     // init remote addr structure and other params
-    server.sin_family = ...;
-    server.sin_port   = ...;
+    server.sin_family = AF_INET;
+	server.sin_port   = htonl(atoi(argv[2]));
     addrlen           = sizeof(struct sockaddr_in);
 
     // get addr from command line and convert it
-    if(inet_pton(...) != 1)
+    if(inet_pton(AF_INET, argv[1], &server.sin_addr) != 1)
     {
-        perror(...);
+        perror("inet_pton");
         close(sockfd);
         exit(EXIT_FAILURE);
     }
 
     printf("Trying to connect to the remote host\n");
-    if(connect(...) == -1)
+    if(connect(sockfd, (struct sockaddr *) &server, addrlen) == -1)
     {
-        perror(...);
+        perror("connect");
         exit(EXIT_FAILURE);
     }
 
     printf("Connection OK\n");
 
     // send string
-    if(sendto(...) == -1)
+    if(sendto(sockfd, argv[3], sizeof(char) * strlen(argv[3]),
+				0,
+				(struct sockaddr *) &server,
+				addrlen) == -1)
     {
-        perror(...);
+        perror("sendto");
         close(sockfd);
         exit(EXIT_FAILURE);
     }

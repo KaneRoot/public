@@ -25,7 +25,16 @@
  * all available addr on the host (use INADDR_ANY maccro).
  */
 
-#include ...
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
+
+#define LISTEN_BACKLOG 100
 
 int main(int argc, char **argv)
 {
@@ -44,41 +53,41 @@ int main(int argc, char **argv)
     }
 
     // socket factory
-    if((sockfd = socket(...)) == -1)
+    if((sockfd = socket(AF_INET, SOCK_STREAM, 0)) == -1)
     {
-        perror(...);
+		perror("socket");
 	    exit(EXIT_FAILURE);
     }
 
     // init local addr structure and other params
-    my_addr.sin_family      = ...;
-    my_addr.sin_port        = ...;
-    my_addr.sin_addr.s_addr = ...;
+    my_addr.sin_family      = AF_INET;
+    my_addr.sin_port        = htons(atoi(argv[1]));
+	my_addr.sin_addr.s_addr = htons(INADDR_ANY);;
     addrlen                 = sizeof(struct sockaddr_in);
     memset(buf,'\0',1024);
 
     // bind addr structure with socket
-    if(bind(...) == -1)
+    if(bind(sockfd, (struct sockaddr *)&my_addr, addrlen) == -1)
     {
-        perror(...);
+        perror("bind");
         close(sockfd);
         exit(EXIT_FAILURE);
     }
 
     // set the socket in passive mode (only used for accept())
     // and set the list size for pending connection
-    if(listen(...) == -1)
+    if(listen(sockfd, LISTEN_BACKLOG) == -1)
     {
-        perror(...);
+        perror("listen");
         close(sockfd);
         exit(EXIT_FAILURE);
     }
 
     printf("Waiting for incomming connection\n");
 
-    if((sockfd2 = accept(...)) == -1)
+    if((sockfd2 = accept(sockfd, (struct sockaddr *) &client, &addrlen)) == -1)
     {
-        perror(...);
+        perror("accept");
         close(sockfd);
         exit(EXIT_FAILURE);
     }
@@ -86,16 +95,16 @@ int main(int argc, char **argv)
     printf("Connection active\n");
 
     // reception de la chaine de caracteres
-    if(recv(...) == -1)
+    if(recv(sockfd, buf, 1024, 0) == -1)
     {
-        perror(...);
+        perror("recv");
         close(sockfd);
         close(sockfd2);
         exit(EXIT_FAILURE);
     }
 
     // print the received char
-    printf(...);
+    printf("Message reçu : %s\n", buf);
 
     // fermeture des sockets
     close(sockfd);
