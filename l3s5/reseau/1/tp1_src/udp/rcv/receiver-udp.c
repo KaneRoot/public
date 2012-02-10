@@ -82,7 +82,7 @@ int main(int argc, char **argv)
     }
 
     // print the received char
-    printf("Message reçu : %s", buf);
+    printf("Message reçu : %s\n", buf);
 
     // close the socket
     close(sockfd);
