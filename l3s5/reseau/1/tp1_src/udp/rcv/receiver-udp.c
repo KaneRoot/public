@@ -25,6 +25,15 @@
  * maccro).
  */
 
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
+
 int main(int argc, char **argv)
 {
     int sockfd;
@@ -32,7 +41,7 @@ int main(int argc, char **argv)
     socklen_t addrlen;
 
     struct sockaddr_in my_addr;
-    struct sockaddr_in client;
+    //struct sockaddr_in client;
 
     // check the number of args on command line
     if(argc != 2)
@@ -56,23 +65,24 @@ int main(int argc, char **argv)
     memset(buf,'\0',1024);
 
     // bind addr structure with socket
-    if(bind(sockfd, ) == -1)
+	// socket locale, adresse, taille
+    if(bind(sockfd, (struct sockaddr *) &my_addr.sin_addr, addrlen ) == -1)
     {
-        perror(...);
+        perror("bind");
         close(sockfd);
         exit(EXIT_FAILURE);
     }
 
     // reception de la chaine de caracteres
-    if(recvfrom(...) == -1)
+    if(recvfrom(sockfd, buf, 1024, 0, NULL, NULL) == -1)
     {
-        perror(...);
+        perror("recvfrom");
         close(sockfd);
         exit(EXIT_FAILURE);
     }
 
     // print the received char
-    printf(...);
+    printf("Message reçu : %s", buf);
 
     // close the socket
     close(sockfd);
