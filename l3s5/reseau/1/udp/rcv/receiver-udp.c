@@ -34,10 +34,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#define TAILLE_BUFFER 1024
+
 int main(int argc, char **argv)
 {
     int sockfd;
-    char buf[1024];
+    char buf[TAILLE_BUFFER];
     socklen_t addrlen;
 
     struct sockaddr_in my_addr;
@@ -62,7 +64,7 @@ int main(int argc, char **argv)
     my_addr.sin_port        = htons(atoi(argv[1]));
     my_addr.sin_addr.s_addr = htons(INADDR_ANY);
     addrlen                 = sizeof(struct sockaddr_in);
-    memset(buf,'\0',1024);
+    memset(buf,'\0', TAILLE_BUFFER);
 
     // bind addr structure with socket
 	// socket locale, adresse, taille
@@ -74,7 +76,7 @@ int main(int argc, char **argv)
     }
 
     // reception de la chaine de caracteres
-    if(recvfrom(sockfd, buf, 1024, 0, NULL, NULL) == -1)
+    if(recvfrom(sockfd, buf, TAILLE_BUFFER, 0, NULL, NULL) == -1)
     {
         perror("recvfrom");
         close(sockfd);
