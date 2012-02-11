@@ -41,7 +41,7 @@ int main(int argc, char **argv)
 {
     int sockfd, sockfd2;
     socklen_t addrlen;
-    char buf[1024];
+    char buf[TAILLE_BUFFER];
 
     struct sockaddr_in my_addr;
     struct sockaddr_in client;
