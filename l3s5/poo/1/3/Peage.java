@@ -1,8 +1,9 @@
 public class Peage
 {
-	private int nbreVehicule, totalCaisse;
-	private double prixEssieux, prixTonne;
-	private static int PRIX_VOITURE = 4;
+	private int nbreVehicule;
+	private double prixEssieux, prixTonne, totalCaisse;
+	private int PRIX_VOITURE = 4;
+	private int PRIX_MOTO = 5;
 
 	private static double PRIX_ESSIEUX = 7.0;
 	private static double PRIX_TONNE = 15.0;
@@ -21,16 +22,18 @@ public class Peage
 		this.nbreVehicule++;
 		if(v instanceof Camion)
 		{
-			double poids = ((Camion)v).getPoidsTotal();
-			int poidsFinal = (int) poids;
-			if( poids % 1 != 0.0) poidsFinal++;
+			int poidsFinal = (int) ((Camion)v).getPoidsTotal();
+			if( ((Camion)v).getPoidsTotal() % 1 != 0.0) poidsFinal++;
+			System.out.println("POIDS : " + poidsFinal);
 			this.totalCaisse += this.prixEssieux * ((Camion)v).getNbreEssieu() + this.prixTonne * poidsFinal;
 		}
-		else
+		else if (v instanceof Moto)
+			this.totalCaisse += PRIX_MOTO;
+		else if ( ! (v instanceof VoitureChef))
 			this.totalCaisse += PRIX_VOITURE;
 	}
 
-	public int getTotalCaisse()
+	public double getTotalCaisse()
 	{
 		return this.totalCaisse;
 	}
@@ -42,6 +45,7 @@ public class Peage
 	{
 		return	"Ce peage fait payer :\n" +
 				"	" + this.prixEssieux + " € / essieu et " + this.prixTonne + " € / tonne aux camions \n" +
-				"	" + this.PRIX_VOITURE + " € / voiture";
+				"	" + this.PRIX_VOITURE + " € / voiture" + 
+				"	" + this.PRIX_MOTO + " € / moto";
 	}
 }
