@@ -40,7 +40,9 @@ public class Global
 	public static void afficher_total(Peage p)
 	{
 		System.out.println("\033[31m---------------\033[00m");
-		System.out.println("EN CAISSE : " + p.getTotalCaisse());
+		System.out.println("\033[36m EN CAISSE \033[00m : " + p.getTotalCaisse() +
+		"	\033[36m NOMBRE VÉHICULES \033[00m: " + p.getTotalVehicules());
+		System.out.println("Détails : " + p.getDetailsVehicules());
 		System.out.println("\033[31m---------------\033[00m");
 	}
 	public static void faire_passage(Peage p, Vehicule v)

@@ -1,10 +1,11 @@
 public class Peage
 {
-	private int nbreVehicule;
+	private int nbreVehicule, nbMoto, nbVoiture, nbCamion;
 	private double prixEssieux, prixTonne, totalCaisse;
-	private int PRIX_VOITURE = 4;
-	private int PRIX_MOTO = 5;
+	private double prix_voiture = 4.0;
+	private double prix_moto = 5.0;
 
+	// Valeurs par défaut
 	private static double PRIX_ESSIEUX = 7.0;
 	private static double PRIX_TONNE = 15.0;
 
@@ -21,16 +22,25 @@ public class Peage
 	{
 		this.nbreVehicule++;
 		if(v instanceof Camion)
-		{
+		{ 
+			this.nbCamion++;
 			int poidsFinal = (int) ((Camion)v).getPoidsTotal();
 			if( ((Camion)v).getPoidsTotal() % 1 != 0.0) poidsFinal++;
-			System.out.println("POIDS : " + poidsFinal);
-			this.totalCaisse += this.prixEssieux * ((Camion)v).getNbreEssieu() + this.prixTonne * poidsFinal;
+			this.totalCaisse += (this.prixEssieux * ((Camion)v).getNbreEssieu()) + 
+				(this.prixTonne * poidsFinal);
 		}
 		else if (v instanceof Moto)
-			this.totalCaisse += PRIX_MOTO;
+		{
+			this.nbMoto++;
+			this.totalCaisse += prix_moto;
+		}
 		else if ( ! (v instanceof VoitureChef))
-			this.totalCaisse += PRIX_VOITURE;
+		{
+			this.nbVoiture++;
+			this.totalCaisse += prix_voiture;
+		}
+		else
+			this.nbVoiture++;
 	}
 
 	public double getTotalCaisse()
@@ -44,8 +54,14 @@ public class Peage
 	public String getDescription()
 	{
 		return	"Ce peage fait payer :\n" +
-				"	" + this.prixEssieux + " € / essieu et " + this.prixTonne + " € / tonne aux camions \n" +
-				"	" + this.PRIX_VOITURE + " € / voiture" + 
-				"	" + this.PRIX_MOTO + " € / moto";
+				"	" + this.prixEssieux + " € / essieu et " + 
+					this.prixTonne + " € / tonne aux camions \n" +
+				"	" + this.prix_voiture + " € / voiture" + 
+				"	" + this.prix_moto + " € / moto";
+	}
+	public String getDetailsVehicules()
+	{
+		return "Nb voitures : " + this.nbVoiture + " | Nb moto : " + this.nbMoto +
+			" | Nb camions : " + this.nbCamion;
 	}
 }
