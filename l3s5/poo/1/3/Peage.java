@@ -2,7 +2,11 @@ public class Peage
 {
 	private int nbreVehicule, totalCaisse;
 	private double prixEssieux, prixTonne;
-	private static PRIX_VOITURE = 4;
+	private static int PRIX_VOITURE = 4;
+
+	private static double PRIX_ESSIEUX = 7.0;
+	private static double PRIX_TONNE = 15.0;
+
 	public Peage(double prixE, double prixT)
 	{
 		this.prixEssieux = prixE;
@@ -10,7 +14,7 @@ public class Peage
 	}
 	public Peage()
 	{
-		this(7.0,15.0);
+		this(PRIX_ESSIEUX, PRIX_TONNE);
 	}
 	public void passage(Vehicule v)
 	{
@@ -19,7 +23,7 @@ public class Peage
 		{
 			double poids = ((Camion)v).getPoidsTotal();
 			int poidsFinal = (int) poids;
-			if(poids%1 != 0) poidsFinal++;
+			if( poids % 1 != 0.0) poidsFinal++;
 			this.totalCaisse += this.prixEssieux * ((Camion)v).getNbreEssieu() + this.prixTonne * poidsFinal;
 		}
 		else
@@ -29,5 +33,15 @@ public class Peage
 	public int getTotalCaisse()
 	{
 		return this.totalCaisse;
+	}
+	public int getTotalVehicules()
+	{
+		return this.nbreVehicule;
+	}
+	public String getDescription()
+	{
+		return	"Ce peage fait payer :\n" +
+				"	" + this.prixEssieux + " € / essieu et " + this.prixTonne + " € / tonne aux camions \n" +
+				"	" + this.PRIX_VOITURE + " € / voiture";
 	}
 }
