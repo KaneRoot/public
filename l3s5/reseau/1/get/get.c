@@ -9,12 +9,13 @@
 #include <netdb.h>
 
 #define TAILLE_REQUETE 1024
+#define TAILLE_BUFFER 1024
 
 int main(int argc, char **argv)
 {
-    int sockfd, rv;
+    int sockfd, rv, nlues;
 	struct addrinfo hints, *servinfo, *p;
-	char requete[TAILLE_REQUETE];
+	char requete[TAILLE_REQUETE], buf[TAILLE_BUFFER];
 
 	bzero(requete, TAILLE_REQUETE);
 	
@@ -26,6 +27,7 @@ int main(int argc, char **argv)
 
 	// On construit la requête
 	snprintf(requete, TAILLE_REQUETE, "GET %s HTTP/1.1\nhost: %s\n\n", argv[2], argv[1]);
+	printf("REQUETE : \n%s", requete);
 	
 	memset(&hints, 0, sizeof hints);
 	hints.ai_family = AF_UNSPEC; // Peu importe que ce soit de l'IPv4 ou 6
@@ -37,7 +39,7 @@ int main(int argc, char **argv)
 		exit(1);
 	}
 
-	// loop through all the results and connect to the first we can
+	// Boucle sur chaque résultat de getaddrinfo tant qu'on arrive pas à se connecter
 	for(p = servinfo; p != NULL; p = p->ai_next) 
 	{
 		if ((sockfd = socket(p->ai_family, p->ai_socktype, p->ai_protocol)) == -1) 
@@ -52,6 +54,18 @@ int main(int argc, char **argv)
 			perror("connect");
 			continue;
 		}
+
+		if(sendto(sockfd, requete, TAILLE_REQUETE, 0,
+					servinfo->ai_addr,
+					servinfo->ai_addrlen) < 0)
+		{
+			perror("sendto");
+			return EXIT_FAILURE;
+		}
+
+
+		while( (nlues = recv(sockfd, buf, TAILLE_BUFFER, 0)) != 0)
+			write(1, buf, nlues);
 
 		break; // si on arrive là c'est qu'on est connecté
 	}
