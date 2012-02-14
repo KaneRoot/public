@@ -1,5 +1,5 @@
 /**
- * @file receiver-udp.c
+ * @file server-tcp.c
  * @author Julien Montavont
  * @version 1.0
  *
@@ -18,11 +18,11 @@
  *
  * @section DESCRIPTION
  *
- * Simple program that creates an IPv4 UDP socket and waits for the
- * reception of a string. The program takes a single parameter which
- * is the local communication port. The IPv4 addr associated to the
- * socket will be all available addr on the host (use INADDR_ANY
- * maccro).
+ * Simple program that creates an IPv4 TCP socket waits for the
+ * connection of a client and the reception of a string from that
+ * client. The program takes a single parameter which is the local
+ * communication port. The IPv4 addr associated to the socket will be
+ * all available addr on the host (use INADDR_ANY maccro).
  */
 
 #include <unistd.h>
@@ -34,58 +34,82 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#define LISTEN_BACKLOG 100
+#define TAILLE_BUFFER 1024
+
 int main(int argc, char **argv)
 {
-    int sockfd;
-    char buf[1024];
+    int sockfd, sockfd2;
     socklen_t addrlen;
+    char buf[TAILLE_BUFFER];
 
     struct sockaddr_in my_addr;
-    //struct sockaddr_in client;
+    struct sockaddr_in client;
 
     // check the number of args on command line
     if(argc != 2)
     {
-        printf("Usage: %s local_port\n", argv[0]);
+        printf("USAGE: %s port_num\n", argv[0]);
         exit(-1);
     }
 
     // socket factory
-    if((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) == -1)
+    if((sockfd = socket(AF_INET, SOCK_STREAM, 0)) == -1)
     {
-        perror("socket");
-        exit(EXIT_FAILURE);
+		perror("socket");
+	    exit(EXIT_FAILURE);
     }
 
     // init local addr structure and other params
     my_addr.sin_family      = AF_INET;
     my_addr.sin_port        = htons(atoi(argv[1]));
-    my_addr.sin_addr.s_addr = htons(INADDR_ANY);
+	my_addr.sin_addr.s_addr = htons(INADDR_ANY);;
     addrlen                 = sizeof(struct sockaddr_in);
-    memset(buf,'\0',1024);
+    memset(buf,'\0',TAILLE_BUFFER);
 
     // bind addr structure with socket
-	// socket locale, adresse, taille
-    if(bind(sockfd, (struct sockaddr *) &my_addr, addrlen ) == -1)
+    if(bind(sockfd, (struct sockaddr *)&my_addr, addrlen) == -1)
     {
         perror("bind");
         close(sockfd);
         exit(EXIT_FAILURE);
     }
 
-    // reception de la chaine de caracteres
-    if(recvfrom(sockfd, buf, 1024, 0, NULL, NULL) == -1)
+    // set the socket in passive mode (only used for accept())
+    // and set the list size for pending connection
+    if(listen(sockfd, LISTEN_BACKLOG) == -1)
     {
-        perror("recvfrom");
+        perror("listen");
         close(sockfd);
+        exit(EXIT_FAILURE);
+    }
+
+    printf("Waiting for incomming connection\n");
+
+    if((sockfd2 = accept(sockfd, (struct sockaddr *) &client, &addrlen)) == -1)
+    {
+        perror("accept");
+        close(sockfd);
+        exit(EXIT_FAILURE);
+    }
+
+    printf("Connection active\n");
+
+    // reception de la chaine de caracteres
+    if(recv(sockfd2, buf, TAILLE_BUFFER, 0) == -1)
+    {
+        perror("recv");
+        close(sockfd);
+        close(sockfd2);
         exit(EXIT_FAILURE);
     }
 
     // print the received char
     printf("Message reçu : %s\n", buf);
 
-    // close the socket
+    // fermeture des sockets
     close(sockfd);
+    close(sockfd2);
 
     return 0;
 }
