@@ -28,19 +28,58 @@ create table ARTICLE
 	FOREIGN KEY (idRevue) REFERENCES REVUE
 );
 
-AUTEUR(idAuteur number(8), nomAuteur varchar2(60), email varchar2(80), siteWeb varchar2(150))
+create table AUTEUR
+(
+	idAuteur number(8) PRIMARY KEY, 
+	nomAuteur varchar2(60), 
+	email varchar2(80), 
+	siteWeb varchar2(150)
+);
 
-ORGANISME(idOrganisme number(6), nom varchar2(512), telephone varchar2(20), pays varchar2(20))
+create table ORGANISME
+(
+	idOrganisme number(6) PRIMARY KEY, 
+	nom varchar2(512), 
+	telephone varchar2(20), 
+	pays varchar2(20)
+);
 
-OUVRAGE(idOuvrage number(8), titre varchar2(80), idEditeur number(6), annee number(4))
+create table OUVRAGE
+(
+	idOuvrage number(8) PRIMARY KEY, 
+	titre varchar2(80), 
+	idEditeur number(6), 
+	annee number(4)
+);
 
-MOTCLES(idMot number(6), mot varchar2(40), descriptif varchar2(80))
+create table MOTCLES
+(
+	idMot number(6) PRIMARY KEY, 
+	mot varchar2(40), 
+	descriptif varchar2(80)
+);
 
-ARTICLE_AUTEUR(idArticle number(8), idAuteur number(8))
+create table ARTICLE_AUTEUR
+(
+	idArticle number(8), 
+	idAuteur number(8)
+);
 
-AUTEUR_ORGANISME(idAuteur number(8), idOrganisme number(6))
+create table AUTEUR_ORGANISME
+(
+	idAuteur number(8), 
+	idOrganisme number(6)
+);
 
-OUVRAGE_AUTEUR(idOuvrage number(8), idAuteur number(8))
+create table OUVRAGE_AUTEUR
+(
+	idOuvrage number(8), 
+	idAuteur number(8)
+);
 
-ARTICLE_MOTCLES(idArticle number(8), idMot number(6))
+create table ARTICLE_MOTCLES
+(
+	idArticle number(8), 
+	idMot number(6)
+);
 
