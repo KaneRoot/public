@@ -34,7 +34,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#define LISTEN_BACKLOG 100
+#define LISTEN_BACKLOG 10
 #define TAILLE_BUFFER 1024
 
 int main(int argc, char **argv)
@@ -50,7 +50,7 @@ int main(int argc, char **argv)
     if(argc != 2)
     {
         printf("USAGE: %s port_num\n", argv[0]);
-        exit(-1);
+        exit(EXIT_FAILURE);
     }
 
     // socket factory
