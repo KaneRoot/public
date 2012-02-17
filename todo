@@ -22,40 +22,21 @@
 # Configurer un serveur CSS 
 # Configurer un serveur Mumble ?
 
-# 	SAVOIR FAIRE
-	# utiliser les map dans vim - FAIT (à reprendre)
-	# faire des fonctions dans vim - FAIT (à reprendre)
-	# mieux utiliser IRC et weechat
-	# faire des scripts pour IRC/weechat - FAIT (à reprendre)
-
-# à retenir : /usr/share/X11/xkb/symbols
-
 #	SERVEUR
-	# Mettre le serveur sous Debian - FAIT
-	# Faire une liste de tout ce que je met en place sur le serveur - FAIT
-		# transmission-daemon - FAIT
-		# apache2 - FAIT
-			# à retenir : awesom.eu + scripts - TODO
-			# WordPress - FAIT
-			# dépôt - FAIT
-			# Nanoblog - FAIT (à continuer)
-			 
-		# git via ssh - FAIT
-		# screen sur karchnu all time - FAIT
-		# dhcp daemon - FAIT
 	# Remettre les backup en place + archivage - TODO
-		# comptes - FAIT
-		# Musique à sync - IMPOSSIBLE FOR NOW - TODO
-		# wiki.karchnu.fr
-		# WordPress
-	# Configurer apache façon d.karchnu.fr = dépôt etc.  - TODO
 	# Boot PXE + tuto - TODO
 	# Faire un script d'ajout d'utilisateur git+trac + page web - TODO
-	# Installer NickServ + autres outils + faire un post sur karchnu.fr - TODO
-	# Ajouter un bot d'identification au serveur IRC - TODO
 	# Configurer un Trac + git (fait une fois) - ou autre service web + git - TODO
+	# IRC
+		# Installer NickServ + autres outils + faire un post sur karchnu.fr - TODO
+		# Ajouter un bot d'identification au serveur IRC - TODO
+	# WIKI
+		# Page VIM
+			# utiliser les map dans vim - FAIT (à reprendre)
+			# faire des fonctions dans vim - FAIT (à reprendre)
 
 #	AUTRE
 	# Apprendre à faire "Secret Prayer" + m'enregistrer
 	# Apprendre un morceau au synthé
-	# Faire le document "Ordinateur" + "Utilisation" pour moman : wiki.karchnu.fr - FAIT
+	# à retenir : /usr/share/X11/xkb/symbols
+	# à retenir : awesom.eu + scripts
