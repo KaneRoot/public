@@ -2,16 +2,37 @@ Réponses aux questions.
 
 Exercice 1 :
 1. Le constructeur de Binome est en "protected" pour pouvoir instancier un "Binome" uniquement dans le package courant.
-2. Le mot clé "static" pour la méthode CreeBinome sert à pouvoir utiliser cette méthode sans instancier la classe.
+2. Le mot clé "static" pour la méthode CreeBinome sert à pouvoir utiliser cette méthode sans instancier d'objet de la classe.
 
 Exercice 2 :
 1. Pour ne pas que ce bout de code puisse compiler, une solution serait de mettre la classe Animal en "abstract".
 
 Exercice 4 :
 1. Pour compter les lapins à tout moment j'utilise un attribut static dans la classe Lapin que j'incrémente quand un nouveau lapin né et que je décrémente lorsqu'il meurt.
-2. On ne peut pas renvoyer null car un constructeur renvoie forcément une référence non-nulle lors de son appel. 
+2. On ne peut pas renvoyer null car un constructeur renvoie forcément une référence non nulle lors de son appel. 
 Il n'y a d'ailleurs pas de "return" à faire.
 
-Stratégies d'implémentation.
 
+Stratégies d'implantation.
+
+Exercice 1/
+Pour la première classe j'ai créé des méthodes get (et set) pour récupérer des attributs privés de la classe Binome dans ses sous-classes.
+Il y a des fonctions qui écrivent sur le terminal dans toutes les classes. Ce n'est pas propre et ce ne serait pas à faire dans un __vrai__ programme.
+Ce qui aurait été plus malin à faire aurait été de ne pas utiliser l'héritage dans ce cas, car nous faisons des classes pour des cas particuliers (une classe si nous n'avons pas de racine, une classe pour le cas où nous en avons une etc.). 
+Il aurait simplement suffit d'une classe regroupant Binome* et UsineABinome. Si l'exercice était légèrement plus complexe, mon avis serait peut-être différent.
+
+Exercice 2/
+À mon sens : "Je suis un animal de nom de X." => c'est la classe Animal qui donne ça en sortie de GetPresentation().
+Et cette fonction est redéfinie en ajoutant des informations en plus dans la chaîne de caractère dans chaque classe fille.
+"Je suis un poisson|mammifère"." => Classe Poisson ou Mammifere, etc.
+
+Exercice 3/
+Le sujet de l'exercice 3 n'est pas fixe, j'ai développé les variantes qui étaient écrites.
+La sortie est assez verbeuse (et en couleurs!).
+
+Exercice 4/
+J'ai développé les deux versions demandées. Dans la première, on passe par des méthodes d'instance, dans l'autre par des méthodes de classe.
+Dans la première version, tous les lapins sont instanciés donc les méthodes d'instance sont appropriées mais dans la seconde version on peut se retrouver avec des lapins non instanciés et donc l'utilisation d'une méthode d'instance provoquerait une erreur à l'exécution.
+Pour faire un code "générique", ne sachant pas si les lapins seront instanciés, je n'utilise plus que des méthode d'instance.
+Bien sûr, on pourrait faire autrement et je ne suis pas forcément convaincu que ce soit la meilleure méthode.
 

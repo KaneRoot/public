@@ -2,6 +2,8 @@ public class Peage
 {
 	private int nbreVehicule, nbMoto, nbVoiture, nbCamion;
 	private double prixEssieux, prixTonne, totalCaisse;
+
+	// Prix par défaut du passage de voitures et de motos au péage.
 	private double prix_voiture = 4.0;
 	private double prix_moto = 5.0;
 
@@ -20,11 +22,14 @@ public class Peage
 	}
 	public void passage(Vehicule v)
 	{
+		// Dans tous les cas le véhicule passe
 		this.nbreVehicule++;
 		if(v instanceof Camion)
 		{ 
 			this.nbCamion++;
 			int poidsFinal = (int) ((Camion)v).getPoidsTotal();
+
+			// Il y a sûrement une autre méthode. Mais celle-ci marche tout aussi bien.
 			if( ((Camion)v).getPoidsTotal() % 1 != 0.0) poidsFinal++;
 			this.totalCaisse += (this.prixEssieux * ((Camion)v).getNbreEssieu()) + 
 				(this.prixTonne * poidsFinal);

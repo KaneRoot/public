@@ -11,10 +11,12 @@ public class Camion extends Vehicule
 		this.nbreEssieu = nbEssieux;
 		this.poidsTotal = poids;
 	}
-	public Camion()
+	public Camion() // constructeur par défaut
 	{
-		this(_NB_ESSIEUX, _POIDS);
+		this(_NB_ESSIEUX, _POIDS); // on utilise les valeurs par défaut
 	}
+
+	// Ensemble de getter classiques
 	public int getNbreEssieu()
 	{
 		return this.nbreEssieu;
@@ -23,6 +25,8 @@ public class Camion extends Vehicule
 	{
 		return this.poidsTotal;
 	}
+
+	// implantation de la méthode getDescription
 	public String getDescription()
 	{
 		return "Je suis un Camion avec " + this.getNbreEssieu() + " essieux et un poids de " + this.getPoidsTotal() + " tonnes";

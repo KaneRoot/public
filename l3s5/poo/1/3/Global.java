@@ -34,9 +34,9 @@ public class Global
 			Global.faire_passage(P[1], V[i]);
 			Global.afficher_total(P[1]);
 		}
-		
-
 	}
+
+	// Une fonction d'affichage unique pour les différentes informations sur les péages
 	public static void afficher_total(Peage p)
 	{
 		System.out.println("\033[31m---------------\033[00m");
@@ -45,6 +45,8 @@ public class Global
 		System.out.println("Détails : " + p.getDetailsVehicules());
 		System.out.println("\033[31m---------------\033[00m");
 	}
+
+	// On affiche chaque passage de véhicule
 	public static void faire_passage(Peage p, Vehicule v)
 	{
 		System.out.println("	Passage véhicule : " + v.getDescription());
