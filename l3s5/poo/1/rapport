@@ -1,3 +1,5 @@
+Réponses aux questions.
+
 Exercice 1 :
 1. Le constructeur de Binome est en "protected" pour pouvoir instancier un "Binome" uniquement dans le package courant.
 2. Le mot clé "static" pour la méthode CreeBinome sert à pouvoir utiliser cette méthode sans instancier la classe.
@@ -9,3 +11,7 @@ Exercice 4 :
 1. Pour compter les lapins à tout moment j'utilise un attribut static dans la classe Lapin que j'incrémente quand un nouveau lapin né et que je décrémente lorsqu'il meurt.
 2. On ne peut pas renvoyer null car un constructeur renvoie forcément une référence non-nulle lors de son appel. 
 Il n'y a d'ailleurs pas de "return" à faire.
+
+Stratégies d'implémentation.
+
+

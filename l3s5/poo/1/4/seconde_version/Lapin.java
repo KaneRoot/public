@@ -7,6 +7,27 @@ public class Lapin
 	private Lapin()
 	{
 	}
+
+	// maintenant qu'un Lapin peut être null, on passe par des méthodes statiques, c'est plus prudent
+	private String getEtat()
+	{
+		if(this.vivant)
+			return "vivant";
+		return "mort";
+	}
+	private void casserole()
+	{
+		if(this.vivant)
+		{
+			Lapin.NB_LAPINS--;
+			this.vivant = false;
+		}
+	}
+	public static void passeALaCasserole(Lapin l)
+	{
+		if(l != null)
+			l.casserole();
+	}
 	public static Lapin creationLapin()
 	{
 		if(Lapin.NB_LAPINS >= 50)
@@ -16,18 +37,11 @@ public class Lapin
 		return new Lapin();
 
 	}
-	public void passeALaCasserole()
+	public static String getEtatLapin(Lapin l)
 	{
-		if(this.vivant)
-		{
-			Lapin.NB_LAPINS--;
-			this.vivant = false;
-		}
-	}
-	public String getEtat()
-	{
-		if(this.vivant)
-			return "vivant";
-		return "mort";
+		if(l == null) 
+			return "non existant";
+
+		return l.getEtat();
 	}
 }

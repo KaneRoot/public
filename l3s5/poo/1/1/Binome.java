@@ -1,3 +1,5 @@
+// La classe Binome est comme demandée avec en plus des getter et de setter
+// car les attributs a_, b_, c_ et dis_ sont privés (donc non disponibles dans les classes filles)
 public class Binome
 {
 	private double a_,b_,c_,dis_;
