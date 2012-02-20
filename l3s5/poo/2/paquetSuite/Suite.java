@@ -1,5 +1,7 @@
 package paquetSuite;
 
+import paquetException.*;
+
 public abstract class Suite
 {
 	// premier = u0 , pas = raison
@@ -9,7 +11,7 @@ public abstract class Suite
 		this.premier = premier;
 		this.pas = pas;
 	}
-	public abstract int valeurAuRangN(int n);
-	public abstract int sommeAuRangN(int n);
+	public abstract int valeurAuRangN(int n) throws SuiteException;
+	public abstract int sommeAuRangN(int n) throws SuiteException;
 
 }
