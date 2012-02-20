@@ -1,4 +1,4 @@
-package paquet-Suite;
+package paquetSuite;
 
 public class SuiteArithm extends Suite
 {
@@ -9,8 +9,10 @@ public class SuiteArithm extends Suite
 
 	public int valeurAuRangN(int n)
 	{
+		return this.premier + n * this.pas;
 	}
 	public int sommeAuRangN(int n)
 	{
+		return n * (this.premier + this.valeurAuRangN(n-1))/2;
 	}
 }

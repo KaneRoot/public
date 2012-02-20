@@ -1,4 +1,4 @@
-package paquet-Suite;
+package paquetSuite;
 
 public abstract class Suite
 {
