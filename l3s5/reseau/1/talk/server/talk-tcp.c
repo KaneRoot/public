@@ -20,42 +20,57 @@ typedef struct
 int sockfd;
 char buf[TAILLE_BUFFER];
 socklen_t addrlen;
+int nb_connexions = 0;
+client_s client[NB_CLIENTS];
+fd_set readfds, masterfds;
 
 void quitter(char * erreur);
 void init_programme(int argc, char **argv);
+void attendre_utilisateur(void);
+int plus_grand_fd(void);
+void clore_les_sockets(void);
+void supprimer_client(int);
 
 int main(int argc, char **argv)
 {
+	int i, rt; // rt = return value
+
 	init_programme(argc,argv);
 
-	int nb_connexions = 0;
-	client_s client[NB_CLIENTS];
+	FD_SET(sockfd, &masterfds);
 
-	printf("Attente première connexion\n");
-    if((client[0].fd = accept(sockfd, (struct sockaddr *)&client[0].adr, &addrlen)) == -1)
-    {
-        close(sockfd);
-		quitter("accept");
-    }
-	while(0)
+	while(1)
 	{
-		if(recv(client[0].fd, buf, TAILLE_BUFFER, 0) == -1)
+		memcpy(&readfds, &masterfds, sizeof(fd_set));
+		rt = select(plus_grand_fd() + 1, &readfds, NULL, NULL, NULL);
+		for(i = 0 ; i <= plus_grand_fd() ; i++)
 		{
-			close(sockfd);
-			// CLOSE DES SOCKETS
-			quitter("recv");
+			if(FD_ISSET(i, &readfds))
+			{
+				if(i == sockfd) // connexion entrante
+					attendre_utilisateur();
+				else
+				{
+					if((rt = recv(client[i].fd, buf, TAILLE_BUFFER, 0) == -1))
+						quitter("recv"); // Erreur sur la réception
+					if(rt == 0)
+						supprimer_client(i);
+				}
+			}
+			else
+			{
+			}
 		}
 	}
 
-    close(sockfd);
-	// CLOSE DES SOCKETS
-
+	clore_les_sockets();
     return 0;
 }
 
 void quitter(char * erreur)
 {
 	perror(erreur);
+	clore_les_sockets();
 	exit(EXIT_FAILURE);
 }
 
@@ -89,4 +104,39 @@ void init_programme(int argc, char **argv)
         close(sockfd);
 		quitter("listen");
     }
+	FD_ZERO(&masterfds);
+}
+void attendre_utilisateur(void)
+{
+	int i;
+	for(i = 0 ; i < NB_CLIENTS ; i++)
+		if(client[i].fd <= 0)
+			break;
+	printf("Mise en attente de connexion à l'emplacement %d\n", i);
+    if((client[i].fd = accept(sockfd, (struct sockaddr *) &client[i].adr, &addrlen)) == -1)
+		quitter("accept");
+
+	FD_SET(client[i].fd, &masterfds);
+	printf("Connexion emplacement %d\n", i);
+}
+int plus_grand_fd(void)
+{
+	int i, max = -1;
+	for(i = 0 ; i < NB_CLIENTS ; i++)
+		if(client[i].fd > max)
+			max = client[i].fd;
+	max = (max > sockfd) ? max : sockfd;
+	return max;
+}
+void supprimer_client(int i)
+{
+	client[i].fd = 0;
+}
+void clore_les_sockets(void)
+{
+	int i = 0;
+	for(i = 0 ; i < NB_CLIENTS ; i++)
+		if(client[i].fd > 0)
+			close(client[i].fd);
+	close(sockfd);
 }
