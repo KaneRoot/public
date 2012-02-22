@@ -43,13 +43,14 @@ int main(int argc, char **argv)
 	{
 		memcpy(&readfds, &masterfds, sizeof(fd_set));
 		rt = select(plus_grand_fd() + 1, &readfds, NULL, NULL, NULL);
+		printf("Passage select\n");
 		for(i = 0 ; i <= plus_grand_fd() ; i++)
 		{
 			if(FD_ISSET(i, &readfds))
 			{
-				if(i == sockfd) // connexion entrante
+				if(i == sockfd)		// connexion entrante
 					attendre_utilisateur();
-				else
+				else				// utilisateurs
 				{
 					if((rt = recv(client[i].fd, buf, TAILLE_BUFFER, 0) == -1))
 						quitter("recv"); // Erreur sur la réception
