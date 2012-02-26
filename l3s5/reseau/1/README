@@ -1,0 +1,17 @@
+Tous les programmes fonctionnent.
+
+Pour faire un test de la commande get (client web) :
+	./get karchnu.fr /accueil/index.php
+La commande get met du temps pour quitter après avoir chargé la page.
+
+
+Petits plus pour talk :
+	possibilité d'arrêter les clients et le serveur via CTRL^D.
+	arrêter le serveur = arrêter les clients.
+	le programme est écrit pour fonctionner en IPV6
+
+Pour le lancer : 
+	./talk-server 9000
+	./talk-client ::1 9000
+	OU
+	./talk-client localhost 9000
