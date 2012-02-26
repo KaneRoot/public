@@ -61,7 +61,7 @@ int main(int argc, char **argv)
     addrlen           = sizeof(struct sockaddr_in);
 
     // get addr from command line and convert it
-    if(inet_pton(AF_INET, argv[1], &server.sin_addr) != 1)
+    if(inet_pton(AF_INET, argv[1], &server.sin_addr) < 0)
     {
         perror("inet_pton");
         close(sockfd);

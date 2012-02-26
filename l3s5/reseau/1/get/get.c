@@ -67,7 +67,6 @@ int main(int argc, char **argv)
 			return EXIT_FAILURE;
 		}
 
-
 		// On écrit tout ce qu'on reçoit sur le terminal
 		while( (nlues = recv(sockfd, buf, TAILLE_BUFFER, 0)) != 0)
 			write(1, buf, nlues);
@@ -79,7 +78,7 @@ int main(int argc, char **argv)
 	{
 		// On a terminé la boucle mais sans réussir à se connecter
 		fprintf(stderr, "failed to connect\n");
-		exit(2);
+		return EXIT_FAILURE;
 	}
 
 	freeaddrinfo(servinfo); // à faire sur toutes les structures addrinfo

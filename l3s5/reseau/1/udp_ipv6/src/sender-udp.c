@@ -29,7 +29,7 @@ int main(int argc, char **argv)
     dest.sin6_port   = htons(atoi(argv[2]));
     addrlen         = sizeof(struct sockaddr_in6);
 
-    if(inet_pton(AF_INET6, argv[1], &dest.sin6_addr) != 1)
+    if(inet_pton(AF_INET6, argv[1], &dest.sin6_addr) < 0)
     {
         perror("inet_pton");
         close(sockfd);

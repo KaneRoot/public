@@ -22,7 +22,7 @@ int main(int argc, char **argv)
     if(argc != 2)
     {
         printf("USAGE: %s port_num\n", argv[0]);
-        exit(-1);
+        exit(EXIT_FAILURE);
     }
 
     if((sockfd = socket(AF_INET6, SOCK_STREAM, 0)) == -1)
