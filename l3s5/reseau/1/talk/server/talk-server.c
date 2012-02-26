@@ -11,12 +11,11 @@
 
 #define LISTEN_BACKLOG 10
 #define TAILLE_BUFFER 1024
-#define NB_CLIENTS 5
+#define NB_CLIENTS 10
 
 int sockfd;
 char buf[TAILLE_BUFFER];
 socklen_t addrlen;
-int nb_connexions = 0;
 client_s client[NB_CLIENTS];
 fd_set readfds, masterfds;
 
@@ -37,7 +36,6 @@ int main(int argc, char **argv)
 		bzero(buf, TAILLE_BUFFER); // On vide le tampon
 
 		plusgrandfd = plus_grand_fd();
-		printf("Plus grand FD : %d \n", plusgrandfd);
 		rt = select(plusgrandfd + 1, &readfds, NULL, NULL, NULL);
 
 		if(rt < 0)
@@ -51,7 +49,7 @@ int main(int argc, char **argv)
 					attendre_utilisateur();
 				else if(i == 0)
 					sortie_programme();
-				else if(i >= 4 && i < NB_CLIENTS + 4)				// utilisateurs
+				else if(i >= 4 && i < NB_CLIENTS + 4)	// utilisateurs
 					recevoir_utilisateur(i - 4);
 			}
 		}
@@ -73,7 +71,7 @@ void init_programme(int argc, char **argv)
 {
     if(argc != 2)
     {
-        printf("USAGE: %s port_num\n", argv[0]);
+        printf("USAGE: %s port_num\n\tExemple : %s 9000\n", argv[0], argv[0]);
         exit(EXIT_FAILURE);
     }
 
@@ -100,6 +98,9 @@ void init_programme(int argc, char **argv)
 		quitter("listen");
     }
 	FD_ZERO(&masterfds);
+
+	printf( "Début du programme.\n"
+			"\033[36m Pour quitter : ^D\033[00m \n");
 }
 void attendre_utilisateur(void)
 {
@@ -107,12 +108,11 @@ void attendre_utilisateur(void)
 	for(i = 0 ; i < NB_CLIENTS ; i++)
 		if(client[i].fd <= 0)
 			break;
-	printf("Mise en attente de connexion à l'emplacement %d\n", i);
     if((client[i].fd = accept(sockfd, (struct sockaddr *) &client[i].adr, &addrlen)) == -1)
 		quitter("accept");
 
 	FD_SET(client[i].fd, &masterfds);
-	printf("Connexion emplacement %d\n", i);
+	printf("Connexion à l'emplacement %d\n", i);
 }
 int plus_grand_fd(void)
 {
@@ -125,7 +125,7 @@ int plus_grand_fd(void)
 }
 void supprimer_client(int i)
 {
-	printf("Suppression du client %d\n", i);
+	printf("Suppression du client à l'emplacement %d\n", i);
 	FD_CLR(client[i].fd, &masterfds);
 	close(client[i].fd);
 	client[i].fd = 0;
@@ -149,7 +149,10 @@ void renvoyer_message(int nclient)
 }
 void sortie_programme(void)
 {
-	printf("Vous avez fait ^D, vous quittez le programme\n");
+	// Pour ne pas que ça n'écrive quelque-chose sur la ligne de commande
+	// Au cas où vous ne rentreriez pas ^D comme prévu
+	read(0, buf, TAILLE_BUFFER);
+	printf("\nVous avez fait ^D, vous quittez le programme\n");
 	clore_les_sockets();
 	exit(EXIT_SUCCESS);
 }

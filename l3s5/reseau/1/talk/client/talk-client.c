@@ -23,7 +23,7 @@ int main(int argc, char **argv)
 	init_programme(argc, argv);
 
 	FD_SET(0, &masterfds);		// On écoute sur l'entrée standard
-	FD_SET(sockfd, &masterfds); // On ajoute le socket ouvert
+	FD_SET(sockfd, &masterfds); // On ajoute le socket lié au serveur
 	while(1)
 	{
 		memcpy(&readfds, &masterfds, sizeof(fd_set));
@@ -37,26 +37,25 @@ int main(int argc, char **argv)
 		{
 			if(FD_ISSET(i, &readfds))
 			{
-				// send string
-				if(i == 0)
+				if(i == 0)	// lecture entrée standard + envoi
 					envoyer_donnee();
-				else
+				else		// lecture socket liée au serveur + écriture
 					recevoir_donnee();
 			}
 		}
 
 	}
 
-    // close the socket
-    close(sockfd);
+	// fermer les sockets
+	clore_les_sockets();
 
-    return 0;
+    return EXIT_FAILURE;
 }
 void sortie_programme(void)
 {
 	clore_les_sockets();
 	printf("Fin du programme. "
-			"Le serveur a fermé sa socket ou vous avez entré ^D\n");
+			"Le serveur a fermé sa socket ou vous avez entré ^D.\n");
 	exit(EXIT_SUCCESS);
 }
 void init_programme(int argc, char *argv[])
@@ -64,7 +63,7 @@ void init_programme(int argc, char *argv[])
     // check the number of args on command line
     if(argc != 3)
     {
-        printf("USAGE: %s @server port_num\n", argv[0]);
+        printf("USAGE: %s @server port_num\n\tExemple: %s ::1 9000\n", argv[0], argv[0]);
         exit(EXIT_FAILURE);
     }
 
@@ -95,11 +94,8 @@ void init_programme(int argc, char *argv[])
     }
 
 	FD_ZERO(&masterfds);
-}
-
-int plus_grand_fd(void)
-{
-	return sockfd;
+	printf(	"Début du programme.\n"
+			"\033[36m Pour quitter : ^D \033[00m \n");
 }
 
 void quitter(char * erreur)
@@ -111,7 +107,7 @@ void quitter(char * erreur)
 
 void clore_les_sockets(void)
 {
-	// Qu'une socket à fermer.
+	// Qu'un socket à fermer.
 	close(sockfd);
 }
 void envoyer_donnee(void)
@@ -141,5 +137,5 @@ void recevoir_donnee(void)
 	else if(rt == 0)
 		sortie_programme();
 	else
-		printf("On reçoit : %s", buf);
+		printf("\033[31m On reçoit :\033[00m %s", buf);
 }
