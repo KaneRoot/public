@@ -22,39 +22,37 @@ fd_set readfds, masterfds;
 
 int main(int argc, char **argv)
 {
-	int i, rt; // rt = return value
+	int i, rt, plusgrandfd; // rt = return value
 
 	init_programme(argc,argv);
 
+	// Au cas où on veuille quitter (^D)
+	FD_SET(0, &masterfds);
 	FD_SET(sockfd, &masterfds);
 
 	// On ne quitte pas cette boucle sauf pour terminer le programme
 	while(1) 
 	{
 		memcpy(&readfds, &masterfds, sizeof(fd_set));
-		rt = select(FD_SETSIZE, &readfds, NULL, NULL, NULL);
-		printf("Passage select, son retour : %d \n", rt);
+		bzero(buf, TAILLE_BUFFER); // On vide le tampon
 
-		for(i = 2 ; i <= FD_SETSIZE ; i++)
+		plusgrandfd = plus_grand_fd();
+		printf("Plus grand FD : %d \n", plusgrandfd);
+		rt = select(plusgrandfd + 1, &readfds, NULL, NULL, NULL);
+
+		if(rt < 0)
+			printf("retour select : %d \n", rt);
+
+		for(i = 0 ; i <= plusgrandfd ; i++)
 		{
 			if(FD_ISSET(i, &readfds))
 			{
 				if(i == sockfd)		// connexion entrante
 					attendre_utilisateur();
-				else				// utilisateurs
-				{
-					rt = recv(client[i - 4].fd, buf, TAILLE_BUFFER, 0);
-
-					if(rt < 0)
-						quitter("recv");	// Erreur sur la réception
-					else if(rt == 0)		// On ne reçoit rien, il s'est déconnecté
-						supprimer_client(i-4);
-					else
-					{
-						printf("Message reçu : %s\n", buf);
-						bzero(buf, TAILLE_BUFFER);
-					}
-				}
+				else if(i == 0)
+					sortie_programme();
+				else if(i >= 4 && i < NB_CLIENTS + 4)				// utilisateurs
+					recevoir_utilisateur(i - 4);
 			}
 		}
 	}
@@ -139,4 +137,31 @@ void clore_les_sockets(void)
 		if(client[i].fd > 0)
 			close(client[i].fd);
 	close(sockfd);
+}
+void renvoyer_message(int nclient)
+{
+	int i;
+	for(i = 0 ; i < NB_CLIENTS ; i++)
+		if(i != nclient && client[i].fd != 0)
+			sendto(client[i].fd, buf, TAILLE_BUFFER, 0,
+					(struct sockaddr *) &client[i].adr,
+					sizeof(client[i].adr));
+}
+void sortie_programme(void)
+{
+	printf("Vous avez fait ^D, vous quittez le programme\n");
+	clore_les_sockets();
+	exit(EXIT_SUCCESS);
+}
+void recevoir_utilisateur(int nclient)
+{
+	int rt;
+	rt = recv(client[nclient].fd, buf, TAILLE_BUFFER, 0);
+
+	if(rt < 0)				// Erreur sur la réception
+		quitter("recv");	
+	else if(rt == 0)		// On ne reçoit rien, il s'est déconnecté
+		supprimer_client(nclient);
+	else					// On a reçu, on renvoie aux autres clients
+		renvoyer_message(nclient);
 }

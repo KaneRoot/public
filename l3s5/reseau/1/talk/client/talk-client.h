@@ -7,5 +7,6 @@ void clore_les_sockets(void);
 void init_programme(int argc, char *argv[]);
 void sortie_programme(void);
 void envoyer_donnee(void);
+void recevoir_donnee(void);
 
 #endif

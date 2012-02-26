@@ -14,10 +14,10 @@ int sockfd;
 struct sockaddr_in6 server;
 socklen_t addrlen;
 fd_set masterfds, readfds;
+char buf[TAILLE_BUF];
 
 int main(int argc, char **argv)
 {
-	char buf[TAILLE_BUF];
 	int i, rt;
 
 	init_programme(argc, argv);
@@ -27,6 +27,8 @@ int main(int argc, char **argv)
 	while(1)
 	{
 		memcpy(&readfds, &masterfds, sizeof(fd_set));
+		bzero(buf, TAILLE_BUF); // On vide le tampon
+
 		rt = select(FD_SETSIZE, &readfds, NULL, NULL, NULL);
 		if(rt < 0)
 			quitter("select");
@@ -39,16 +41,7 @@ int main(int argc, char **argv)
 				if(i == 0)
 					envoyer_donnee();
 				else
-				{
-					printf("%d fait partie des fds -- on reçoit une donnée\n",i);
-					rt = recv(sockfd, buf, TAILLE_BUF, 0);
-					if(rt < 0)
-						quitter("recv");
-					else if(rt == 0)
-						sortie_programme();
-					else
-						printf("On reçoit : %s\n", buf);
-				}
+					recevoir_donnee();
 			}
 		}
 
@@ -62,7 +55,8 @@ int main(int argc, char **argv)
 void sortie_programme(void)
 {
 	clore_les_sockets();
-	printf("Le serveur a fermé sa socket, fin de programme\n");
+	printf("Fin du programme. "
+			"Le serveur a fermé sa socket ou vous avez entré ^D\n");
 	exit(EXIT_SUCCESS);
 }
 void init_programme(int argc, char *argv[])
@@ -94,7 +88,6 @@ void init_programme(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
 
-    printf("Trying to connect to the remote host\n");
     if(connect(sockfd, (struct sockaddr *) &server, addrlen) == -1)
     {
         perror("connect");
@@ -102,7 +95,6 @@ void init_programme(int argc, char *argv[])
     }
 
 	FD_ZERO(&masterfds);
-    printf("Connection OK\n");
 }
 
 int plus_grand_fd(void)
@@ -119,18 +111,35 @@ void quitter(char * erreur)
 
 void clore_les_sockets(void)
 {
+	// Qu'une socket à fermer.
 	close(sockfd);
 }
 void envoyer_donnee(void)
 {
 	int rt;
-	char buf[TAILLE_BUF];
 
 	rt = read(0, buf, TAILLE_BUF);
-	if(rt <= 0)
+	if(rt < 0)
 		quitter("read");
+	else if(rt == 0)
+		sortie_programme();
 
 	rt = sendto(sockfd, buf, TAILLE_BUF, 0, (struct sockaddr *) &server, addrlen);
 	if(rt == -1)
 		quitter("sendto");
+
+	// On vide le tampon
+	fflush(stdin);
+}
+void recevoir_donnee(void)
+{
+	int rt;
+
+	rt = recv(sockfd, buf, TAILLE_BUF, 0);
+	if(rt < 0)
+		quitter("recv");
+	else if(rt == 0)
+		sortie_programme();
+	else
+		printf("On reçoit : %s", buf);
 }
