@@ -1,5 +1,5 @@
-#ifndef __TALK_TCP_H__
-#define __TALK_TCP_H__
+#ifndef __TALK_SERVER_H__
+#define __TALK_SERVER_H__
 
 typedef struct 
 {

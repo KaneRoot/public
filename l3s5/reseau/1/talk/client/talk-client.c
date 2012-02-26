@@ -6,74 +6,131 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <netdb.h>
 
-#define TAILLE_REQUETE 1024
-#define TAILLE_BUFFER 1024
+#include "talk-client.h"
+#define TAILLE_BUF 1024
+
+int sockfd;
+struct sockaddr_in6 server;
+socklen_t addrlen;
+fd_set masterfds, readfds;
 
 int main(int argc, char **argv)
 {
-    int sockfd, rv, nlues;
-	struct addrinfo hints, *servinfo, *p;
-	char requete[TAILLE_REQUETE], buf[TAILLE_BUFFER];
+	char buf[TAILLE_BUF];
+	int i, rt;
 
-	bzero(requete, TAILLE_REQUETE);
-	
+	init_programme(argc, argv);
+
+	FD_SET(0, &masterfds);		// On écoute sur l'entrée standard
+	FD_SET(sockfd, &masterfds); // On ajoute le socket ouvert
+	while(1)
+	{
+		memcpy(&readfds, &masterfds, sizeof(fd_set));
+		rt = select(FD_SETSIZE, &readfds, NULL, NULL, NULL);
+		if(rt < 0)
+			quitter("select");
+
+		for(i = 0 ; i < FD_SETSIZE ; i++)
+		{
+			if(FD_ISSET(i, &readfds))
+			{
+				// send string
+				if(i == 0)
+					envoyer_donnee();
+				else
+				{
+					printf("%d fait partie des fds -- on reçoit une donnée\n",i);
+					rt = recv(sockfd, buf, TAILLE_BUF, 0);
+					if(rt < 0)
+						quitter("recv");
+					else if(rt == 0)
+						sortie_programme();
+					else
+						printf("On reçoit : %s\n", buf);
+				}
+			}
+		}
+
+	}
+
+    // close the socket
+    close(sockfd);
+
+    return 0;
+}
+void sortie_programme(void)
+{
+	clore_les_sockets();
+	printf("Le serveur a fermé sa socket, fin de programme\n");
+	exit(EXIT_SUCCESS);
+}
+void init_programme(int argc, char *argv[])
+{
+    // check the number of args on command line
     if(argc != 3)
     {
-        printf("USAGE: %s @server file\n", argv[0]); // a légèrement changé
-        exit(-1);
+        printf("USAGE: %s @server port_num\n", argv[0]);
+        exit(EXIT_FAILURE);
     }
 
-	memset(&hints, 0, sizeof hints);
-	hints.ai_family = AF_UNSPEC; // Peu importe que ce soit de l'IPv4 ou 6
-	hints.ai_socktype = SOCK_STREAM;
+    // socket factory
+    if((sockfd = socket(AF_INET6, SOCK_STREAM, 0)) == -1)
+    {
+        perror("socket");
+	    exit(EXIT_FAILURE);
+    }
 
-	if ((rv = getaddrinfo(argv[1], "http", &hints, &servinfo)) != 0) 
-	{
-		fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(rv));
-		return EXIT_FAILURE;
-	}
+    // init remote addr structure and other params
+    server.sin6_family = AF_INET6;
+	server.sin6_port   = htons(atoi(argv[2]));
+    addrlen           = sizeof(struct sockaddr_in6);
 
-	// Boucle sur chaque résultat de getaddrinfo tant qu'on arrive pas à se connecter
-	for(p = servinfo; p != NULL; p = p->ai_next) 
-	{
-		if ((sockfd = socket(p->ai_family, p->ai_socktype, p->ai_protocol)) == -1) 
-		{
-			perror("socket");
-			continue;
-		}
+    // get addr from command line and convert it
+    if(inet_pton(AF_INET6, argv[1], &server.sin6_addr) != 1)
+    {
+        perror("inet_pton");
+        close(sockfd);
+        exit(EXIT_FAILURE);
+    }
 
-		if (connect(sockfd, p->ai_addr, p->ai_addrlen) == -1) 
-		{
-			close(sockfd);
-			perror("connect");
-			continue;
-		}
+    printf("Trying to connect to the remote host\n");
+    if(connect(sockfd, (struct sockaddr *) &server, addrlen) == -1)
+    {
+        perror("connect");
+        exit(EXIT_FAILURE);
+    }
 
-		if(sendto(sockfd, requete, TAILLE_REQUETE, 0,
-					servinfo->ai_addr,
-					servinfo->ai_addrlen) < 0)
-		{
-			perror("sendto");
-			return EXIT_FAILURE;
-		}
+	FD_ZERO(&masterfds);
+    printf("Connection OK\n");
+}
 
+int plus_grand_fd(void)
+{
+	return sockfd;
+}
 
-		while( (nlues = recv(sockfd, buf, TAILLE_BUFFER, 0)) != 0)
-			write(1, buf, nlues);
+void quitter(char * erreur)
+{
+	perror(erreur);
+	clore_les_sockets();
+	exit(EXIT_FAILURE);
+}
 
-		break; // si on arrive là c'est qu'on est connecté
-	}
+void clore_les_sockets(void)
+{
+	close(sockfd);
+}
+void envoyer_donnee(void)
+{
+	int rt;
+	char buf[TAILLE_BUF];
 
-	if (p == NULL) 
-	{
-		// looped off the end of the list with no connection
-		fprintf(stderr, "failed to connect\n");
-		exit(2);
-	}
+	rt = read(0, buf, TAILLE_BUF);
+	if(rt <= 0)
+		quitter("read");
 
-	freeaddrinfo(servinfo); // à faire sur toutes les structures addrinfo
-
-    return EXIT_SUCCESS;
+	rt = sendto(sockfd, buf, TAILLE_BUF, 0, (struct sockaddr *) &server, addrlen);
+	if(rt == -1)
+		quitter("sendto");
 }

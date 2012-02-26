@@ -6,7 +6,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include "talk-tcp.h"
+#include "talk-server.h"
+
 
 #define LISTEN_BACKLOG 10
 #define TAILLE_BUFFER 1024
@@ -27,12 +28,14 @@ int main(int argc, char **argv)
 
 	FD_SET(sockfd, &masterfds);
 
-	while(1)
+	// On ne quitte pas cette boucle sauf pour terminer le programme
+	while(1) 
 	{
 		memcpy(&readfds, &masterfds, sizeof(fd_set));
-		rt = select(plus_grand_fd() + 1, &readfds, NULL, NULL, NULL);
-		printf("Passage select\n");
-		for(i = 0 ; i <= plus_grand_fd() ; i++)
+		rt = select(FD_SETSIZE, &readfds, NULL, NULL, NULL);
+		printf("Passage select, son retour : %d \n", rt);
+
+		for(i = 2 ; i <= FD_SETSIZE ; i++)
 		{
 			if(FD_ISSET(i, &readfds))
 			{
@@ -40,20 +43,25 @@ int main(int argc, char **argv)
 					attendre_utilisateur();
 				else				// utilisateurs
 				{
-					if((rt = recv(client[i].fd, buf, TAILLE_BUFFER, 0) == -1))
-						quitter("recv"); // Erreur sur la réception
-					if(rt == 0)
-						supprimer_client(i);
+					rt = recv(client[i - 4].fd, buf, TAILLE_BUFFER, 0);
+
+					if(rt < 0)
+						quitter("recv");	// Erreur sur la réception
+					else if(rt == 0)		// On ne reçoit rien, il s'est déconnecté
+						supprimer_client(i-4);
+					else
+					{
+						printf("Message reçu : %s\n", buf);
+						bzero(buf, TAILLE_BUFFER);
+					}
 				}
-			}
-			else
-			{
 			}
 		}
 	}
 
+	// On ne devait pas sortir de la boucle
 	clore_les_sockets();
-    return 0;
+    return EXIT_FAILURE;
 }
 
 void quitter(char * erreur)
@@ -119,6 +127,9 @@ int plus_grand_fd(void)
 }
 void supprimer_client(int i)
 {
+	printf("Suppression du client %d\n", i);
+	FD_CLR(client[i].fd, &masterfds);
+	close(client[i].fd);
 	client[i].fd = 0;
 }
 void clore_les_sockets(void)
