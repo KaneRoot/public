@@ -6,16 +6,11 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include "talk-tcp.h"
 
 #define LISTEN_BACKLOG 10
 #define TAILLE_BUFFER 1024
 #define NB_CLIENTS 5
-
-typedef struct 
-{
-	int fd;						// socket
-	struct sockaddr_in6 adr;	// info @
-} client_s;
 
 int sockfd;
 char buf[TAILLE_BUFFER];
@@ -23,13 +18,6 @@ socklen_t addrlen;
 int nb_connexions = 0;
 client_s client[NB_CLIENTS];
 fd_set readfds, masterfds;
-
-void quitter(char * erreur);
-void init_programme(int argc, char **argv);
-void attendre_utilisateur(void);
-int plus_grand_fd(void);
-void clore_les_sockets(void);
-void supprimer_client(int);
 
 int main(int argc, char **argv)
 {
