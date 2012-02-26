@@ -24,6 +24,7 @@ int main(int argc, char **argv)
     if(argc != 3)
     {
         printf("USAGE: %s server file\n", argv[0]); // a légèrement changé
+		printf("Exemple : %s karchnu.fr /accueil/index.php\n", argv[0]);
 		return EXIT_FAILURE;
     }
 
