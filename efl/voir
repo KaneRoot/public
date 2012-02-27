@@ -1,4 +1,0 @@
-#!/bin/bash
-
-edje_cc $1.edc
-edje_player $1.edj

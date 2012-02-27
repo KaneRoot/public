@@ -1,8 +1,0 @@
-
-Tout d'abord, un peu de culture (ce ne sera pas long).
-
-Récemment (ces quelques dernières années), nous avons vu mettre en place deux types de partage de données sur internet et qui ont connu plus ou moins de succès.
-Ces **deux solutions** sont appelées communément "peer to peer" (pair à pair) et "Direct Download" (aka DDL, téléchargement direct).
-
-La première **solution** consiste à ce qu'une personne mettre en partage un fichier, contenant un ensemble d'informations qui nous sera nécessaire pour identifier de façon unique les fichiers informatiques à partager, et également pouvoir les retrouver (c'est le fameux .torrent).
-Toujours communément, pour faciliter le partage de masse des fichiers, nous utilisons un "traker".
