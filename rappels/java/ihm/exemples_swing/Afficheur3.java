@@ -26,7 +26,6 @@ class JPanelCompteur extends JPanel implements ActionListener
 		this.jtfCompteur.setEnabled(false);
 		this.add(this.jtfCompteur, BorderLayout.CENTER);
 
-		// son propre écouteur:  actionPerformed(ActionEvent e) dans la classe
 		this.jbPlus.addActionListener(this) ;
 		this.jbMoins.addActionListener(this) ;
 	}
