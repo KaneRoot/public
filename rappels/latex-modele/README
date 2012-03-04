@@ -1,3 +1,9 @@
 Ce modèle a été trouvé sur le site http://genma.free.fr/.
 
+Pour bien le compiler :
+
+latex Global.tex ; bibtex Global ; latex Global.tex ; latex Global.tex ; dvipdf Global.dvi 
+
+Oui il faut bien faire 2 fois "latex Global.tex".
+
 Merci.
