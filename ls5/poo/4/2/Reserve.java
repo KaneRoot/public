@@ -3,25 +3,19 @@ public class Reserve
 	private int nbressources = 10, nbmax = 50;
 	public synchronized void prendre(int nb)
 	{
-		while(true)
+		while((nbressources - nb) < 0)
 		{
-			if((nbressources - nb) < 0)
+			try
 			{
-				try
-				{
-					wait();
-				}
-				catch(InterruptedException e)
-				{
-					System.out.println("Exception prendre : " + e.getMessage());
-				}
+				wait();
 			}
-			else
-				break;
+			catch(InterruptedException e)
+			{
+				System.out.println("Exception prendre : " + e.getMessage());
+			}
 		}
-		System.out.print("Prendre " + nb + " résultat : ");
 		nbressources -= nb;
-		System.out.println(nbressources);
+		System.out.println("Prendre " + nb + " résultat : " + nbressources);
 		try
 		{
 			notifyAll();
@@ -33,25 +27,19 @@ public class Reserve
 	}
 	public synchronized void mettre(int nb)
 	{
-		while(true)
+		while((nbressources + nb) > nbmax)
 		{
-			if((nbressources + nb) > nbmax)
+			try
 			{
-				try
-				{
-					wait();
-				}
-				catch(InterruptedException e)
-				{
-					System.out.println("Exception mettre : " + e.getMessage());
-				}
+				wait();
 			}
-			else
-				break;
+			catch(InterruptedException e)
+			{
+				System.out.println("Exception mettre : " + e.getMessage());
+			}
 		}
-		System.out.print("Mettre " + nb + " résultat : ");
 		nbressources += nb;
-		System.out.println(nbressources);
+		System.out.println("Mettre " + nb + " résultat : " + nbressources);
 		try
 		{
 			notifyAll();
