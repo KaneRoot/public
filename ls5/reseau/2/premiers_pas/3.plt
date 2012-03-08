@@ -8,7 +8,8 @@
 # labels
 set xlabel "absisses"
 set ylabel "ordonnées"
-set border 0
+set border
+set grid
 
 set sample 5000
 set xrange [-3:3]
