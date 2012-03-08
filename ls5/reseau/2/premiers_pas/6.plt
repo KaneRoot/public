@@ -10,9 +10,12 @@ set xlabel "absisses"
 set ylabel "ordonnées"
 set border
 
-set sample 5000
+set sample 500
 set xrange [-3:3]
 set yrange [-2:2]
 
+f1(x) = sin(pi*x+1)/2
+f2(x) = sin(2*pi*x)
+
 # fonction
-plot sin(pi*x+1)/2, sin(2*pi*x), sin(2*pi*x) + sin(pi*x+1)/2
+splot f1(x), f2(x), f1(x) + f2(x)
