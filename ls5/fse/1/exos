@@ -1,0 +1,7 @@
+EXO1
+
+- commande de lancement du processus : cmdline
+- ppid / gid / uid :  status
+- statut du processus : stat / status
+- mémoire utilisée par le processus : /proc/PID/mem / statm
+
