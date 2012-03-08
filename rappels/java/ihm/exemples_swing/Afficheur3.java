@@ -32,8 +32,8 @@ class JPanelCompteur extends JPanel implements ActionListener
 	
 	public void actionPerformed(ActionEvent e)
 	{
-	int entier = Integer.parseInt(this.jtfCompteur.getText()); 
-	JButton jb = (JButton)e.getSource();
+		int entier = Integer.parseInt(this.jtfCompteur.getText()); 
+		JButton jb = (JButton)e.getSource();
 		
 		if( jb == this.jbPlus)
 			entier++;
@@ -54,7 +54,7 @@ public class Afficheur3 extends JFrame
 	}
 	public static void main ( String [] args )// pareil....
 	{
-	Afficheur3 cpt ;
+		Afficheur3 cpt ;
 		cpt = new Afficheur3("Essai 3") ;
 		cpt.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		cpt.pack() ;
