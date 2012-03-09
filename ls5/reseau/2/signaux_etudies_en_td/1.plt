@@ -14,5 +14,7 @@ set sample 5000
 set xrange [-3:3]
 set yrange [-2:2]
 
-# fonction
-plot sin(pi*x+2)/2, sin(2*pi*x), sin(2*pi*x) + sin(pi*x+2)/2
+# fonctions
+carre(x) = ((ceil(x)%2) == 0) ? 1 : -1
+
+plot carre(x), sin(x)
