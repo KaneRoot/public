@@ -13,10 +13,10 @@ float pi = M_PI;
 void
 coef_sf (int nb_harm, float a[], float b[])
 {
-  int i;
+  int i = 0;
 
   for (i = 1; i <= nb_harm; i += 2)
-    a[i] = (1 / (pi * i)) * (1 - cos (pi - i));	// à modifier (fait) TODO
+    a[i] = (1 / (pi * i)) * (1 - cos (pi * i));	// à modifier (fait) TODO
 
   for (i = 1; i <= nb_harm; i++)
     b[i] = (1 / (pi * i)) * sin (pi * i);	// à modifier (fait) tjs 0. TODO
