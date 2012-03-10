@@ -16,10 +16,10 @@ coef_sf (int nb_harm, float a[], float b[])
   int i;
 
   for (i = 1; i <= nb_harm; i += 2)
-	a[i] = (2 / (pi * i)) * (1 - cos (pi - i));		// à modifier (fait)
+    a[i] = (1 / (pi * i)) * (1 - cos (pi - i));	// à modifier (fait) TODO
 
   for (i = 1; i <= nb_harm; i++)
-	b[i] = (2 / (pi * i)) * sin (pi * i);			// à modifier (fait) tjs 0.
+    b[i] = (1 / (pi * i)) * sin (pi * i);	// à modifier (fait) tjs 0. TODO
 
   return;
 }
@@ -88,7 +88,7 @@ main ()
   {
     sa = somcos (nb_harm, fondamentale, t, bb);
     sb = somsin (nb_harm, fondamentale, t, aa);
-	ss = sa + sb + dt / 2;						// à modifier (fait)
+    ss = sa + sb + dt / 2;							// à modifier (fait) TODO
 
     fprintf (fp, "%f %f\n", t, ss);
     t += dt;

@@ -9,21 +9,25 @@ set sample 500
 set xrange [-3:3]
 set yrange [-2:2]
 
-#set terminal png
-#set output "monfichier.png"
+set terminal png
+set output "dent_scie_4.png"
 
 # notre amplitude
-A = 1
-T=2
-f=1/T
+A = 1.
+T = 1.
+f = 1./T
 a0 = A
 
 dent_de_scie(x) = x - floor(x)
 
-a(n) = 
-b(n) = -A/(pi*n)
+a(n) = -A/(pi*n)
+b(n) = 0
 
-f(x,n) = (n == 0) ? : f(x) + a(1.) * sin(2.*pi*x) + b(1.) * cos(2. * pi * x)
+# généralisation de la fonction de calcul des harmoniques avec une harmonique nulle (numéro y)
+f(x,n) = (y == n) ? 0 : (n == 0) ? a0/2. : f(x, n - 1) + a(n) * sin(2. * pi * x * n * f) + b(n) * cos(2. * pi * x * n * f)
+
+# L'harmonique qui doit être nulle
+y = 4
 
 # fonction
-plot dent_de_scie(x)
+plot dent_de_scie(x), f(x,1), f(x,2), f(x,3), f(x,4)
