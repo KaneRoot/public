@@ -88,7 +88,7 @@ main ()
   {
     sa = somcos (nb_harm, fondamentale, t, bb);
     sb = somsin (nb_harm, fondamentale, t, aa);
-    ss = sa + sb + dt / 2.0;							// à modifier (fait)
+    ss = sa + sb + 0.5;							// à modifier (fait)
 
     fprintf (fp, "%f %f\n", t, ss);
     t += dt;

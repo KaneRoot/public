@@ -1,0 +1,20 @@
+Premiers pas.
+
+Il y a un fichier exécutable pour chaque question de l'exercice.
+Chaque script enregistre son résultat dans un fichier .png.
+
+Les courbes sont déjà enregistrées dans le dossier "images".
+
+
+
+Signaux étudiés en TD.
+
+Ici, il y a deux fichiers exécutables: carre.plt et dent_de_scie.plt .
+Même fonctionnement que précédemment.
+
+Les courbes sont également déjà enregistrées dans le dossier "images".
+
+Les fonctions utilisées sont récursives, pour avoir un code plus clair (et plus générique).
+Pour essayer les fonctions avec un plus grand nombre d'harmoniques, il suffit d'entrer le nombre désiré en second paramètre de la fonction "f" (vaut pour les deux fonctions vues en cours).
+
+Pour les fichiers compilés, un script "test.plt" dessinera l'image de la courbe avec le fichier sf.dat .
