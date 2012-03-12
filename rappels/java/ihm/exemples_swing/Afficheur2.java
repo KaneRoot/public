@@ -61,7 +61,7 @@ public class Afficheur2 extends JFrame
 	 
 	public Afficheur2( String s )
 	{
-	super(s);
+		super(s);
 	
 		this.add(jpCpt,BorderLayout.CENTER) ;
 		
@@ -69,7 +69,8 @@ public class Afficheur2 extends JFrame
 	
 	public static void main ( String [] args )
 	{
-	Afficheur2 cpt ;
+		Afficheur2 cpt ;
+
 		cpt = new Afficheur2("Essai compteur") ;
 		cpt.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		cpt.pack() ;

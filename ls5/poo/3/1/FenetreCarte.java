@@ -22,14 +22,13 @@ public class FenetreCarte extends JFrame
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setContentPane(buildContentPane());
-		setSize(300,200);
 		setVisible(true);
 	}
 	private JPanel buildContentPane()
 	{
 		Carte[] c = new Carte[6*7];
 		for(int i = 0 ; i < (6*7) ; i++)
-			c[i] = new Carte();
+			c[i] = new Carte("" + i);
 
 		JPanel panel = new PanneauCarte(c);
 		return panel;
@@ -46,13 +45,17 @@ public class FenetreCarte extends JFrame
 	}
 }
 
-
 class Carte extends JButton
 {
 	/*
 	 * Créée une FenetreCarte et affiche la topologie de la carte
 	 *
 	 **/
+	public Carte(String s)
+	{
+		super(s);
+		this.setSize(50,50);
+	}
 	public void Afficher()
 	{
 	}
