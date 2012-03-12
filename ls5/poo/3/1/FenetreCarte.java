@@ -11,10 +11,43 @@ public class FenetreCarte extends JFrame
 	public void Afficher(Carte c)
 	{
 	}
+	public FenetreCarte()
+	{
+		super();
+		build();
+	}
+	private void build()
+	{
+		setTitle("Premier Exercice");
+		setLocationRelativeTo(null);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setContentPane(buildContentPane());
+		setSize(300,200);
+		setVisible(true);
+	}
+	private JPanel buildContentPane()
+	{
+		Carte[] c = new Carte[6*7];
+		for(int i = 0 ; i < (6*7) ; i++)
+			c[i] = new Carte();
+
+		JPanel panel = new PanneauCarte(c);
+		return panel;
+	}
+	public static void main(String[] args)
+	{
+		SwingUtilities.invokeLater(new Runnable()
+		{
+			public void run()
+			{
+				FenetreCarte f = new FenetreCarte();
+			}
+		});
+	}
 }
 
 
-class Carte
+class Carte extends JButton
 {
 	/*
 	 * Créée une FenetreCarte et affiche la topologie de la carte
@@ -28,10 +61,14 @@ class Carte
 
 class PanneauCarte extends JPanel
 {
-	public Carte c;
-	public PanneauCarte(Carte c)
+	public Carte[] c;
+	public PanneauCarte(Carte[] c)
 	{
 		this.c = c;
+		this.setLayout(new GridLayout(6,7));
+		this.setBackground(Color.black);
+		for(int i = 0 ; i < (6*7) ; i++)
+			this.add(c[i]);
 	}
 	/*
 	 * Redéfinition de paint pour dessiner la carte
