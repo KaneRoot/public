@@ -1,6 +1,6 @@
-import javax.swing.JScrollBar;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
+import javax.swing.JScrollBar;
 import java.awt.GridLayout;
 import javax.swing.JPanel;
 
@@ -14,10 +14,11 @@ public class VueSlider extends PointVue implements ChangeListener
 		super(pc);
 		this.x = x;
 		this.y = y;
-		sx = new JScrollBar();
-		sy = new JScrollBar();
-		sx.addChangeListener(this);
-		sy.addChangeListener(this);
+
+		this.sx = new JScrollBar();
+		this.sy = new JScrollBar();
+		this.sx.addChangeListener(this);
+		this.sy.addChangeListener(this);
 
 		JPanel jp = new JPanel();
 		jp.setLayout(new GridLayout(2,1));

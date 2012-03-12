@@ -11,14 +11,13 @@ public class VueGraphe extends PointVue implements MouseListener
 		this.x = x;
 		this.y = y;
 	}
-	@Override
 	public void mouseClick(MouseEvent e)
 	{
 		getControleur().NotifierChangementPosition(e.getX(),e.getY());
 	}
 	public void Paint(Graphics g)
 	{
-		super.PaintComponent(g);
+		super.paintComponent(g);
 		g.drawOval(x,y,10,10);
 	}
 	public void PositionChangee(ChangementPositionEvent e)
