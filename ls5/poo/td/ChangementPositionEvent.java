@@ -9,6 +9,6 @@ public class ChangementPositionEvent extends EventObject
 		this.nouveauX_ = nouvX;
 		this.nouveauY_ = nouvY;
 	}
-	public int getNouveauX() { return this.nouveauX_; }
-	public int getNouveauY() { return this.nouveauY_; }
+	public int getNouveauX() { return this.nouveauX_; }
+	public int getNouveauY() { return this.nouveauY_; }
 }

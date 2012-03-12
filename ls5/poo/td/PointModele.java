@@ -32,8 +32,15 @@ public class PointModele
 	}
 	protected void fireChangementPosition()
 	{
+		/* Méthode qui ne marche pas
 		Object[] listeners = listenerList.getListenerList(ChangementPositionListener.class);
 		for(int i = listeners.length - 1 ; i >= 0 ; i--)
 			listeners[i].PositionChangee(new ChangementPositionEvent(this, this.x, this.y));
+		*/
+
+		Object[] listeners = listenerList.getListenerList();
+		for(int i = listeners.length - 2 ; i >= 0 ; i -= 2)
+			if(listeners[i] == ChangementPositionListener.class)
+				((ChangementPositionListener) listeners[i+1]).PositionChangee(new ChangementPositionEvent(this, this.x, this.y));
 	}
 }

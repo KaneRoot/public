@@ -1,5 +1,6 @@
 import javax.swing.JScrollBar;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
 import java.awt.GridLayout;
 import javax.swing.JPanel;
 
