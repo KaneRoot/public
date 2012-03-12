@@ -14,4 +14,8 @@ public class PointControleur
 		vg.setVisible(true);
 		vs.setVisible(true);
 	}
+	public void NotifierChangementPosition(int x, int y)
+	{
+		this.pm.set(x,y);
+	}
 }

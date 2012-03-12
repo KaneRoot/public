@@ -1,3 +1,5 @@
+import javax.swing.event.EventListenerList;
+
 public class PointModele
 {
 	private int x, y;

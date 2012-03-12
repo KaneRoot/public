@@ -1,3 +1,5 @@
+import java.awt.event.MouseListener;
+
 public class VueGraphe extends PointVue implements MouseListener
 {
 	private int x,y;
@@ -7,12 +9,10 @@ public class VueGraphe extends PointVue implements MouseListener
 		this.x = x;
 		this.y = y;
 	}
-	@Override
 	public void mouseClick(MouseEvent e)
 	{
 		getControleur().NotifierChangementPosition(e.getX(),e.getY());
 	}
-	@Override
 	public void Paint(Graphics g)
 	{
 		super.PaintComponent(g);
