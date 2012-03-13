@@ -1,0 +1,2 @@
+escale( idEscale number(10), villeDepart varchar2(50), villeArrivee varchar2(50))
+vol( idVol number(10)
