@@ -6,14 +6,10 @@ create table CLIENT
 	adresseClient varchar2(100),
 	numTelClient number(10)
 );
-create table VOL
+create table COMPAGNIE
 (
-	idVol number(10) PRIMARY KEY,
-	dateDepart date,
-	dateArrivee date,
-	villeDepart varchar2(50),
-	villeArrivee varchar2(50),
-	CONSTRAINT fk_vol_compagnie FOREIGN KEY(idCompagnie) REFERENCES COMPAGNIE
+	idCompagnie number(10) PRIMARY KEY,
+	nomCompagnie varchar2(50)
 );
 create table ESCALE
 (
@@ -21,10 +17,28 @@ create table ESCALE
 	villeDepart varchar2(50),
 	villeArrivee varchar2(50)	
 );
-create table COMPAGNIE
+create table VOL
 (
-	idCompagnie number(10) PRIMARY KEY,
-	nomCompagnie varchar2(50)
+	idVol number(10) PRIMARY KEY,
+	dateDepart date,
+	dateArrivee date,
+	villeDepart varchar2(50),
+	villeArrivee varchar2(50),
+	idCompagnie number(10) NOT NULL,
+	CONSTRAINT fk_vol_compagnie FOREIGN KEY (idCompagnie) REFERENCES COMPAGNIE ON DELETE CASCADE
+);
+create table BILLET
+(
+	idBillet number(15) PRIMARY KEY,
+	promo number(2),
+	prix number(15) CHECK (prix > 0),
+	dateAchat date,
+	idVol number(10) NOT NULL,
+	idClient number(15) NOT NULL,
+	idCompagnie number(10) NOT NULL,
+	CONSTRAINT fk_billet_vol FOREIGN KEY (idVol) REFERENCES VOL ON DELETE CASCADE,
+	CONSTRAINT fk_billet_client FOREIGN KEY (idClient) REFERENCES CLIENT ON DELETE CASCADE ,
+	CONSTRAINT fk_billet_compagnie FOREIGN KEY (idCompagnie) REFERENCES COMPAGNIE ON DELETE CASCADE
 );
 create table CARTE_FIDELITE
 (
@@ -43,20 +57,6 @@ create table RESERVATION
 	idBillet number(15) NOT NULL,
 	CONSTRAINT fk_reservation_client FOREIGN KEY (idClient) REFERENCES CLIENT ON DELETE CASCADE,
 	CONSTRAINT fk_reservation_billet FOREIGN KEY (idBillet) REFERENCES BILLET ON DELETE CASCADE
-);
-create table BILLET
-(
-	idBillet number(15) PRIMARY KEY,
-	promo number(2),
-	prix number(15) CHECK (prix > 0),
-	dateAchat date,
-
-	idVol number(10) NOT NULL,
-	idClient number(15) NOT NULL,
-	idCompagnie number(10) NOT NULL,
-	CONSTRAINT fk_billet_vol FOREIGN KEY (idVol) REFERENCES VOL ON DELETE CASCADE,
-	CONSTRAINT fk_billet_client FOREIGN KEY (idClient) REFERENCES CLIENT ON DELETE CASCADE ,
-	CONSTRAINT fk_billet_compagnie FOREIGN KEY (idCompagnie) REFERENCES COMPAGNIE ON DELETE CASCADE
 );
 create table VOL_ESCALE
 (
