@@ -16,5 +16,5 @@ billet( idBillet number(15) PK, promo number(2), #idVol number(10) PK, #idClient
 
 vol_escale( #idVol number(10) PK, #idEscale number(10) PK)
 
-achat( #idBillet number(15) PK, #idClient number(15) PK , dateAchat date, prix number(15))
+achat( idAchat number(15) PK, #idBillet number(15), #idClient number(15), dateAchat date, prix number(15))
 
