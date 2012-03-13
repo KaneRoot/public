@@ -20,7 +20,7 @@ create table ESCALE
 create table VOL
 (
 	idVol number(10) PRIMARY KEY,
-	idCompagnie number(10) PRIMARY KEY,
+	idCompagnie number(10) NOT NULL,
 	dateDepart date NOT NULL,
 	dateArrivee date NOT NULL,
 	villeDepart varchar2(50) NOT NULL,
@@ -30,8 +30,8 @@ create table VOL
 create table BILLET
 (
 	idBillet number(15) PRIMARY KEY,
-	idVol number(10) PRIMARY KEY,
-	idCompagnie number(10) PRIMARY KEY,
+	idVol number(10) NOT NULL,
+	idCompagnie number(10) NOT NULL,
 	promo number(2) CHECK (promo > 0 AND promo < 100),
 	CONSTRAINT fk_billet_vol FOREIGN KEY (idVol) REFERENCES VOL ON DELETE CASCADE,
 	CONSTRAINT fk_billet_compagnie FOREIGN KEY (idCompagnie) REFERENCES COMPAGNIE ON DELETE CASCADE
@@ -49,7 +49,7 @@ create table ACHAT
 create table CARTE_FIDELITE
 (
 	idCompagnie number(8) PRIMARY KEY, 
-	idClient number(6) PRIMARY KEY,
+	idClient number(6) NOT NULL,
 	miles number(10) NOT NULL,
 	CONSTRAINT fk_carte_fidelite_compagnie FOREIGN KEY (idCompagnie) REFERENCES COMPAGNIE ON DELETE CASCADE,
 	CONSTRAINT fk_carte_fidelite_client FOREIGN KEY (idClient) REFERENCES CLIENT ON DELETE CASCADE
