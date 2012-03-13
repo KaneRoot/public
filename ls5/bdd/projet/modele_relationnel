@@ -1,8 +1,20 @@
-escale( idEscale number(10), villeDepart varchar2(50), villeArrivee varchar2(50))
-vol( idVol number(10), dateDepart date, dateArrivee date, villeArrivee varchar2(50), villeDepart varchar2(50), #idCompagnie number(10))
-compagnie( idCompagnie number(10), nomCompagnie varchar2(50))
-carte_fidelite( #idCompagnie number(10), #idClient number(15), miles number(10))
-client(idClient number(15), nomClient varchar2(50), prenomClient varchar2(50), adresseClient varchar2(100), numTelClient number(10))
-reservation( idReservation number(15), dateReservation date, etatReservation char(1), #idVol number(10),  #idClient number(15), #idCompagnie number(10))
-billet( idBillet number(15), promo number(2), prix number(15), dateAchat date, #idVol number(10), #idClient number(15), #idCompagnie number(10))
-vol_escale( #idVol number(10), #idEscale number(10))
+Pour les clés primaire : PK
+
+escale( idEscale number(10) PK, villeDepart varchar2(50), villeArrivee varchar2(50))
+
+vol( idVol number(10) PK , dateDepart date, dateArrivee date, villeArrivee varchar2(50), villeDepart varchar2(50), #idCompagnie number(10) PK)
+
+compagnie( idCompagnie number(10) PK, nomCompagnie varchar2(50))
+
+carte_fidelite( #idCompagnie number(10) PK, #idClient number(15) PK, miles number(10))
+
+client(idClient number(15) PK, nomClient varchar2(50), prenomClient varchar2(50), adresseClient varchar2(100), numTelClient number(10))
+
+reservation( idReservation number(15) PK, dateReservation date, etatReservation char(1), #idClient number(15), #idBillet number(15))
+
+billet( idBillet number(15) PK, promo number(2), #idVol number(10) PK, #idClient number(15), #idCompagnie number(10) PK)
+
+vol_escale( #idVol number(10) PK, #idEscale number(10) PK)
+
+achat( #idBillet number(15) PK, #idClient number(15) PK , dateAchat date, prix number(15))
+
