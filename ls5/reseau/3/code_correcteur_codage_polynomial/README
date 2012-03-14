@@ -1,6 +1,1 @@
-Exercice 1 : bit de parité
-Il faudra afficher toutes les chaînes dans lesquelles le médium aura introduit des erreurs, ainsi que toutes les chaînes dans lesquelles le récepteur aura détecté des erreurs. 
-Les deux listes devraient être identiques. 
-
-Quels sont les types d’erreurs que l’on peut détecter avec ce codage ?
-
+Exercice 2 : codage polynomial
