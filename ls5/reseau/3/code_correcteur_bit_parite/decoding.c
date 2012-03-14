@@ -51,7 +51,8 @@ void errorCorrection(CodeWord_t *cw, int data_size)
 */
 int thereIsError(CodeWord_t *cw, int data_size)
 {
-	int i, j, nb_de_un;
+	int i, j, nb_de_un, erreur = 0;
+	printf("Les erreurs : ");
 	for(i = 0 ; i < data_size ; i++)
 	{
 		nb_de_un = 0;
@@ -59,9 +60,16 @@ int thereIsError(CodeWord_t *cw, int data_size)
 			if(getNthBit(cw[i],j))
 				nb_de_un++;
 		if(getNthBit(cw[i], 9) != nb_de_un%2)
-			return 1;
+		{
+			printf("[\033[36m%d\033[00m:\033[31m%c\033[00m] ", i, cw[i]);
+			erreur = 1;
+		}
 	}
-	return 0;
+	if(! erreur)
+		printf("aucune erreur\n");
+	else
+		printf("\n");
+	return erreur;
 }
 
 void
