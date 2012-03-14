@@ -195,29 +195,21 @@ main (int argc, char **argv)
       res = forward (s_medsend, s_medrec, remote_rec, error_type);
 
       if (res == 0)
-      {
-	stop = 1;
-      }
+		stop = 1;
       else if (res < 0)
-      {
-	crash = 1;
-      }
+		crash = 1;
     }
 
     // if the receiver sends a message
     if (FD_ISSET (s_medrec, &reading2))
     {
-      res = forward (s_medrec, s_medsend, remote_send, error_type);
+		res = forward (s_medrec, s_medsend, remote_send, error_type);
 
-      if (res == 0)
-      {
-	stop = 1;
-      }
-      else if (res < 0)
-      {
-	crash = 1;
-      }
-    }
+		if (res == 0)
+			stop = 1;
+		else if (res < 0)
+			crash = 1;
+	}
   }
 
   if (crash)

@@ -43,23 +43,26 @@ copyDataBitsDecoding (CodeWord_t * cw, char *message, int data_size)
   }
 }
 
-/**
- * Up to you
-
+/*
 void errorCorrection(CodeWord_t *cw, int data_size)
 {
-  return;
+	return;
 }
 */
-
-/**
- * Up to you
-
 int thereIsError(CodeWord_t *cw, int data_size)
 {
-  return 0;
+	int i, j, nb_de_un;
+	for(i = 0 ; i < data_size ; i++)
+	{
+		nb_de_un = 0;
+		for(j = 1 ; j <= 8 ; j++) 
+			if(getNthBit(cw[i],j))
+				nb_de_un++;
+		if(getNthBit(cw[i], 9) != nb_de_un%2)
+			return 1;
+	}
+	return 0;
 }
-*/
 
 void
 decoding (char *cw, int cw_size, char *message, int *data_size)
@@ -75,10 +78,10 @@ decoding (char *cw, int cw_size, char *message, int *data_size)
 
   //-- For error detection
   //-- to uncomment when complete and needed
-  //if(thereIsError((CodeWord_t*)cw, *data_size))
-  //  {
-  //    printf("PARITY ERROR: \"%s\"\n", message);
-  //  }
+	if(thereIsError((CodeWord_t*)cw, *data_size))
+	{
+		printf("PARITY ERROR: \"%s\"\n", message);
+	}
 
-  return;
+	return;
 }

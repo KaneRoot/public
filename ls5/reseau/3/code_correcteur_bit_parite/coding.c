@@ -44,14 +44,19 @@ copyDataBitsCoding (char *message, CodeWord_t * cw, int size)
   return;
 }
 
-/**
- * Up to you
-
-void computeCtrlBits(CodeWord_t *message, int size)
+void computeCtrlBits(CodeWord_t *cw, int size)
 {
-  return;
+	int nombre_de_un, i, j;
+	for(i = 0 ; i < size ; i++)
+	{
+		nombre_de_un = 0;
+		for(j = 1 ; j <= 8 ; j++) 
+			if(getNthBit(cw[i],j))
+				nombre_de_un++;
+
+		setNthBitCW(&cw[i], 9, nombre_de_un%2);
+	}
 }
-*/
 
 void
 coding (char *message, int data_size, char *cw, int *cw_size)
@@ -60,7 +65,7 @@ coding (char *message, int data_size, char *cw, int *cw_size)
 
   copyDataBitsCoding (message, (CodeWord_t *) cw, data_size);
   //-- to uncomment when complete and needed
-  //computeCtrlBits((CodeWord_t*)cw, *cw_size);
+  computeCtrlBits((CodeWord_t*)cw, *cw_size);
 
   return;
 }
