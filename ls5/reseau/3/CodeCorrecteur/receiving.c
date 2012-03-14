@@ -37,40 +37,40 @@
  *
  * @return -1 in case of error, the size (in bytes) of data flow otherwise
  */
-static int receiveMessage(int desc, char *message)
+static int
+receiveMessage (int desc, char *message)
 {
   static int stop = 0;
-  int cw_size     = 0;
-  int data_size   = 0;
+  int cw_size = 0;
+  int data_size = 0;
 
   char cw[MAX_MSG_CODE];
-  memset(cw, '\0', MAX_MSG_CODE*sizeof(char));
+  memset (cw, '\0', MAX_MSG_CODE * sizeof (char));
 
   struct sockaddr_un remote_addr;
-  unsigned int addr_size = sizeof(struct sockaddr_un);
+  unsigned int addr_size = sizeof (struct sockaddr_un);
 
-  if(stop)
-    {
-      return(0);
-    }
+  if (stop)
+  {
+    return (0);
+  }
   else
+  {
+    cw_size = recvfrom (desc, cw, MAX_MSG_CODE, 0,
+			(struct sockaddr *) &remote_addr, &addr_size);
+
+    if (cw_size == 0)
     {
-      cw_size = recvfrom(desc, cw, MAX_MSG_CODE, 0,
-			 (struct sockaddr *) &remote_addr,
-			 &addr_size);
-
-      if(cw_size == 0)
-	{
-	  return(0);
-	}
-      else if(cw_size > 0)
-	{
-	  decoding(cw, cw_size, message, &data_size);
-	  return(data_size);
-	}
-
-      return(-1);
+      return (0);
     }
+    else if (cw_size > 0)
+    {
+      decoding (cw, cw_size, message, &data_size);
+      return (data_size);
+    }
+
+    return (-1);
+  }
 }
 
 /**
@@ -81,72 +81,73 @@ static int receiveMessage(int desc, char *message)
  * @return 0 if the program has successfully completed,
  *         anything else otherwise
  */
-int main(int argc, char **argv)
+int
+main (int argc, char **argv)
 {
   int saveFile = 0;
-  int size     = 0;
-  int res      = 0;
-  int desc     = 0;
-  int stop     = 0;
+  int size = 0;
+  int res = 0;
+  int desc = 0;
+  int stop = 0;
 
-  mode_t mode  = 0;
+  mode_t mode = 0;
 
   char message[MAX_MESSAGE];
-  memset(message, '\0', MAX_MESSAGE*sizeof(char));
+  memset (message, '\0', MAX_MESSAGE * sizeof (char));
 
-  if(argc != 2)
-    {
-      printf("Usage: receiver FileReceived \n");
-      exit(1);
-    }
+  if (argc != 2)
+  {
+    printf ("Usage: receiver FileReceived \n");
+    exit (1);
+  }
 
   //-- open the file in write mode
-  mode = S_IRUSR|S_IWUSR;
+  mode = S_IRUSR | S_IWUSR;
 
-  if((saveFile = open(argv[1], O_WRONLY|O_CREAT|O_TRUNC, mode)) == -1)
-    {
-      perror(argv[1]);
-      exit(1);
-    }
+  if ((saveFile = open (argv[1], O_WRONLY | O_CREAT | O_TRUNC, mode)) == -1)
+  {
+    perror (argv[1]);
+    exit (1);
+  }
 
   //-- create and bind local socket
-  desc = getAndBindSocket("sock_rec");
+  desc = getAndBindSocket ("sock_rec");
 
   //-- transmission
-  printf("Ready to receive.\n");
+  printf ("Ready to receive.\n");
 
   do
+  {
+    size = receiveMessage (desc, message);
+
+    if (size < 0)
     {
-      size = receiveMessage(desc, message);
-
-      if(size < 0)
-	{
-	  perror("reception socket\n");
-	  exit(1);
-	}
-      else if(size > 0)
-	{
-	  res = write(saveFile, message, size);
-
-	  if(res == -1)
-	    {
-	      perror("writing receiver\n");
-	      exit(1);
-	    }
-	}
-      else if(size == 0)
-	{
-	  stop = 1;
-	}
+      perror ("reception socket\n");
+      exit (1);
     }
-  while(!stop);
+    else if (size > 0)
+    {
+      res = write (saveFile, message, size);
+
+      if (res == -1)
+      {
+	perror ("writing receiver\n");
+	exit (1);
+      }
+    }
+    else if (size == 0)
+    {
+      stop = 1;
+    }
+  }
+  while (!stop);
 
   //-- transmission complete
 
-  printf("Reception complete\n");
-  close(desc);
-  close(saveFile);
-  remove("sock_rec");
+  printf ("Reception complete\n");
+  close (desc);
+  close (saveFile);
+  remove ("sock_rec");
 
   return 0;
 }

@@ -40,43 +40,42 @@
  *
  * @return nothing (coding and sending message)
  */
-static void sendMessage(int desc,
-			char *message,
-			int size,
-			struct sockaddr_un remote_addr)
+static void
+sendMessage (int desc,
+	     char *message, int size, struct sockaddr_un remote_addr)
 {
-  int ok      = 0;
-  int res     = 0;
+  int ok = 0;
+  int res = 0;
   int cw_size = 0;
 
   char cw[MAX_MSG_CODE];
-  memset(cw, '\0', MAX_MSG_CODE*sizeof(char));
+  memset (cw, '\0', MAX_MSG_CODE * sizeof (char));
 
-  coding(message, size, cw, &cw_size);
+  coding (message, size, cw, &cw_size);
 
   do
-    {
-      res = sendto(desc, cw, cw_size, 0,
-		   (struct sockaddr*) &remote_addr,
-		   sizeof(struct sockaddr_un));
+  {
+    res = sendto (desc, cw, cw_size, 0,
+		  (struct sockaddr *) &remote_addr,
+		  sizeof (struct sockaddr_un));
 
-      if(res < 0 && errno == ENOBUFS)
-	{
-	  usleep(1000);
-	  ok = 0;
-	}
-      else
-	{
-	  ok = 1;
-	}
-    }
-  while(!ok);
-
-  if(res == -1)
+    if (res < 0 && errno == ENOBUFS)
     {
-      perror("sendto sender\n");
-      exit(1);
+      usleep (1000);
+      ok = 0;
     }
+    else
+    {
+      ok = 1;
+    }
+  }
+  while (!ok);
+
+  if (res == -1)
+  {
+    perror ("sendto sender\n");
+    exit (1);
+  }
 
   return;
 }
@@ -91,19 +90,20 @@ static void sendMessage(int desc,
  *
  * @return nothing
  */
-static void disconnectRequest(int desc, struct sockaddr_un remote_addr)
+static void
+disconnectRequest (int desc, struct sockaddr_un remote_addr)
 {
   int res = 0;
 
-  res = sendto(desc, "", 0, 0,
-	       (struct sockaddr*) &remote_addr,
-	       sizeof(struct sockaddr_un));
+  res = sendto (desc, "", 0, 0,
+		(struct sockaddr *) &remote_addr,
+		sizeof (struct sockaddr_un));
 
-  if(res == -1)
-    {
-      perror("sendto deconnect\n");
-      exit(1);
-    }
+  if (res == -1)
+  {
+    perror ("sendto deconnect\n");
+    exit (1);
+  }
 
   return;
 }
@@ -116,59 +116,60 @@ static void disconnectRequest(int desc, struct sockaddr_un remote_addr)
  * @return 0 if the program has successfully completed,
  *         anything else otherwise
  */
-int main(int argc, char **argv)
+int
+main (int argc, char **argv)
 {
   int readFile = 0;
-  int size     = 0;
-  int desc     = 0;
+  int size = 0;
+  int desc = 0;
 
   struct sockaddr_un remote_addr;
 
   mode_t mode = 0;
 
   char message[MAX_MESSAGE];
-  memset(message, '\0', MAX_MESSAGE*sizeof(char));
+  memset (message, '\0', MAX_MESSAGE * sizeof (char));
 
-  if(argc != 2)
-    {
-      printf("Usage : sender FileToSend \n");
-      exit(1);
-    }
+  if (argc != 2)
+  {
+    printf ("Usage : sender FileToSend \n");
+    exit (1);
+  }
 
   //-- open the file in read mode
-  mode = S_IRUSR|S_IWUSR;
+  mode = S_IRUSR | S_IWUSR;
 
-  if((readFile = open(argv[1], O_RDONLY, mode)) == -1)
-    {
-      perror(argv[1]);
-      exit(1);
-    }
+  if ((readFile = open (argv[1], O_RDONLY, mode)) == -1)
+  {
+    perror (argv[1]);
+    exit (1);
+  }
 
   //-- create and bind local socket
   //-- and set the remote addr structure
-  desc        = getAndBindSocket("sock_send");
-  remote_addr = setAddr("s_medsend");
+  desc = getAndBindSocket ("sock_send");
+  remote_addr = setAddr ("s_medsend");
 
   //-- transmission
-  while((size = read(readFile, message, MAX_MESSAGE)) > 0)
-    {
-      sendMessage(desc, message, size, remote_addr);
-    }
+  while ((size = read (readFile, message, MAX_MESSAGE)) > 0)
+  {
+    sendMessage (desc, message, size, remote_addr);
+  }
 
   //-- end of transmission
-  if(size < 0)
-    {
-      perror("read");
-      exit(1);
-    }
-  else //-- size = 0
-    {
-      printf("Transmission complete\n");
-      disconnectRequest(desc, remote_addr);
-      close(desc);
-      close(readFile);
-      remove("sock_send");
-    }
+  if (size < 0)
+  {
+    perror ("read");
+    exit (1);
+  }
+  else				//-- size = 0
+  {
+    printf ("Transmission complete\n");
+    disconnectRequest (desc, remote_addr);
+    close (desc);
+    close (readFile);
+    remove ("sock_send");
+  }
 
   return 0;
 }

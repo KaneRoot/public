@@ -24,21 +24,22 @@
 
 #include "codingdecoding.h"
 
-void copyDataBitsCoding(char *message, CodeWord_t *cw, int size)
+void
+copyDataBitsCoding (char *message, CodeWord_t * cw, int size)
 {
   int i = 0;
 
-  for(i=0; i<size; i++)
-    {
-      setNthBitCW(&(cw[i]), 1, getNthBit(message[i], 1));
-      setNthBitCW(&(cw[i]), 2, getNthBit(message[i], 2));
-      setNthBitCW(&(cw[i]), 3, getNthBit(message[i], 3));
-      setNthBitCW(&(cw[i]), 4, getNthBit(message[i], 4));
-      setNthBitCW(&(cw[i]), 5, getNthBit(message[i], 5));
-      setNthBitCW(&(cw[i]), 6, getNthBit(message[i], 6));
-      setNthBitCW(&(cw[i]), 7, getNthBit(message[i], 7));
-      setNthBitCW(&(cw[i]), 8, getNthBit(message[i], 8));
-    }
+  for (i = 0; i < size; i++)
+  {
+    setNthBitCW (&(cw[i]), 1, getNthBit (message[i], 1));
+    setNthBitCW (&(cw[i]), 2, getNthBit (message[i], 2));
+    setNthBitCW (&(cw[i]), 3, getNthBit (message[i], 3));
+    setNthBitCW (&(cw[i]), 4, getNthBit (message[i], 4));
+    setNthBitCW (&(cw[i]), 5, getNthBit (message[i], 5));
+    setNthBitCW (&(cw[i]), 6, getNthBit (message[i], 6));
+    setNthBitCW (&(cw[i]), 7, getNthBit (message[i], 7));
+    setNthBitCW (&(cw[i]), 8, getNthBit (message[i], 8));
+  }
 
   return;
 }
@@ -52,11 +53,12 @@ void computeCtrlBits(CodeWord_t *message, int size)
 }
 */
 
-void coding(char *message, int data_size, char *cw, int *cw_size)
+void
+coding (char *message, int data_size, char *cw, int *cw_size)
 {
-  *cw_size = data_size * sizeof(CodeWord_t);
+  *cw_size = data_size * sizeof (CodeWord_t);
 
-  copyDataBitsCoding(message, (CodeWord_t*)cw, data_size);
+  copyDataBitsCoding (message, (CodeWord_t *) cw, data_size);
   //-- to uncomment when complete and needed
   //computeCtrlBits((CodeWord_t*)cw, *cw_size);
 

@@ -25,40 +25,42 @@
 #include <stdlib.h>
 #include "sockettoolbox.h"
 
-struct sockaddr_un setAddr(char *ref)
+struct sockaddr_un
+setAddr (char *ref)
 {
   struct sockaddr_un remote_addr;
 
   remote_addr.sun_family = AF_UNIX;
-  strcpy(remote_addr.sun_path, ref);
+  strcpy (remote_addr.sun_path, ref);
 
-  return(remote_addr);
+  return (remote_addr);
 }
 
-int getAndBindSocket(char *ref)
+int
+getAndBindSocket (char *ref)
 {
   int desc = 0;
-  int res  = 0;
+  int res = 0;
   struct sockaddr_un local_addr;
 
-  desc = socket(AF_UNIX, SOCK_DGRAM, 0);
+  desc = socket (AF_UNIX, SOCK_DGRAM, 0);
 
-  if(desc == -1)
-    {
-      perror("socket");
-      exit(1);
-    }
+  if (desc == -1)
+  {
+    perror ("socket");
+    exit (1);
+  }
 
   local_addr.sun_family = AF_UNIX;
-  strcpy(local_addr.sun_path, ref);
+  strcpy (local_addr.sun_path, ref);
 
-  res = bind(desc, (struct sockaddr*) &local_addr, sizeof(local_addr));
+  res = bind (desc, (struct sockaddr *) &local_addr, sizeof (local_addr));
 
-  if(res == -1)
-    {
-      perror(ref);
-      exit(1);
-    }
+  if (res == -1)
+  {
+    perror (ref);
+    exit (1);
+  }
 
-  return(desc);
+  return (desc);
 }
