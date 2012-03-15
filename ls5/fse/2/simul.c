@@ -64,29 +64,29 @@ int main (int argc, char *argv [])
 		switch (opt)
 		{
 			case 't' :			/* tracer les creations de processus */
-			trace++ ;
-			break ;
+				trace++ ;
+				break ;
 			case 'i' :			/* initialise le generateur d'alea */
-			init_random = 1 ;
-			break ;
+				init_random = 1 ;
+				break ;
 			case 'p' :			/* probabilite de creation de processus */
-			prob_create = atof (optarg) ;
-			break ;
+				prob_create = atof (optarg) ;
+				break ;
 			case 'c' :			/* duree autorisee pour la creation de processus */
-			duration_create = atoi (optarg) ;
-			break ;
+				duration_create = atoi (optarg) ;
+				break ;
 			case 's' :			/* duree totale de la simulation */
-			duration_total = atoi (optarg) ;
-			break ;
+				duration_total = atoi (optarg) ;
+				break ;
 			case 'q' :			/* duree du quantum */
-			quantum = atoi (optarg) ;
-			break ;
+				quantum = atoi (optarg) ;
+				break ;
 			case 'm' :			/* duree maximum d'un processus */
-			max_duration = atoi (optarg) ;
-			break ;
+				max_duration = atoi (optarg) ;
+				break ;
 			case '?' :
-			default :
-			usage (argv [0]) ;
+				default :
+				usage (argv [0]) ;
 		}
     }
 

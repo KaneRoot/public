@@ -10,6 +10,13 @@
  * a l'exterieur de ce fichier source.
  */
 
+/* Cellule d'une file de processus */
+struct cell
+{
+    struct pcb *proc ;
+    struct cell *next ;
+} ;
+
 /* La file de processus pour l'ordonnanceur round-robin */
 struct cell *rrqueue ;
 

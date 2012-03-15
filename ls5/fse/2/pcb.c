@@ -15,6 +15,8 @@ struct pcb *pcb_create (int pid, int start, int duration, int prio)
 	p->duration = duration;
 	p->prio = prio;
 	p->cpu_time = 0;
+
+	return p;
 }
 
 /*

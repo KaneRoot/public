@@ -57,11 +57,4 @@ void queue_display (void) ;
 /* Ordonnanceur */
 struct pcb *schedule (struct pcb *curproc) ;
 
-/* Cellule d'une file de processus */
-struct cell
-{
-    struct pcb *proc ;
-    struct cell *next ;
-} ;
-
 #endif

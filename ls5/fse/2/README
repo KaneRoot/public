@@ -1,0 +1,9 @@
+Question 2 :
+
+-t : 	/* tracer les creations de processus */
+-i : 	/* initialise le generateur d'alea */
+-p : 	/* probabilite de creation de processus */
+-c : 	/* duree autorisee pour la creation de processus */
+-s : 	/* duree totale de la simulation */
+-q : 	/* duree du quantum */
+-m : 	/* duree maximum d'un processus */

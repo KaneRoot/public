@@ -17,11 +17,12 @@ int main(int argc, char * argv[])
 		p2[i] = pcb_create(i+4, i, i, 0);
 
 	queue_init();
-	for(i = 0 ; i < 3 ; i++)
-		queue_insert(p1[i]);
+	for(i = 0 ; i < 3 ; i++) queue_insert(p1[i]);
 	queue_display();
-	for(i = 0 ; i < 3 ; i++)
-		queue_insert(p2[i]);
+	for(i = 0 ; i < 3 ; i++) queue_insert(p2[i]);
+	queue_display();
+	printf("suppression d'un élément\n");
+	queue_remove_any(p1[0]);
 	queue_display();
 
 	
