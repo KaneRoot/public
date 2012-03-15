@@ -13,7 +13,7 @@ endif
 SOCKETS=s_medsend s_medrec sock_send sock_rec
 all: $(PROGS)
 
-sender: sending.o coding.o logic.o sockettoolbox.o
+sender: sending.o coding.o logic.o sockettoolbox.o autresfonctions.o
 	$(CC) -o $@ $^ $(LDFLAGS_NET)
 
 receiver: receiving.o decoding.o logic.o sockettoolbox.o
