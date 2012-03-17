@@ -24,7 +24,7 @@ public class VueSlider extends PointVue implements ChangeListener
         content.add(scrollY_);
         setContentPane(content);
         pack();
-        setSize(200, 200);
+        setSize(150, 100);
     }
 
 

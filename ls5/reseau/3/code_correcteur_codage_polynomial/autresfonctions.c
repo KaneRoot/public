@@ -20,27 +20,39 @@ void deplacementBits(CodeWord_t * cw, int nb)
 {
 	cw[0] = cw[0] << nb;
 }
+CodeWord_t getNombreDiviseur(void)
+{
+	CodeWord_t nbdiviseur;
+	setNthBitCW(&nbdiviseur, 1, 1);
+	setNthBitCW(&nbdiviseur, 4, 1);
+	setNthBitCW(&nbdiviseur, 5, 1);
+	setNthBitCW(&nbdiviseur, 6, 1);
+	setNthBitCW(&nbdiviseur, 9, 1);
+	return nbdiviseur;
+}
 void division(CodeWord_t *x)
 {
-	int decalage;
-	CodeWord_t ntmp = x[0];
-	CodeWord_t nombre_diviseur = NB_DIVISEUR;
+	CodeWord_t ntmp = *x;
+	CodeWord_t nombre_diviseur = getNombreDiviseur();
 
 	printf("Division \n");
 
-	printf("X : %u\n", ntmp);
-	while( *x >= (CodeWord_t) 256 && *x != 0)
+	while( getFirstBitToOne(&ntmp) > 8 && ntmp != 0)
 	{
-		decalage = getFirstBitToOne(&ntmp) - getFirstBitToOne(&nombre_diviseur);
-		deplacementBits(&ntmp, decalage);
-		printBits(ntmp, "Nombre diviseur :");
-		*x = *x ^ ntmp;
+		deplacementBits(&nombre_diviseur, getFirstBitToOne(&ntmp) - getFirstBitToOne(&nombre_diviseur));
+		ntmp = ntmp ^ nombre_diviseur;
+//		printBits(nombre_diviseur, "nb : ");
+		nombre_diviseur = getNombreDiviseur();
+//		printBits(nombre_diviseur, "nb : ");
+//		printBits(ntmp, "APRES : ");
 	}
+	*x += ntmp;
 	printf(" --- Division \n");
 }
 void coder(CodeWord_t *cw)
 {
-	deplacementBits(&cw[0], 16 - getFirstBitToOne(&cw[0]));
+	printBits(cw[0], "AVANT : ");
+	deplacementBits(cw, 8);
 	division(cw);
 	printBits(cw[0], "APRES : ");
 }
