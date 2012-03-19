@@ -1,0 +1,33 @@
+THREADS
+
+void run : dans la classe qui étend thread
+void start
+void join
+static void sleep (dans le thread)
+boolean isAlive
+
+
+class bla extends Thread
+{
+	void run() {}
+}
+bla b = new bla();
+b.start();
+
+class bla implements Runnable
+{
+	void run() {}
+}
+Thread b = new Thread(new bla());
+b.start();
+
+try
+{
+	wait();
+}
+…
+
+notifyAll(); -> réveille les threads qui sont en attente
+
+Timer:
+Timer t = new Timer(new Tache(), milisecs);

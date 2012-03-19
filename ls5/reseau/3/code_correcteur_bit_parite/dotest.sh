@@ -1,10 +1,14 @@
 #!/bin/bash
 
-rm FileReceived 2>/dev/null
+rm FileReceived
+make clean
+make
 
-./medium 1 &
+./medium 0 &
 
 sleep 1
 ./receiver FileReceived &
 sleep 1
 ./sender FileToSend
+
+make clean

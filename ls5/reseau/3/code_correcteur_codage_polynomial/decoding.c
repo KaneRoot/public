@@ -24,6 +24,7 @@
 
 #include <stdio.h>
 #include "codingdecoding.h"
+#include "autresfonctions.h"
 
 void
 copyDataBitsDecoding (CodeWord_t * cw, char *message, int data_size)
@@ -51,17 +52,19 @@ void errorCorrection(CodeWord_t *cw, int data_size)
 */
 int thereIsError(CodeWord_t *cw, int data_size)
 {
-	int i, j, nb_de_un;
+	int i, retour = 0;
 	for(i = 0 ; i < data_size ; i++)
 	{
-		nb_de_un = 0;
-		for(j = 1 ; j <= 8 ; j++) 
-			if(getNthBit(cw[i],j))
-				nb_de_un++;
-		if(getNthBit(cw[i], 9) != nb_de_un%2)
-			return 1;
+		printBits(cw[i], "avant déplacement");
+	//	if(decoder(&cw[i]))
+	//	{
+	//		printBits(cw[i], "erreur, reçu");
+	//		retour = 1;
+	//	}
+		printBits(cw[i], "après déplacement");
 	}
-	return 0;
+
+	return retour;
 }
 
 void

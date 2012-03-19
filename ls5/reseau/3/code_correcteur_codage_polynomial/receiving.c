@@ -131,8 +131,8 @@ main (int argc, char **argv)
 
       if (res == -1)
       {
-	perror ("writing receiver\n");
-	exit (1);
+		perror ("writing receiver\n");
+		exit (1);
       }
     }
     else if (size == 0)

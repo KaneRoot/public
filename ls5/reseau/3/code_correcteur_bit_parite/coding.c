@@ -50,11 +50,13 @@ void computeCtrlBits(CodeWord_t *cw, int size)
 	for(i = 0 ; i < size ; i++)
 	{
 		nombre_de_un = 0;
+		printBits(cw[i], "avant");
 		for(j = 1 ; j <= 8 ; j++) 
 			if(getNthBit(cw[i],j))
 				nombre_de_un++;
 
 		setNthBitCW(&cw[i], 9, nombre_de_un%2);
+		printBits(cw[i], "après");
 	}
 }
 
