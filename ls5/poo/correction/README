@@ -1,0 +1,13 @@
+Dans les vues : 
+	on garde les éléments affichés en attribut
+	on prend en paramètre du constructeur un contrôleur
+	création d'un panneau et on y ajoute les composants
+	ajout des écouteurs sur les éléments affichés
+	pack();
+	ajout d'une taille pour que la fenêtre soit visible
+
+	redéf PositionChangée avec un event
+
+Pour les JSCROLLBAR : étendre ChangeListener et redéfinir stateChanged(ChangeEvent e) pour dire au contrôleur les changements (NotifierChangementPosition)
+
+Event : juste une classe qui possède les attributs à changer (donnés dans le constructeur)
