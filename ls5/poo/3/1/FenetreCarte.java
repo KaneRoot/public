@@ -17,9 +17,9 @@ public class FenetreCarte extends JFrame
 		this.panneau = new PanneauCarte(c);
 		this.add(this.panneau);
 
-	//	setSize(c.ty * 100, c.tx * 100);
 		setVisible(true);
 		this.pack();
+		setSize(c.ty * 50, c.tx * 50);
 	}
 	public FenetreCarte()
 	{
@@ -29,7 +29,7 @@ public class FenetreCarte extends JFrame
 	private void build()
 	{
 		setTitle("Premier Exercice");
-		setLocationRelativeTo(null);
+	//	setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 }

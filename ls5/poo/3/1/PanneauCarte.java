@@ -10,23 +10,29 @@ public class PanneauCarte extends JPanel
 	{
 		this.c = c;
 		this.setBackground(Color.black);
-		this.setLayout(new GridLayout(this.c.tx, this.c.ty));
+
+		this.setSize(c.ty*100, c.tx*100);
 	}
-	/*
-	 * Redéfinition de paint pour dessiner la carte
-	 *
-	 **/
 	@Override
 	public void paint(Graphics g)
 	{
-		Case[] cases = this.c.getCases();
-
-		for(int i = 0 ; i < (this.c.tx * this.c.ty) ; i++)
+		super.paintComponent(g);
+		Case[] cases = c.getCases();
+		for(Case mcase : cases)
 		{
-			if(! cases[i].isFranchissable())
-				cases[i].setBackground(Color.black);
-			this.add(cases[i]);
-			cases[i].repaint();
+			if(mcase.isFranchissable())
+				g.setColor(Color.green);
+			else
+				g.setColor(Color.red);
+
+			System.out.println("num : " + mcase.num + " taille x " + Case.TAILLE_X +
+					" taille y " + Case.TAILLE_Y + " tx " + this.c.tx + " ty " +
+					this.c.ty);
+			g.fillRect(	
+						(mcase.num % this.c.ty) * Case.TAILLE_X, 
+						(mcase.num / this.c.ty) * Case.TAILLE_Y, 
+						Case.TAILLE_X, 
+						Case.TAILLE_Y);
 		}
 	}
 }

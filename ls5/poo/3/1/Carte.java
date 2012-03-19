@@ -15,12 +15,10 @@ public class Carte
 		this.ty = y;
 		this.c = new Case[x*y];
 
-		for(i = 0 ; i < (x*y) - 20 ; i++)
+		for(i = 0 ; i < (x*y) ; i++)			
 			this.c[i] = new Case(true,i);
-		for(i = (x*y) - 20; i < (x*y) - 10 ; i++)
-			this.c[i] = new Case(false,i);
-		for(i = (x*y) - 10; i < (x*y) ; i++)
-			this.c[i] = new Case(true,i);
+		this.c[8].franchissable = false;
+		this.c[15].franchissable = false;
 
 	}
 	public void Afficher()
@@ -34,9 +32,6 @@ public class Carte
 	}
 	public static void main(String[] args)
 	{
-		Carte c = new Carte(5,7);
-		c.Afficher();
-		/*
 		SwingUtilities.invokeLater(new Runnable()
 		{
 			public void run()
@@ -45,6 +40,5 @@ public class Carte
 				c.Afficher();
 			}
 		});
-		*/
 	}
 }

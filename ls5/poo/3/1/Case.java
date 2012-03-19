@@ -1,7 +1,8 @@
 import javax.swing.*;
 import java.awt.Graphics;
+import java.awt.Color;
 
-public class Case extends JButton
+public class Case
 {
 	public boolean franchissable;
 	public int num;
@@ -15,10 +16,5 @@ public class Case extends JButton
 	public boolean isFranchissable()
 	{
 		return this.franchissable;
-	}
-	public void paint(Graphics g)
-	{
-		g.drawRect((this.num * TAILLE_X) % 5, (this.num * TAILLE_Y) % 7, TAILLE_X, TAILLE_Y);
-		this.setSize(50,50);
 	}
 }
