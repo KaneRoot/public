@@ -22,7 +22,10 @@
  * Generate code words from the initial data flow
  */
 
+#include <stdio.h>
+#include <stdlib.h>
 #include "codingdecoding.h"
+#include "autresfonctions.h"
 
 void
 copyDataBitsCoding (char *message, CodeWord_t * cw, int size)
@@ -46,15 +49,13 @@ copyDataBitsCoding (char *message, CodeWord_t * cw, int size)
 
 void computeCtrlBits(CodeWord_t *cw, int size)
 {
-	int nombre_de_un, i, j;
+	int i;
 	for(i = 0 ; i < size ; i++)
 	{
-		nombre_de_un = 0;
-		for(j = 1 ; j <= 8 ; j++) 
-			if(getNthBit(cw[i],j))
-				nombre_de_un++;
-
-		setNthBitCW(&cw[i], 9, nombre_de_un%2);
+		printBits(cw[i], "avant");
+	//	deplacementBits(&cw[i], 8);
+	//	cw[i] += division(&cw[i]);
+		printBits(cw[i], "après");
 	}
 }
 

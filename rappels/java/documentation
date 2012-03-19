@@ -1,0 +1,23 @@
+Petit rappel :
+	faire la doc !
+
+
+	javadoc -d doc dir/foo/bar.java
+
+
+	-public
+	-protected
+	-package : uniquement les membres public/protected/package
+	-private : tout
+
+
+	@author
+	@deprecated
+	@exception
+	@param
+	@return
+	@see
+	@since : à quelle version la méthode a été ajoutée
+	@throws : synonyme d'exception
+	@version
+
