@@ -17,7 +17,7 @@ public class FenetreCarte extends JFrame
 		this.panneau = new PanneauCarte(c);
 		this.add(this.panneau);
 
-		setSize(c.ty * 100, c.tx * 100);
+	//	setSize(c.ty * 100, c.tx * 100);
 		setVisible(true);
 		this.pack();
 	}

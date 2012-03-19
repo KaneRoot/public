@@ -16,11 +16,11 @@ public class Carte
 		this.c = new Case[x*y];
 
 		for(i = 0 ; i < (x*y) - 20 ; i++)
-			this.c[i] = new Case(true);
+			this.c[i] = new Case(true,i);
 		for(i = (x*y) - 20; i < (x*y) - 10 ; i++)
-			this.c[i] = new Case(false);
+			this.c[i] = new Case(false,i);
 		for(i = (x*y) - 10; i < (x*y) ; i++)
-			this.c[i] = new Case(true);
+			this.c[i] = new Case(true,i);
 
 	}
 	public void Afficher()
