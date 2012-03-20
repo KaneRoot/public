@@ -11,25 +11,58 @@ Contraintes :
 	statiques
 
 	* CLIENT
-PK : 
-UNIQUE :
+PK : idClient 
+UNIQUE : rien (autorise les gens qui ont le même nom et prénom)
 FK : 
-NN : 
+NN : nomClient, prenomClient, adresseClient
 CHECK :
 SEC : 
 
 	* VILLE
-PK :
+PK : idVille
+UNIQUE : rien (2 villes ayant le même nom, c'est possible)
+FK : 
+NN : nomVille
+CHECK :
+SEC : 
+
+	* COMPAGNIE
+PK : idCompagnie
 UNIQUE :
+FK : 
+NN : nomCompagnie
+CHECK :
+SEC : 
+
+	* ESCALE
+PK : idEscale
+UNIQUE :
+FK : idVilleDepart, idVilleArrivee
+NN : idVilleDepart, idVilleArrivee
+CHECK : idVilleDepart != idVilleArrivee
+SEC : idVilleDepart, idVilleArrivee
+
+	* VOL
+PK : idVol, nomCompagnie
+UNIQUE : (idVilleDepart, idVilleArrivee)
+FK : idVilleDepart, idVilleArrivee
+NN : idVilleDepart, idVilleArrivee, dateDepart, dateArrivee
+CHECK :
+SEC : 
+	* BILLET
+PK : 
+UNIQUE : 
 FK : 
 NN : 
 CHECK :
 SEC : 
-	* COMPAGNIE
-	* ESCALE
-	* VOL
-	* BILLET
 	* ACHAT
+PK : 
+UNIQUE : 
+FK : 
+NN : 
+CHECK :
+SEC : 
 	* CARTE_FIDELITE
 	* RESERVATION
 	* VOL_ESCALE

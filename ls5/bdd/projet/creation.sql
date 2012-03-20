@@ -32,6 +32,7 @@ create table VOL
 	dateArrivee date NOT NULL,
 	idVilleDepart number(15) NOT NULL,
 	idVilleArrivee number(15) NOT NULL,
+	nombreBillets number(4) NOT NULL,
 	CONSTRAINT fk_vol_compagnie FOREIGN KEY (idCompagnie) REFERENCES COMPAGNIE ON DELETE CASCADE,
 	CONSTRAINT fk_vol_villedepart FOREIGN KEY (idVilleDepart) REFERENCES VILLE ON DELETE CASCADE,
 	CONSTRAINT fk_vol_villearrivee FOREIGN KEY (idVilleArrivee) REFERENCES VILLE ON DELETE CASCADE

@@ -2,7 +2,7 @@ Pour les clés primaire : PK
 
 escale( idEscale number(10) PK, villeDepart varchar2(50), villeArrivee varchar2(50))
 
-vol( idVol number(10) PK , dateDepart date, dateArrivee date, villeArrivee varchar2(50), villeDepart varchar2(50), #idCompagnie number(10) PK )
+vol( idVol number(10) PK , dateDepart date, dateArrivee date, villeArrivee varchar2(50), villeDepart varchar2(50), #idCompagnie number(10) PK, nombreBillets number(4) )
 
 compagnie( idCompagnie number(10) PK, nomCompagnie varchar2(50))
 
