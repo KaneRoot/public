@@ -46,17 +46,19 @@ SEC : idVilleDepart, idVilleArrivee
 PK : idVol, nomCompagnie
 UNIQUE : (idVilleDepart, idVilleArrivee)
 FK : idVilleDepart, idVilleArrivee
-NN : idVilleDepart, idVilleArrivee, dateDepart, dateArrivee
-CHECK :
-SEC : 
+NN : idVilleDepart, idVilleArrivee, dateDepart, dateArrivee, nombreBillets
+CHECK : nombreBillets >= 0
+SEC : idVilleDepart, idVilleArrivee
+
 	* BILLET
-PK : 
+PK : idBillet, idVol, idCompagnie
 UNIQUE : 
-FK : 
-NN : 
-CHECK :
-SEC : 
-	* ACHAT
+FK : idVol, idCompagnie
+NN : prixBase
+CHECK : prixBase > 0
+SEC : idVol, idCompagnie
+
+	* BILLET_CLIENT
 PK : 
 UNIQUE : 
 FK : 

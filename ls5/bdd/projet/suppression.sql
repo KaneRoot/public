@@ -17,8 +17,8 @@ alter table RESERVATION drop CONSTRAINT fk_reservation_billet;
 alter table VOL_ESCALE drop CONSTRAINT fk_vol_escale_vol;
 alter table VOL_ESCALE drop CONSTRAINT fk_vol_escale_escale;
 
-alter table ACHAT drop CONSTRAINT fk_achat_client;
-alter table ACHAT drop CONSTRAINT fk_achat_billet;
+alter table BILLET_CLIENT drop CONSTRAINT fk_billet_client_client;
+alter table BILLET_CLIENT drop CONSTRAINT fk_billet_client_billet;
 
 
 drop table CLIENT;
@@ -29,4 +29,4 @@ drop table COMPAGNIE;
 drop table CARTE_FIDELITE; 
 drop table RESERVATION;
 drop table VOL_ESCALE;
-drop table ACHAT;
+drop table BILLET_CLIENT;
