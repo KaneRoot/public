@@ -21,8 +21,8 @@ create table ESCALE
 	idEscale number(10) PRIMARY KEY,
 	idVilleDepart number(15) NOT NULL,
 	idVilleArrivee number(15) NOT NULL,
-	CONSTRAINT fk_escale_villedepart FOREIGN KEY (idVilleDepart) REFERENCES	VILLE ON DELETE CASCADE,
-	CONSTRAINT fk_escale_villearrivee FOREIGN KEY (idVilleArrivee) REFERENCES VILLE ON DELETE CASCADE
+	CONSTRAINT fk_escale_villedepart FOREIGN KEY (idVilleDepart) REFERENCES	VILLE(idVille) ON DELETE CASCADE,
+	CONSTRAINT fk_escale_villearrivee FOREIGN KEY (idVilleArrivee) REFERENCES VILLE(idVille) ON DELETE CASCADE
 );
 create table VOL
 (
@@ -37,17 +37,17 @@ create table VOL
 	CHECK( nombreBillets >= 0),
 	PRIMARY KEY(idVol, idCompagnie),
 	CONSTRAINT fk_vol_compagnie FOREIGN KEY (idCompagnie) REFERENCES COMPAGNIE ON DELETE CASCADE,
-	CONSTRAINT fk_vol_villedepart FOREIGN KEY (idVilleDepart) REFERENCES VILLE ON DELETE CASCADE,
-	CONSTRAINT fk_vol_villearrivee FOREIGN KEY (idVilleArrivee) REFERENCES VILLE ON DELETE CASCADE
+	CONSTRAINT fk_vol_villedepart FOREIGN KEY (idVilleDepart) REFERENCES VILLE(idVille) ON DELETE CASCADE,
+	CONSTRAINT fk_vol_villearrivee FOREIGN KEY (idVilleArrivee) REFERENCES VILLE(idVille) ON DELETE CASCADE
 );
 create table BILLET
 (
 	idBillet number(15),
 	idVol number(10) NOT NULL,
 	idCompagnie number(10) NOT NULL,
-	prixBase number(15) CHECK(prixBase > 0) NOT NULL,
+	prix number(15) CHECK(prix > 0) NOT NULL,
 	promo number(2) CHECK (promo > 0 AND promo < 100),
-	etatBillet char(1) CHECK(etatBillet = 'A' OR etatBillet = 'R')
+	etatBillet char(1) CHECK(etatBillet = 'A' OR etatBillet = 'R'),
 	CONSTRAINT fk_billet_vol FOREIGN KEY (idVol) REFERENCES VOL ON DELETE CASCADE,
 	CONSTRAINT fk_billet_compagnie FOREIGN KEY (idCompagnie) REFERENCES COMPAGNIE ON DELETE CASCADE,
 	PRIMARY KEY(idBillet, idVol, idCompagnie)
@@ -57,7 +57,6 @@ create table BILLET_CLIENT
 	idAchat number(15) PRIMARY KEY,
 	idBillet number(15) NOT NULL,
 	idClient number(15) NOT NULL,
-	prix number(15) CHECK (prix > 0),
 	dateAchat date NOT NULL,
 	CONSTRAINT fk_billet_client_client FOREIGN KEY (idClient) REFERENCES CLIENT ON DELETE CASCADE ,
 	CONSTRAINT fk_billet_client_billet FOREIGN KEY (idBillet) REFERENCES BILLET ON DELETE CASCADE
@@ -74,16 +73,16 @@ create table CARTE_FIDELITE
 create table RESERVATION
 (
 	dateReservation date NOT NULL,
-	idClient number(15) NOT NULL,
-	idBillet number(15) NOT NULL,
+	idClient number(15),
+	idBillet number(15),
 	CONSTRAINT fk_reservation_client FOREIGN KEY (idClient) REFERENCES CLIENT ON DELETE CASCADE,
 	CONSTRAINT fk_reservation_billet FOREIGN KEY (idBillet) REFERENCES BILLET ON DELETE CASCADE,
 	PRIMARY KEY(idClient, idBillet)
 );
 create table VOL_ESCALE
 (
-	idVol number(10) NOT NULL,
-	idEscale number(10) NOT NULL,
+	idVol number(10),
+	idEscale number(10),
 	CONSTRAINT fk_vol_escale_vol FOREIGN KEY (idVol) REFERENCES VOL ON DELETE CASCADE,
 	CONSTRAINT fk_vol_escale_escale FOREIGN KEY (idEscale) REFERENCES ESCALE ON DELETE CASCADE,
 	PRIMARY KEY(idVol, idEscale)

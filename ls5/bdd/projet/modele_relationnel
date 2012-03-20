@@ -7,10 +7,11 @@ escale(
 
 vol( 
 		idVol number(10) PK , 
-		dateDepart date, dateArrivee date, 
+		#idCompagnie number(10) PK, 
+		dateDepart date, 
+		dateArrivee date, 
 		#idVilleArrivee number(15),
 		#idVilleDepart number(15), 
-		#idCompagnie number(10) PK, 
 		nombreBillets number(4), 
 		nombreBilletsReserves number(4))
 
@@ -37,7 +38,7 @@ reservation(
 
 billet( 
 		idBillet number(15) PK, 
-		prixBase number(15),
+		prix number(15),
 		promo number(2), 
 		#idVol number(10) , 
 		#idClient number(15), 
@@ -51,8 +52,7 @@ billet_client(
 		idAchat number(15) PK, 
 		#idBillet number(15), 
 		#idClient number(15), 
-		dateAchat date, 
-		prix number(15))
+		dateAchat date)
 
 ville(
 		idVille number(15) PK, 

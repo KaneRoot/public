@@ -48,14 +48,14 @@ UNIQUE : (idVilleDepart, idVilleArrivee)
 FK : idVilleDepart, idVilleArrivee
 NN : idVilleDepart, idVilleArrivee, dateDepart, dateArrivee, nombreBillets, nombreBilletsReserves
 CHECK : nombreBillets >= 0
-SEC : idVilleDepart, idVilleArrivee
+SEC : idVilleDepart, idVilleArrivee, idCompagnie
 
 	* BILLET
 PK : idBillet, idVol, idCompagnie
 UNIQUE : 
 FK : idVol, idCompagnie
-NN : prixBase
-CHECK : prixBase > 0
+NN : prix
+CHECK : prix > 0
 SEC : idVol, idCompagnie
 
 	* BILLET_CLIENT
@@ -76,13 +76,13 @@ SEC : idClient, idCompagnie
 	* RESERVATION
 PK : idClient, idBillet
 FK : idClient, idBillet
-NN : 
-CHECK : etatReservation = R ou A
+NN : dateReservation
+CHECK : 
 SEC : idClient, idBillet
 
 	* VOL_ESCALE
-PK : 
-FK : 
+PK : idVol, idEscale
+FK : idVol, idEscale
 NN :
 CHECK :
-SEC :
+SEC : idVol, idEscale
