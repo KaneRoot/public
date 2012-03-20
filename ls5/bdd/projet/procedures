@@ -1,0 +1,9 @@
+-- a. Mettre à jour le compteur des miles d'un client donné en prenant en compte l'option de réduction de 100€ pour l'achat du prochain billet(i.e nb_miles = 1000).
+
+create or replace procedure maj_miles
+IS
+-- variables
+
+BEGIN
+
+END;
