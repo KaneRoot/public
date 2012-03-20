@@ -24,6 +24,7 @@ alter table BILLET_CLIENT drop CONSTRAINT fk_billet_client_billet;
 drop table CLIENT;
 drop table BILLET;
 drop table VOL;
+drop table VILLE;
 drop table ESCALE;
 drop table COMPAGNIE;
 drop table CARTE_FIDELITE; 

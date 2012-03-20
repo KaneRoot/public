@@ -20,7 +20,7 @@ SEC :
 
 	* VILLE
 PK : idVille
-UNIQUE : rien (2 villes ayant le même nom, c'est possible)
+UNIQUE : nomVille
 FK : 
 NN : nomVille
 CHECK :
@@ -28,7 +28,7 @@ SEC :
 
 	* COMPAGNIE
 PK : idCompagnie
-UNIQUE :
+UNIQUE : nomCompagnie
 FK : 
 NN : nomCompagnie
 CHECK :
@@ -46,7 +46,7 @@ SEC : idVilleDepart, idVilleArrivee
 PK : idVol, nomCompagnie
 UNIQUE : (idVilleDepart, idVilleArrivee)
 FK : idVilleDepart, idVilleArrivee
-NN : idVilleDepart, idVilleArrivee, dateDepart, dateArrivee, nombreBillets
+NN : idVilleDepart, idVilleArrivee, dateDepart, dateArrivee, nombreBillets, nombreBilletsReserves
 CHECK : nombreBillets >= 0
 SEC : idVilleDepart, idVilleArrivee
 
@@ -59,12 +59,30 @@ CHECK : prixBase > 0
 SEC : idVol, idCompagnie
 
 	* BILLET_CLIENT
-PK : 
+PK : idAchat
 UNIQUE : 
-FK : 
-NN : 
+FK : idClient, idBillet
+NN : idClient, idBillet
 CHECK :
-SEC : 
+SEC : idClient, idBillet
+
 	* CARTE_FIDELITE
+PK : (idClient,idCompagnie)
+FK : idclient, idCompagnie
+NN : miles
+CHECK :
+SEC : idClient, idCompagnie
+
 	* RESERVATION
+PK : idReservation
+FK : idClient, idBillet
+NN : etatReservation (soit réservé, soit acheté, sinon pas de réservation)
+CHECK : etatReservation = R ou A
+SEC : idClient, idBillet
+
 	* VOL_ESCALE
+PK : 
+FK : 
+NN :
+CHECK :
+SEC :
