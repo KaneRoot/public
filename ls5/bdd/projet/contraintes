@@ -6,3 +6,30 @@ L'état de réservation est stocké sur un caractère, il peut être soit 'R' (r
 
 La promo peut soit être nulle (aucune promotion) soit un pourcentage (entier entre 1 et 99).
 Le prix ne peut pas être inférieur à 0.
+
+Contraintes :
+	statiques
+
+	* CLIENT
+PK : 
+UNIQUE :
+FK : 
+NN : 
+CHECK :
+SEC : 
+
+	* VILLE
+PK :
+UNIQUE :
+FK : 
+NN : 
+CHECK :
+SEC : 
+	* COMPAGNIE
+	* ESCALE
+	* VOL
+	* BILLET
+	* ACHAT
+	* CARTE_FIDELITE
+	* RESERVATION
+	* VOL_ESCALE
