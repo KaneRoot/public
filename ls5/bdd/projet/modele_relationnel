@@ -31,11 +31,9 @@ client(
 		numTelClient number(10))
 
 reservation( 
-		idReservation number(15) PK, 
 		dateReservation date, 
-		etatReservation char(1),  VA CHANGER
-		#idClient number(15), 
-		#idBillet number(15))
+		#idClient number(15) PK, 
+		#idBillet number(15) PK)
 
 billet( 
 		idBillet number(15) PK, 
@@ -56,4 +54,6 @@ billet_client(
 		dateAchat date, 
 		prix number(15))
 
-ville(idVille number(15) PK, nomVille varchar2(50))
+ville(
+		idVille number(15) PK, 
+		nomVille varchar2(50))

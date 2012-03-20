@@ -74,9 +74,9 @@ CHECK :
 SEC : idClient, idCompagnie
 
 	* RESERVATION
-PK : idReservation
+PK : idClient, idBillet
 FK : idClient, idBillet
-NN : etatReservation (soit réservé, soit acheté, sinon pas de réservation)
+NN : 
 CHECK : etatReservation = R ou A
 SEC : idClient, idBillet
 

@@ -73,14 +73,12 @@ create table CARTE_FIDELITE
 );
 create table RESERVATION
 (
-	idReservation number(15) PRIMARY KEY,
 	dateReservation date NOT NULL,
-	-- VA ÊTRE SUPPRIMÉ
-	etatReservation char(1) CHECK (etatReservation = 'R' OR etatReservation = 'A') NOT NULL,
 	idClient number(15) NOT NULL,
 	idBillet number(15) NOT NULL,
 	CONSTRAINT fk_reservation_client FOREIGN KEY (idClient) REFERENCES CLIENT ON DELETE CASCADE,
-	CONSTRAINT fk_reservation_billet FOREIGN KEY (idBillet) REFERENCES BILLET ON DELETE CASCADE
+	CONSTRAINT fk_reservation_billet FOREIGN KEY (idBillet) REFERENCES BILLET ON DELETE CASCADE,
+	PRIMARY KEY(idClient, idBillet)
 );
 create table VOL_ESCALE
 (
