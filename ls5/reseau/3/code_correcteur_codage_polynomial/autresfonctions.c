@@ -34,15 +34,14 @@ CodeWord_t division(CodeWord_t *x)
 {
 	CodeWord_t ntmp = *x;
 	CodeWord_t nombre_diviseur = getNombreDiviseur();
-	printf("%d nombre diviseur\n", nombre_diviseur);
 	int deplacement;
 
 	while( (deplacement = getDegre(&ntmp) - getDegre(&nombre_diviseur)) >= 0)
 	{
-		printf("PREMIER BIT : %d\n", getDegre(&ntmp));
-		printf("Déplacement : %d\n", getDegre(&ntmp) - getDegre(&nombre_diviseur));
+//		printf("PREMIER BIT : %d\n", getDegre(&ntmp));
+//		printf("Déplacement : %d\n", getDegre(&ntmp) - getDegre(&nombre_diviseur));
 		deplacementBits(&nombre_diviseur, deplacement);
-		printBits(nombre_diviseur, "nombre diviseur");
+	//	printBits(nombre_diviseur, "nombre diviseur");
 		ntmp = ntmp ^ nombre_diviseur;
 		nombre_diviseur = getNombreDiviseur();
 	}
