@@ -4,7 +4,7 @@ rm FileReceived
 make clean
 make
 
-./medium 2 &
+./medium 0 &
 
 sleep 1
 ./receiver FileReceived &

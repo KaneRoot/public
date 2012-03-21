@@ -8,10 +8,10 @@
 
 
 // Récupérer l'adresse du premier bit à 1
-int getFirstBitToOne(CodeWord_t * cw)
+int getDegre(CodeWord_t * cw)
 {
 	int i;
-	for(i = 16 ; i >= 0 ; i--)
+	for(i = 15 ; i >= 0 ; i--)
 		if(getNthBit(cw[0], i))
 			return i;
 	return 0;
@@ -24,9 +24,9 @@ CodeWord_t getNombreDiviseur(void)
 {
 	CodeWord_t nbdiviseur;
 	setNthBitCW(&nbdiviseur, 1, 1);
+	setNthBitCW(&nbdiviseur, 3, 1);
 	setNthBitCW(&nbdiviseur, 4, 1);
 	setNthBitCW(&nbdiviseur, 5, 1);
-	setNthBitCW(&nbdiviseur, 6, 1);
 	setNthBitCW(&nbdiviseur, 9, 1);
 	return nbdiviseur;
 }
@@ -34,10 +34,15 @@ CodeWord_t division(CodeWord_t *x)
 {
 	CodeWord_t ntmp = *x;
 	CodeWord_t nombre_diviseur = getNombreDiviseur();
+	printf("%d nombre diviseur\n", nombre_diviseur);
+	int deplacement;
 
-	while( getFirstBitToOne(&ntmp) > 8 && ntmp != 0)
+	while( (deplacement = getDegre(&ntmp) - getDegre(&nombre_diviseur)) >= 0)
 	{
-		deplacementBits(&nombre_diviseur, getFirstBitToOne(&ntmp) - getFirstBitToOne(&nombre_diviseur));
+		printf("PREMIER BIT : %d\n", getDegre(&ntmp));
+		printf("Déplacement : %d\n", getDegre(&ntmp) - getDegre(&nombre_diviseur));
+		deplacementBits(&nombre_diviseur, deplacement);
+		printBits(nombre_diviseur, "nombre diviseur");
 		ntmp = ntmp ^ nombre_diviseur;
 		nombre_diviseur = getNombreDiviseur();
 	}

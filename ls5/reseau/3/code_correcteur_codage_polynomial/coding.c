@@ -52,7 +52,7 @@ void computeCtrlBits(CodeWord_t *cw, int size)
 	int i;
 	for(i = 0 ; i < size ; i++)
 	{
-		printBits(cw[i], "avant");
+		printBits(cw[i], "\033[32mavant\033[00m");
 		deplacementBits(&cw[i], 8);
 		cw[i] += division(&cw[i]);
 		printBits(cw[i], "après");
