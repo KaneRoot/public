@@ -40,6 +40,14 @@ copyDataBitsDecoding (CodeWord_t * cw, char *message, int data_size)
     setNthBitW (&(message[i]), 6, getNthBit (cw[i], 6));
     setNthBitW (&(message[i]), 7, getNthBit (cw[i], 7));
     setNthBitW (&(message[i]), 8, getNthBit (cw[i], 8));
+    setNthBitW (&(message[i]), 9, getNthBit (cw[i], 9));
+    setNthBitW (&(message[i]), 10, getNthBit (cw[i], 10));
+    setNthBitW (&(message[i]), 11, getNthBit (cw[i], 11));
+    setNthBitW (&(message[i]), 12, getNthBit (cw[i], 12));
+    setNthBitW (&(message[i]), 13, getNthBit (cw[i], 13));
+    setNthBitW (&(message[i]), 14, getNthBit (cw[i], 14));
+    setNthBitW (&(message[i]), 15, getNthBit (cw[i], 15));
+    setNthBitW (&(message[i]), 16, getNthBit (cw[i], 16));
   }
 }
 

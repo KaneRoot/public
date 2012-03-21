@@ -43,12 +43,3 @@ CodeWord_t division(CodeWord_t *x)
 	}
 	return ntmp;
 }
-int decoder(CodeWord_t *cw)
-{
-//	if( *cw != 0 && division(cw) != 0) 
-//		return 1;
-	if(division(cw) != 0)
-		printf("Erreur");
-	deplacementBits(cw, -8);
-	return 0;
-}

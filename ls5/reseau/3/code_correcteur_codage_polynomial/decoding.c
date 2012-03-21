@@ -56,12 +56,13 @@ int thereIsError(CodeWord_t *cw, int data_size)
 	for(i = 0 ; i < data_size ; i++)
 	{
 		printBits(cw[i], "avant déplacement");
-	//	if(decoder(&cw[i]))
-	//	{
-	//		printBits(cw[i], "erreur, reçu");
-	//		retour = 1;
-	//	}
-		printBits(cw[i], "après déplacement");
+		if(division(&cw[i]) != 0)
+			printBits(cw[i], "erreur, reçu");
+		else
+		{
+			deplacementBits(&cw[i], -8);
+			printBits(cw[i], "après déplacement");
+		}
 	}
 
 	return retour;

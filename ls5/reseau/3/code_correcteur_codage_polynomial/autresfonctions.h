@@ -9,7 +9,5 @@ void deplacementBits(CodeWord_t * cw, int nb);
 CodeWord_t getNombreDiviseur(void);
 CodeWord_t division(CodeWord_t *x);
 
-int decoder(CodeWord_t *cw);
-
 #endif
 
