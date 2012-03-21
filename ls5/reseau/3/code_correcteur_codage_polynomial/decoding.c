@@ -76,16 +76,17 @@ decoding (char *cw, int cw_size, char *message, int *data_size)
   //-- For error correction
   //-- to uncomment when complete and needed
   //errorCorrection((CodeWord_t*)cw, *data_size);
-
-  //-- For decoding
-  copyDataBitsDecoding ((CodeWord_t *) cw, message, *data_size);
-
-  //-- For error detection
-  //-- to uncomment when complete and needed
 	if(thereIsError((CodeWord_t*)cw, *data_size))
 	{
 		printf("PARITY ERROR: \"%s\"\n", message);
 	}
+
+  //-- For decoding
+  copyDataBitsDecoding ((CodeWord_t *) cw, message, *data_size);
+
+  //printf("message : %s\n", message);
+  //-- For error detection
+  //-- to uncomment when complete and needed
 
 	return;
 }

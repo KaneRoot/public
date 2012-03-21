@@ -18,7 +18,7 @@ int getFirstBitToOne(CodeWord_t * cw)
 }
 void deplacementBits(CodeWord_t * cw, int nb)
 {
-	cw[0] = (nb > 0) ? cw[0] << nb : cw[0] >> -nb;
+	*cw = (nb > 0) ? *cw << nb : *cw >> -nb;
 }
 CodeWord_t getNombreDiviseur(void)
 {
@@ -41,5 +41,6 @@ CodeWord_t division(CodeWord_t *x)
 		ntmp = ntmp ^ nombre_diviseur;
 		nombre_diviseur = getNombreDiviseur();
 	}
+	printBits(ntmp, "Reste de la division : ");
 	return ntmp;
 }
