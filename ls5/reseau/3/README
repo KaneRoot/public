@@ -1,17 +1,25 @@
 Exercice 1 : bit de parité.
-Il faudra afficher toutes les chaînes dans lesquelles le médium aura introduit des erreurs, ainsi que toutes les chaînes dans lesquelles le récepteur aura détecté des erreurs. 
-Les deux listes devraient être identiques. 
 
 Quels sont les types d’erreurs que l’on peut détecter avec ce codage ?
-
 Les erreurs sur le contenu.
+
+Pour essayer le programme rapidement : ./dotest.sh
+Le programme fonctionne.
 
 
 Exercice 2 : codage polynomial.
 
 Quels sont les types d’erreurs que l’on peut détecter avec ce codage ?
-
 Les erreurs sur le contenu.
+
+Pour essayer le programme rapidement : ./dotest.sh
+
+Le programme n'est pas exactement comme demandé (les bits de contrôle sont à droite) mais il fonctionne.
+Mon implémentation du codage polynomial utilise les CodeWord_t comme un entier sur 16 bits ce qui me permet de faire très facilement une division de polynômes.
+Une fois la division faite je n'ai plus qu'à l'ajouter (opérateur +) au message à transmettre.
+
+Il m'a parru superflu de déplacer à nouveau les bits.
+
 
 Exercice 3 : code de Hamming.
 

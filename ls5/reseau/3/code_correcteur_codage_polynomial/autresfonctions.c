@@ -36,6 +36,8 @@ CodeWord_t division(CodeWord_t *x)
 	CodeWord_t nombre_diviseur = getNombreDiviseur();
 	int deplacement;
 
+	printBits(nombre_diviseur, "nombre diviseur");
+
 	while( (deplacement = getDegre(&ntmp) - getDegre(&nombre_diviseur)) >= 0)
 	{
 //		printf("PREMIER BIT : %d\n", getDegre(&ntmp));
