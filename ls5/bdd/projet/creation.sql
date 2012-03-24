@@ -32,7 +32,7 @@ create table ESCALE
 
 	CONSTRAINT pk_escale PRIMARY KEY(idEscale),
 	CONSTRAINT u_escale UNIQUE(idVilleDepart, idVilleArrivee),
-	CONSTRAINT ck_escale_villes_differentes CHECK(upper(idVilleDepart) != upper(idVilleArrivee)),
+	CONSTRAINT ck_escale_villes_differentes CHECK(idVilleDepart != idVilleArrivee),
 	CONSTRAINT fk_escale_villedepart FOREIGN KEY (idVilleDepart) REFERENCES	VILLE(idVille) ON DELETE CASCADE,
 	CONSTRAINT fk_escale_villearrivee FOREIGN KEY (idVilleArrivee) REFERENCES VILLE(idVille) ON DELETE CASCADE
 );
@@ -107,4 +107,3 @@ create table VOL_ESCALE
 	CONSTRAINT fk_vol_escale_vol FOREIGN KEY (idVol) REFERENCES VOL ON DELETE CASCADE,
 	CONSTRAINT fk_vol_escale_escale FOREIGN KEY (idEscale) REFERENCES ESCALE ON DELETE CASCADE
 );
-
