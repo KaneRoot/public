@@ -38,14 +38,11 @@ create table VOL
 	idCompagnie number(10) NOT NULL,
 	dateDepart date NOT NULL,
 	dateArrivee date NOT NULL,
-	idVilleDepart number(15) NOT NULL,
-	idVilleArrivee number(15) NOT NULL,
 	nombreBillets number(4) NOT NULL,
 	nombreBilletsReserves number(4) NOT NULL,
 	CONSTRAINT pk_vol PRIMARY KEY(idVol, idCompagnie),
 	CONSTRAINT fk_vol_compagnie FOREIGN KEY (idCompagnie) REFERENCES COMPAGNIE ON DELETE CASCADE,
-	CONSTRAINT fk_vol_villedepart FOREIGN KEY (idVilleDepart) REFERENCES VILLE(idVille) ON DELETE CASCADE,
-	CONSTRAINT fk_vol_villearrivee FOREIGN KEY (idVilleArrivee) REFERENCES VILLE(idVille) ON DELETE CASCADE,
+	CONSTRAINT fk_vol_escale FOREIGN KEY (idEscale) REFERENCES ESCALE ON DELETE CASCADE,
 	CONSTRAINT ck_vol_nbbillets CHECK( nombreBillets >= 0)
 );
 create table BILLET

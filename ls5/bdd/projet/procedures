@@ -9,6 +9,8 @@ nbMiles CARTE_FIDELITE.miles%TYPE;
 
 BEGIN
 
-SELECT miles INTO nbMiles FROM CARTE_FIDELITE WHERE idClient = nclient AND 
+SELECT miles INTO nbMiles 
+FROM CARTE_FIDELITE 
+WHERE idClient = nclient AND 
 
 END;
