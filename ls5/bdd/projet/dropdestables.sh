@@ -1,10 +1,13 @@
 #!/bin/bash
 
+CREATION=creation.sql
+SUPPRESSION=fichiertmp
+
 OLDIFS=$IFS
 IFS='
 '
-for i in $(cat creation.sql | grep "create table" | cut -d' ' -f 3 )
+for i in $(cat ${CREATION} | grep "create table" | cut -d' ' -f 3 )
 do
-	echo "DROP TABLE " $i ";"
+	echo "DROP TABLE " $i ";" >> ${SUPPRESSION}
 done
 IFS=${OLDIFS}
