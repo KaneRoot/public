@@ -1,7 +1,7 @@
 INSERT INTO CLIENT VALUES(1, 'moi', 'prenomdemoi', 'adresse', 1050305010); 
 INSERT INTO CLIENT VALUES(2, 'moi2', 'prenomdemoi2', 'adresse2', 1050305010); 
 INSERT INTO CLIENT VALUES(3, 'moi3', 'prenomdemoi3', 'adresse3', 1050305010); 
-INSERT INTO CLIENT VALUES(3, 'moi3', 'prenomdemoi3', 'adresse3', 1050305010); -- erreur volontaire
+--INSERT INTO CLIENT VALUES(3, 'moi3', 'prenomdemoi3', 'adresse3', 1050305010); -- erreur volontaire
 
 INSERT INTO COMPAGNIE VALUES(1, 'bla1');
 INSERT INTO COMPAGNIE VALUES(2, 'bla2');
@@ -17,7 +17,7 @@ INSERT INTO VILLE VALUES(3, "SARIS");
 INSERT INTO ESCALLE VALUES(1, 1, 2);
 INSERT INTO ESCALLE VALUES(2, 1, 3);
 INSERT INTO ESCALLE VALUES(3, 2, 3);
-INSERT INTO ESCALLE VALUES(4, 3, 3); -- erreur volontaire
+--INSERT INTO ESCALLE VALUES(4, 3, 3); -- erreur volontaire
 
 INSERT INTO VOL VALUES(1, 1, 1, to_date('2012/03/16 21:02:44', 'yyyy/mm/dd hh24:mi:ss'), to_date('2012/03/18 21:02:44', 'yyyy/mm/dd hh24:mi:ss'), 10, 0);
 INSERT INTO VOL VALUES(2, 1, 2, to_date('2012/03/16 21:02:44', 'yyyy/mm/dd hh24:mi:ss'), to_date('2012/03/18 21:02:44', 'yyyy/mm/dd hh24:mi:ss'), 10, 0);
