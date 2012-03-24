@@ -1,33 +1,31 @@
-alter table VOL drop CONSTRAINT fk_vol_compagnie;
-alter table VOL drop CONSTRAINT fk_vol_villedepart;
-alter table VOL drop CONSTRAINT fk_vol_villearrivee;
-
-alter table ESCALE drop CONSTRAINT fk_escale_villedepart;
-alter table ESCALE drop CONSTRAINT fk_escale_villearrivee;
-
-alter table CARTE_FIDELITE drop CONSTRAINT fk_carte_fidelite_compagnie;
-alter table CARTE_FIDELITE drop CONSTRAINT fk_carte_fidelite_client;
-
-alter table BILLET drop CONSTRAINT fk_billet_vol;
-alter table BILLET drop CONSTRAINT fk_billet_compagnie;
-
-alter table RESERVATION drop CONSTRAINT fk_reservation_client;
-alter table RESERVATION drop CONSTRAINT fk_reservation_billet;
-
-alter table VOL_ESCALE drop CONSTRAINT fk_vol_escale_vol;
-alter table VOL_ESCALE drop CONSTRAINT fk_vol_escale_escale;
-
-alter table BILLET_CLIENT drop CONSTRAINT fk_billet_client_client;
-alter table BILLET_CLIENT drop CONSTRAINT fk_billet_client_billet;
-
-
-drop table CLIENT;
-drop table BILLET;
-drop table VOL;
-drop table VILLE;
-drop table ESCALE;
-drop table COMPAGNIE;
-drop table CARTE_FIDELITE; 
-drop table RESERVATION;
-drop table VOL_ESCALE;
-drop table BILLET_CLIENT;
+ALTER TABLE CLIENT 	DISABLE 	CONSTRAINT pk_client ;
+ALTER TABLE CLIENT 	DISABLE 	CONSTRAINT u_client_nom_prenom_adresse ;
+ALTER TABLE VILLE 	DISABLE 	CONSTRAINT pk_ville ;
+ALTER TABLE VILLE 	DISABLE 	CONSTRAINT u_ville_nomVille ;
+ALTER TABLE COMPAGNIE 	DISABLE 	CONSTRAINT pk_compagnie ;
+ALTER TABLE ESCALE 	DISABLE 	CONSTRAINT pk_escale ;
+ALTER TABLE ESCALE 	DISABLE 	CONSTRAINT u_escale ;
+ALTER TABLE ESCALE 	DISABLE 	CONSTRAINT ck_escale_villes_differentes ;
+ALTER TABLE ESCALE 	DISABLE 	CONSTRAINT fk_escale_villedepart ;
+ALTER TABLE ESCALE 	DISABLE 	CONSTRAINT fk_escale_villearrivee ;
+ALTER TABLE VOL 	DISABLE 	CONSTRAINT pk_vol ;
+ALTER TABLE VOL 	DISABLE 	CONSTRAINT fk_vol_compagnie ;
+ALTER TABLE VOL 	DISABLE 	CONSTRAINT fk_vol_villedepart ;
+ALTER TABLE VOL 	DISABLE 	CONSTRAINT fk_vol_villearrivee ;
+ALTER TABLE VOL 	DISABLE 	CONSTRAINT ck_vol_nbbillets ;
+ALTER TABLE BILLET 	DISABLE 	CONSTRAINT pk_billet ;
+ALTER TABLE BILLET 	DISABLE 	CONSTRAINT ck_billet_etatbillet ;
+ALTER TABLE BILLET 	DISABLE 	CONSTRAINT ck_billet_prix ;
+ALTER TABLE BILLET 	DISABLE 	CONSTRAINT fk_billet_vol_compagnie ;
+ALTER TABLE BILLET_CLIENT 	DISABLE 	CONSTRAINT pk_billet_client ;
+ALTER TABLE BILLET_CLIENT 	DISABLE 	CONSTRAINT fk_billet_client_client ;
+ALTER TABLE BILLET_CLIENT 	DISABLE 	CONSTRAINT fk_billet_client_billet ;
+ALTER TABLE CARTE_FIDELITE 	DISABLE 	CONSTRAINT pk_carte_fidelite ;
+ALTER TABLE CARTE_FIDELITE 	DISABLE 	CONSTRAINT fk_carte_fidelite_compagnie ;
+ALTER TABLE CARTE_FIDELITE 	DISABLE 	CONSTRAINT fk_carte_fidelite_client ;
+ALTER TABLE RESERVATION 	DISABLE 	CONSTRAINT pk_reservation ;
+ALTER TABLE RESERVATION 	DISABLE 	CONSTRAINT fk_reservation_client ;
+ALTER TABLE RESERVATION 	DISABLE 	CONSTRAINT fk_reservation_billet ;
+ALTER TABLE VOL_ESCALE 	DISABLE 	CONSTRAINT pk_vol_escale ;
+ALTER TABLE VOL_ESCALE 	DISABLE 	CONSTRAINT fk_vol_escale_vol ;
+ALTER TABLE VOL_ESCALE 	DISABLE 	CONSTRAINT fk_vol_escale_escale ;
