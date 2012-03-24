@@ -36,6 +36,7 @@ create table VOL
 (
 	idVol number(10),
 	idCompagnie number(10) NOT NULL,
+	idEscale number(10) NOT NULL,
 	dateDepart date NOT NULL,
 	dateArrivee date NOT NULL,
 	nombreBillets number(4) NOT NULL,
