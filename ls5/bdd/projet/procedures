@@ -1,16 +1,77 @@
 -- a. Mettre à jour le compteur des miles d'un client donné en prenant en compte l'option de réduction de 100€ pour l'achat du prochain billet(i.e nb_miles = 1000).
+CREATE or REPLACE function maj_miles(	IN idClient_p CLIENT.id_client%TYPE, 
+										IN idCompagnie_p COMPAGNIE.idCompagnie%TYPE)
+	RETURN Boolean  -- renvoie vrai si on baisse le prix du billet
+	IS
+		miles_v carte_fidelie.miles%TYPE;
+	BEGIN 
+		SELECT miles INTO miles_v
+			FROM CARTE_FIDELITE c
+			WHERE c.idClient = idClient_p AND c.idCompagnie = idCompagnie_p;
 
-create or replace procedure maj_miles( 
-		ncompagnie COMPAGNIE.idCompagnie%TYPE,
-		nclient CLIENT.idClient%TYPE)
-IS
--- variables
-nbMiles CARTE_FIDELITE.miles%TYPE;
+		IF miles_v >= 1000 THEN    
+			UPDATE carte_fidelite 
+				set miles = miles_v - 900
+				WHERE idClient = idClient_p and idCompagnie = idCompagnie_p;
+			return TRUE ;
+		END IF;
 
-BEGIN
-
-SELECT miles INTO nbMiles 
-FROM CARTE_FIDELITE 
-WHERE idClient = nclient AND 
-
+		UPDATE CARTE_FIDELITE 
+			set miles = miles_v + 100
+			WHERE idClient = idClient_p and idCompagnie = idCompagnie_p;
+		return FALSE;
 END;
+
+	-- b. Alerter un client une heure avant l'expiration de sa réservation.
+CREATE or REPLACE function etat_reservation(	IN idBillet_p RESERVATION.idBillet%TYPE
+												IN idClient_p RESERVATION.idClient%TYPE)
+	RETURN BOOLEAN;
+	IS
+		date_vol_v DATE;
+		date_reservation_v DATE;
+		idVol_v	VOL.idVol%TYPE;
+		idCompagnie_v COMPAGNIE.idCompagnie%TYPE;
+
+	BEGIN 
+		SELECT idVol, idCompagnie INTO idVol_v, idCompagnie_v
+			FROM BILLET
+			WHERE idBillet = idBillet_p;
+
+		SELECT r.dateReservation INTO date_reservation_v
+			FROM RESERVATION r
+			WHERE idBillet_p = r.idBillet and idClient_p = r.idClient ;
+		IF (SYSDATE + 1/24 + 3) >= date_vol_v OR (date_reservation_v + 2 + 1/24) < SYSDATE 
+		THEN 
+			RETURN TRUE;
+		END IF;
+
+		RETURN FALSE;
+END ;
+
+	-- Billets réservés
+CREATE or REPLACE function nb_billet_reserve(	IN idVol_p VOL.idVol%TYPE,  
+												IN idCompagnie_p COMPAGNIE.idCompagnie%TYPE)
+	RETURN INTEGER
+	IS
+		nb_billet_reserve_v INTEGER;
+
+	BEGIN 
+		SELECT count(*) INTO nb_billet_reserve_v
+			FROM BILLET 
+			WHERE idVol = idVol_p AND idCompagnie = idCompagnie_p AND etatBillet = 'R';
+		RETURN nb_billet_reserve_v;
+END ;
+
+	-- Billets achetés
+CREATE or REPLACE function nb_billet_achetes(	IN idVol_p VOL.idVol%TYPE,  
+												IN idCompagnie_p COMPAGNIE.idCompagnie%TYPE)
+	RETURN INTEGER
+	IS
+		nb_billet_achete_v INTEGER;
+
+	BEGIN 
+		SELECT count(*) INTO nb_billet_achete_v
+			FROM BILLET 
+			WHERE idVol = idVol_p AND idCompagnie = idCompagnie_p AND etatBillet = 'A';
+		RETURN nb_billet_achete_v;
+END ;
