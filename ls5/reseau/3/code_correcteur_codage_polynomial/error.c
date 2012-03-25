@@ -69,16 +69,15 @@ includeError1 (char *string, int size)
 
     if (exponent < 8)
     {
-      mask = 1 << exponent;
-      string[i] = xor (string[i], mask);
+		mask = 1 << exponent;
+		string[i] = xor (string[i], mask);
     }
     else
     {
-      mask = 1 << (exponent - 8);
-      string[i + 1] = xor (string[i + 1], mask);
+		mask = 1 << (exponent - 8);
+		string[i + 1] = xor (string[i + 1], mask);
     }
   }
-
   return;
 }
 
@@ -97,13 +96,13 @@ includeError2 (char *string, int size)
 
       if (exponent < 8)
       {
-	mask = 1 << exponent;
-	string[i] = xor (string[i], mask);
+		mask = 1 << exponent;
+		string[i] = xor (string[i], mask);
       }
       else
       {
-	mask = 1 << (exponent - 8);
-	string[i + 1] = xor (string[i + 1], mask);
+		mask = 1 << (exponent - 8);
+		string[i + 1] = xor (string[i + 1], mask);
       }
     }
   }
