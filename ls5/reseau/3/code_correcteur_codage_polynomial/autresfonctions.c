@@ -7,7 +7,7 @@
 #include "logic.h"
 
 
-// Récupérer l'adresse du premier bit à 1
+// Récupérer le degré d'un polynôme
 int getDegre(CodeWord_t * cw)
 {
 	int i;
@@ -16,10 +16,12 @@ int getDegre(CodeWord_t * cw)
 			return i;
 	return 0;
 }
+// Déplacement de bits
 void deplacementBits(CodeWord_t * cw, int nb)
 {
 	*cw = (nb > 0) ? *cw << nb : *cw >> -nb;
 }
+// Renvoie le polynôme diviseur sous forme de CodeWord_t
 CodeWord_t getNombreDiviseur(void)
 {
 	CodeWord_t nbdiviseur;
@@ -30,23 +32,20 @@ CodeWord_t getNombreDiviseur(void)
 	setNthBitCW(&nbdiviseur, 9, 1);
 	return nbdiviseur;
 }
+// Effectuer la division d'un polynôme
 CodeWord_t division(CodeWord_t *x)
 {
 	CodeWord_t ntmp = *x;
 	CodeWord_t nombre_diviseur = getNombreDiviseur();
 	int deplacement;
 
-	printBits(nombre_diviseur, "nombre diviseur");
-
+	// tant que le degré du polynôme diviseur est inférieur ou égal à l'autre
 	while( (deplacement = getDegre(&ntmp) - getDegre(&nombre_diviseur)) >= 0)
 	{
-//		printf("PREMIER BIT : %d\n", getDegre(&ntmp));
-//		printf("Déplacement : %d\n", getDegre(&ntmp) - getDegre(&nombre_diviseur));
+		// nombre_diviseur est une variable temporaire contenant le polynôme diviseur
 		deplacementBits(&nombre_diviseur, deplacement);
-	//	printBits(nombre_diviseur, "nombre diviseur");
 		ntmp = ntmp ^ nombre_diviseur;
 		nombre_diviseur = getNombreDiviseur();
 	}
-	printBits(ntmp, "Reste de la division : ");
 	return ntmp;
 }
