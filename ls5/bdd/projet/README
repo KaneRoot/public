@@ -1,10 +1,20 @@
 fouchal@unistra.fr
 
+1. modèle relationnel à revoir.
+2. contraintes à revoir.
+3. procédures à tester.
+4. rajouter des insertions pour des tests.
+
+Création et suppression des tables = OK.
+
 PARTIE 3 du projet : procédures et déclencheurs
 1. PL/SQL : Écrire les procédures PL/SQL qui permettent d'effectuer les opérations suivantes :
+FAIT :
 	a. Mettre à jour le compteur des miles d'un client donné en prenant en compte l'option de réduction de 100€ pour l'achat du prochain billet(i.e nb_miles = 1000).
 	b. Alerter un client une heure avant l'expiration de sa réservation.
 	c. Récupérer l'état des billets pour un vol donné (nombre de billets vendus, nombre de billets réservés).
+
+À FAIRE :
 	d. Valider une commande avant son archivage (une commande non validée n'est pas considérée).
 2. DÉCLENCHEURS : Écrire les déclencheurs permettant d'assurer les procédures ci-dessous :
 	a. Archiver les commandes validées.
