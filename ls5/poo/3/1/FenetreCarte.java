@@ -2,12 +2,12 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+/**
+ * Créée un PanneauCarte et l'ajoute au contenu de la fenêtre
+ *
+ **/
 public class FenetreCarte extends JFrame
 {
-	/*
-	 * Créée un PanneauCarte et l'ajoute au contenu de la fenêtre
-	 *
-	 **/
 	private PanneauCarte panneau;
 	private Carte c;
 
