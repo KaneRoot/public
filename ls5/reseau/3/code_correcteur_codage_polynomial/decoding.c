@@ -53,16 +53,19 @@ void errorCorrection(CodeWord_t *cw, int data_size)
 int thereIsError(CodeWord_t *cw, int data_size)
 {
 	int i, retour = 0;
+	char c;
+
 	for(i = 0 ; i < data_size ; i++)
 	{
-		printBits(cw[i], "avant déplacement");
+		//printBits(cw[i], "avant déplacement");
 		if(division(&cw[i]) != 0)
-			printBits(cw[i], "erreur, reçu");
-		else
 		{
-			deplacementBits(&cw[i], -8);
-			printBits(cw[i], "après déplacement");
+			printBits(cw[i], "erreur, reçu");
 		}
+		deplacementBits(&cw[i], -8);
+		c = (CodeWord_t) cw[i] >> 8;
+		printf("En lettre : %c\n", c);
+		//printBits(cw[i], "après déplacement");
 	}
 
 	return retour;

@@ -1,12 +1,12 @@
 import javax.swing.*;
 
+/**
+ * Créée une FenetreCarte et affiche la topologie de la carte
+ *
+ **/
 public class Carte
 {
 	Case[] c;
-	/*
-	 * Créée une FenetreCarte et affiche la topologie de la carte
-	 *
-	 **/
 	public int tx,ty;
 	public Carte(int x, int y)
 	{

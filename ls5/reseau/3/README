@@ -20,7 +20,10 @@ Une fois la division faite je n'ai plus qu'à l'ajouter (opérateur +) au messag
 
 Il m'a parru superflu de déplacer à nouveau les bits.
 
+autresfonctions.(c|h) : des fonctions supplémentaires. Comme la division de polynômes, le degré et le déplacement de bits.
+
 
 Exercice 3 : code de Hamming.
 
+RENDU À PART.
 
