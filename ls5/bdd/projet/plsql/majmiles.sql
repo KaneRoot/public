@@ -21,4 +21,21 @@ CREATE or REPLACE function maj_miles(	IN idClient_p CLIENT.id_client%TYPE,
 			WHERE idClient = idClient_p and idCompagnie = idCompagnie_p;
 		return FALSE;
 END;
+/
+SHOW ERRORS FUNCTION maj_miles;
 
+-- test
+select maj_miles(1, 1) from dual;
+select maj_miles(1, 1) from dual;
+select maj_miles(1, 1) from dual;
+select maj_miles(1, 1) from dual;
+select maj_miles(1, 1) from dual;
+select maj_miles(1, 1) from dual;
+select maj_miles(1, 1) from dual;
+select maj_miles(1, 1) from dual;
+select maj_miles(1, 1) from dual;
+select maj_miles(1, 1) from dual;
+select maj_miles(1, 1) from dual;
+select maj_miles(1, 1) from dual;
+select maj_miles(1, 1) from dual;
+select maj_miles(1, 1) from dual;
