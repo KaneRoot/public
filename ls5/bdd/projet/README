@@ -18,3 +18,10 @@ FAIT :
 	d. Valider une commande avant son archivage (une commande non validée n'est pas considérée).
 2. DÉCLENCHEURS : Écrire les déclencheurs permettant d'assurer les procédures ci-dessous :
 	a. Archiver les commandes validées.
+
+
+@/users/info/il3/pittoli/Atelier/public/ls5/bdd/projet/creation.sql
+@/users/info/il3/pittoli/Atelier/public/ls5/bdd/projet/insertion.sql
+@/users/info/il3/pittoli/Atelier/public/ls5/bdd/projet/suppression.sql
+
+@/users/info/il3/pittoli/Atelier/public/ls5/bdd/projet/plsql/
