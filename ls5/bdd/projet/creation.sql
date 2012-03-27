@@ -24,27 +24,22 @@ create table COMPAGNIE
 create table ESCALE
 (
 	idEscale number(10),
-	idVilleDepart number(15) NOT NULL,
-	idVilleArrivee number(15) NOT NULL,
+	idVille number(15) NOT NULL,
 	CONSTRAINT pk_escale PRIMARY KEY(idEscale),
-	CONSTRAINT u_escale UNIQUE(idVilleDepart, idVilleArrivee),
-	CONSTRAINT ck_escale_villes_differentes CHECK(idVilleDepart != idVilleArrivee),
-	CONSTRAINT fk_escale_villedepart FOREIGN KEY (idVilleDepart) REFERENCES	VILLE(idVille) ON DELETE CASCADE,
-	CONSTRAINT fk_escale_villearrivee FOREIGN KEY (idVilleArrivee) REFERENCES VILLE(idVille) ON DELETE CASCADE
+	CONSTRAINT fk_escale_ville FOREIGN KEY (idVille) REFERENCES VILLE ON DELETE CASCADE
 );
 create table VOL
 (
 	idVol number(10),
 	idCompagnie number(10) NOT NULL,
-	idEscale number(10) NOT NULL,
+	idVilleDepart number(15) NOT NULL,
+	idVilleArrivee number(15) NOT NULL,
 	dateDepart date NOT NULL,
 	dateArrivee date NOT NULL,
-	nombreBillets number(4) NOT NULL,
-	nombreBilletsReserves number(4) NOT NULL,
 	CONSTRAINT pk_vol PRIMARY KEY(idVol, idCompagnie),
 	CONSTRAINT fk_vol_compagnie FOREIGN KEY (idCompagnie) REFERENCES COMPAGNIE ON DELETE CASCADE,
-	CONSTRAINT fk_vol_escale FOREIGN KEY (idEscale) REFERENCES ESCALE ON DELETE CASCADE,
-	CONSTRAINT ck_vol_nbbillets CHECK( nombreBillets >= 0)
+	CONSTRAINT fk_vol_villedepart FOREIGN KEY (idVilleDepart) REFERENCES VILLE ON DELETE CASCADE,
+	CONSTRAINT fk_vol_villearrivee FOREIGN KEY (idVilleArrivee) REFERENCES VILLE ON DELETE CASCADE
 );
 create table BILLET
 (

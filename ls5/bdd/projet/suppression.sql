@@ -1,15 +1,12 @@
 -- Ce script supprime toutes les tables et toutes les contraintes
 
--- Suppression des FK en premier
+-- Suppression des FK en premier, avec les autres contraintes
 ALTER TABLE CLIENT			DROP 	CONSTRAINT u_client_nom_prenom_adresse ;
 ALTER TABLE VILLE			DROP 	CONSTRAINT u_ville_nomVille ;
-ALTER TABLE ESCALE			DROP 	CONSTRAINT u_escale ;
-ALTER TABLE ESCALE			DROP 	CONSTRAINT ck_escale_villes_differentes ;
-ALTER TABLE ESCALE			DROP 	CONSTRAINT fk_escale_villedepart ;
-ALTER TABLE ESCALE			DROP 	CONSTRAINT fk_escale_villearrivee ;
+ALTER TABLE ESCALE			DROP 	CONSTRAINT fk_escale_ville;
 ALTER TABLE VOL				DROP 	CONSTRAINT fk_vol_compagnie ;
-ALTER TABLE VOL				DROP 	CONSTRAINT fk_vol_escale ;
-ALTER TABLE VOL				DROP 	CONSTRAINT ck_vol_nbbillets ;
+ALTER TABLE VOL				DROP 	CONSTRAINT fk_vol_villedepart ;
+ALTER TABLE VOL				DROP 	CONSTRAINT fk_vol_villearrivee;
 ALTER TABLE BILLET			DROP 	CONSTRAINT ck_billet_etatbillet ;
 ALTER TABLE BILLET			DROP 	CONSTRAINT ck_billet_prix ;
 ALTER TABLE BILLET			DROP 	CONSTRAINT fk_billet_vol_compagnie ;
