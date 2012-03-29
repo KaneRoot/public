@@ -19,15 +19,15 @@ INSERT INTO VILLE VALUES(1, 'PARIS');
 INSERT INTO VILLE VALUES(2, 'LARIS');
 INSERT INTO VILLE VALUES(3, 'SARIS');
 
+-- idVol idCompagnie idVilleDepart idVilleArrivee dateDepart dateArrivee
+INSERT INTO VOL VALUES(1, 1, 1, 3, to_date('2012/03/16 21:02:44', 'yyyy/mm/dd hh24:mi:ss'), to_date('2012/03/18 21:02:44', 'yyyy/mm/dd hh24:mi:ss'));
+INSERT INTO VOL VALUES(2, 1, 2, 3, to_date('2012/03/16 21:02:44', 'yyyy/mm/dd hh24:mi:ss'), to_date('2012/03/18 21:02:44', 'yyyy/mm/dd hh24:mi:ss'));
+INSERT INTO VOL VALUES(3, 1, 3, 1, to_date('2012/03/16 21:02:44', 'yyyy/mm/dd hh24:mi:ss'), to_date('2012/03/18 21:02:44', 'yyyy/mm/dd hh24:mi:ss'));
+
 -- idEscale idVille idVol idCompagnie
 INSERT INTO ESCALE VALUES(1, 1, 1, 1);
-INSERT INTO ESCALE VALUES(2, 1, 1, 1);
-INSERT INTO ESCALE VALUES(3, 2, 1, 1);
-
--- idVol idCompagnie idVilleDepart idVilleArrivee dateDepart dateArrivee
-INSERT INTO VOL VALUES(1, 1, 1, to_date('2012/03/16 21:02:44', 'yyyy/mm/dd hh24:mi:ss'), to_date('2012/03/18 21:02:44', 'yyyy/mm/dd hh24:mi:ss'), 10, 0);
-INSERT INTO VOL VALUES(2, 1, 2, to_date('2012/03/16 21:02:44', 'yyyy/mm/dd hh24:mi:ss'), to_date('2012/03/18 21:02:44', 'yyyy/mm/dd hh24:mi:ss'), 10, 0);
-INSERT INTO VOL VALUES(3, 1, 3, to_date('2012/03/16 21:02:44', 'yyyy/mm/dd hh24:mi:ss'), to_date('2012/03/18 21:02:44', 'yyyy/mm/dd hh24:mi:ss'), 10, 0);
+INSERT INTO ESCALE VALUES(2, 2, 1, 1);
+INSERT INTO ESCALE VALUES(3, 3, 1, 1);
 
 -- idCompagnie idClient miles
 INSERT INTO CARTE_FIDELITE VALUES(1, 1, 900);
