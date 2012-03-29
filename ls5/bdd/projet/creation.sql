@@ -28,8 +28,11 @@ create table ESCALE
 (
 	idEscale number(10),
 	idVille number(15) NOT NULL,
+	idVol number(10) NOT NULL,
+	idCompagnie number(10) NOT NULL, 
 	CONSTRAINT pk_escale PRIMARY KEY(idEscale),
-	CONSTRAINT fk_escale_ville FOREIGN KEY (idVille) REFERENCES VILLE ON DELETE CASCADE
+	CONSTRAINT fk_escale_vol FOREIGN KEY (idVol, idCompagnie) REFERENCES VOL ON DELETE CASCADE,
+	CONSTRAINT fk_escale_ville FOREIGN KEY(idVille) REFERENCES VILLE ON DELETE CASCADE
 );
 create table VOL
 (
@@ -84,13 +87,4 @@ create table RESERVATION
 	CONSTRAINT pk_reservation PRIMARY KEY(idClient, idBillet),
 	CONSTRAINT fk_reservation_client FOREIGN KEY (idClient) REFERENCES CLIENT ON DELETE CASCADE,
 	CONSTRAINT fk_reservation_billet FOREIGN KEY (idBillet) REFERENCES BILLET ON DELETE CASCADE
-);
-create table VOL_ESCALE
-(
-	idVol number(10),
-	idCompagnie number(10) NOT NULL, 
-	idEscale number(10),
-	CONSTRAINT pk_vol_escale PRIMARY KEY(idVol, idEscale),
-	CONSTRAINT fk_vol_escale_vol FOREIGN KEY (idVol, idCompagnie) REFERENCES VOL ON DELETE CASCADE,
-	CONSTRAINT fk_vol_escale_escale FOREIGN KEY (idEscale) REFERENCES ESCALE ON DELETE CASCADE
 );
