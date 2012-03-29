@@ -24,16 +24,6 @@ create table COMPAGNIE
 	nomCompagnie varchar2(50) NOT NULL,
 	CONSTRAINT pk_compagnie PRIMARY KEY (idCompagnie)
 );
-create table ESCALE
-(
-	idEscale number(10),
-	idVille number(15) NOT NULL,
-	idVol number(10) NOT NULL,
-	idCompagnie number(10) NOT NULL, 
-	CONSTRAINT pk_escale PRIMARY KEY(idEscale),
-	CONSTRAINT fk_escale_vol FOREIGN KEY (idVol, idCompagnie) REFERENCES VOL ON DELETE CASCADE,
-	CONSTRAINT fk_escale_ville FOREIGN KEY(idVille) REFERENCES VILLE ON DELETE CASCADE
-);
 create table VOL
 (
 	idVol number(10),
@@ -46,6 +36,16 @@ create table VOL
 	CONSTRAINT fk_vol_compagnie FOREIGN KEY (idCompagnie) REFERENCES COMPAGNIE ON DELETE CASCADE,
 	CONSTRAINT fk_vol_villedepart FOREIGN KEY (idVilleDepart) REFERENCES VILLE ON DELETE CASCADE,
 	CONSTRAINT fk_vol_villearrivee FOREIGN KEY (idVilleArrivee) REFERENCES VILLE ON DELETE CASCADE
+);
+create table ESCALE
+(
+	idEscale number(10),
+	idVille number(15) NOT NULL,
+	idVol number(10) NOT NULL,
+	idCompagnie number(10) NOT NULL, 
+	CONSTRAINT pk_escale PRIMARY KEY(idEscale),
+	CONSTRAINT fk_escale_vol FOREIGN KEY (idVol, idCompagnie) REFERENCES VOL ON DELETE CASCADE,
+	CONSTRAINT fk_escale_ville FOREIGN KEY(idVille) REFERENCES VILLE ON DELETE CASCADE
 );
 create table BILLET
 (
