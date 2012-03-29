@@ -1,12 +1,15 @@
 create table CLIENT
 (
 	idClient number(15),
+	loginClient varchar2(50) NOT NULL,
+	motDePasseClient varchar2(50) NOT NULL,
 	nomClient varchar2(50) NOT NULL,
 	prenomClient varchar2(50) NOT NULL,
 	adresseClient varchar2(100) NOT NULL,
 	numTelClient number(10),
 	CONSTRAINT pk_client PRIMARY KEY(idClient),
-	CONSTRAINT u_client_nom_prenom_adresse UNIQUE(nomClient, prenomClient, adresseClient)
+	CONSTRAINT u_client_nom_prenom_adresse UNIQUE(nomClient, prenomClient, adresseClient),
+	CONSTRAINT u_client_login UNIQUE(loginClient)
 );
 create table VILLE
 (

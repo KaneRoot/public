@@ -2,6 +2,7 @@
 
 -- Suppression des FK en premier, avec les autres contraintes
 ALTER TABLE CLIENT			DROP 	CONSTRAINT u_client_nom_prenom_adresse ;
+ALTER TABLE CLIENT			DROP 	CONSTRAINT u_client_login;
 ALTER TABLE VILLE			DROP 	CONSTRAINT u_ville_nomVille ;
 ALTER TABLE ESCALE			DROP 	CONSTRAINT fk_escale_ville;
 ALTER TABLE VOL				DROP 	CONSTRAINT fk_vol_compagnie ;
