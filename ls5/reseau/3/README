@@ -23,7 +23,7 @@ Il m'a parru superflu de déplacer à nouveau les bits.
 autresfonctions.(c|h) : des fonctions supplémentaires. Comme la division de polynômes, le degré et le déplacement de bits.
 
 
-Exercice 3 : code de Hamming.
+Exercice 4.
 
-RENDU À PART.
+Le code est systématique, car les bits d'info sont séparés des bits de contrôle.
 
