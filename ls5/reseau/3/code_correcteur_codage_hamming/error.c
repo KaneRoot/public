@@ -63,17 +63,14 @@ includeError1 (char *string, int size)
   int exponent = 0;
   unsigned char mask = '\0';
 
-  printf("Liste des caractères changés ( [\033[36mposition\033[00m:\033[32mcaractère-avant\033[00m:\033[31mcaractère-après\033[00m] ) : ");
   for (i = 0; i < size; i += 2)
   {
     exponent = floor (drand48 () * 16);
 
     if (exponent < 8)
     {
-		printf("[\033[36m%d\033[00m:\033[32m%c\033[00m:\033[31m", i, string[i]);
 		mask = 1 << exponent;
 		string[i] = xor (string[i], mask);
-		printf("%c\033[00m] ", string[i]);
     }
     else
     {
@@ -81,7 +78,6 @@ includeError1 (char *string, int size)
 		string[i + 1] = xor (string[i + 1], mask);
     }
   }
-  printf("\n");
 
   return;
 }

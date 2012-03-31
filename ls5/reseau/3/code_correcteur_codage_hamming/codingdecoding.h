@@ -126,5 +126,7 @@ int thereIsError(CodeWord_t *, int);
 void decoding(char *, int, char *, int *);
 
 matrice_s * get_matrice_generatrice(void);
+matrice_s * get_matrice_cw(CodeWord_t * cw, int offset);
+void matrice_mod_2(matrice_s * m);
 
 #endif /* _CODEC_H */
