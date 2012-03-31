@@ -23,6 +23,7 @@
  */
 
 #include "codingdecoding.h"
+#include "mesfonctions.h"
 
 void
 copyDataBitsCoding (char *message, CodeWord_t * cw, int size)
@@ -44,20 +45,30 @@ copyDataBitsCoding (char *message, CodeWord_t * cw, int size)
   return;
 }
 
+matrice_s * get_matrice_generatrice(void)
+{
+	matrice_s * m;
+	m = create_matrix(4, 8);
+
+	m->matrice[0][1] = 1;
+	display_matrix(m);
+
+}
+
 void computeCtrlBits(CodeWord_t *cw, int size)
 {
-	int nombre_de_un, i, j;
-	for(i = 0 ; i < size ; i++)
-	{
-		nombre_de_un = 0;
-	//	printBits(cw[i], "avant");
-		for(j = 1 ; j <= 8 ; j++) 
-			if(getNthBit(cw[i],j))
-				nombre_de_un++;
+//	int i, j;
+//	for(i = 0 ; i < size ; i++)
+//	{
+//	}
 
-		setNthBitCW(&cw[i], 9, nombre_de_un%2);
-	//	printBits(cw[i], "après");
-	}
+	*cw = 0;
+	size = 0;
+	size = size;
+
+	matrice_s * m = get_matrice_generatrice();
+
+	free_matrix(m);
 }
 
 void

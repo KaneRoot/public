@@ -124,4 +124,6 @@ int thereIsError(CodeWord_t *, int);
  */
 void decoding(char *, int, char *, int *);
 
+matrice_s * get_matrice_generatrice(void);
+
 #endif /* _CODEC_H */
