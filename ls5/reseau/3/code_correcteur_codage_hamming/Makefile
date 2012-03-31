@@ -13,19 +13,19 @@ endif
 SOCKETS=s_medsend s_medrec sock_send sock_rec
 all: $(PROGS)
 
-sender: sending.o coding.o logic.o sockettoolbox.o
+sender: sending.o coding.o logic.o sockettoolbox.o mesfonctions.o
 	$(CC) -o $@ $^ $(LDFLAGS_NET)
 
-receiver: receiving.o decoding.o logic.o sockettoolbox.o
+receiver: receiving.o decoding.o logic.o sockettoolbox.o mesfonctions.o
 	$(CC) -o $@ $^ $(LDFLAGS_NET)
 
-sender2: sending.o coding2.o logic.o sockettoolbox.o
+sender2: sending.o coding2.o logic.o sockettoolbox.o mesfonctions.o
 	$(CC) -o $@ $^ $(LDFLAGS_NET)
 
-receiver2: receiving.o decoding2.o logic.o sockettoolbox.o
+receiver2: receiving.o decoding2.o logic.o sockettoolbox.o mesfonctions.o
 	$(CC) -o $@ $^ $(LDFLAGS_NET)
 
-medium : medium.o error.o sockettoolbox.o logic.o
+medium : medium.o error.o sockettoolbox.o logic.o mesfonctions.o
 	$(CC) -o $@ $^ $(LDFLAGS_NET) -lm
 
 error.o: error.c error.h

@@ -25,5 +25,18 @@ autresfonctions.(c|h) : des fonctions supplémentaires. Comme la division de pol
 
 Exercice 4.
 
-Le code est systématique, car les bits d'info sont séparés des bits de contrôle.
+1. Le code est systématique, car les bits d'info sont séparés des bits de contrôle.
 
+Matrice H : 
+0	1	1	1	1	0	0	0
+1	0	1	1	0	1	0	0
+1	1	0	1	0	0	1	0
+1	1	1	0	0	0	0	1
+
+
+2. Le poids minimum d'une ligne de G est de 4 (4 bits à 1 par ligne).
+Le poids de la somme de deux lignes de G est toujours de 4.
+Le poids de la somme de trois lignes de G est de 4 également.
+Le poids de la somme des quatre lignes de G est de 8 (tous les bits de la ligne sont à 1).
+
+3. Le code peut détecter 3 erreurs et en corriger une.
