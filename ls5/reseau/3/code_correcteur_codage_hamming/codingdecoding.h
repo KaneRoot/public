@@ -26,6 +26,7 @@
 #define _CODEC_H
 
 #include "logic.h"
+#include "mesfonctions.h"
 
 /**
  * Copy data bits in code words.
@@ -123,5 +124,7 @@ int thereIsError(CodeWord_t *, int);
  * @return nothing (call the other functions)
  */
 void decoding(char *, int, char *, int *);
+
+matrice_s * get_matrice_generatrice(void);
 
 #endif /* _CODEC_H */
