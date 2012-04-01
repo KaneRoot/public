@@ -34,7 +34,7 @@ getNthBit (int number, int order)
 void
 printBits (CodeWord_t sh, char *comment)
 {
-  printf ("%s : %u : %d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d\n",
+  printf ("%s : %u : %d%d%d%d %d%d%d%d %d%d%d%d %d%d%d%d\n",
 	  comment,
 	  sh,
 	  getNthBit (sh, 16),

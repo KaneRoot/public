@@ -3,8 +3,14 @@
 rm FileReceived
 make clean
 make
+if [ $# = 0 ]
+then
+	nb=1
+else
+	nb=$1
+fi
 
-./medium 0 &
+./medium ${nb} &
 
 sleep 1
 ./receiver FileReceived &

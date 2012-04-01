@@ -22,6 +22,7 @@
  * Generate code words from the initial data flow
  */
 
+#include <stdio.h>
 #include "codingdecoding.h"
 #include "mesfonctions.h"
 
@@ -54,68 +55,54 @@ matrice_s * get_matrice_cw(CodeWord_t * cw, int offset)
 
 	return m;
 }
-
-matrice_s * get_matrice_generatrice(void)
+CodeWord_t matrice_to_codeword(matrice_s * m)
 {
-	matrice_s * m;
-	m = create_matrix(4, 8);
-
-	m->matrice[0][0] = 1;
-	m->matrice[1][1] = 1;
-	m->matrice[2][2] = 1;
-	m->matrice[3][3] = 1;
-
-	m->matrice[1][4] = 1;
-	m->matrice[2][4] = 1;
-	m->matrice[3][4] = 1;
-	m->matrice[0][5] = 1;
-	m->matrice[2][5] = 1;
-	m->matrice[3][5] = 1;
-	m->matrice[0][6] = 1;
-	m->matrice[1][6] = 1;
-	m->matrice[3][6] = 1;
-	m->matrice[0][7] = 1;
-	m->matrice[1][7] = 1;
-	m->matrice[2][7] = 1;
-	display_matrix(m);
-
-	return m;
-}
-void matrice_mod_2(matrice_s * m)
-{
-	int i, j;
-	for(i = 0 ; i < m->nbl ; i++)
-		for(j = 0 ; j < m->nbc ; j++)
-			while(m->matrice[i][j] >= 2)
-				m->matrice[i][j] -= 2;
+	CodeWord_t x;
+	int i;
+	for(i = 0 ; i < m->nbc ; i++)
+		setNthBitCW(&x, i + 1, m->matrice[0][i]);
+	return x;
 }
 void computeCtrlBits(CodeWord_t *cw, int size)
 {
-//	int i, j;
-//	for(i = 0 ; i < size ; i++)
-//	{
-//	}
-
-	size = 0;
-	size = size;
-
 	matrice_s * m = get_matrice_generatrice();
-	matrice_s * bla = get_matrice_cw(cw,1);
-	matrice_s * bla2 = get_matrice_cw(cw,4);
-
 	matrice_s *tmp1, *tmp2;
+	matrice_s *tmp3, *tmp4;
+	CodeWord_t cwtmp1, cwtmp2;
+	int i;
 
-	tmp1 = multiplication_matrices(bla, m);
-	tmp2 = multiplication_matrices(bla2, m);
+	/* pour tout cw[i] faire : 
+	 * get_matrice_cw 1 et de 5 qu'on multiplie par m
+	 * on fait modulo 2 puis on matrice_to_codeword qu'on va placer dans un codeword plus grand
+	 */
 
-	display_matrix(tmp1);
-	display_matrix(tmp2);
+	for(i = 0 ; i < size ; i++)
+	{
+		tmp1 = get_matrice_cw(&(cw[i]),1);
+		tmp2 = get_matrice_cw(&(cw[i]),5);
 
-	matrice_mod_2(tmp1);
-	matrice_mod_2(tmp2);
+//		display_matrix(tmp1);
+//		display_matrix(tmp2);
 
-	display_matrix(tmp1);
-	display_matrix(tmp2);
+		tmp3 = multiplication_matrices(tmp1, m);
+		tmp4 = multiplication_matrices(tmp2, m);
+		matrice_mod_2(tmp3);
+		matrice_mod_2(tmp4);
+		cwtmp1 = matrice_to_codeword(tmp3);
+		cwtmp2 = matrice_to_codeword(tmp4);
+		cwtmp2 = cwtmp2 << 8;
+		cw[i] = cwtmp1 + cwtmp2;
+
+		if(cw[i] != 0)
+		{
+			printf("cw %d ", i);
+			printBits(cw[i], "cw");
+		}
+		free_matrix(tmp1);
+		free_matrix(tmp2);
+		free_matrix(tmp3);
+		free_matrix(tmp4);
+	}
 
 	free_matrix(m);
 }

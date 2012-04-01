@@ -452,3 +452,48 @@ polynome_s * dupliquer_polynome(polynome_s * p)
 {
 	return (polynome_s *) dupliquer_matrice((matrice_s *) p);
 }
+matrice_s * get_matrice_generatrice(void)
+{
+	matrice_s * m;
+	m = create_matrix(4, 8);
+
+	// In
+	m->matrice[0][0] = 1;
+	m->matrice[1][1] = 1;
+	m->matrice[2][2] = 1;
+	m->matrice[3][3] = 1;
+
+	// At
+	m->matrice[1][4] = 1; m->matrice[2][4] = 1; m->matrice[3][4] = 1;
+	m->matrice[0][5] = 1; m->matrice[2][5] = 1; m->matrice[3][5] = 1;
+	m->matrice[0][6] = 1; m->matrice[1][6] = 1; m->matrice[3][6] = 1;
+	m->matrice[0][7] = 1; m->matrice[1][7] = 1; m->matrice[2][7] = 1;
+
+	return m;
+}
+matrice_s * get_matrice_parite(void)
+{
+	matrice_s * m = create_matrix(4, 8);
+
+	// A
+	m->matrice[1][0] = 1; m->matrice[2][0] = 1; m->matrice[3][0] = 1;
+	m->matrice[0][1] = 1; m->matrice[2][1] = 1; m->matrice[3][1] = 1;
+	m->matrice[0][2] = 1; m->matrice[1][2] = 1; m->matrice[3][2] = 1;
+	m->matrice[0][3] = 1; m->matrice[1][3] = 1; m->matrice[2][3] = 1;
+
+	// In
+	m->matrice[0][4] = 1;
+	m->matrice[1][5] = 1;
+	m->matrice[2][6] = 1;
+	m->matrice[3][7] = 1;
+
+	return m;
+}
+void matrice_mod_2(matrice_s * m)
+{
+	int i, j;
+	for(i = 0 ; i < m->nbl ; i++)
+		for(j = 0 ; j < m->nbc ; j++)
+			while(m->matrice[i][j] >= 2)
+				m->matrice[i][j] -= 2;
+}

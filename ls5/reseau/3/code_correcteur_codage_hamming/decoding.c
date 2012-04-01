@@ -24,6 +24,17 @@
 
 #include <stdio.h>
 #include "codingdecoding.h"
+#include "mesfonctions.h"
+
+matrice_s * get_matrice_cw_long(CodeWord_t x)
+{
+	matrice_s * m = create_matrix(1, 8);
+	int i;
+	for(i = 0 ; i < 8 ; i++)
+		m->matrice[0][i] = getNthBit(x, i+1);
+
+	return m;
+}
 
 void
 copyDataBitsDecoding (CodeWord_t * cw, char *message, int data_size)
@@ -43,33 +54,128 @@ copyDataBitsDecoding (CodeWord_t * cw, char *message, int data_size)
   }
 }
 
-/*
+int ajouter_puissance_deux(int n)
+{
+	int x = 2;
+	if(n <= 0)
+		return 1;
+
+	while(--n >= 1)
+		x *= 2;
+
+	return x;
+}
+int matrice_to_int(matrice_s * m)
+{
+	int nombre = 0, i;
+	for(i = 0 ; i < 4 ; i++)
+		nombre = (m->matrice[i][0] != 0.0) ? nombre + ajouter_puissance_deux(i) : nombre;
+	return nombre;
+}
 void errorCorrection(CodeWord_t *cw, int data_size)
 {
-	return;
-}
-*/
-int thereIsError(CodeWord_t *cw, int data_size)
-{
-	int i, j, nb_de_un, erreur = 0;
-	printf("Les erreurs : ");
+	matrice_s * m = get_matrice_parite();
+	matrice_s *tmp1, *tmp2;
+	matrice_s *tmp3, *tmp4;
+	matrice_s *tr1, *tr2;
+	CodeWord_t tmp;
+	int i, j, err1, err2;
+
+	display_matrix(m);
 	for(i = 0 ; i < data_size ; i++)
 	{
-		nb_de_un = 0;
-		for(j = 1 ; j <= 8 ; j++) 
-			if(getNthBit(cw[i],j))
-				nb_de_un++;
-		if(getNthBit(cw[i], 9) != nb_de_un%2)
-		{
-			printf("[\033[36m%d\033[00m:\033[31m%c\033[00m] ", i, cw[i]);
-			erreur = 1;
-		}
+		printf("cw %d ", i);
+		printBits(cw[i], "cw");
+		tmp1 = get_matrice_cw_long(cw[i]);
+		cw[i] = cw[i] >> 8;
+		tmp2 = get_matrice_cw_long(cw[i]);
+	
+		tr1 = transposee_matrix(tmp1);
+		tr2 = transposee_matrix(tmp2);
+
+		tmp3 = multiplication_matrices(m, tr1);
+		tmp4 = multiplication_matrices(m, tr2);
+
+		matrice_mod_2(tmp3);
+		matrice_mod_2(tmp4);
+
+		err1 = matrice_to_int(tmp3);
+		err2 = matrice_to_int(tmp4);
+
+		printf("Nombre 1 = %d  Nombre 2 : %d\n", err1, err2);
+
+		for( j = 0 ; j < 4 ; j++)
+			if( err1 != 0 && (j + 1) == err1)
+				setNthBitCW(&tmp, j + 1, ((int) tmp1->matrice[0][j] + 1) % 2);
+			else
+				setNthBitCW(&tmp, j + 1, tmp1->matrice[0][j]);
+
+		for( j = 0 ; j < 4 ; j++)
+			if( err2 != 0 && (j + 1) == err2)
+				setNthBitCW(&tmp, j + 5, ( (int ) tmp2->matrice[0][j] + 1) % 2);
+			else
+				setNthBitCW(&tmp, j + 5, tmp2->matrice[0][j]);
+
+		cw[i] = tmp;
+
+		free_matrix(tmp1);
+		free_matrix(tmp2);
+		free_matrix(tmp3);
+		free_matrix(tmp4);
+		free_matrix(tr1);
+		free_matrix(tr2);
 	}
-	if(! erreur)
-		printf("aucune erreur\n");
-	else
-		printf("\n");
-	return erreur;
+
+	free_matrix(m);
+	return;
+}
+int thereIsError(CodeWord_t *cw, int data_size)
+{
+	matrice_s * m = get_matrice_parite();
+	matrice_s *tmp1, *tmp2;
+	matrice_s *tmp3, *tmp4;
+	matrice_s *tr1, *tr2;
+	CodeWord_t tmp;
+	int i, err1, err2;
+
+	for(i = 0 ; i < data_size ; i++)
+	{
+		tmp1 = get_matrice_cw_long(cw[i]);
+		tmp = cw[i] >> 8;
+		tmp2 = get_matrice_cw_long(tmp);
+	
+		tr1 = transposee_matrix(tmp1);
+		tr2 = transposee_matrix(tmp2);
+
+		tmp3 = multiplication_matrices(m, tr1);
+		tmp4 = multiplication_matrices(m, tr2);
+
+		matrice_mod_2(tmp3);
+		matrice_mod_2(tmp4);
+
+		err1 = matrice_to_int(tmp3);
+		err2 = matrice_to_int(tmp4);
+		if(err1 != 0 || err2 != 0)
+		{
+			free_matrix(tmp1);
+			free_matrix(tmp2);
+			free_matrix(tmp3);
+			free_matrix(tmp4);
+			free_matrix(tr1);
+			free_matrix(tr2);
+			free_matrix(m);
+			return 1;
+		}
+		free_matrix(tmp1);
+		free_matrix(tmp2);
+		free_matrix(tmp3);
+		free_matrix(tmp4);
+		free_matrix(tr1);
+		free_matrix(tr2);
+	}
+
+	free_matrix(m);
+	return 0;
 }
 
 void
@@ -77,19 +183,19 @@ decoding (char *cw, int cw_size, char *message, int *data_size)
 {
   *data_size = cw_size / sizeof (CodeWord_t);
 
-  //-- For error correction
-  //-- to uncomment when complete and needed
-  //errorCorrection((CodeWord_t*)cw, *data_size);
-
-  //-- For decoding
-  copyDataBitsDecoding ((CodeWord_t *) cw, message, *data_size);
-
   //-- For error detection
   //-- to uncomment when complete and needed
 	if(thereIsError((CodeWord_t*)cw, *data_size))
 	{
-		printf("PARITY ERROR: \"%s\"\n", message);
+		printf("PARITY ERROR\n");
 	}
+
+  //-- For error correction
+  //-- to uncomment when complete and needed
+  errorCorrection((CodeWord_t*)cw, *data_size);
+
+  //-- For decoding
+  copyDataBitsDecoding ((CodeWord_t *) cw, message, *data_size);
 
 	return;
 }

@@ -107,4 +107,8 @@ polynome_s * multiplication_polynome_par_reel(polynome_s * p, float reel);
 
 // Duplication d'un polynôme
 polynome_s * dupliquer_polynome(polynome_s * p);
+
+matrice_s * get_matrice_generatrice(void);
+matrice_s * get_matrice_parite(void);
+void matrice_mod_2(matrice_s * m);
 #endif
