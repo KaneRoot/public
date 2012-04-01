@@ -81,11 +81,10 @@ void errorCorrection(CodeWord_t *cw, int data_size)
 	CodeWord_t tmp;
 	int i, j, err1, err2;
 
-	display_matrix(m);
 	for(i = 0 ; i < data_size ; i++)
 	{
-		printf("cw %d ", i);
-		printBits(cw[i], "cw");
+//		printf("cw %d ", i);
+//		printBits(cw[i], "cw");
 		tmp1 = get_matrice_cw_long(cw[i]);
 		cw[i] = cw[i] >> 8;
 		tmp2 = get_matrice_cw_long(cw[i]);
@@ -102,7 +101,7 @@ void errorCorrection(CodeWord_t *cw, int data_size)
 		err1 = matrice_to_int(tmp3);
 		err2 = matrice_to_int(tmp4);
 
-		printf("Nombre 1 = %d  Nombre 2 : %d\n", err1, err2);
+//		printf("Nombre 1 = %d  Nombre 2 : %d\n", err1, err2);
 
 		for( j = 0 ; j < 4 ; j++)
 			if( err1 != 0 && (j + 1) == err1)

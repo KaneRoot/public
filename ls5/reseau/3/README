@@ -23,9 +23,32 @@ Il m'a parru superflu de déplacer à nouveau les bits.
 autresfonctions.(c|h) : des fonctions supplémentaires. Comme la division de polynômes, le degré et le déplacement de bits.
 
 
+Exercice 3.
+
+Le codage de hamming ne fonctionne pas.
+Il semble y avoir une erreur lors du calcul H.Ct. 
+Ceci est censé renvoyer une valeur qui correspond au numéro du bit qui n'est pas bon et que l'on doit changer mais là la valeur est parfois suppérieure au nombre de bits dans la matrice.
+
+Cependant la détection d'erreur marche.
+
+
+Ce que le code fait : le programme prend séparément deux séries de 4 bits d'info et les codes suivant la matrice génératrice donnée à l'exercice 4.
+Ceci nous donne 2 codes de 8 bits que je place sur un mot CodeWord_t de 16 bits.
+
+Au décodage je prend la matrice de parité que je multiplie avec la transposée de ces 2 codes.
+En cas d'erreur, la matrice crée ne contient pas uniquement des 0. Tout ceci fonctionne.
+
+Mon erreur : lors de la multiplication des matrices H.Ct je n'obtiens pas un nombre correct. Je n'ai malheureusement plus le temps de corriger le programme.
+
 Exercice 4.
 
 1. Le code est systématique, car les bits d'info sont séparés des bits de contrôle.
+
+C = données * G
+G = Ik.At
+données * Ik = données
+
+Donc C = données.(données * At)
 
 Matrice H : 
 0	1	1	1	1	0	0	0
@@ -40,3 +63,14 @@ Le poids de la somme de trois lignes de G est de 4 également.
 Le poids de la somme des quatre lignes de G est de 8 (tous les bits de la ligne sont à 1).
 
 3. Le code peut détecter 3 erreurs et en corriger une.
+Pouvoir de détection (D = distance, K = erreurs détectée) : 
+	* D >= K + 1
+	* 3 >= 2 + 1
+Ce code permet donc de détecter 3 erreurs.
+
+Pouvoir de correction (D = distance, K = erreurs corrigibles):
+	* D >= 2K + 1
+	* 3 >= 2* 1 + 1
+Ce code permet donc de corriger 1 erreur.
+
+
