@@ -14,17 +14,14 @@ public class Noeud
 		{
 			int rfg = filsGauche.calcule();
 			int rfd = filsDroit.calcule();
-			switch(sym.getOperation())
+			switch(symbole.getOperation())
 			{
-				case '+' : return rfg + rfd; break;
-				case '-' : return rfg - rfd; break;
-				case '/' : return rfg / rfd; break;
-				case '*' : return rfg * rfd; break;
+				case '+' : return rfg + rfd;
+				case '-' : return rfg - rfd;
+				case '/' : return rfg / rfd;
+				case '*' : return rfg * rfd;
 			}
 		}
-		else
-		{
-			return symbole.getNombre();
-		}
+		return symbole.getNombre();
 	}
 }
