@@ -1,0 +1,15 @@
+/* Karchnu - WebDesign */
+/* Artfully Masterminded by Karchnu himself */
+
+p 
+{
+	text-align: justify;
+}
+.index-pages
+{
+	text-transform: lowercase;
+}
+.index-pages:first-letter
+{
+	text-transform: uppercase;
+}
