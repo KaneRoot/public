@@ -1,27 +1,47 @@
 public class Symbole
 {
-	String chaine;
-	public Symbole(String s)
+	public String chaine;
+	public boolean estOp;
+	public int nb;
+	
+	public Symbole(String s) throws Exception
 	{
 		this.chaine = s;
-	}
-	public boolean estNombre()
-	{
 		try
 		{
-			Integer.parseInt(this.chaine);
+			this.nb = Integer.parseInt(this.chaine);
+			this.estOp = false;
 		}
 		catch(NumberFormatException e)
 		{
-			System.out.prinln("Exception : " + chaine + " n'est pas un nombre");
-			return false;
+			if(		chaine.compareTo("+") == 0 || 
+					chaine.compareTo("-") == 0 ||
+					chaine.compareTo("/") == 0 ||
+					chaine.compareTo("*") == 0)
+			{
+				this.estOp = true;
+			}
+			else
+			{
+				throw new Exception();
+			}
 		}
-		return true;
+	}
+	
+	public boolean estNombre()
+	{
+		return ! estOp;
 	}
 	public boolean estOperation()
 	{
-		if(! estNombre())
-		{
-		}
+		return estOp;
+	}
+	public int getNombre()
+	{
+		return this.nb;
+	}
+	public char getOperation()
+	{
+		return this.chaine.charAt(0);
 	}
 }
