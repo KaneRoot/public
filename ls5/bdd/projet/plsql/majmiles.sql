@@ -1,6 +1,6 @@
 -- a. Mettre à jour le compteur des miles d'un client donné en prenant en compte l'option de réduction de 100€ pour l'achat du prochain billet(i.e nb_miles = 1000).
-CREATE or REPLACE function maj_miles(	IN idClient_p CLIENT.id_client%TYPE, 
-										IN idCompagnie_p COMPAGNIE.idCompagnie%TYPE)
+CREATE or REPLACE function maj_miles(	idClient_p CLIENT.id_client%TYPE, 
+										idCompagnie_p COMPAGNIE.idCompagnie%TYPE)
 	RETURN Boolean  -- renvoie vrai si on baisse le prix du billet
 	IS
 		miles_v carte_fidelie.miles%TYPE;
