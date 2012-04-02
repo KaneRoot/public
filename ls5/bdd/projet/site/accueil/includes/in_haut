@@ -1,0 +1,22 @@
+		<div class="row">
+			<div class="three columns">
+				<p></p>
+				<h4>Karchnu (.fr)</h4>
+			<!--	<p><em>( a.k.a. Philippe P.)</em></p> -->
+			</div>
+			<div class="six columns offset-by-three">
+				<p></p>
+				<p>
+					<a href="/accueil/"		class="nice small radius blue button">Accueil</a>
+					<a href="/w/"		class="nice small radius blue button">Blog</a>
+					<a href="/tracker/"		class="nice small radius red button">Tracker</a>
+					<a href="/wiki/"	class="nice small radius blue button">Wiki</a>
+					<a href="/accueil/irc.php"	class="nice small radius blue button">IRC</a>
+					<a href="/t/"		class="nice small radius red button">Reste</a>
+				</p>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="twelve columns"><hr /></div>
+		</div>
