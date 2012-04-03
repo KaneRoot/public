@@ -4,7 +4,6 @@ IS
 	idCompagnie_v COMPAGNIE.idCompagnie%TYPE;
 	miles_v CARTE_FIDELITE.miles%TYPE;
 	miles2_v CARTE_FIDELITE.miles%TYPE;
-	truc NUMBER;
 BEGIN
 	-- on récupère l'idCompagnie
 	select idCompagnie into idCompagnie_v
@@ -32,6 +31,8 @@ BEGIN
 
 	-- si on a une réservation	
 	UPDATE BILLET SET etatBillet='A' WHERE idBillet = idBillet_p;
+
+	INSERT INTO
 
 END;
 /
