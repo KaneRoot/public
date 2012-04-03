@@ -4,6 +4,7 @@ IS
 	idCompagnie_v COMPAGNIE.idCompagnie%TYPE;
 	miles_v CARTE_FIDELITE.miles%TYPE;
 	miles2_v CARTE_FIDELITE.miles%TYPE;
+	truc NUMBER;
 BEGIN
 	-- on récupère l'idCompagnie
 	select idCompagnie into idCompagnie_v
@@ -16,7 +17,7 @@ BEGIN
 		where idClient = idClient_p and idCompagnie = idCompagnie_v;
 	
 	-- on met à jour les miles
-	execute immediate majMiles(idClient_p,idCompagnie_v);
+	execute majMiles(idClient_p,idCompagnie_v);
 
 	-- nouveau nb de miles
 	select miles into miles2_v
