@@ -7,6 +7,7 @@
 			<div class="six columns offset-by-three">
 				<p></p>
 				<p>
+					<a href="index.php"		class="nice small radius red button">Accueil</a>
 					<a href="connexion.php"		class="nice small radius blue button">Connexion client</a>
 					<a href="connexionAdmin.php"		class="nice small radius blue button">Connexion admin</a>
 				</p>

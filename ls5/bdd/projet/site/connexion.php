@@ -1,6 +1,6 @@
 <?php 
 	session_start();
-	$_TITRE_PAGE="BDD";
+	$_TITRE_PAGE="BDD - connexion client";
 	include("includes/in_entete"); 
 ?>
 	<!-- container -->

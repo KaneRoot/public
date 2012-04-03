@@ -1,5 +1,5 @@
 <?php 
-	$_TITRE_PAGE="BDD";
+	$_TITRE_PAGE="BDD - accueil";
 	include("includes/in_entete"); 
 ?>
 	<!-- container -->
@@ -12,12 +12,12 @@
 				<h4>Bla ?</h4>
 				<dl class="tabs">
 					<dd><a href="#connexion" class="active">Connexion</a></dd>
-					<dd><a href="#connexionAdmin" class="active">Connexion Admin</a></dd>
+					<dd><a href="#connexionAdmin">Connexion Admin</a></dd>
 				</dl>
 
 				<ul class="tabs-content">
-					<li class="active" id="connexionTab"><p>Connexion du client</p></li>
-					<li class="active" id="connexionAdminTab"><p>Connexion des administrateurs (les compagnies).</p></li>
+					<li class="active" id="connexionTab"><p>Connexion du client.</p></li>
+					<li id="connexionAdminTab"><p>Connexion des administrateurs (les compagnies).</p></li>
 				</ul>
 			</div>
 		</div>
