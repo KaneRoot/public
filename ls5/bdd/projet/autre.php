@@ -1,7 +1,4 @@
 <?php 
-	session_start();
-	$_TITRE_PAGE="BDD - connexion client";
-	include("includes/in_entete"); 
 	//$conn = oci_connect("log", "pass", "host:dbname");
 	$conn = oci_connect("kalk", "kalk", "localhost/ROSA");
 	if(! $conn)
@@ -25,13 +22,4 @@
 		echo "</ul></li>";
 	}
 
-?>
-	<!-- container -->
-	<div class="container">
-
-		<?php include("includes/in_haut"); ?>
-
-	</div>
-<?php 
-	include("includes/in_pied"); 
 ?>
