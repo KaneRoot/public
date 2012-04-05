@@ -12,3 +12,18 @@ La commande dd fait une copie par bloc d'un système de fichiers. Ce qui est pra
 Il n'y a que des 0 jusqu'au superblock.
 L'adresse est 400 base 16, ce qui correspond à 16^2 * 4 = 1024 .
 
+4.
+
+Il y a 100 blocs, 16 inodes
+Il y a 3 répertoires.
+La taille d'un bloc est de 1024 octets.
+Il y a 8192 blocs par groupe.
+
+L'inode 13 pointe vers le fichier /foo/bar.
+
+
+Les numéros de blocs sont : 46, 47, 48.
+
+On peut le trouver en tapant "bmap nomdufichier 0" (puis 1, 2 … jusqu'au nombre de blocs du fichier) ou "blocks nomdufichieroudossier".
+
+
