@@ -1,0 +1,14 @@
+I.
+
+1.
+Le fichier fstab sert à indiquer les partitions à monter, au démarrage ou plus généralement à indiquer sur quel dossier on va monter une partition.
+Exemple simple, on indique que la partition /dev/sda1 (ou on la désigne par son UUID) est associée au répertoire /mnt/dossier et donc l'administrateur n'a plus qu'à taper "mount /mnt/dossier".
+On peut également indiquer des répertoires distants à monter (via sshfs par exemple).
+
+2.
+La commande dd fait une copie par bloc d'un système de fichiers. Ce qui est pratique pour des backup.
+
+3.
+Il n'y a que des 0 jusqu'au superblock.
+L'adresse est 400 base 16, ce qui correspond à 16^2 * 4 = 1024 .
+
