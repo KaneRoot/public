@@ -26,28 +26,28 @@ INSERT INTO VOL VALUES(2, 2, 3, 4, to_date('2012/03/16 21:02:44', 'yyyy/mm/dd hh
 INSERT INTO VOL VALUES(3, 2, 4, 2, to_date('2012/03/16 21:02:44', 'yyyy/mm/dd hh24:mi:ss'), to_date('2012/04/18 21:02:44', 'yyyy/mm/dd hh24:mi:ss'));
 
 -- idEscale idVille idVol idCompagnie
-INSERT INTO ESCALE VALUES(seq_escale.nextVal, 2, 1, 2);
-INSERT INTO ESCALE VALUES(seq_escale.nextVal, 3, 1, 3);
-INSERT INTO ESCALE VALUES(seq_escale.nextVal, 4, 1, 2);
+INSERT INTO ESCALE VALUES(seq_escale.nextVal, 2, 2, 3);
+INSERT INTO ESCALE VALUES(seq_escale.nextVal, 3, 2, 4);
+INSERT INTO ESCALE VALUES(seq_escale.nextVal, 4, 2, 3);
 
 -- idCompagnie idClient miles
-INSERT INTO CARTE_FIDELITE VALUES(1, 1, 900);
-INSERT INTO CARTE_FIDELITE VALUES(2, 1, 950);
---
----- idBillet idVol idCompagnie prix promo etatBillet
---INSERT INTO BILLET VALUES(seq_billet.nextVal, 1, 1, 1000, 0, null);
---INSERT INTO BILLET VALUES(seq_billet.nextVal, 1, 1, 1000, 0, null);
---INSERT INTO BILLET VALUES(seq_billet.nextVal, 1, 1, 1000, 0, null);
---INSERT INTO BILLET VALUES(seq_billet.nextVal, 1, 1, 1000, 0, null);
---INSERT INTO BILLET VALUES(seq_billet.nextVal, 1, 1, 1000, 0, 'A');
---INSERT INTO BILLET VALUES(seq_billet.nextVal, 1, 1, 1000, 0, 'A');
---INSERT INTO BILLET VALUES(seq_billet.nextVal, 1, 1, 1000, 0, 'R');
---INSERT INTO BILLET VALUES(seq_billet.nextVal, 1, 1, 1000, 0, 'R');
---
----- idAchat idBillet idClient dateAchat
---INSERT INTO BILLET_CLIENT VALUES(1, 1, 1, DEFAULT);
---INSERT INTO BILLET_CLIENT VALUES(2, 2, 1, DEFAULT);
---
----- erreur volontaire
----- INSERT INTO CLIENT VALUES(3, 'moi3', 'prenomdemoi3', 'adresse3', 1050305010); 
---
+INSERT INTO CARTE_FIDELITE VALUES(2, 2, 900);
+INSERT INTO CARTE_FIDELITE VALUES(3, 2, 950);
+
+-- idBillet idVol idCompagnie prix promo etatBillet
+INSERT INTO BILLET VALUES(seq_billet.nextVal, 2, 2, 1000, 0, null);
+INSERT INTO BILLET VALUES(seq_billet.nextVal, 2, 2, 1000, 0, null);
+INSERT INTO BILLET VALUES(seq_billet.nextVal, 2, 2, 1000, 0, null);
+INSERT INTO BILLET VALUES(seq_billet.nextVal, 2, 2, 1000, 0, null);
+INSERT INTO BILLET VALUES(seq_billet.nextVal, 2, 2, 1000, 0, 'A');
+INSERT INTO BILLET VALUES(seq_billet.nextVal, 2, 2, 1000, 0, 'A');
+INSERT INTO BILLET VALUES(seq_billet.nextVal, 2, 2, 1000, 0, 'R');
+INSERT INTO BILLET VALUES(seq_billet.nextVal, 2, 2, 1000, 0, 'R');
+
+-- idAchat idBillet idClient dateAchat
+INSERT INTO BILLET_CLIENT VALUES(seq_billet_client.nextVal, 1, 1, DEFAULT);
+INSERT INTO BILLET_CLIENT VALUES(seq_billet_client.nextVal, 2, 1, DEFAULT);
+
+-- erreur volontaire
+-- INSERT INTO CLIENT VALUES(3, 'moi3', 'prenomdemoi3', 'adresse3', 1050305010); 
+
