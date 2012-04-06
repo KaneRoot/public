@@ -2,7 +2,7 @@ create table CLIENT
 (
 	idClient number(15),
 	loginClient varchar2(50) NOT NULL,
-	motDePasseClient varchar2(50) NOT NULL,
+	mdpClient varchar2(50) NOT NULL,
 	nomClient varchar2(50) NOT NULL,
 	prenomClient varchar2(50) NOT NULL,
 	adresseClient varchar2(100) NOT NULL,
@@ -23,6 +23,16 @@ create table COMPAGNIE
 	idCompagnie number(10),
 	nomCompagnie varchar2(50) NOT NULL,
 	CONSTRAINT pk_compagnie PRIMARY KEY (idCompagnie)
+);
+create table GESTIONNAIRE
+(
+	idGestionnaire number(15),
+	loginGestionnaire varchar2(50) NOT NULL,
+	mdpGestionnaire varchar2(50) NOT NULL,
+	idCompagnie number(10) NOT NULL,
+	CONSTRAINT pk_gestionnaire PRIMARY KEY(idGestionnaire),
+	CONSTRAINT u_gestionnaire_login UNIQUE(loginGestionnaire),
+	CONSTRAINT fk_gestionnaire_compagnie FOREIGN KEY(idCompagnie) REFERENCES COMPAGNIE ON DELETE CASCADE
 );
 create table VOL
 (
@@ -88,3 +98,11 @@ create table RESERVATION
 	CONSTRAINT fk_reservation_client FOREIGN KEY (idClient) REFERENCES CLIENT ON DELETE CASCADE,
 	CONSTRAINT fk_reservation_billet FOREIGN KEY (idBillet) REFERENCES BILLET ON DELETE CASCADE
 );
+
+CREATE SEQUENCE seq_client MINVALUE 1 START WITH 1 INCREMENT BY 1 CACHE 10;
+CREATE SEQUENCE seq_gestionnaire MINVALUE 1 START WITH 1 INCREMENT BY 1 CACHE 10;
+CREATE SEQUENCE seq_billet MINVALUE 1 START WITH 1 INCREMENT BY 1 CACHE 10;
+CREATE SEQUENCE seq_billet_client MINVALUE 1 START WITH 1 INCREMENT BY 1 CACHE 10;
+CREATE SEQUENCE seq_ville MINVALUE 1 START WITH 1 INCREMENT BY 1 CACHE 10;
+CREATE SEQUENCE seq_compagnie MINVALUE 1 START WITH 1 INCREMENT BY 1 CACHE 10;
+CREATE SEQUENCE seq_escale MINVALUE 1 START WITH 1 INCREMENT BY 1 CACHE 10;

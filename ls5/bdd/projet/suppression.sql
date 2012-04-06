@@ -3,6 +3,8 @@
 -- Suppression des FK en premier, avec les autres contraintes
 ALTER TABLE CLIENT			DROP 	CONSTRAINT u_client_nom_prenom_adresse ;
 ALTER TABLE CLIENT			DROP 	CONSTRAINT u_client_login;
+ALTER TABLE GESTIONNAIRE	DROP	CONSTRAINT fk_gestionnaire_compagnie;
+ALTER TABLE GESTIONNAIRE	DROP	CONSTRAINT u_gestionnaire_login;
 ALTER TABLE VILLE			DROP 	CONSTRAINT u_ville_nomVille ;
 ALTER TABLE ESCALE			DROP 	CONSTRAINT fk_escale_ville;
 ALTER TABLE ESCALE			DROP 	CONSTRAINT fk_escale_vol ;
@@ -22,6 +24,7 @@ ALTER TABLE RESERVATION 	DROP 	CONSTRAINT fk_reservation_billet ;
 -- Suppression des PK en second
 ALTER TABLE CLIENT			DROP 	CONSTRAINT pk_client ;
 ALTER TABLE COMPAGNIE		DROP 	CONSTRAINT pk_compagnie ;
+ALTER TABLE GESTIONNAIRE	DROP	CONSTRAINT pk_gestionnaire;
 ALTER TABLE RESERVATION		DROP 	CONSTRAINT pk_reservation ;
 ALTER TABLE BILLET_CLIENT 	DROP 	CONSTRAINT pk_billet_client ;
 ALTER TABLE BILLET			DROP 	CONSTRAINT pk_billet ;
@@ -33,6 +36,7 @@ ALTER TABLE CARTE_FIDELITE 	DROP 	CONSTRAINT pk_carte_fidelite ;
 -- Suppression des tables en dernier
 DROP TABLE  CLIENT ;
 DROP TABLE  VILLE ;
+DROP TABLE  GESTIONNAIRE ;
 DROP TABLE  COMPAGNIE ;
 DROP TABLE  ESCALE ;
 DROP TABLE  VOL ;
@@ -40,3 +44,12 @@ DROP TABLE  BILLET ;
 DROP TABLE  BILLET_CLIENT ;
 DROP TABLE  CARTE_FIDELITE ;
 DROP TABLE  RESERVATION ;
+
+-- Suppression des séquences
+DROP SEQUENCE seq_client ;
+DROP SEQUENCE seq_gestionnaire ;
+DROP SEQUENCE seq_billet ;
+DROP SEQUENCE seq_billet_client ;
+DROP SEQUENCE seq_ville ;
+DROP SEQUENCE seq_compagnie ;
+DROP SEQUENCE seq_escale ;

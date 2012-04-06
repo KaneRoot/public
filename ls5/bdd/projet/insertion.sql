@@ -2,10 +2,10 @@
 -- PAS DE COMMENTAIRE SUR UNE LIGNE AVEC UNE INSTRUCTION
 
 -- idClient loginClient motDePasseClient nomClient prenomClient adresseClient numTelClient
-INSERT INTO CLIENT VALUES(1,'login1', 'mdp1', 'moi1', 'prenomdemoi1', 'adresse1', 1050305010); 
-INSERT INTO CLIENT VALUES(2,'login2', 'mdp2', 'moi2', 'prenomdemoi2', 'adresse2', 1050305010); 
-INSERT INTO CLIENT VALUES(3,'login3', 'mdp3', 'moi3', 'prenomdemoi3', 'adresse3', 1050305010); 
-
+INSERT INTO CLIENT VALUES(seq_client.nextVal,'login1', 'mdp1', 'moi1', 'prenomdemoi1', 'adresse1', 1050305010); 
+INSERT INTO CLIENT VALUES(seq_client.nextVal,'login2', 'mdp2', 'moi2', 'prenomdemoi2', 'adresse2', 1050305010); 
+INSERT INTO CLIENT VALUES(seq_client.nextVal,'login3', 'mdp3', 'moi3', 'prenomdemoi3', 'adresse3', 1050305010); 
+--
 -- idCompagnie nomCompagnie
 INSERT INTO COMPAGNIE VALUES(1, 'bla1');
 INSERT INTO COMPAGNIE VALUES(2, 'bla2');
