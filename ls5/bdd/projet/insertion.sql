@@ -14,6 +14,10 @@ INSERT INTO COMPAGNIE VALUES(seq_compagnie.nextVal, 'bla4');
 INSERT INTO COMPAGNIE VALUES(seq_compagnie.nextVal, 'bla5');
 INSERT INTO COMPAGNIE VALUES(seq_compagnie.nextVal, 'bla6');
 
+
+-- idGestionnaire loginGestionnaire mdpGestionnaire idCompagnie
+INSERT INTO GESTIONNAIRE VALUES(seq_gestionnaire.nextVal, 'gest1', 'gest1', 2);
+
 -- idVille nomVille
 INSERT INTO VILLE VALUES(seq_ville.nextVal, 'PARIS');
 INSERT INTO VILLE VALUES(seq_ville.nextVal, 'LARIS');

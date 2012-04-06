@@ -2,34 +2,36 @@
 	session_start();
 	$_TITRE_PAGE="BDD - connexion client";
 	include("includes/in_entete"); 
-	//$conn = oci_connect("log", "pass", "host:dbname");
-	$conn = oci_connect("kalk", "kalk", "localhost/ROSA");
-	if(! $conn)
-	{
-		echo "Erreur de connexion";
-		exit;
-	}
-
-	$query = "select * from Utilisateur";
-	$stmt = oci_parse($conn, $query);
-	oci_execute($stmt);
-
-	echo "vous êtes : ". $_SERVER["REMOTE_ADDR"] . "\n<br/>";
-	while($array = oci_fetch_assoc($stmt))
-	{
-		echo "<li><ul>";
-
-		foreach(array_keys($array) as $key)
-			echo "<li>" . $key . " " . $array[$key]. "</li>\n";
-
-		echo "</ul></li>";
-	}
-
 ?>
 	<!-- container -->
 	<div class="container">
 
 		<?php include("includes/in_haut"); ?>
+	
+		<div class="row">
+			<div class="six columns">
+				<form class="nice" action="co_client.php" method="POST" >
+					<fieldset>
+					<h5>Connectez-vous !</h5>
+					<p>Tellement de choses merveilleuses à faire quand on est connecté !</p>
+						<input id='login' type="text" placeholder="Login" class="input-text" />
+						<input id='mdp' type="text" placeholder="Mot de passe" class="input-text" />
+					</fieldset>
+				</form>
+			</div>
+			<div class="six columns">
+				<form class="nice" action="co_client.php" method="POST" >
+					<fieldset>
+					<h5>… ou enregistrez-vous !</h5>
+					<p>Tellement de choses merveilleuses à faire quand on est client !</p>
+						<input id='nom' type="text" placeholder="Nom" class="input-text" />
+						<input id='prenom' type="text" placeholder="prenom" class="input-text" />
+						<input id='login' type="text" placeholder="Login" class="input-text" />
+						<input id='mdp' type="text" placeholder="Mot de passe" class="input-text" />
+					</fieldset>
+				</form>
+			</div>
+		</div>
 
 	</div>
 <?php 
