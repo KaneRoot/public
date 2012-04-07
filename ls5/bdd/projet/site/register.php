@@ -23,6 +23,12 @@ if(existe(array($_POST['r_login'], $_POST['r_mdp'])))
 		$stmt = oci_parse($conn, $query);
 		if( ! oci_execute($stmt))
 			die("Il y a eu une erreur dans l'insertion d'un nouveau gestionnaire.");
+
+		$_SESSION['estCli'] = false;
+		$_SESSION['login'] = $_POST['r_login'];
+		$_SESSION['compagnie'] = $_POST['r_compagnie'];
+
+		echo "<p><a href='gestionnaire.php' >Aller sur la page d'accueil.</a></p>";
 	}
 	else if(existe(array($_POST['r_nom'], $_POST['r_prenom'], $_POST['r_adresse'], $_POST['r_numtel'])))
 	{
@@ -32,6 +38,13 @@ if(existe(array($_POST['r_login'], $_POST['r_mdp'])))
 		$stmt = oci_parse($conn, $query);
 		if( ! oci_execute($stmt))
 			die("Il y a eu une erreur dans l'insertion d'un nouveau client.");
+
+		$_SESSION['estCli'] = true;
+		$_SESSION['login'] = $_POST['r_login'];
+		$_SESSION['nom'] = $_POST['r_nom'];
+		$_SESSION['prenom'] = $_POST['r_prenom'];
+
+		echo "<p><a href='client.php' >Aller sur la page d'accueil.</a></p>";
 	}
 	else
 	{
