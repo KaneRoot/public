@@ -21,7 +21,6 @@ Il y a 8192 blocs par groupe.
 
 L'inode 13 pointe vers le fichier /foo/bar.
 
-
 Les numéros de blocs sont : 46, 47, 48.
 
 On peut le trouver en tapant "bmap nomdufichier 0" (puis 1, 2 … jusqu'au nombre de blocs du fichier) ou "blocks nomdufichieroudossier".

@@ -47,14 +47,36 @@ struct ofile
 
 ctxt_t e2_ctxt_init (char *file, int maxbuf)
 {
+	ctxt_t c = (ctxt_t) malloc(sizeof(struct context));
+	c.fd = open(file, O_RDONLY);
+
+	lseek(c.fd, 0x400, SEEK_SET);
+	if((read(c.fd, &(c.sb), sizeof(struct ext2_super_block))) == -1)
+	{
+		errno = -1;
+		return NULL;
+	}
+
+	c.ngroups = c.sb.s_blocks_count / c.sb.s_blocks_per_group;
+
+	if((read(c.fd, &(c.gd), sizeof(struct ext2_group_desc))) == -1)
+	{
+		errno = -2;
+		return NULL;
+	}
+
+	return c;
 }
 
 void e2_ctxt_close (ctxt_t c)
 {
+	close(c.fd);
+	free(c);
 }
 
 int e2_ctxt_blksize (ctxt_t c)
 {
+	return (c.sb.s_blocks_count - c.sb.s_first_data_block)/c.sb.s_blocks_per_group;
 }
 
 /******************************************************************************
