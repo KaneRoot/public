@@ -14,8 +14,8 @@
 					<fieldset>
 					<h5>Connectez-vous !</h5>
 					<p>Venez bosser.</p>
-						<input id='c_login' type="text" placeholder="Login" class="input-text" />
-						<input id='c_mdp' type="password" placeholder="Mot de passe" class="input-text" />
+						<input id='c_login' name='c_login' type="text" placeholder="Login" class="input-text" />
+						<input id='c_mdp' name='c_mdp' type="password" placeholder="Mot de passe" class="input-text" />
 					</fieldset>
 					<input type="submit" value="Connexion !" />
 					<input type="reset" value="Oubliez-moi !" />
@@ -26,8 +26,8 @@
 					<fieldset>
 					<h5>… ou enregistrez-vous !</h5>
 					<p>Tellement de choses merveilleuses à faire quand on travaille chez nous !</p>
-						<input id='r_login' type="text" placeholder="Login" class="input-text" />
-						<input id='r_mdp' type="password" placeholder="Mot de passe" class="input-text" />
+						<input id='r_login' name='r_login' type="text" placeholder="Login" class="input-text" />
+						<input id='r_mdp' name='r_mdp' type="password" placeholder="Mot de passe" class="input-text" />
 						<label for="r_compagnie">Compagnie</label>
 						<select id="r_compagnie" name="r_compagnie">
 						<?php
@@ -37,7 +37,7 @@
 
 							while($array = oci_fetch_assoc($stmt))
 							{
-								echo "<option value='" . $array['idCompagnie'] . "' > " . $array['nomCompagnie']. "</option>\n";
+								echo "<option value='" . $array['IDCOMPAGNIE'] . "' > " . $array['NOMCOMPAGNIE']. "</option>\n";
 							}
 						?>
 						</select>
