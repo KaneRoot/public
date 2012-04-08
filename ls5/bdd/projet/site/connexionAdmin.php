@@ -17,6 +17,8 @@
 						<input id='c_login' type="text" placeholder="Login" class="input-text" />
 						<input id='c_mdp' type="password" placeholder="Mot de passe" class="input-text" />
 					</fieldset>
+					<input type="submit" value="Connexion !" />
+					<input type="reset" value="Oubliez-moi !" />
 				</form>
 			</div>
 			<div class="six columns">
@@ -41,6 +43,8 @@
 						</select>
 
 					</fieldset>
+					<input type="submit" value="Enregistrez-moi !" />
+					<input type="reset" value="Oubliez-moi !" />
 				</form>
 			</div>
 		</div>
