@@ -1,13 +1,13 @@
 <?php 
 	//$conn = oci_connect("log", "pass", "host:dbname");
 
-	$conn = oci_connect("pittoli", "1712juph", "localhost/ROSA");
+	$conn = oci_connect("kalk", "kalk", "localhost/ROSA");
 	if(! $conn) 
 	{
 		echo "Erreur de connexion";
 		exit;
 	}
-	$query = 'select * from CLIENT';
+	$query = 'select * from Utilisateur';
 	$stmt = oci_parse($conn, $query);
 
 	if( ! oci_execute($stmt))
