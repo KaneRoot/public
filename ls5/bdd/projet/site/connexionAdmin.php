@@ -1,6 +1,6 @@
 <?php 
 	session_start();
-	include("co"); // Connexion
+	include("co");
 	$_TITRE_PAGE="BDD - connexion admin";
 	include("includes/in_entete"); 
 ?>
@@ -30,16 +30,26 @@
 						<input id='r_mdp' name='r_mdp' type="password" placeholder="Mot de passe" class="input-text" />
 						<label for="r_compagnie">Compagnie</label>
 						<select id="r_compagnie" name="r_compagnie">
-						<?php
-							$query = "select * from COMPAGNIE";
-							$stmt = oci_parse($conn, $query);
-							oci_execute($stmt);
+<?php
+$query = 'select * from CLIENT';
+$stmt = oci_parse($conn, $query);
 
-							while($array = oci_fetch_assoc($stmt))
-							{
-								echo "<option value='" . $array['IDCOMPAGNIE'] . "' > " . $array['NOMCOMPAGNIE']. "</option>\n";
-							}
-						?>
+if( ! oci_execute($stmt))
+{	
+	die("Erreur connexion pour récup les compagnies");
+}
+
+oci_fetch_all($stmt, $row);
+var_dump($row);
+
+while($row = oci_fetch_assoc($stmt))
+{
+	var_dump($row);
+	echo "<option value='" . 
+		$row["IDCOMPAGNIE"] . "' > " . 
+		$row["NOMCOMPAGNIE"]. "</option>\n";
+}
+?>
 						</select>
 
 					</fieldset>

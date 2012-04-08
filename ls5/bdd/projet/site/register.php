@@ -16,10 +16,17 @@ include("co");
 // Quelqu'un tente de s'enregistrer
 if(existe(array($_POST['r_login'], $_POST['r_mdp'])))
 {
+	$_POST['r_login'] = "'". $_POST['r_login'] . "'";
+	$_POST['r_mdp'] = "'". $_POST['r_mdp'] . "'";
+
+
+	// Enregistrement d'un gestionnaire
 	if(isset($_POST['r_compagnie']) && strlen($_POST['r_compagnie']) != 0 )
 	{
-		$query = "insert into GESTIONNAIRE VALUES(seq_gestionnaire,". $_POST['r_login'] . 
-			", " . $_POST['r_mdp'] . ", " . $_POST['r_compagnie'] . " )";
+		$query = "insert into GESTIONNAIRE VALUES(seq_gestionnaire.nextVal,". 
+			$_POST['r_login'] . ", " . 
+			$_POST['r_mdp'] . ", " . 
+			$_POST['r_compagnie'] . " )";
 		$stmt = oci_parse($conn, $query);
 		if( ! oci_execute($stmt))
 			die("Il y a eu une erreur dans l'insertion d'un nouveau gestionnaire.");
@@ -30,11 +37,20 @@ if(existe(array($_POST['r_login'], $_POST['r_mdp'])))
 
 		echo "<p><a href='gestionnaire.php' >Aller sur la page d'accueil.</a></p>";
 	}
+	// Enregistrement d'un client
 	else if(existe(array($_POST['r_nom'], $_POST['r_prenom'], $_POST['r_adresse'], $_POST['r_numtel'])))
 	{
-		$query = "insert into CLIENT VALUES(seq_client, ". $_POST['r_login'] . ", " . 
-			$_POST['r_mdp'] . ", " . $_POST['r_nom'] . ", " . $_POST['r_prenom'] . ", " . 
-			$_POST['r_adresse'] . ", ". $_POST['r_numtel']. " )";
+		$_POST['r_nom'] = "'". $_POST['r_nom'] . "'";
+		$_POST['r_prenom'] = "'". $_POST['r_prenom'] . "'";
+		$_POST['r_adresse'] = "'". $_POST['r_adresse'] . "'";
+
+		$query = "insert into CLIENT VALUES(seq_client.nextVal, ". 
+			$_POST['r_login']	. ", " . 
+			$_POST['r_mdp']		. ", " . 
+			$_POST['r_nom']		. ", " . 
+			$_POST['r_prenom']	. ", " . 
+			$_POST['r_adresse'] . ", ". 
+			$_POST['r_numtel']	. " )";
 		$stmt = oci_parse($conn, $query);
 		echo "\n<br />La requête : ". $query . "<br />\n";
 		if( ! oci_execute($stmt))
