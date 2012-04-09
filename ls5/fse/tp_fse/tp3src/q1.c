@@ -1,10 +1,23 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <linux/fs.h>
+#include <linux/ext2_fs.h>
 
 #include "e2fs.h"
 
 #define	MAXBUF	100
+struct context
+{
+    int fd ;
+    struct ext2_super_block sb ;
+    int ngroups ;			/* nombre de groupes dans gd [] */
+    struct ext2_group_desc *gd ;	/* c'est un tableau */
+    /* ce qui suit concerne les lectures bufferisees */
+    struct buffer *last ;		/* pointe sur dernier buffer */
+    int bufstat_read ;			/* nombre de demandes de lecture */
+    int bufstat_cached ;		/* nombre de lectures en cache */
+} ;
 
 /* Lit un bloc physique quelconque (sans passer par les buffers) */
 
@@ -26,6 +39,10 @@ int main (int argc, char *argv [])
 		exit (1) ;
     }
 
+	printf("Nombre de blocks : %d\n", c->sb.s_blocks_count);
+	printf("Nombre de blocks par groupes : %d\n", c->sb.s_blocks_per_group);
+	printf("Nombre de groupes : %d\n", c->ngroups);
+	printf("c->gd.bg_used_dirs_count %d\n", c->gd[0].bg_used_dirs_count);
     /* A REDIGER */
 
     e2_ctxt_close (c) ;

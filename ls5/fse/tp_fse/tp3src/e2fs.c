@@ -48,6 +48,9 @@ struct ofile
 ctxt_t e2_ctxt_init (char *file, int maxbuf)
 {
 	ctxt_t c = (ctxt_t) malloc(sizeof(struct context));
+	int i;
+
+
 	c->fd = open(file, O_RDONLY);
 
 	lseek(c->fd, 0x400, SEEK_SET);
@@ -63,12 +66,17 @@ ctxt_t e2_ctxt_init (char *file, int maxbuf)
 		errno = -2;
 		return NULL;
 	}
-	c->ngroups = c->sb.s_blocks_count / c->sb.s_blocks_per_group;
+	c->ngroups = 1 + (c->sb.s_blocks_count / c->sb.s_blocks_per_group);
 
-	if((read(c->fd, &(c->gd), sizeof(struct ext2_group_desc))) == -1)
+	c->gd = (struct ext2_group_desc *) malloc(sizeof( struct ext2_group_desc) * c->ngroups);
+
+	for( i = 0 ; i < c->ngroups ; i++)
 	{
-		errno = -3;
-		return NULL;
+		if((read(c->fd, &(c->gd[i]), sizeof(struct ext2_group_desc))) == -1)
+		{
+			errno = -3;
+			return NULL;
+		}
 	}
 
 	return c;
@@ -91,5 +99,13 @@ int e2_ctxt_blksize (ctxt_t c)
 
 int e2_block_fetch (ctxt_t c, pblk_t blkno, void *data)
 {
+	blkno -= 2;
+	lseek(c->fd, 2048 + (blkno * c->sb.s_log_block_size), SEEK_SET);
+	if((read(c->fd, data, c->sb.s_log_block_size)) == -1)
+	{
+		errno = -1;
+		return -1;
+	}
+
 	return 0;
 }
