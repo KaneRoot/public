@@ -14,15 +14,15 @@ int main (int argc, char *argv [])
 
     if (argc < 3)
     {
-	fprintf (stderr, "usage: %s fs blkno ... blkno\n", argv [0]) ;
-	exit (1) ;
+		fprintf (stderr, "usage: %s fs blkno ... blkno\n", argv [0]) ;
+		exit (1) ;
     }
 
     c = e2_ctxt_init (argv [1], MAXBUF) ;
     if (c == NULL)
     {
-	perror ("e2_ctxt_init") ;
-	exit (1) ;
+		perror ("e2_ctxt_init") ;
+		exit (1) ;
     }
 
     /* A REDIGER */

@@ -51,7 +51,7 @@ int main (int argc, char *argv [])
 
 	*/
 
-	bloc = malloc(c->sb.s_log_block_size);
+	bloc = malloc( 1024 << c->sb.s_log_block_size);
 
 	if((e2_block_fetch(c, atoi(argv[2]), bloc)) == -1)
 	{
@@ -61,6 +61,7 @@ int main (int argc, char *argv [])
 
 	printf("Le bloc : \n%s\n", (char *) bloc);
     e2_ctxt_close (c) ;
+	free(bloc);
 
     exit (0) ;
 }

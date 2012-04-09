@@ -50,7 +50,6 @@ ctxt_t e2_ctxt_init (char *file, int maxbuf)
 	ctxt_t c = (ctxt_t) malloc(sizeof(struct context));
 	int i;
 
-
 	c->fd = open(file, O_RDONLY);
 
 	lseek(c->fd, 0x400, SEEK_SET);
@@ -60,7 +59,6 @@ ctxt_t e2_ctxt_init (char *file, int maxbuf)
 		return NULL;
 	}
 
-	//printf("Magik number : %d, le bon : %d\n", c->sb.s_magic, 0xEF53);
 	if(c->sb.s_magic != 0xEF53)
 	{
 		errno = -2;
@@ -79,12 +77,33 @@ ctxt_t e2_ctxt_init (char *file, int maxbuf)
 		}
 	}
 
+	c->last = (struct buffer *) malloc(sizeof(struct buffer));
+	struct buffer *tmp = c->last;
+	for( i = 0 ; i < maxbuf ; i++)
+	{
+		tmp->next = (struct buffer *) malloc(sizeof(struct buffer));
+		tmp = tmp->next;
+	}
+
 	return c;
 }
 
 void e2_ctxt_close (ctxt_t c)
 {
 	close(c->fd);
+	free(c->gd);
+	struct buffer * tmp = c->last;
+
+	while(c->last != NULL)
+	{
+		while(tmp->next != NULL) 
+			tmp = tmp->next;
+		free(tmp->data);
+		free(tmp);
+		tmp = NULL;
+		tmp = c->last;
+	}
+	
 	free(c);
 }
 
@@ -113,4 +132,64 @@ int e2_block_fetch (ctxt_t c, pblk_t blkno, void *data)
 	}
 
 	return 0;
+}
+
+/******************************************************************************
+ * Gestion du buffer et lecture bufferisee
+ */
+
+/* recupere un buffer pour le bloc, le retire de la liste des buffers
+ * et lit le contenu si necessaire
+ */
+buf_t e2_buffer_get (ctxt_t c, pblk_t blkno)
+{
+	buf_t tmp = c->last;
+	buf_t tmp2 = NULL;
+
+
+	if(tmp != NULL)
+	{
+		while(tmp->next != NULL && tmp->blkno != blkno)
+			tmp = tmp->next;
+		if(tmp->blkno == blkno)
+		{
+			tmp2 = c->last;
+			while(tmp2->next != tmp) //&& tmp->next != NULL)
+				tmp2 = tmp2->next;
+			tmp2->next = tmp->next;
+
+			return tmp;
+		}
+	}
+	buf_t ret = (buf_t) malloc(sizeof(struct buffer));
+	ret->data = malloc(1024 << c->sb.s_log_block_size);
+
+	if((e2_block_fetch(c, blkno, ret->data)) == -1)
+	{
+		errno = -1;
+		return NULL;
+	}
+
+	ret->blkno = blkno;
+	ret->next = NULL;
+
+	return ret;
+}
+        
+/* replace le buffer en premier dans la liste */
+void e2_buffer_put (ctxt_t c, buf_t b)
+{
+	b->next = c->last;
+	c->last = b;
+}
+        
+/* recupere les donnees du buffer */
+void *e2_buffer_data (buf_t b)
+{
+	return b->data;
+}
+
+/* affiche les statistiques */
+void e2_buffer_stats (ctxt_t c)
+{
 }

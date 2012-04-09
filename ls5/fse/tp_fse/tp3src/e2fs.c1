@@ -1,33 +1,4 @@
 
-
-/******************************************************************************
- * Gestion du buffer et lecture bufferisee
- */
-
-/* recupere un buffer pour le bloc, le retire de la liste des buffers
- * et lit le contenu si necessaire
- */
-buf_t e2_buffer_get (ctxt_t c, pblk_t blkno)
-{
-	return (buf_t) NULL;
-}
-        
-/* replace le buffer en premier dans la liste */
-void e2_buffer_put (ctxt_t c, buf_t b)
-{
-}
-        
-/* recupere les donnees du buffer */
-void *e2_buffer_data (buf_t b)
-{
-	return NULL;
-}
-
-/* affiche les statistiques */
-void e2_buffer_stats (ctxt_t c)
-{
-}
-
 /******************************************************************************
  * Fonction de lecture d'un bloc dans un inode
  */
