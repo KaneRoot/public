@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <linux/fs.h>
 #include <linux/ext2_fs.h>
+#include "errno.h"
 
 #include "e2fs.h"
 
@@ -25,6 +26,7 @@ struct context
 int main (int argc, char *argv [])
 {
     ctxt_t c ;
+	void * bloc;
 
     if (argc != 3)
     {
@@ -39,12 +41,25 @@ int main (int argc, char *argv [])
 		exit (1) ;
     }
 
+	/*
+
 	printf("Nombre de blocks : %d\n", c->sb.s_blocks_count);
 	printf("Nombre de blocks par groupes : %d\n", c->sb.s_blocks_per_group);
 	printf("Nombre de groupes : %d\n", c->ngroups);
+	printf("Taille d'un bloc : %d\n", 1024 << c->sb.s_log_block_size);
 	printf("c->gd.bg_used_dirs_count %d\n", c->gd[0].bg_used_dirs_count);
-    /* A REDIGER */
 
+	*/
+
+	bloc = malloc(c->sb.s_log_block_size);
+
+	if((e2_block_fetch(c, atoi(argv[2]), bloc)) == -1)
+	{
+		printf("Numéro d'erreur : %d\n", errno);
+		exit(1);
+	}
+
+	printf("Le bloc : \n%s\n", (char *) bloc);
     e2_ctxt_close (c) ;
 
     exit (0) ;

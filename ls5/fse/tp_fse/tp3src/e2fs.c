@@ -99,11 +99,16 @@ int e2_ctxt_blksize (ctxt_t c)
 
 int e2_block_fetch (ctxt_t c, pblk_t blkno, void *data)
 {
+	int n = 0;
 	blkno -= 2;
-	lseek(c->fd, 2048 + (blkno * c->sb.s_log_block_size), SEEK_SET);
-	if((read(c->fd, data, c->sb.s_log_block_size)) == -1)
+	if((lseek(c->fd, 2048 + (blkno *(1024 << c->sb.s_log_block_size)), SEEK_SET)) == -1)
 	{
 		errno = -1;
+		return -1;
+	}
+	if((n = read(c->fd, data, (1024 << c->sb.s_log_block_size))) == -1)
+	{
+		errno = -2;
 		return -1;
 	}
 
