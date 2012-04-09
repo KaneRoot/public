@@ -4,7 +4,7 @@
 
 #include "e2fs.h"
 
-#define	MAXBUF	100
+#define	MAXBUF	10
 
 /* Lit un bloc physique quelconque en passant par un buffer */
 
