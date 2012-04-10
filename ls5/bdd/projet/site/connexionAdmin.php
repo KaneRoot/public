@@ -31,7 +31,7 @@
 						<label for="r_compagnie">Compagnie</label>
 						<select id="r_compagnie" name="r_compagnie">
 <?php
-$query = 'select * from CLIENT';
+$query = 'select * from COMPAGNIE';
 $stmt = oci_parse($conn, $query);
 
 if( ! oci_execute($stmt))
@@ -39,15 +39,11 @@ if( ! oci_execute($stmt))
 	die("Erreur connexion pour récup les compagnies");
 }
 
-oci_fetch_all($stmt, $row);
-var_dump($row);
-
 while($row = oci_fetch_assoc($stmt))
 {
-	var_dump($row);
 	echo "<option value='" . 
-		$row["IDCOMPAGNIE"] . "' > " . 
-		$row["NOMCOMPAGNIE"]. "</option>\n";
+		$row['IDCOMPAGNIE'] . "' > " . 
+		$row['NOMCOMPAGNIE']. "</option>\n";
 }
 ?>
 						</select>
