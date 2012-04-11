@@ -47,6 +47,6 @@ END ;
 SHOW ERRORS FUNCTION nb_billets_restants;
 
 -- tests
-select nb_billets_reserve(1,1) from dual;
-select nb_billets_achetes(1,1) from dual;
-select nb_billets_restants(1,1) from dual;
+--select nb_billets_reserve(1,1) from dual;
+--select nb_billets_achetes(1,1) from dual;
+--select nb_billets_restants(1,1) from dual;
