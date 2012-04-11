@@ -1,0 +1,21 @@
+EXO1:
+
+	-	@ logique : @ dans l'espace d'adressage d'un processus.
+		Conversion @ logique → @ physique par la MMU
+	-	Pagination : découpage de la mémoire en pages / cadres (frames)
+									^espace d'adressage / ^ RAM
+	-	cadre : unité d'allocation élémentaire de la RAM
+	-	défaut de page : interruption (du système et physique déclenché par la MMU) lorsqu'une page n'est pas disponible
+		défaut de page : interruption déclenchée lorsqu'une page accédée par un processus n'est pas en RAM. Le système se charge de la récupérer (sur disque).
+	-	copy-on-write (flag sur une page) : si un processus écrit, la page doit être copiée.
+	-	MMU : envoie des interruptions et converti les @ logiques en @ physiques. Fortement lié au matériel.
+
+	- TEXT / DATA / STACK
+		DATA : allouée (au début) = var globales initialisées puis le tas = var globales non initialisées.
+		
+		____________________________________
+		| code	|	data	|		← pile	|	
+		|_______|___________|_______________|
+
+
+EXO 2.1: 
