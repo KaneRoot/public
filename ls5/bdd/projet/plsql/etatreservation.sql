@@ -45,5 +45,5 @@ SHOW ERRORS FUNCTION etat_reservation;
 
 -- test
 -- idBillet idClient
-select etat_reservation(3,1) from dual;
-select etat_reservation(1,1) from dual;
+--select etat_reservation(3,1) from dual;
+--select etat_reservation(1,1) from dual;
