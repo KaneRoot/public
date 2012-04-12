@@ -25,4 +25,4 @@ SHOW ERRORS procedure majMiles;
 
 
 -- test
-execute majMiles(1,1);
+-- execute majMiles(1,1);
