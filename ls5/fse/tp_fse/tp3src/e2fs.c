@@ -77,6 +77,7 @@ ctxt_t e2_ctxt_init (char *file, int maxbuf)
 		}
 	}
 
+	/*		*/
 	c->last = (struct buffer *) malloc(sizeof(struct buffer));
 	struct buffer *tmp = c->last;
 	for( i = 1 ; i < maxbuf ; i++)
@@ -87,13 +88,6 @@ ctxt_t e2_ctxt_init (char *file, int maxbuf)
 		tmp = tmp->next;
 		tmp->next = NULL;
 	}
-
-	tmp = c->last;
-	for(i = 1 ; i < maxbuf ; i++)
-	{
-		printf("i : %d\n", tmp->valid);
-		tmp = tmp->next;
-	}
 	return c;
 }
 
@@ -101,34 +95,33 @@ void e2_ctxt_close (ctxt_t c)
 {
 	close(c->fd);
 	free(c->gd);
-	int i = 0;
+
 	struct buffer * tmp;
 	struct buffer * tmp2;
 
 	tmp = c->last;
-	if(tmp != NULL)
+	while(c->last != NULL)
 	{
-		while(tmp != NULL)
+		while(tmp->next != NULL)
+			tmp = tmp->next;
+		if(tmp->data != NULL)
+			free(tmp->data);
+
+		tmp2 = c->last;
+		if(tmp2 != tmp)
 		{
-			while(tmp2->next != NULL) 
-			{
-				printf("b\t");
+			while(tmp2->next != tmp)
 				tmp2 = tmp2->next;
-			}
-			free(tmp2->data);
-			printf("%d\t", tmp2->valid);
-			free(tmp2);
-			tmp2 = NULL;
-			tmp2 = tmp;
-			i++;
-			if(i == 500)
-			{
-				printf("\n\noBLIGÉ De free\n");
-				break;
-			}
+			tmp2->next = NULL;
 		}
+		else
+			c->last = NULL;
+
+		if(tmp != NULL)
+			free(tmp);
+		tmp = c->last;
 	}
-	
+
 	free(c);
 }
 
