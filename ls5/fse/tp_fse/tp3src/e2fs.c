@@ -167,10 +167,9 @@ buf_t e2_buffer_get (ctxt_t c, pblk_t blkno)
 {
 	buf_t tmp = c->last;
 	buf_t tmp2 = NULL;
-	buf_t ret;
 
 	/* SI ON TROUVE */
-	while(tmp->next != NULL && tmp->valid == 1 && tmp->blkno != blkno)
+	while(tmp->next != NULL && tmp->blkno != blkno)
 		tmp = tmp->next;
 
 	if(tmp->valid == 1 && tmp->blkno == blkno)
@@ -184,29 +183,43 @@ buf_t e2_buffer_get (ctxt_t c, pblk_t blkno)
 		}
 		else
 		{
-			c->last = tmp2->next;
+			c->last = tmp->next;
 		}
 
+		c->bufstat_cached++;
 		return tmp;
-	}
-	else if(tmp->valid == 0)
-	{
 	}
 
 	/* SI ON NE TROUVE PAS */
-	ret = c->last;
-	ret->data = malloc(1024 << c->sb.s_log_block_size);
+	printf("On n'a pas trouvé %d\n", blkno);
+	tmp = c->last;
+	while(tmp->next != NULL)
+		tmp = tmp->next;
+	if(tmp->data != NULL)
+	{
+		free(tmp->data);
+		tmp->data = NULL;
+	}
+	tmp->data = malloc(1024 << c->sb.s_log_block_size);
 
-	if((e2_block_fetch(c, blkno, ret->data)) == -1)
+	if((e2_block_fetch(c, blkno, tmp->data)) == -1)
 	{
 		errno = -1;
 		return NULL;
 	}
+	tmp->blkno = blkno;
+	tmp->next = NULL;
 
-	ret->blkno = blkno;
-	ret->next = NULL;
+	tmp2 = c->last;
 
-	return ret;
+	while(tmp2->next != tmp)
+		tmp2 = tmp2->next;
+
+	tmp2->next = NULL;
+
+	tmp->valid = 1;
+	c->bufstat_read++;
+	return tmp;
 }
         
 /* replace le buffer en premier dans la liste */

@@ -11,7 +11,7 @@ function existe($val)
 	return $retour;
 }
 
-include("co");
+include("co.php");
 
 if(! isset($_POST['estCli']))
 {
