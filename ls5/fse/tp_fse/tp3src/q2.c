@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <linux/fs.h>
+#include <linux/ext2_fs.h>
+#include "errno.h"
 
 #include "e2fs.h"
 
@@ -10,6 +13,7 @@
 
 int main (int argc, char *argv [])
 {
+	int i;
     ctxt_t c ;
 
     if (argc < 3)
@@ -27,6 +31,13 @@ int main (int argc, char *argv [])
 
     /* A REDIGER */
 
+	for( i = 2 ; i < argc ; i++)
+		e2_buffer_put(c, e2_buffer_get(c, atoi(argv[i])));
+
+	for( i = 2 ; i < argc ; i++)
+		e2_buffer_put(c, e2_buffer_get(c, atoi(argv[i])));
+
+	e2_buffer_stats(c);
     e2_ctxt_close (c) ;
 
     exit (0) ;

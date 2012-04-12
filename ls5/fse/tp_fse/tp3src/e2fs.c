@@ -167,12 +167,22 @@ buf_t e2_buffer_get (ctxt_t c, pblk_t blkno)
 {
 	buf_t tmp = c->last;
 	buf_t tmp2 = NULL;
+	int i;
+	printf("Affichage des buffers \n");
+	tmp2 = c->last;
+	for( i = 0 ; i < 10 ; i++)
+	{
+		printf("%d : ", tmp2->blkno);
+		tmp2 = tmp2->next;
+	}
+	printf("\n");
+	tmp2 = NULL;
 
 	/* SI ON TROUVE */
 	while(tmp->next != NULL && tmp->blkno != blkno)
 		tmp = tmp->next;
 
-	if(tmp->valid == 1 && tmp->blkno == blkno)
+	if(tmp->blkno == blkno && tmp->valid == 1 )
 	{
 		tmp2 = c->last;
 		if(tmp2 != tmp)
@@ -191,10 +201,10 @@ buf_t e2_buffer_get (ctxt_t c, pblk_t blkno)
 	}
 
 	/* SI ON NE TROUVE PAS */
-	printf("On n'a pas trouvé %d\n", blkno);
 	tmp = c->last;
 	while(tmp->next != NULL)
 		tmp = tmp->next;
+
 	if(tmp->data != NULL)
 	{
 		free(tmp->data);
@@ -208,16 +218,16 @@ buf_t e2_buffer_get (ctxt_t c, pblk_t blkno)
 		return NULL;
 	}
 	tmp->blkno = blkno;
-	tmp->next = NULL;
+	tmp->valid = 1;
 
 	tmp2 = c->last;
 
 	while(tmp2->next != tmp)
 		tmp2 = tmp2->next;
 
-	tmp2->next = NULL;
+	tmp2->next = tmp->next;
+	tmp->next = NULL;
 
-	tmp->valid = 1;
 	c->bufstat_read++;
 	return tmp;
 }
