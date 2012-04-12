@@ -167,16 +167,6 @@ buf_t e2_buffer_get (ctxt_t c, pblk_t blkno)
 {
 	buf_t tmp = c->last;
 	buf_t tmp2 = NULL;
-	int i;
-	printf("Affichage des buffers \n");
-	tmp2 = c->last;
-	for( i = 0 ; i < 10 ; i++)
-	{
-		printf("%d : ", tmp2->blkno);
-		tmp2 = tmp2->next;
-	}
-	printf("\n");
-	tmp2 = NULL;
 
 	/* SI ON TROUVE */
 	while(tmp->next != NULL && tmp->blkno != blkno)
