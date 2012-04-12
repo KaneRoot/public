@@ -64,10 +64,11 @@ ctxt_t e2_ctxt_init (char *file, int maxbuf)
 		errno = -2;
 		return NULL;
 	}
-	c->ngroups = 1 + (c->sb.s_blocks_count / c->sb.s_blocks_per_group);
+	c->ngroups= 1 + ((c->sb.s_blocks_count - c->sb.s_first_data_block) / c->sb.s_blocks_per_group);
 
 	c->gd = (struct ext2_group_desc *) malloc(sizeof( struct ext2_group_desc) * c->ngroups);
 
+	lseek(c->fd, 2 * (1024 << c->sb.s_log_block_size), SEEK_SET);
 	for( i = 0 ; i < c->ngroups ; i++)
 	{
 		if((read(c->fd, &(c->gd[i]), sizeof(struct ext2_group_desc))) == -1)
@@ -75,6 +76,7 @@ ctxt_t e2_ctxt_init (char *file, int maxbuf)
 			errno = -3;
 			return NULL;
 		}
+		printf("%d\n", c->gd[0].bg_block_bitmap);
 	}
 
 	/*		*/
@@ -83,11 +85,13 @@ ctxt_t e2_ctxt_init (char *file, int maxbuf)
 	for( i = 1 ; i < maxbuf ; i++)
 	{
 		tmp->next = (struct buffer *) malloc(sizeof(struct buffer));
-		tmp->data = malloc(1024 << c->sb.s_log_block_size);
+		//tmp->data = malloc(1024 << c->sb.s_log_block_size);
 		tmp->valid = i;
 		tmp = tmp->next;
 		tmp->next = NULL;
 	}
+	c->bufstat_read = 0;
+	c->bufstat_cached = 0;
 	return c;
 }
 
@@ -163,23 +167,34 @@ buf_t e2_buffer_get (ctxt_t c, pblk_t blkno)
 {
 	buf_t tmp = c->last;
 	buf_t tmp2 = NULL;
+	buf_t ret;
 
+	/* SI ON TROUVE */
+	while(tmp->next != NULL && tmp->valid == 1 && tmp->blkno != blkno)
+		tmp = tmp->next;
 
-	if(tmp != NULL)
+	if(tmp->valid == 1 && tmp->blkno == blkno)
 	{
-		while(tmp->next != NULL && tmp->blkno != blkno)
-			tmp = tmp->next;
-		if(tmp->blkno == blkno)
+		tmp2 = c->last;
+		if(tmp2 != tmp)
 		{
-			tmp2 = c->last;
-			while(tmp2->next != tmp) //&& tmp->next != NULL)
+			while(tmp2->next != tmp)
 				tmp2 = tmp2->next;
 			tmp2->next = tmp->next;
-
-			return tmp;
 		}
+		else
+		{
+			c->last = tmp2->next;
+		}
+
+		return tmp;
 	}
-	buf_t ret = (buf_t) malloc(sizeof(struct buffer));
+	else if(tmp->valid == 0)
+	{
+	}
+
+	/* SI ON NE TROUVE PAS */
+	ret = c->last;
 	ret->data = malloc(1024 << c->sb.s_log_block_size);
 
 	if((e2_block_fetch(c, blkno, ret->data)) == -1)
@@ -210,4 +225,6 @@ void *e2_buffer_data (buf_t b)
 /* affiche les statistiques */
 void e2_buffer_stats (ctxt_t c)
 {
+	printf("Le nombre de lectures sur disque %d\n", c->bufstat_read);
+	printf("Le nombre de lecture dans le cache %d\n", c->bufstat_cached);
 }
