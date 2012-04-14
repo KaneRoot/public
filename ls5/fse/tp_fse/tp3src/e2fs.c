@@ -272,15 +272,6 @@ struct ext2_inode *e2_inode_read (ctxt_t c, inum_t i, buf_t b)
 	{
 		printf("LE BLOC DATA EST NULL\n");
 	}
-//	else
-//	{
-//		if( memcpy(inode, (b->data + (((i-1)%(1024 << c->sb.s_log_block_size)/sizeof(struct ext2_inode)) * sizeof(struct ext2_inode))), sizeof(struct ext2_inode)) == -1)
-//		{
-//			errno = 1;
-//			free(inode);
-//			return (struct ext2_inode*) NULL;
-//		}
-//	}
 
 	int nombre_inodes_par_bloc = (1024 << c->sb.s_log_block_size) / sizeof(struct ext2_inode);
 
@@ -291,6 +282,26 @@ struct ext2_inode *e2_inode_read (ctxt_t c, inum_t i, buf_t b)
 /* numero de bloc physique correspondant au bloc logique blkno de l'inode in */
 pblk_t e2_inode_lblk_to_pblk (ctxt_t c, struct ext2_inode *in, lblk_t blkno)
 {
-	return 0;
+	int taille_bloc = (1024 << c->sb.s_log_block_size);
+	int nb_blocs_max = 12 + taille_bloc + taille_bloc * taille_bloc + taille_bloc * taille_bloc * taille_bloc;
+
+	/* Assez clairement, si blkno > au nb max de blocs pour un fichier, il y a un soucis */
+	if(blkno > nb_blocs_max || blkno > in->i_blocks)
+	{
+		return 0;
+	}
+	if( blkno < 12)
+		return in->i_block[blkno];
+	else if ( blkno < taille_bloc + 11)
+	{
+		buf_t b = e2_block_fetch(c, in->i_block[12]);
+
+
+	}
+	else if ( blkno < (taille_bloc*taille_bloc) + 11)
+	{
+	}
+
+	return ;
 }
 
