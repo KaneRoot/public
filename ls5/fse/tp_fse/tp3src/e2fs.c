@@ -76,7 +76,7 @@ ctxt_t e2_ctxt_init (char *file, int maxbuf)
 			errno = -3;
 			return NULL;
 		}
-		printf("%d\n", c->gd[0].bg_block_bitmap);
+		//printf("%d\n", c->gd[0].bg_block_bitmap);
 	}
 
 	/*		*/
@@ -241,3 +241,47 @@ void e2_buffer_stats (ctxt_t c)
 	printf("Le nombre de lectures sur disque %d\n", c->bufstat_read);
 	printf("Le nombre de lecture dans le cache %d\n", c->bufstat_cached);
 }
+
+/******************************************************************************
+ * Fonction de lecture d'un bloc dans un inode
+ */
+
+/* recupere le buffer contenant l'inode */
+pblk_t e2_inode_to_pblk (ctxt_t c, inum_t i)
+{
+	int nb_inodes_par_groupe = c->sb.s_inodes_per_group;
+//	printf("Nombre d'inodes par groupe : %d\n", nb_inodes_par_groupe);
+
+	int numero_groupe_bloc = (i-1)/nb_inodes_par_groupe;
+//	printf("Numéro de groupe de bloc : %d\n", numero_groupe_bloc);
+
+	int nombre_inodes_par_bloc = (1024 << c->sb.s_log_block_size) / sizeof(struct ext2_inode);
+//	printf("Nombre d'inodes par bloc : %d\n", nombre_inodes_par_bloc);
+
+	int num_bloc = c->gd[numero_groupe_bloc].bg_inode_table + ((i-1) % nb_inodes_par_groupe) / nombre_inodes_par_bloc;
+//	printf("bg bidule : %d\n", c->gd[numero_groupe_bloc].bg_inode_table);
+//	printf("Numéro de bloc : %d\n", num_bloc);
+
+	return num_bloc;
+}
+
+/* extrait l'inode du buffer */
+struct ext2_inode *e2_inode_read (ctxt_t c, inum_t i, buf_t b)
+{
+	struct ext2_inode * inode = malloc(sizeof(struct ext2_inode));
+	if( memcpy(inode, (b->data + (((i-1)%(1024 << c->sb.s_log_block_size)/sizeof(struct ext2_inode)) * sizeof(struct ext2_inode))), sizeof(struct ext2_inode)) == -1)
+	{
+		errno = 1;
+		free(inode);
+		return (struct ext2_inode*) NULL;
+	}
+
+	return inode;
+}
+
+/* numero de bloc physique correspondant au bloc logique blkno de l'inode in */
+pblk_t e2_inode_lblk_to_pblk (ctxt_t c, struct ext2_inode *in, lblk_t blkno)
+{
+	return 0;
+}
+
