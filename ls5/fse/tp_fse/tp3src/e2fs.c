@@ -268,15 +268,24 @@ pblk_t e2_inode_to_pblk (ctxt_t c, inum_t i)
 /* extrait l'inode du buffer */
 struct ext2_inode *e2_inode_read (ctxt_t c, inum_t i, buf_t b)
 {
-	struct ext2_inode * inode = malloc(sizeof(struct ext2_inode));
-	if( memcpy(inode, (b->data + (((i-1)%(1024 << c->sb.s_log_block_size)/sizeof(struct ext2_inode)) * sizeof(struct ext2_inode))), sizeof(struct ext2_inode)) == -1)
+	if(b->data == NULL)
 	{
-		errno = 1;
-		free(inode);
-		return (struct ext2_inode*) NULL;
+		printf("LE BLOC DATA EST NULL\n");
 	}
+//	else
+//	{
+//		if( memcpy(inode, (b->data + (((i-1)%(1024 << c->sb.s_log_block_size)/sizeof(struct ext2_inode)) * sizeof(struct ext2_inode))), sizeof(struct ext2_inode)) == -1)
+//		{
+//			errno = 1;
+//			free(inode);
+//			return (struct ext2_inode*) NULL;
+//		}
+//	}
 
-	return inode;
+	int nombre_inodes_par_bloc = (1024 << c->sb.s_log_block_size) / sizeof(struct ext2_inode);
+
+	return (struct ext2_inode*) 
+		(b->data + ((i-1) % nombre_inodes_par_bloc) * sizeof(struct ext2_inode));
 }
 
 /* numero de bloc physique correspondant au bloc logique blkno de l'inode in */
