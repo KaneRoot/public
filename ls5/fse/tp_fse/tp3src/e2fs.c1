@@ -1,14 +1,4 @@
 /******************************************************************************
- * Operation de haut niveau : affichage d'un fichier complet
- */
-
-/* affiche les blocs d'un fichier */
-int e2_cat (ctxt_t c, inum_t i, int disp_pblk)
-{
-	return 0;
-}
-
-/******************************************************************************
  * Simulation d'une ouverture de fichiers
  */
 

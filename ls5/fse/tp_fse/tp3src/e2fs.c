@@ -90,6 +90,8 @@ ctxt_t e2_ctxt_init (char *file, int maxbuf)
 		tmp = tmp->next;
 		tmp->next = NULL;
 	}
+
+	// Bon ok c'est pour la forme ça.
 	c->bufstat_read = 0;
 	c->bufstat_cached = 0;
 	return c;
@@ -278,7 +280,6 @@ struct ext2_inode *e2_inode_read (ctxt_t c, inum_t i, buf_t b)
 	return (struct ext2_inode*) 
 		(b->data + ((i-1) % nombre_inodes_par_bloc) * sizeof(struct ext2_inode));
 }
-
 /* numero de bloc physique correspondant au bloc logique blkno de l'inode in */
 pblk_t e2_inode_lblk_to_pblk (ctxt_t c, struct ext2_inode *in, lblk_t blkno)
 {
@@ -292,16 +293,50 @@ pblk_t e2_inode_lblk_to_pblk (ctxt_t c, struct ext2_inode *in, lblk_t blkno)
 	}
 	if( blkno < 12)
 		return in->i_block[blkno];
+/* TODO */
 	else if ( blkno < taille_bloc + 11)
 	{
-		buf_t b = e2_block_fetch(c, in->i_block[12]);
+		void * data = malloc(taille_bloc); 
+		if( e2_block_fetch(c, in->i_block[12], data) != 0)
+		{
+			errno = 1;
+			return 0;
+		}
+		int info = (int) (data + blkno-12);
 
+		free(data);
+
+		return info;
 
 	}
+/* TODO */
 	else if ( blkno < (taille_bloc*taille_bloc) + 11)
 	{
 	}
+/* TODO */
 
-	return ;
+	return 0;
+}
+
+/******************************************************************************
+ * Operation de haut niveau : affichage d'un fichier complet
+ */
+
+/* affiche les blocs d'un fichier */
+int e2_cat (ctxt_t c, inum_t i, int disp_pblk)
+{
+	if(disp_pblk == 0)
+	{
+	}
+	else
+	{
+		int num_bloc = e2_inode_to_pblk(c, i);
+		buf_t b = e2_buffer_get(c, num_bloc);
+		e2_buffer_put(c, b);
+		struct ext2_inode *inode;
+		inode = e2_inode_read(c, i, b);
+		printf("La taille du fichier est de : %d\n", inode->i_size);
+	}
+	return 0;
 }
 
