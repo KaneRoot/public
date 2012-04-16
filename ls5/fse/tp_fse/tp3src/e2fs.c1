@@ -1,35 +1,3 @@
-
-/******************************************************************************
- * Fonction de lecture d'un bloc dans un inode
- */
-
-/* recupere le buffer contenant l'inode */
-pblk_t e2_inode_to_pblk (ctxt_t c, inum_t i)
-{
-}
-
-/* extrait l'inode du buffer */
-struct ext2_inode *e2_inode_read (ctxt_t c, inum_t i, buf_t b)
-{
-	return (struct ext2_inode*) NULL;
-}
-
-/* numero de bloc physique correspondant au bloc logique blkno de l'inode in */
-pblk_t e2_inode_lblk_to_pblk (ctxt_t c, struct ext2_inode *in, lblk_t blkno)
-{
-}
-
-
-/******************************************************************************
- * Operation de haut niveau : affichage d'un fichier complet
- */
-
-/* affiche les blocs d'un fichier */
-int e2_cat (ctxt_t c, inum_t i, int disp_pblk)
-{
-	return 0;
-}
-
 /******************************************************************************
  * Simulation d'une ouverture de fichiers
  */

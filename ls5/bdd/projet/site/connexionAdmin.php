@@ -1,6 +1,6 @@
 <?php 
 	session_start();
-	include("co");
+	include("co.php");
 	$_TITRE_PAGE="BDD - connexion admin";
 	include("includes/in_entete"); 
 ?>

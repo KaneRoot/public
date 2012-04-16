@@ -64,10 +64,11 @@ ctxt_t e2_ctxt_init (char *file, int maxbuf)
 		errno = -2;
 		return NULL;
 	}
-	c->ngroups = 1 + (c->sb.s_blocks_count / c->sb.s_blocks_per_group);
+	c->ngroups= 1 + ((c->sb.s_blocks_count - c->sb.s_first_data_block) / c->sb.s_blocks_per_group);
 
 	c->gd = (struct ext2_group_desc *) malloc(sizeof( struct ext2_group_desc) * c->ngroups);
 
+	lseek(c->fd, 2 * (1024 << c->sb.s_log_block_size), SEEK_SET);
 	for( i = 0 ; i < c->ngroups ; i++)
 	{
 		if((read(c->fd, &(c->gd[i]), sizeof(struct ext2_group_desc))) == -1)
@@ -75,25 +76,24 @@ ctxt_t e2_ctxt_init (char *file, int maxbuf)
 			errno = -3;
 			return NULL;
 		}
+		//printf("%d\n", c->gd[0].bg_block_bitmap);
 	}
 
+	/*		*/
 	c->last = (struct buffer *) malloc(sizeof(struct buffer));
 	struct buffer *tmp = c->last;
 	for( i = 1 ; i < maxbuf ; i++)
 	{
 		tmp->next = (struct buffer *) malloc(sizeof(struct buffer));
-		tmp->data = malloc(1024 << c->sb.s_log_block_size);
+		//tmp->data = malloc(1024 << c->sb.s_log_block_size);
 		tmp->valid = i;
 		tmp = tmp->next;
 		tmp->next = NULL;
 	}
 
-	tmp = c->last;
-	for(i = 1 ; i < maxbuf ; i++)
-	{
-		printf("i : %d\n", tmp->valid);
-		tmp = tmp->next;
-	}
+	// Bon ok c'est pour la forme ça.
+	c->bufstat_read = 0;
+	c->bufstat_cached = 0;
 	return c;
 }
 
@@ -101,34 +101,33 @@ void e2_ctxt_close (ctxt_t c)
 {
 	close(c->fd);
 	free(c->gd);
-	int i = 0;
+
 	struct buffer * tmp;
 	struct buffer * tmp2;
 
 	tmp = c->last;
-	if(tmp != NULL)
+	while(c->last != NULL)
 	{
-		while(tmp != NULL)
+		while(tmp->next != NULL)
+			tmp = tmp->next;
+		if(tmp->data != NULL)
+			free(tmp->data);
+
+		tmp2 = c->last;
+		if(tmp2 != tmp)
 		{
-			while(tmp2->next != NULL) 
-			{
-				printf("b\t");
+			while(tmp2->next != tmp)
 				tmp2 = tmp2->next;
-			}
-			free(tmp2->data);
-			printf("%d\t", tmp2->valid);
-			free(tmp2);
-			tmp2 = NULL;
-			tmp2 = tmp;
-			i++;
-			if(i == 500)
-			{
-				printf("\n\noBLIGÉ De free\n");
-				break;
-			}
+			tmp2->next = NULL;
 		}
+		else
+			c->last = NULL;
+
+		if(tmp != NULL)
+			free(tmp);
+		tmp = c->last;
 	}
-	
+
 	free(c);
 }
 
@@ -171,34 +170,58 @@ buf_t e2_buffer_get (ctxt_t c, pblk_t blkno)
 	buf_t tmp = c->last;
 	buf_t tmp2 = NULL;
 
+	/* SI ON TROUVE */
+	while(tmp->next != NULL && tmp->blkno != blkno)
+		tmp = tmp->next;
 
-	if(tmp != NULL)
+	if(tmp->blkno == blkno && tmp->valid == 1 )
 	{
-		while(tmp->next != NULL && tmp->blkno != blkno)
-			tmp = tmp->next;
-		if(tmp->blkno == blkno)
+		tmp2 = c->last;
+		if(tmp2 != tmp)
 		{
-			tmp2 = c->last;
-			while(tmp2->next != tmp) //&& tmp->next != NULL)
+			while(tmp2->next != tmp)
 				tmp2 = tmp2->next;
 			tmp2->next = tmp->next;
-
-			return tmp;
 		}
-	}
-	buf_t ret = (buf_t) malloc(sizeof(struct buffer));
-	ret->data = malloc(1024 << c->sb.s_log_block_size);
+		else
+		{
+			c->last = tmp->next;
+		}
 
-	if((e2_block_fetch(c, blkno, ret->data)) == -1)
+		c->bufstat_cached++;
+		return tmp;
+	}
+
+	/* SI ON NE TROUVE PAS */
+	tmp = c->last;
+	while(tmp->next != NULL)
+		tmp = tmp->next;
+
+	if(tmp->data != NULL)
+	{
+		free(tmp->data);
+		tmp->data = NULL;
+	}
+	tmp->data = malloc(1024 << c->sb.s_log_block_size);
+
+	if((e2_block_fetch(c, blkno, tmp->data)) == -1)
 	{
 		errno = -1;
 		return NULL;
 	}
+	tmp->blkno = blkno;
+	tmp->valid = 1;
 
-	ret->blkno = blkno;
-	ret->next = NULL;
+	tmp2 = c->last;
 
-	return ret;
+	while(tmp2->next != tmp)
+		tmp2 = tmp2->next;
+
+	tmp2->next = tmp->next;
+	tmp->next = NULL;
+
+	c->bufstat_read++;
+	return tmp;
 }
         
 /* replace le buffer en premier dans la liste */
@@ -217,4 +240,103 @@ void *e2_buffer_data (buf_t b)
 /* affiche les statistiques */
 void e2_buffer_stats (ctxt_t c)
 {
+	printf("Le nombre de lectures sur disque %d\n", c->bufstat_read);
+	printf("Le nombre de lecture dans le cache %d\n", c->bufstat_cached);
 }
+
+/******************************************************************************
+ * Fonction de lecture d'un bloc dans un inode
+ */
+
+/* recupere le buffer contenant l'inode */
+pblk_t e2_inode_to_pblk (ctxt_t c, inum_t i)
+{
+	int nb_inodes_par_groupe = c->sb.s_inodes_per_group;
+//	printf("Nombre d'inodes par groupe : %d\n", nb_inodes_par_groupe);
+
+	int numero_groupe_bloc = (i-1)/nb_inodes_par_groupe;
+//	printf("Numéro de groupe de bloc : %d\n", numero_groupe_bloc);
+
+	int nombre_inodes_par_bloc = (1024 << c->sb.s_log_block_size) / sizeof(struct ext2_inode);
+//	printf("Nombre d'inodes par bloc : %d\n", nombre_inodes_par_bloc);
+
+	int num_bloc = c->gd[numero_groupe_bloc].bg_inode_table + ((i-1) % nb_inodes_par_groupe) / nombre_inodes_par_bloc;
+//	printf("bg bidule : %d\n", c->gd[numero_groupe_bloc].bg_inode_table);
+//	printf("Numéro de bloc : %d\n", num_bloc);
+
+	return num_bloc;
+}
+
+/* extrait l'inode du buffer */
+struct ext2_inode *e2_inode_read (ctxt_t c, inum_t i, buf_t b)
+{
+	if(b->data == NULL)
+	{
+		printf("LE BLOC DATA EST NULL\n");
+	}
+
+	int nombre_inodes_par_bloc = (1024 << c->sb.s_log_block_size) / sizeof(struct ext2_inode);
+
+	return (struct ext2_inode*) 
+		(b->data + ((i-1) % nombre_inodes_par_bloc) * sizeof(struct ext2_inode));
+}
+/* numero de bloc physique correspondant au bloc logique blkno de l'inode in */
+pblk_t e2_inode_lblk_to_pblk (ctxt_t c, struct ext2_inode *in, lblk_t blkno)
+{
+	int taille_bloc = (1024 << c->sb.s_log_block_size);
+	int nb_blocs_max = 12 + taille_bloc + taille_bloc * taille_bloc + taille_bloc * taille_bloc * taille_bloc;
+
+	/* Assez clairement, si blkno > au nb max de blocs pour un fichier, il y a un soucis */
+	if(blkno > nb_blocs_max || blkno > in->i_blocks)
+	{
+		return 0;
+	}
+	if( blkno < 12)
+		return in->i_block[blkno];
+/* TODO */
+	else if ( blkno < taille_bloc + 11)
+	{
+		void * data = malloc(taille_bloc); 
+		if( e2_block_fetch(c, in->i_block[12], data) != 0)
+		{
+			errno = 1;
+			return 0;
+		}
+		int info = (int) (data + blkno-12);
+
+		free(data);
+
+		return info;
+
+	}
+/* TODO */
+	else if ( blkno < (taille_bloc*taille_bloc) + 11)
+	{
+	}
+/* TODO */
+
+	return 0;
+}
+
+/******************************************************************************
+ * Operation de haut niveau : affichage d'un fichier complet
+ */
+
+/* affiche les blocs d'un fichier */
+int e2_cat (ctxt_t c, inum_t i, int disp_pblk)
+{
+	if(disp_pblk == 0)
+	{
+	}
+	else
+	{
+		int num_bloc = e2_inode_to_pblk(c, i);
+		buf_t b = e2_buffer_get(c, num_bloc);
+		e2_buffer_put(c, b);
+		struct ext2_inode *inode;
+		inode = e2_inode_read(c, i, b);
+		printf("La taille du fichier est de : %d\n", inode->i_size);
+	}
+	return 0;
+}
+

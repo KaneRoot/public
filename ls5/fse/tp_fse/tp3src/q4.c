@@ -13,18 +13,22 @@ int main (int argc, char *argv [])
 
     if (argc != 3 && argc != 4)
     {
-	fprintf (stderr, "usage: %s fs inode [dispblkno]\n", argv [0]) ;
-	exit (1) ;
+		fprintf (stderr, "usage: %s fs inode [dispblkno]\n", argv [0]) ;
+		exit (1) ;
     }
 
     c = e2_ctxt_init (argv [1], MAXBUF) ;
     if (c == NULL)
     {
-	perror ("e2_ctxt_init") ;
-	exit (1) ;
+		perror ("e2_ctxt_init") ;
+		exit (1) ;
     }
 
     /* A REDIGER */
+	if(argc == 3)
+		e2_cat(c, atoi(argv[2]), 0);
+	else
+		e2_cat(c, atoi(argv[2]), atoi(argv[3]));
 
     e2_ctxt_close (c) ;
 

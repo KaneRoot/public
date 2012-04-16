@@ -1,15 +1,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <linux/fs.h>
+#include <linux/ext2_fs.h>
+#include "errno.h"
 
 #include "e2fs.h"
 
-#define	MAXBUF	10
+#define	MAXBUF	2
 
 /* Lit un bloc physique quelconque en passant par un buffer */
 
 int main (int argc, char *argv [])
 {
+	int i;
     ctxt_t c ;
 
     if (argc < 3)
@@ -27,6 +31,16 @@ int main (int argc, char *argv [])
 
     /* A REDIGER */
 
+	buf_t tmp;
+
+	for( i = 2 ; i < argc ; i++)
+	{
+		tmp = e2_buffer_get(c, atoi(argv[i]));
+		printf("%s", (char *) e2_buffer_data(tmp));
+		e2_buffer_put(c, tmp);
+	}
+
+	e2_buffer_stats(c);
     e2_ctxt_close (c) ;
 
     exit (0) ;
