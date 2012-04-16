@@ -168,7 +168,7 @@ int e2_block_fetch (ctxt_t c, pblk_t blkno, void *data)
 buf_t e2_buffer_get (ctxt_t c, pblk_t blkno)
 {
 	buf_t tmp = c->last;
-	buf_t tmp2 = NULL;
+	buf_t tmp2 = c->last;
 
 	/* SI ON TROUVE */
 	while(tmp->next != NULL && tmp->blkno != blkno)
@@ -354,6 +354,8 @@ int e2_cat (ctxt_t c, inum_t i, int disp_pblk)
 		}
 		printf("\n");
 	}
+
+	free(inode);
 	return 0;
 }
 
@@ -364,6 +366,7 @@ int e2_cat (ctxt_t c, inum_t i, int disp_pblk)
 file_t e2_file_open (ctxt_t c, inum_t i)
 {
 	file_t fichier = (file_t) malloc(sizeof(struct ofile));
+	fichier->data = (char *) malloc(1024 << c->sb.s_log_block_size);
 	int num_pblk_inode;
 	buf_t b;
 
@@ -381,7 +384,7 @@ file_t e2_file_open (ctxt_t c, inum_t i)
 	if(0 == (fichier->inode = e2_inode_read(c, i, b)))
 		return (file_t) NULL;
 
-	fichier->data = (char *) e2_buffer_data(b);
+	memcpy(fichier->data, (char *) e2_buffer_data(b), 1024 << c->sb.s_log_block_size);
 	fichier->len = fichier->inode->i_size;
 	fichier->pos = 0;
 	fichier->curblk = 0;
@@ -394,6 +397,7 @@ void e2_file_close (file_t of)
 	if(of->data != NULL)
 		free(of->data);
 
+	free(of->inode);
 	free(of);
 }
 
@@ -414,11 +418,12 @@ int e2_file_getc (file_t of)
 		buf_t b = e2_buffer_get(of->ctxt, e2_inode_lblk_to_pblk(of->ctxt, of->inode, of->curblk));
 		e2_buffer_put(of->ctxt, b);
 
-		of->data = e2_buffer_data(b);
+		of->data = (char *) malloc(taille_bloc);
+		memcpy(of->data, e2_buffer_data(b), taille_bloc);
 	}
 
 	of->pos++;
-	memcpy(&car, of->data + (of->pos % taille_bloc), sizeof(int));
+	memcpy(&car, of->data + (of->pos % taille_bloc), sizeof(char));
 	return car;
 }
 
