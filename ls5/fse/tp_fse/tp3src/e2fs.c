@@ -293,27 +293,23 @@ pblk_t e2_inode_lblk_to_pblk (ctxt_t c, struct ext2_inode *in, lblk_t blkno)
 	}
 	if( blkno < 12)
 		return in->i_block[blkno];
-/* TODO */
 	else if ( blkno < taille_bloc + 11)
 	{
 		void * data = malloc(taille_bloc); 
-		if( e2_block_fetch(c, in->i_block[12], data) != 0)
+		if( e2_block_fetch(c, in->i_block[13], data) != 0)
 		{
-			errno = 1;
-			return 0;
+			   errno = 1;
+			   return 0;
 		}
 		int info = (int) (data + blkno-12);
 
 		free(data);
 
 		return info;
-
 	}
-/* TODO */
 	else if ( blkno < (taille_bloc*taille_bloc) + 11)
 	{
 	}
-/* TODO */
 
 	return 0;
 }
