@@ -82,12 +82,16 @@ ctxt_t e2_ctxt_init (char *file, int maxbuf)
 	/*		*/
 	c->last = (struct buffer *) malloc(sizeof(struct buffer));
 	struct buffer *tmp = c->last;
-	for( i = 1 ; i < maxbuf ; i++)
+	for( i = 0 ; i < maxbuf ; i++)
 	{
-		tmp->next = (struct buffer *) malloc(sizeof(struct buffer));
-		//tmp->data = malloc(1024 << c->sb.s_log_block_size);
-		tmp->valid = i;
-		tmp = tmp->next;
+		tmp->valid = 0;
+		tmp->blkno = 0;
+		tmp->data = NULL;
+		if(i != maxbuf - 1)
+		{
+			tmp->next = (struct buffer *) malloc(sizeof(struct buffer));
+			tmp = tmp->next;
+		}
 		tmp->next = NULL;
 	}
 
@@ -423,7 +427,8 @@ int e2_file_getc (file_t of)
 	}
 
 	of->pos++;
-	memcpy(&car, of->data + (of->pos % taille_bloc), sizeof(char));
+	//memcpy(&car, of->data + (of->pos % taille_bloc), sizeof(char));
+	car = *(of->data + (of->pos % taille_bloc)) & 0xFF;
 	return car;
 }
 
