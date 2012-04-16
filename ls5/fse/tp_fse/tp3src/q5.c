@@ -32,7 +32,7 @@ int main (int argc, char *argv [])
 		printf("%c", car);
 
 
-	//e2_file_close(fichier);
+	e2_file_close(fichier);
     e2_ctxt_close (c) ;
 
     exit (0) ;
