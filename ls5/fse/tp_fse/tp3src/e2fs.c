@@ -304,7 +304,8 @@ pblk_t e2_inode_lblk_to_pblk (ctxt_t c, struct ext2_inode *in, lblk_t blkno)
 			   errno = 1;
 			   return 0;
 		}
-		int info = (int) (data + blkno-12);
+		int info ;
+		memcpy(&info, (data + blkno-12), sizeof(int));
 
 		free(data);
 
@@ -381,7 +382,7 @@ file_t e2_file_open (ctxt_t c, inum_t i)
 		return (file_t) NULL;
 
 	fichier->data = (char *) e2_buffer_data(b);
-	fichier->len = inode->i_size;
+	fichier->len = fichier->inode->i_size;
 	fichier->pos = 0;
 	fichier->curblk = 0;
 
@@ -399,15 +400,26 @@ void e2_file_close (file_t of)
 /* renvoie EOF ou un caractere valide */
 int e2_file_getc (file_t of)
 {
-	int taille_bloc = (1024 << c->sb.s_log_block_size);
+	int taille_bloc = (1024 << of->ctxt->sb.s_log_block_size);
+	int car;
 
 	if(of->len == of->pos)
 		return EOF;
-	if( (of->pos % taille_bloc) == 0)
+
+	if( (of->pos % taille_bloc) == 0 && of->pos != 0)
 	{
+		of->curblk++;
+		if(of->data != NULL)
+			free(of->data);
+		buf_t b = e2_buffer_get(of->ctxt, e2_inode_lblk_to_pblk(of->ctxt, of->inode, of->curblk));
+		e2_buffer_put(of->ctxt, b);
+
+		of->data = e2_buffer_data(b);
 	}
 
-	return 0;
+	of->pos++;
+	memcpy(&car, of->data + (of->pos % taille_bloc), sizeof(int));
+	return car;
 }
 
 /* renvoie nb de caracteres lus (0 lorsqu'on arrive en fin de fichier) */
