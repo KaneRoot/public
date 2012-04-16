@@ -248,7 +248,7 @@ void e2_buffer_stats (ctxt_t c)
  * Fonction de lecture d'un bloc dans un inode
  */
 
-/* recupere le buffer contenant l'inode */
+/* recupere le numéro du bloc contenant l'inode */
 pblk_t e2_inode_to_pblk (ctxt_t c, inum_t i)
 {
 	int nb_inodes_par_groupe = c->sb.s_inodes_per_group;
@@ -276,9 +276,12 @@ struct ext2_inode *e2_inode_read (ctxt_t c, inum_t i, buf_t b)
 	}
 
 	int nombre_inodes_par_bloc = (1024 << c->sb.s_log_block_size) / sizeof(struct ext2_inode);
+	struct ext2_inode * inode = malloc(sizeof(struct ext2_inode));
+	memcpy(inode, 
+			(b->data + ((i-1) % nombre_inodes_par_bloc) * sizeof(struct ext2_inode)),
+			sizeof(struct ext2_inode));
 
-	return (struct ext2_inode*) 
-		(b->data + ((i-1) % nombre_inodes_par_bloc) * sizeof(struct ext2_inode));
+	return inode;
 }
 /* numero de bloc physique correspondant au bloc logique blkno de l'inode in */
 pblk_t e2_inode_lblk_to_pblk (ctxt_t c, struct ext2_inode *in, lblk_t blkno)
@@ -321,18 +324,95 @@ pblk_t e2_inode_lblk_to_pblk (ctxt_t c, struct ext2_inode *in, lblk_t blkno)
 /* affiche les blocs d'un fichier */
 int e2_cat (ctxt_t c, inum_t i, int disp_pblk)
 {
+	int num_bloc, j;
+	buf_t b, tmp;
+	struct ext2_inode *inode;
+
+	num_bloc = e2_inode_to_pblk(c, i);
+	b = e2_buffer_get(c, num_bloc);
+	e2_buffer_put(c, b);
+	inode = e2_inode_read(c, i, b);
+
 	if(disp_pblk == 0)
 	{
+		for(j = 0 ; e2_inode_lblk_to_pblk(c, inode, j) != 0 ; j++)
+		{
+			tmp = e2_buffer_get(c, e2_inode_lblk_to_pblk(c, inode, j));
+			e2_buffer_put(c, tmp);
+			printf("%s", (char *)e2_buffer_data(tmp));
+		}
 	}
 	else
 	{
-		int num_bloc = e2_inode_to_pblk(c, i);
-		buf_t b = e2_buffer_get(c, num_bloc);
-		e2_buffer_put(c, b);
-		struct ext2_inode *inode;
-		inode = e2_inode_read(c, i, b);
 		printf("La taille du fichier est de : %d\n", inode->i_size);
+		printf("L'entrée i_blocks est de : %d\n", inode->i_blocks);
+		printf("Les blocs : \t");
+		for(j = 0 ; e2_inode_lblk_to_pblk(c, inode, j) != 0 ; j++)
+		{
+			printf("%d, ", e2_inode_lblk_to_pblk(c, inode, j));
+		}
+		printf("\n");
 	}
+	return 0;
+}
+
+/******************************************************************************
+ * Simulation d'une ouverture de fichiers
+ */
+
+file_t e2_file_open (ctxt_t c, inum_t i)
+{
+	file_t fichier = (file_t) malloc(sizeof(struct ofile));
+	int num_pblk_inode;
+	buf_t b;
+
+	if( 0 == (num_pblk_inode = e2_inode_to_pblk(c, i)))
+		return (file_t) NULL;
+
+	if( NULL == (b = e2_buffer_get(c, num_pblk_inode)))
+		return (file_t) NULL;
+
+	e2_buffer_put(c, b);
+
+	fichier->ctxt = c;
+	fichier->buffer = b;
+
+	if(0 == (fichier->inode = e2_inode_read(c, i, b)))
+		return (file_t) NULL;
+
+	fichier->data = (char *) e2_buffer_data(b);
+	fichier->len = inode->i_size;
+	fichier->pos = 0;
+	fichier->curblk = 0;
+
+	return fichier;
+}
+
+void e2_file_close (file_t of)
+{
+	if(of->data != NULL)
+		free(of->data);
+
+	free(of);
+}
+
+/* renvoie EOF ou un caractere valide */
+int e2_file_getc (file_t of)
+{
+	int taille_bloc = (1024 << c->sb.s_log_block_size);
+
+	if(of->len == of->pos)
+		return EOF;
+	if( (of->pos % taille_bloc) == 0)
+	{
+	}
+
+	return 0;
+}
+
+/* renvoie nb de caracteres lus (0 lorsqu'on arrive en fin de fichier) */
+int e2_file_read (file_t of, void *data, int len)
+{
 	return 0;
 }
 

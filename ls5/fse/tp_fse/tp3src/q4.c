@@ -10,6 +10,7 @@
 int main (int argc, char *argv [])
 {
     ctxt_t c ;
+	int dispblkno;
 
     if (argc != 3 && argc != 4)
     {
@@ -25,10 +26,12 @@ int main (int argc, char *argv [])
     }
 
     /* A REDIGER */
-	if(argc == 3)
-		e2_cat(c, atoi(argv[2]), 0);
-	else
-		e2_cat(c, atoi(argv[2]), atoi(argv[3]));
+	dispblkno = 0;
+
+	if(argc == 4)
+		dispblkno = atoi(argv[3]);
+
+	e2_cat(c, atoi(argv[2]), dispblkno);
 
     e2_ctxt_close (c) ;
 
