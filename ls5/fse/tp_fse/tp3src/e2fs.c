@@ -370,9 +370,11 @@ int e2_cat (ctxt_t c, inum_t i, int disp_pblk)
 file_t e2_file_open (ctxt_t c, inum_t i)
 {
 	file_t fichier = (file_t) malloc(sizeof(struct ofile));
-	fichier->data = (char *) malloc(1024 << c->sb.s_log_block_size);
+	//int taille_bloc = (1024 << c->sb.s_log_block_size);
 	int num_pblk_inode;
 	buf_t b;
+
+	//fichier->data = (char *) malloc(taille_bloc);
 
 	if( 0 == (num_pblk_inode = e2_inode_to_pblk(c, i)))
 		return (file_t) NULL;
@@ -388,7 +390,8 @@ file_t e2_file_open (ctxt_t c, inum_t i)
 	if(0 == (fichier->inode = e2_inode_read(c, i, b)))
 		return (file_t) NULL;
 
-	memcpy(fichier->data, (char *) e2_buffer_data(b), 1024 << c->sb.s_log_block_size);
+	//memcpy(fichier->data, (char *) e2_buffer_data(b), taille_bloc);
+	fichier->data = NULL;
 	fichier->len = fichier->inode->i_size;
 	fichier->pos = 0;
 	fichier->curblk = 0;
@@ -410,31 +413,45 @@ int e2_file_getc (file_t of)
 {
 	int taille_bloc = (1024 << of->ctxt->sb.s_log_block_size);
 	int car;
+	buf_t b;
 
 	if(of->len == of->pos)
 		return EOF;
 
-	if( (of->pos % taille_bloc) == 0 && of->pos != 0)
+	if( (of->pos % taille_bloc) == 0 || of->pos == 0)
 	{
-		of->curblk++;
+		if(of->pos != 0)
+			of->curblk++;
+	//	printf("\nChangement de bloc : %d\n", of->curblk);
 		if(of->data != NULL)
 			free(of->data);
-		buf_t b = e2_buffer_get(of->ctxt, e2_inode_lblk_to_pblk(of->ctxt, of->inode, of->curblk));
+
+		b = e2_buffer_get(of->ctxt, e2_inode_lblk_to_pblk(of->ctxt, of->inode, of->curblk ));
 		e2_buffer_put(of->ctxt, b);
 
 		of->data = (char *) malloc(taille_bloc);
 		memcpy(of->data, e2_buffer_data(b), taille_bloc);
 	}
 
+	//printf("%d - %d \n", of->pos, of->curblk);
+	memcpy(&car, of->data + (of->pos % taille_bloc), sizeof(char));
+	//car = *(of->data + (of->pos % taille_bloc)) & 0xFF;
 	of->pos++;
-	//memcpy(&car, of->data + (of->pos % taille_bloc), sizeof(char));
-	car = *(of->data + (of->pos % taille_bloc)) & 0xFF;
 	return car;
 }
 
 /* renvoie nb de caracteres lus (0 lorsqu'on arrive en fin de fichier) */
 int e2_file_read (file_t of, void *data, int len)
 {
-	return 0;
+	// nombre de caractères lus
+	int i = 0;
+	int c ;
+	while( i != len && (c = e2_file_getc(of)) != EOF)
+	{
+		*((char *)data + i) = (char) c;
+		i++;
+	}
+
+	return i;
 }
 
