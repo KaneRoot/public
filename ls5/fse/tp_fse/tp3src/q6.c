@@ -13,18 +13,23 @@ int main (int argc, char *argv [])
 
     if (argc != 3)
     {
-	fprintf (stderr, "usage: %s fs inode\n", argv [0]) ;
-	exit (1) ;
+		fprintf (stderr, "usage: %s fs inode\n", argv [0]) ;
+		exit (1) ;
     }
 
     c = e2_ctxt_init (argv [1], MAXBUF) ;
     if (c == NULL)
     {
-	perror ("e2_ctxt_init") ;
-	exit (1) ;
+		perror ("e2_ctxt_init") ;
+		exit (1) ;
     }
 
     /* A REDIGER */
+
+	file_t f = e2_file_open(c, atoi(argv[2]));
+	struct ext2_dir_entry_2 * rep = e2_dir_get(f);
+
+	rep = rep;
 
     e2_ctxt_close (c) ;
 

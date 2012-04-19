@@ -1,20 +1,4 @@
 /******************************************************************************
- * Operations sur les repertoires
- */
-
-/* retourne une entree de repertoire */
-struct ext2_dir_entry_2 *e2_dir_get (file_t of)
-{
-	return (struct ext2_dir_entry_2 *) NULL;
-}
-
-/* recherche un composant de chemin dans un repertoire */
-inum_t e2_dir_lookup (ctxt_t c, inum_t i, char *str, int len)
-{
-	return (inum_t) NULL;
-}
-
-/******************************************************************************
  * Operation de haut niveau : affichage d'un repertoire complet
  */
 

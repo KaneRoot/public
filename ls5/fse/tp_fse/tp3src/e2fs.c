@@ -455,3 +455,32 @@ int e2_file_read (file_t of, void *data, int len)
 	return i;
 }
 
+/******************************************************************************
+ * Operations sur les repertoires
+ */
+
+/* retourne une entree de repertoire */
+struct ext2_dir_entry_2 *e2_dir_get (file_t of)
+{
+	buf_t b;
+
+	b = e2_buffer_get(c, of->inode->i_block[0]);
+	e2_buffer_put(of->ctxt, b);
+
+	if(0 == S_ISDIR(of->inode->i_mode))
+	{
+		/*	Ce n'est pas un répertoire	*/
+		return (struct ext2_dir_entry_2 *) NULL;
+	}
+	/*	C'est bien un répertoire	*/
+
+	of->pos++;
+	return (struct ext2_dir_entry_2 *) NULL;
+}
+
+/* recherche un composant de chemin dans un repertoire */
+//inum_t e2_dir_lookup (ctxt_t c, inum_t i, char *str, int len)
+//{
+//	return (inum_t) NULL;
+//}
+//
