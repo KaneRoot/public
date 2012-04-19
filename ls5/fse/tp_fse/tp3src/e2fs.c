@@ -76,7 +76,6 @@ ctxt_t e2_ctxt_init (char *file, int maxbuf)
 			errno = -3;
 			return NULL;
 		}
-		//printf("%d\n", c->gd[0].bg_block_bitmap);
 	}
 
 	/*		*/
@@ -256,17 +255,12 @@ void e2_buffer_stats (ctxt_t c)
 pblk_t e2_inode_to_pblk (ctxt_t c, inum_t i)
 {
 	int nb_inodes_par_groupe = c->sb.s_inodes_per_group;
-//	printf("Nombre d'inodes par groupe : %d\n", nb_inodes_par_groupe);
 
 	int numero_groupe_bloc = (i-1)/nb_inodes_par_groupe;
-//	printf("Numéro de groupe de bloc : %d\n", numero_groupe_bloc);
 
 	int nombre_inodes_par_bloc = (1024 << c->sb.s_log_block_size) / sizeof(struct ext2_inode);
-//	printf("Nombre d'inodes par bloc : %d\n", nombre_inodes_par_bloc);
 
 	int num_bloc = c->gd[numero_groupe_bloc].bg_inode_table + ((i-1) % nb_inodes_par_groupe) / nombre_inodes_par_bloc;
-//	printf("bg bidule : %d\n", c->gd[numero_groupe_bloc].bg_inode_table);
-//	printf("Numéro de bloc : %d\n", num_bloc);
 
 	return num_bloc;
 }
@@ -463,8 +457,13 @@ int e2_file_read (file_t of, void *data, int len)
 struct ext2_dir_entry_2 *e2_dir_get (file_t of)
 {
 	buf_t b;
+	int taille, taille_du_nom;
+	char * lenom = malloc(500);
 
-	b = e2_buffer_get(c, of->inode->i_block[0]);
+	static struct ext2_dir_entry_2 * entree;
+	static int e2_dir_get_offset = 0;
+
+	b = e2_buffer_get(of->ctxt, of->inode->i_block[0]);
 	e2_buffer_put(of->ctxt, b);
 
 	if(0 == S_ISDIR(of->inode->i_mode))
@@ -474,8 +473,25 @@ struct ext2_dir_entry_2 *e2_dir_get (file_t of)
 	}
 	/*	C'est bien un répertoire	*/
 
-	of->pos++;
-	return (struct ext2_dir_entry_2 *) NULL;
+	memcpy(&taille, (b->data + e2_dir_get_offset + 4), sizeof(char)*2);
+	if(taille != 0 && entree != NULL)
+	{
+		if(entree != NULL)
+		{
+			free(entree);
+			entree = malloc(taille);
+		}
+		memcpy(entree, (b->data + e2_dir_get_offset), taille);
+		memcpy(&taille_du_nom, (b->data + e2_dir_get_offset + 6 ), 1);
+	}
+	e2_dir_get_offset += taille;
+
+	printf("La taille %d - taille du nom : %d\n", taille, taille_du_nom);
+	snprintf(lenom, taille_du_nom, "%s", entree->name);
+	printf("Le nom : %s\n", lenom);
+
+	free(lenom);
+	return (struct ext2_dir_entry_2 *) entree;
 }
 
 /* recherche un composant de chemin dans un repertoire */

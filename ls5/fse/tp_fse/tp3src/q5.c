@@ -31,7 +31,6 @@ int main (int argc, char *argv [])
 	while((car = e2_file_getc(fichier)) != EOF)
 		printf("%c",(char) car);
 
-
 	e2_file_close(fichier);
     e2_ctxt_close (c) ;
 
