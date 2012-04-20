@@ -26,10 +26,10 @@ int main (int argc, char *argv [])
 
     /* A REDIGER */
 
-	file_t f = e2_file_open(c, atoi(argv[2]));
-	struct ext2_dir_entry_2 * rep = e2_dir_get(f);
-
-	rep = rep;
+	if(e2_ls(c, atoi(argv[2])) != 0)
+	{
+		printf("Il y a eu une erreur\n");
+	}
 
     e2_ctxt_close (c) ;
 

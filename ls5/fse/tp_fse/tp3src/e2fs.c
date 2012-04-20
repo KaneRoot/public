@@ -457,41 +457,64 @@ int e2_file_read (file_t of, void *data, int len)
 struct ext2_dir_entry_2 *e2_dir_get (file_t of)
 {
 	buf_t b;
-	int taille, taille_du_nom;
-	char * lenom = malloc(500);
-
+	int taille = 0;
+	int taille_bloc = (1024 << of->ctxt->sb.s_log_block_size);
 	static struct ext2_dir_entry_2 * entree;
 	static int e2_dir_get_offset = 0;
 
-	b = e2_buffer_get(of->ctxt, of->inode->i_block[0]);
+	b = e2_buffer_get(of->ctxt, of->inode->i_block[e2_dir_get_offset / taille_bloc]);
 	e2_buffer_put(of->ctxt, b);
+
+	memcpy(&taille, (b->data + e2_dir_get_offset + 4), sizeof(char)*2);
+
+	if(entree != NULL)
+		free(entree);
+
+	if(taille == 0)
+	{
+		return (struct ext2_dir_entry_2 *) NULL;
+	}
+	entree = malloc(taille);
+
+	memcpy(entree, (b->data + e2_dir_get_offset), taille);
+	e2_dir_get_offset += taille;
+
+	return entree;
+}
+
+/******************************************************************************
+ * Operation de haut niveau : affichage d'un repertoire complet
+ */
+
+/* affiche un repertoire donne par son inode */
+int e2_ls (ctxt_t c, inum_t i)
+{
+	char * lenom = malloc(500);
+	struct ext2_dir_entry_2 * item;
+	file_t of;
+
+	of = e2_file_open(c, i);
 
 	if(0 == S_ISDIR(of->inode->i_mode))
 	{
 		/*	Ce n'est pas un répertoire	*/
-		return (struct ext2_dir_entry_2 *) NULL;
+		return -1;
 	}
 	/*	C'est bien un répertoire	*/
-
-	memcpy(&taille, (b->data + e2_dir_get_offset + 4), sizeof(char)*2);
-	if(taille != 0 && entree != NULL)
+	while((item = e2_dir_get(of)) != NULL)
 	{
-		if(entree != NULL)
-		{
-			free(entree);
-			entree = malloc(taille);
-		}
-		memcpy(entree, (b->data + e2_dir_get_offset), taille);
-		memcpy(&taille_du_nom, (b->data + e2_dir_get_offset + 6 ), 1);
+		snprintf(lenom, item->name_len + 14, "%4d (%4d ) %s", 
+				item->inode,
+				item->rec_len, 
+				(char*) (item->name));
+		printf("%s\n", lenom);
+		bzero(lenom, 500);
 	}
-	e2_dir_get_offset += taille;
-
-	printf("La taille %d - taille du nom : %d\n", taille, taille_du_nom);
-	snprintf(lenom, taille_du_nom, "%s", entree->name);
-	printf("Le nom : %s\n", lenom);
 
 	free(lenom);
-	return (struct ext2_dir_entry_2 *) entree;
+	e2_file_close(of);
+
+	return 0;
 }
 
 /* recherche un composant de chemin dans un repertoire */
@@ -500,3 +523,13 @@ struct ext2_dir_entry_2 *e2_dir_get (file_t of)
 //	return (inum_t) NULL;
 //}
 //
+
+/******************************************************************************
+ * Traversee de repertoire
+ */
+
+/* recherche le fichier (l'inode) par son nom */
+//inum_t e2_namei (ctxt_t c, char *path)
+//{
+//	return (inum_t) NULL;
+//}
