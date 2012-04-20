@@ -321,6 +321,7 @@ pblk_t e2_inode_lblk_to_pblk (ctxt_t c, struct ext2_inode *in, lblk_t blkno)
 	/* Assez clairement, si blkno > au nb max de blocs pour un fichier, il y a un soucis */
 	if(blkno > nb_blocs_max || blkno > in->i_blocks)
 	{
+		errno = -1;
 		return 0;
 	}
 	/* si nous sommes dans les 12 premiers blocs */
@@ -328,14 +329,15 @@ pblk_t e2_inode_lblk_to_pblk (ctxt_t c, struct ext2_inode *in, lblk_t blkno)
 		return in->i_block[blkno];
 	else if ( blkno < tbloc + 11)
 	{
-		void * data = malloc(tbloc); 
-		if( e2_block_fetch(c, in->i_block[13], data) != 0)
-		{
-			   errno = 1;
-			   return 0;
-		}
 		int info ;
-		memcpy(&info, (data + blkno-12), sizeof(int));
+		void * data;
+		data = malloc(tbloc); 
+		if( e2_block_fetch(c, in->i_block[12], data) != 0)
+		{
+			errno = -2;
+			return 0;
+		}
+		memcpy(&info, (data + blkno % tbloc), sizeof(int));
 
 		free(data);
 
@@ -361,12 +363,17 @@ int e2_cat (ctxt_t c, inum_t i, int disp_pblk)
 	struct ext2_inode *inode;
 
 	num_bloc = e2_inode_to_pblk(c, i);
+
+	/* on récupère le buffer de l'inode */
 	b = e2_buffer_get(c, num_bloc);
 	e2_buffer_put(c, b);
+
+	/* on va lire l'inode */
 	inode = e2_inode_read(c, i, b);
 
 	if(disp_pblk == 0)
 	{
+		/* tant qu'on nous renvoie des numéro de bloc > 0 */
 		for(j = 0 ; e2_inode_lblk_to_pblk(c, inode, j) != 0 ; j++)
 		{
 			tmp = e2_buffer_get(c, e2_inode_lblk_to_pblk(c, inode, j));
@@ -379,6 +386,8 @@ int e2_cat (ctxt_t c, inum_t i, int disp_pblk)
 		printf("La taille du fichier est de : %d\n", inode->i_size);
 		printf("L'entrée i_blocks est de : %d\n", inode->i_blocks);
 		printf("Les blocs : \t");
+
+		/* tant qu'on nous renvoie des numéro de bloc > 0 */
 		for(j = 0 ; e2_inode_lblk_to_pblk(c, inode, j) != 0 ; j++)
 		{
 			printf("%d, ", e2_inode_lblk_to_pblk(c, inode, j));
@@ -394,76 +403,108 @@ int e2_cat (ctxt_t c, inum_t i, int disp_pblk)
  * Simulation d'une ouverture de fichiers
  */
 
+/* on ouvre un fichier */
 file_t e2_file_open (ctxt_t c, inum_t i)
 {
-	file_t fichier = (file_t) malloc(sizeof(struct ofile));
-	//int taille_bloc = (1024 << c->sb.s_log_block_size);
+	file_t fichier = NULL;
 	int num_pblk_inode;
 	buf_t b;
 
-	//fichier->data = (char *) malloc(taille_bloc);
+	/* allocation d'une structure de fichier */
+	fichier = (file_t) malloc(sizeof(struct ofile));
 
-	if( 0 == (num_pblk_inode = e2_inode_to_pblk(c, i)))
+	/* en cas d'erreur */
+	if(fichier == NULL)
+	{
+		errno = -1;
 		return (file_t) NULL;
+	}
 
-	if( NULL == (b = e2_buffer_get(c, num_pblk_inode)))
+	num_pblk_inode = e2_inode_to_pblk(c, i);
+
+	/* si on n'arrive pas à avoir le numéro physique du bloc qui contient l'inode */
+	if( 0 == num_pblk_inode)
+	{
+		errno = -2;
 		return (file_t) NULL;
+	}
 
+	b = e2_buffer_get(c, num_pblk_inode);
+
+	/* si on n'arrive pas à avoir le bloc contenant l'inode */
+	if( NULL == b)
+	{
+		errno = -3;
+		return (file_t) NULL;
+	}
 	e2_buffer_put(c, b);
 
 	fichier->ctxt = c;
 	fichier->buffer = b;
 
-	if(0 == (fichier->inode = e2_inode_read(c, i, b)))
+	fichier->inode = e2_inode_read(c, i, b);
+	/* si on n'arrive pas à récupérer l'inode */
+	if(0 == fichier->inode)
+	{
+		errno = -4;
 		return (file_t) NULL;
+	}
 
-	//memcpy(fichier->data, (char *) e2_buffer_data(b), taille_bloc);
 	fichier->data = NULL;
 	fichier->len = fichier->inode->i_size;
+	/* 
+	 * dans la suite, j'utilise fichier->pos pour
+	 * savoir combien d'entrées j'ai lu dans un répertoire
+	 */
 	fichier->pos = 0;
 	fichier->curblk = 0;
 
 	return fichier;
 }
 
+/* fermeture d'un fichier */
 void e2_file_close (file_t of)
 {
 	if(of->data != NULL)
 		free(of->data);
 
-	free(of->inode);
+	if(of->inode != NULL)
+		free(of->inode);
+
 	free(of);
 }
 
 /* renvoie EOF ou un caractere valide */
 int e2_file_getc (file_t of)
 {
-	int taille_bloc = (1024 << of->ctxt->sb.s_log_block_size);
+	int taille_bloc = e2_ctxt_blksize(c);
 	int car;
 	buf_t b;
 
 	if(of->len == of->pos)
 		return EOF;
 
+	/* lors d'un changement de bloc ou du premier getc */
 	if( (of->pos % taille_bloc) == 0 || of->pos == 0)
 	{
+		/* si pos > 0 on change de bloc */
 		if(of->pos != 0)
 			of->curblk++;
-	//	printf("\nChangement de bloc : %d\n", of->curblk);
 		if(of->data != NULL)
 			free(of->data);
 
+		/* on va chercher le bloc */
 		b = e2_buffer_get(of->ctxt, e2_inode_lblk_to_pblk(of->ctxt, of->inode, of->curblk ));
 		e2_buffer_put(of->ctxt, b);
 
+		/* on fait une copie de ce bloc dans la structure fichier */
 		of->data = (char *) malloc(taille_bloc);
 		memcpy(of->data, e2_buffer_data(b), taille_bloc);
 	}
 
-	//printf("%d - %d \n", of->pos, of->curblk);
+	/* lecture du caractère */
 	memcpy(&car, of->data + (of->pos % taille_bloc), sizeof(char));
-	//car = *(of->data + (of->pos % taille_bloc)) & 0xFF;
-	of->pos++;
+	of->pos++; /* on avance d'une position */
 	return car;
 }
 
@@ -491,7 +532,7 @@ struct ext2_dir_entry_2 *e2_dir_get (file_t of)
 {
 	buf_t b;
 	int taille = 0;
-	int taille_bloc = (1024 << of->ctxt->sb.s_log_block_size);
+	int taille_bloc = e2_ctxt_blksize(c);
 
 	static struct ext2_dir_entry_2 * e2_dir_entry_entree = NULL;
 	static int e2_dir_get_offset = 0;
@@ -518,7 +559,7 @@ struct ext2_dir_entry_2 *e2_dir_get (file_t of)
 	}
 
 	/* on va chercher le buffer qui contient l'inode dont on a besoin */
-	b = e2_buffer_get(of->ctxt, of->inode->i_block[e2_dir_get_offset / taille_bloc]);
+	b = e2_buffer_get(of->ctxt, of->inode->i_block[e2_dir_get_offset + 2 / taille_bloc]);
 	e2_buffer_put(of->ctxt, b);
 
 	/* on récupère sa taille */
@@ -532,6 +573,8 @@ struct ext2_dir_entry_2 *e2_dir_get (file_t of)
 	e2_dir_entry_entree = malloc(taille);
 
 	memcpy(e2_dir_entry_entree, (b->data + e2_dir_get_offset), taille);
+
+	/* on garde la position à laquelle on est dans le bloc */
 	e2_dir_get_offset += taille;
 
 	/* subtilité
