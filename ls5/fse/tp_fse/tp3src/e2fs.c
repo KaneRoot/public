@@ -47,28 +47,36 @@ struct ofile
 
 ctxt_t e2_ctxt_init (char *file, int maxbuf)
 {
-	ctxt_t c = (ctxt_t) malloc(sizeof(struct context));
 	int i;
+	ctxt_t c = (ctxt_t) malloc(sizeof(struct context));
 
+	/* ouverture du fichier */
 	c->fd = open(file, O_RDONLY);
-
+	/* on va au superbloc */
 	lseek(c->fd, 0x400, SEEK_SET);
+	/* lecture du superbloc */
 	if((read(c->fd, &(c->sb), sizeof(struct ext2_super_block))) == -1)
 	{
 		errno = -1;
 		return NULL;
 	}
 
+	/* vérification du nombre magique */
 	if(c->sb.s_magic != 0xEF53)
 	{
 		errno = -2;
 		return NULL;
 	}
+	/* calcul du nombre de groupes de blocs */
 	c->ngroups= 1 + ((c->sb.s_blocks_count - c->sb.s_first_data_block) / c->sb.s_blocks_per_group);
 
+	/* allocation des groupes de blocs */
 	c->gd = (struct ext2_group_desc *) malloc(sizeof( struct ext2_group_desc) * c->ngroups);
 
+	/* on se déplace à 2 fois la taille d'un bloc */
 	lseek(c->fd, 2 * (1024 << c->sb.s_log_block_size), SEEK_SET);
+
+	/* va lire les descripteurs de groupe de blocs */
 	for( i = 0 ; i < c->ngroups ; i++)
 	{
 		if((read(c->fd, &(c->gd[i]), sizeof(struct ext2_group_desc))) == -1)
@@ -78,7 +86,7 @@ ctxt_t e2_ctxt_init (char *file, int maxbuf)
 		}
 	}
 
-	/*		*/
+	/* init des buffers */
 	c->last = (struct buffer *) malloc(sizeof(struct buffer));
 	struct buffer *tmp = c->last;
 	for( i = 0 ; i < maxbuf ; i++)
@@ -94,12 +102,13 @@ ctxt_t e2_ctxt_init (char *file, int maxbuf)
 		tmp->next = NULL;
 	}
 
-	// Bon ok c'est pour la forme ça.
+	/* Bon ok c'est un peu pour la forme ça. */
 	c->bufstat_read = 0;
 	c->bufstat_cached = 0;
 	return c;
 }
 
+/* fermeture du contexte */
 void e2_ctxt_close (ctxt_t c)
 {
 	close(c->fd);
@@ -109,6 +118,8 @@ void e2_ctxt_close (ctxt_t c)
 	struct buffer * tmp2;
 
 	tmp = c->last;
+
+	/* jusqu'à la suppression du dernier */
 	while(c->last != NULL)
 	{
 		while(tmp->next != NULL)
@@ -134,30 +145,33 @@ void e2_ctxt_close (ctxt_t c)
 	free(c);
 }
 
+/* taille d'un bloc */
 int e2_ctxt_blksize (ctxt_t c)
 {
-	return (c->sb.s_blocks_count - c->sb.s_first_data_block)/c->sb.s_blocks_per_group;
+	return (1024 << c->sb.s_log_block_size);
 }
 
 /******************************************************************************
  * Fonctions de lecture non bufferisee d'un bloc
  */
 
+/* rechercher un bloc sans passer par le système de cache */
 int e2_block_fetch (ctxt_t c, pblk_t blkno, void *data)
 {
 	int n = 0;
-	blkno -= 2;
-	if((lseek(c->fd, 2048 + (blkno *(1024 << c->sb.s_log_block_size)), SEEK_SET)) == -1)
+	/* déplacement au bloc blkno */
+	if((lseek(c->fd, (blkno * e2_ctxt_blksize(c)), SEEK_SET)) == -1)
 	{
 		errno = -1;
 		return -1;
 	}
-	if((n = read(c->fd, data, (1024 << c->sb.s_log_block_size))) == -1)
+	/* lecture d'un bloc */
+	if((n = read(c->fd, data, e2_ctxt_blksize(c))) == -1)
 	{
 		errno = -2;
 		return -1;
 	}
-
+	/* on retourne 0 si aucune erreur */
 	return 0;
 }
 
@@ -166,21 +180,22 @@ int e2_block_fetch (ctxt_t c, pblk_t blkno, void *data)
  */
 
 /* recupere un buffer pour le bloc, le retire de la liste des buffers
- * et lit le contenu si necessaire
  */
 buf_t e2_buffer_get (ctxt_t c, pblk_t blkno)
 {
 	buf_t tmp = c->last;
 	buf_t tmp2 = c->last;
 
-	/* SI ON TROUVE */
+	/* on va chercher le buffer */
 	while(tmp->next != NULL && tmp->blkno != blkno)
 		tmp = tmp->next;
 
+	/* si on trouve */
 	if(tmp->blkno == blkno && tmp->valid == 1 )
 	{
+		/* il faut l'enlever */
 		tmp2 = c->last;
-		if(tmp2 != tmp)
+		if(tmp2 != tmp) /* si ce n'est pas le premier */
 		{
 			while(tmp2->next != tmp)
 				tmp2 = tmp2->next;
@@ -190,23 +205,28 @@ buf_t e2_buffer_get (ctxt_t c, pblk_t blkno)
 		{
 			c->last = tmp->next;
 		}
-
+		/* on a trouvé le bloc dans les buffers */
 		c->bufstat_cached++;
 		return tmp;
 	}
 
-	/* SI ON NE TROUVE PAS */
+	/* si on ne trouve pas */
 	tmp = c->last;
+
+	/* on cherche le dernier buffer */
 	while(tmp->next != NULL)
 		tmp = tmp->next;
 
+	/* on supprime les données s'il y en a */
 	if(tmp->data != NULL)
 	{
 		free(tmp->data);
 		tmp->data = NULL;
 	}
-	tmp->data = malloc(1024 << c->sb.s_log_block_size);
+	/* allocation d'un bloc */
+	tmp->data = malloc(e2_ctxt_blksize(c));
 
+	/* on va chercher le bloc */
 	if((e2_block_fetch(c, blkno, tmp->data)) == -1)
 	{
 		errno = -1;
@@ -215,14 +235,16 @@ buf_t e2_buffer_get (ctxt_t c, pblk_t blkno)
 	tmp->blkno = blkno;
 	tmp->valid = 1;
 
+	/* on va retrouver l'avant-dernier buffer… */
 	tmp2 = c->last;
 
 	while(tmp2->next != tmp)
 		tmp2 = tmp2->next;
 
-	tmp2->next = tmp->next;
-	tmp->next = NULL;
+	/* …et dire qu'il est le dernier */
+	tmp2->next = NULL;
 
+	/* on a été obligé d'aller chercher le bloc sur le disque */
 	c->bufstat_read++;
 	return tmp;
 }
@@ -230,8 +252,8 @@ buf_t e2_buffer_get (ctxt_t c, pblk_t blkno)
 /* replace le buffer en premier dans la liste */
 void e2_buffer_put (ctxt_t c, buf_t b)
 {
-	b->next = c->last;
-	c->last = b;
+	b->next = c->last; /* le premier buffer est le suivant qu'on insère */
+	c->last = b;	/* le premier buffer est celui qu'on insère */
 }
         
 /* recupere les donnees du buffer */
@@ -255,48 +277,58 @@ void e2_buffer_stats (ctxt_t c)
 pblk_t e2_inode_to_pblk (ctxt_t c, inum_t i)
 {
 	int nb_inodes_par_groupe = c->sb.s_inodes_per_group;
-
 	int numero_groupe_bloc = (i-1)/nb_inodes_par_groupe;
+	int nombre_inodes_par_bloc = e2_ctxt_blksize(c) / sizeof(struct ext2_inode);
 
-	int nombre_inodes_par_bloc = (1024 << c->sb.s_log_block_size) / sizeof(struct ext2_inode);
-
+	/* le numéro du bloc physique */
 	int num_bloc = c->gd[numero_groupe_bloc].bg_inode_table + ((i-1) % nb_inodes_par_groupe) / nombre_inodes_par_bloc;
 
 	return num_bloc;
 }
 
-/* extrait l'inode du buffer */
+/* extrait l'inode du buffer
+ * J'ai préféré en faire une copie
+ */
+
 struct ext2_inode *e2_inode_read (ctxt_t c, inum_t i, buf_t b)
 {
-	if(b->data == NULL)
+	int nombre_inodes_par_bloc;
+	struct ext2_inode * inode;
+
+	nombre_inodes_par_bloc = e2_ctxt_blksize(c) / sizeof(struct ext2_inode);
+
+	/* si nous n'avons plus de mémoire */
+	if((inode = malloc(sizeof(struct ext2_inode))) == NULL)
 	{
-		printf("LE BLOC DATA EST NULL\n");
+		return (struct ext2_inode *) NULL;
 	}
 
-	int nombre_inodes_par_bloc = (1024 << c->sb.s_log_block_size) / sizeof(struct ext2_inode);
-	struct ext2_inode * inode = malloc(sizeof(struct ext2_inode));
-	memcpy(inode, 
+	/* copie de l'inode */
+	memcpy(	inode, 
 			(b->data + ((i-1) % nombre_inodes_par_bloc) * sizeof(struct ext2_inode)),
 			sizeof(struct ext2_inode));
 
 	return inode;
 }
+
 /* numero de bloc physique correspondant au bloc logique blkno de l'inode in */
 pblk_t e2_inode_lblk_to_pblk (ctxt_t c, struct ext2_inode *in, lblk_t blkno)
 {
-	int taille_bloc = (1024 << c->sb.s_log_block_size);
-	int nb_blocs_max = 12 + taille_bloc + taille_bloc * taille_bloc + taille_bloc * taille_bloc * taille_bloc;
+	/* taille d'un bloc */
+	int tbloc = e2_ctxt_blksize(c);
+	int nb_blocs_max = 12 + tbloc + tbloc * tbloc + tbloc * tbloc * tbloc;
 
 	/* Assez clairement, si blkno > au nb max de blocs pour un fichier, il y a un soucis */
 	if(blkno > nb_blocs_max || blkno > in->i_blocks)
 	{
 		return 0;
 	}
+	/* si nous sommes dans les 12 premiers blocs */
 	if( blkno < 12)
 		return in->i_block[blkno];
-	else if ( blkno < taille_bloc + 11)
+	else if ( blkno < tbloc + 11)
 	{
-		void * data = malloc(taille_bloc); 
+		void * data = malloc(tbloc); 
 		if( e2_block_fetch(c, in->i_block[13], data) != 0)
 		{
 			   errno = 1;
@@ -309,9 +341,10 @@ pblk_t e2_inode_lblk_to_pblk (ctxt_t c, struct ext2_inode *in, lblk_t blkno)
 
 		return info;
 	}
-	else if ( blkno < (taille_bloc*taille_bloc) + 11)
-	{
-	}
+	/**
+	 * je ne traite pas les deux autres types d'indirection
+	 *
+	 */
 
 	return 0;
 }
@@ -461,48 +494,55 @@ struct ext2_dir_entry_2 *e2_dir_get (file_t of)
 	int taille_bloc = (1024 << of->ctxt->sb.s_log_block_size);
 
 	static struct ext2_dir_entry_2 * e2_dir_entry_entree = NULL;
-	static struct ext2_inode * e2_dir_get_inode = NULL;
 	static int e2_dir_get_offset = 0;
 	static int e2_dir_get_pos = 0;
 
-	/* si on change de répertoire */
-	if( e2_dir_get_pos != of->pos)
-	{
-		printf("On passe ici\n");
-		e2_dir_get_inode = of->inode;
-		e2_dir_get_offset = 0;
-	}
-
-	if(0 == S_ISDIR(of->inode->i_mode))
-	{
-		/* Ce n'est pas un répertoire */
-		errno = -1;
-		return (struct ext2_dir_entry_2 *) NULL;
-	}
-
-	b = e2_buffer_get(of->ctxt, of->inode->i_block[e2_dir_get_offset / taille_bloc]);
-	e2_buffer_put(of->ctxt, b);
-
-	memcpy(&taille, (b->data + e2_dir_get_offset + 4), sizeof(char)*2);
-
-	if(taille == 0)
-	{
-		return (struct ext2_dir_entry_2 *) NULL;
-	}
-
+	/* On nettoie tout ça */
 	if(e2_dir_entry_entree != NULL)
 	{
 		free(e2_dir_entry_entree);
 		e2_dir_entry_entree = NULL;
 	}
 
+	/* si on change de répertoire */
+	if( e2_dir_get_pos != of->pos)
+	{
+		e2_dir_get_offset = 0;
+	}
+
+	/* si ce n'est pas un répertoire */
+	if(0 == S_ISDIR(of->inode->i_mode))
+	{
+		errno = -1;
+		return (struct ext2_dir_entry_2 *) NULL;
+	}
+
+	/* on va chercher le buffer qui contient l'inode dont on a besoin */
+	b = e2_buffer_get(of->ctxt, of->inode->i_block[e2_dir_get_offset / taille_bloc]);
+	e2_buffer_put(of->ctxt, b);
+
+	/* on récupère sa taille */
+	memcpy(&taille, (b->data + e2_dir_get_offset + 4), sizeof(char)*2);
+
+	/* Si on arrive à la fin du répertoire */
+	if(taille == 0)
+		return (struct ext2_dir_entry_2 *) NULL;
+
+	/* sinon on crée une entrée */
 	e2_dir_entry_entree = malloc(taille);
 
 	memcpy(e2_dir_entry_entree, (b->data + e2_dir_get_offset), taille);
 	e2_dir_get_offset += taille;
 
+	/* subtilité
+	 * on stocke le nombre de passages dans cette fonction
+	 * dans la structure file_t ce qui nous permet de savoir
+	 * quand on change de répertoire
+	 */
+
 	of->pos++;
 	e2_dir_get_pos = of->pos;
+
 	return e2_dir_entry_entree;
 }
 
