@@ -459,27 +459,51 @@ struct ext2_dir_entry_2 *e2_dir_get (file_t of)
 	buf_t b;
 	int taille = 0;
 	int taille_bloc = (1024 << of->ctxt->sb.s_log_block_size);
-	static struct ext2_dir_entry_2 * entree;
+
+	static struct ext2_dir_entry_2 * e2_dir_entry_entree = NULL;
+	static struct ext2_inode * e2_dir_get_inode = NULL;
 	static int e2_dir_get_offset = 0;
+	static int e2_dir_get_pos = 0;
+
+	/* si on change de répertoire */
+	if( e2_dir_get_pos != of->pos)
+	{
+		printf("On passe ici\n");
+		e2_dir_get_inode = of->inode;
+		e2_dir_get_offset = 0;
+	}
+
+	if(0 == S_ISDIR(of->inode->i_mode))
+	{
+		/* Ce n'est pas un répertoire */
+		errno = -1;
+		return (struct ext2_dir_entry_2 *) NULL;
+	}
 
 	b = e2_buffer_get(of->ctxt, of->inode->i_block[e2_dir_get_offset / taille_bloc]);
 	e2_buffer_put(of->ctxt, b);
 
 	memcpy(&taille, (b->data + e2_dir_get_offset + 4), sizeof(char)*2);
 
-	if(entree != NULL)
-		free(entree);
-
 	if(taille == 0)
 	{
 		return (struct ext2_dir_entry_2 *) NULL;
 	}
-	entree = malloc(taille);
 
-	memcpy(entree, (b->data + e2_dir_get_offset), taille);
+	if(e2_dir_entry_entree != NULL)
+	{
+		free(e2_dir_entry_entree);
+		e2_dir_entry_entree = NULL;
+	}
+
+	e2_dir_entry_entree = malloc(taille);
+
+	memcpy(e2_dir_entry_entree, (b->data + e2_dir_get_offset), taille);
 	e2_dir_get_offset += taille;
 
-	return entree;
+	of->pos++;
+	e2_dir_get_pos = of->pos;
+	return e2_dir_entry_entree;
 }
 
 /******************************************************************************
@@ -518,18 +542,73 @@ int e2_ls (ctxt_t c, inum_t i)
 }
 
 /* recherche un composant de chemin dans un repertoire */
-//inum_t e2_dir_lookup (ctxt_t c, inum_t i, char *str, int len)
-//{
-//	return (inum_t) NULL;
-//}
-//
+inum_t e2_dir_lookup (ctxt_t c, inum_t i, char *str, int len)
+{
+	struct ext2_dir_entry_2 * item;
+	inum_t inum = 0;
+	file_t of;
+
+	of = e2_file_open(c, i);
+
+	if(0 == S_ISDIR(of->inode->i_mode))
+	{
+		/* Ce n'est pas un répertoire */
+		errno = -1;
+		return 0;
+	}
+
+	printf("recherché : %s (%d) INODE : %d \n", str, len, i);
+
+	while((item = e2_dir_get(of)) != NULL)
+	{
+		// printf("item->name : %s (%d) recherché : %s (%d)\n", item->name, item->name_len, str, len);
+
+		if( len == item->name_len && strncmp(item->name, str, len) == 0)
+		{
+			/* On a trouvé le bon objet */
+			inum = item->inode;
+			break;
+		}
+	}
+
+	e2_file_close(of);
+
+	/* nous n'avons pas trouvé */
+	/* Erreur */
+	if(inum == 0)
+	{
+		printf("Erreur\n");
+		errno = -2 ;
+	}
+
+	return inum;
+}
+
 
 /******************************************************************************
  * Traversee de repertoire
  */
 
 /* recherche le fichier (l'inode) par son nom */
-//inum_t e2_namei (ctxt_t c, char *path)
-//{
-//	return (inum_t) NULL;
-//}
+inum_t e2_namei (ctxt_t c, char *path)
+{
+	/* Par défaut, on va chercher dans / */
+	inum_t inode_repertoire = 2;
+	inum_t itmp;
+	char * saveptr;
+	char * bla2;
+
+	while((bla2 = strtok_r(path , "/", &saveptr)) != NULL)
+	{
+		itmp = e2_dir_lookup(c, inode_repertoire, bla2, strlen(bla2));
+		if(itmp == 0)
+		{
+			printf("itmp = 0\n");
+			return 0;
+		}
+		inode_repertoire = itmp;
+		path = NULL;
+	}
+
+	return inode_repertoire;
+}

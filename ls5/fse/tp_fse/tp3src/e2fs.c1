@@ -1,0 +1,16 @@
+
+struct ext2_inode *e2_inode_read (ctxt_t c, inum_t i, buf_t b)
+{
+	if(b->data == NULL)
+	{
+		printf("LE BLOC DATA EST NULL\n");
+	}
+
+	int nombre_inodes_par_bloc = (1024 << c->sb.s_log_block_size) / sizeof(struct ext2_inode);
+	struct ext2_inode * inode = malloc(sizeof(struct ext2_inode));
+	memcpy(inode, 
+			(b->data + ((i-1) % nombre_inodes_par_bloc) * sizeof(struct ext2_inode)),
+			sizeof(struct ext2_inode));
+
+	return inode;
+}

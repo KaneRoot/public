@@ -12,23 +12,27 @@
 int main (int argc, char *argv [])
 {
     ctxt_t c ;
+	inum_t numero_inode;
 
     if (argc != 3)
     {
-	fprintf (stderr, "usage: %s fs chemin\n", argv [0]) ;
-	exit (1) ;
+		fprintf (stderr, "usage: %s fs chemin\n", argv [0]) ;
+		exit (1) ;
     }
 
     c = e2_ctxt_init (argv [1], MAXBUF) ;
     if (c == NULL)
     {
-	perror ("e2_ctxt_init") ;
-	exit (1) ;
+		perror ("e2_ctxt_init") ;
+		exit (1) ;
     }
 
     /* A REDIGER */
 
-    e2_ctxt_close (c) ;
+	numero_inode = e2_namei(c, argv[2]);
+	printf("Num inode : %d\n", numero_inode);
+
+	e2_ctxt_close (c) ;
 
     exit (0) ;
 }
