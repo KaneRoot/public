@@ -286,10 +286,8 @@ pblk_t e2_inode_to_pblk (ctxt_t c, inum_t i)
 	return num_bloc;
 }
 
-/* extrait l'inode du buffer
- * J'ai préféré en faire une copie
+/* extrait l'inode du buffer ; j'ai préféré en faire une copie
  */
-
 struct ext2_inode *e2_inode_read (ctxt_t c, inum_t i, buf_t b)
 {
 	int nombre_inodes_par_bloc;
@@ -300,6 +298,7 @@ struct ext2_inode *e2_inode_read (ctxt_t c, inum_t i, buf_t b)
 	/* si nous n'avons plus de mémoire */
 	if((inode = malloc(sizeof(struct ext2_inode))) == NULL)
 	{
+		/* errno est déjà initialisé */
 		return (struct ext2_inode *) NULL;
 	}
 
@@ -383,6 +382,7 @@ int e2_cat (ctxt_t c, inum_t i, int disp_pblk)
 	}
 	else
 	{
+		/* J'affiche une ligne en plus, qui me servait de debug */
 		printf("La taille du fichier est de : %d\n", inode->i_size);
 		printf("L'entrée i_blocks est de : %d\n", inode->i_blocks);
 		printf("Les blocs : \t");
@@ -481,6 +481,7 @@ int e2_file_getc (file_t of)
 	int car;
 	buf_t b;
 
+	/* on arrive à la fin du fichier */
 	if(of->len == of->pos)
 		return EOF;
 
@@ -495,6 +496,11 @@ int e2_file_getc (file_t of)
 
 		/* on va chercher le bloc */
 		b = e2_buffer_get(of->ctxt, e2_inode_lblk_to_pblk(of->ctxt, of->inode, of->curblk ));
+		if( NULL == b)
+		{
+			errno = -1;
+			return 0;
+		}
 		e2_buffer_put(of->ctxt, b);
 
 		/* on fait une copie de ce bloc dans la structure fichier */
