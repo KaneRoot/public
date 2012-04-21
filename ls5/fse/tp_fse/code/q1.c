@@ -53,13 +53,13 @@ int main (int argc, char *argv [])
 
 	bloc = malloc( 1024 << c->sb.s_log_block_size);
 
-	if((e2_block_fetch(c, atoi(argv[2]), bloc)) == -1)
+	if((e2_block_fetch(c, atoi(argv[2]), bloc)) == 0)
 	{
 		printf("Numéro d'erreur : %d\n", errno);
 		exit(1);
 	}
 
-	printf("Le bloc : \n%s\n", (char *) bloc);
+	printf("%s\n", (char *) bloc);
     e2_ctxt_close (c) ;
 	free(bloc);
 

@@ -30,6 +30,14 @@ int main (int argc, char *argv [])
     /* A REDIGER */
 
 	numero_inode = e2_namei(c, argv[2]);
+	if(numero_inode == 0)
+	{
+		if(errno == -1)
+		{
+			printf("L'objet n'a pas été trouvé\n");
+			exit(1);
+		}
+	}
 	printf("Num inode : %d\n", numero_inode);
 
 	e2_ctxt_close (c) ;

@@ -171,16 +171,16 @@ int e2_block_fetch (ctxt_t c, pblk_t blkno, void *data)
 	if((lseek(c->fd, (blkno * e2_ctxt_blksize(c)), SEEK_SET)) == -1)
 	{
 		errno = -1;
-		return -1;
+		return 0;
 	}
 	/* lecture d'un bloc */
 	if((n = read(c->fd, data, e2_ctxt_blksize(c))) == -1)
 	{
 		errno = -2;
-		return -1;
+		return 0;
 	}
-	/* on retourne 0 si aucune erreur */
-	return 0;
+	/* on retourne 1 si aucune erreur */
+	return 1;
 }
 
 /******************************************************************************
@@ -235,7 +235,7 @@ buf_t e2_buffer_get (ctxt_t c, pblk_t blkno)
 	tmp->data = malloc(e2_ctxt_blksize(c));
 
 	/* on va chercher le bloc */
-	if((e2_block_fetch(c, blkno, tmp->data)) == -1)
+	if((e2_block_fetch(c, blkno, tmp->data)) == 0)
 	{
 		errno = -1;
 		return NULL;
@@ -345,7 +345,7 @@ pblk_t e2_inode_lblk_to_pblk (ctxt_t c, struct ext2_inode *in, lblk_t blkno)
 		if(data == NULL)
 			return 0;
 
-		if( e2_block_fetch(c, in->i_block[12], data) != 0)
+		if( e2_block_fetch(c, in->i_block[12], data) == 0)
 		{
 			errno = -2;
 			return 0;
@@ -717,7 +717,10 @@ inum_t e2_namei (ctxt_t c, char *path)
 
 		/* itmp == 0 : on n'a pas trouvé l'objet */
 		if(itmp == 0)
+		{
+			errno = -1;
 			return 0;
+		}
 
 		inode_repertoire = itmp;
 		path = NULL;
