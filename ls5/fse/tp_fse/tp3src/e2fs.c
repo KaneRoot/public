@@ -517,7 +517,7 @@ int e2_file_getc (file_t of)
 /* renvoie nb de caracteres lus (0 lorsqu'on arrive en fin de fichier) */
 int e2_file_read (file_t of, void *data, int len)
 {
-	// nombre de caractères lus
+	/* nombre de caractères lus */
 	int i = 0;
 	int c ;
 	while( i != len && (c = e2_file_getc(of)) != EOF)
@@ -540,7 +540,9 @@ struct ext2_dir_entry_2 *e2_dir_get (file_t of)
 	int taille = 0;
 	int taille_bloc = e2_ctxt_blksize(of->ctxt);
 
+	/* on stocke l'entrée dans le répertoire */
 	static struct ext2_dir_entry_2 * e2_dir_entry_entree = NULL;
+	/* ainsi que l'offset + la position (nb d'entrées lues) */
 	static int e2_dir_get_offset = 0;
 	static int e2_dir_get_pos = 0;
 
@@ -554,6 +556,7 @@ struct ext2_dir_entry_2 *e2_dir_get (file_t of)
 	/* si on change de répertoire */
 	if( e2_dir_get_pos != of->pos)
 	{
+		of->pos = 0;
 		e2_dir_get_offset = 0;
 	}
 
@@ -566,19 +569,19 @@ struct ext2_dir_entry_2 *e2_dir_get (file_t of)
 
 	/* on va chercher le buffer qui contient l'inode dont on a besoin */
 	b = e2_buffer_get(of->ctxt, of->inode->i_block[(e2_dir_get_offset + 2) / taille_bloc]);
-	if(b == NULL)
+	if(b == NULL) /* on ne trouve pas le buffer */
 	{
+		errno = -2;
+		return NULL;
 	}
 	e2_buffer_put(of->ctxt, b);
 
 	/* on récupère sa taille */
-	memcpy(&taille, (b->data + e2_dir_get_offset + 4), sizeof(char)*2);
+	memcpy(&taille, (b->data + e2_dir_get_offset + 4), 2);
 
 	/* Si on arrive à la fin du répertoire */
 	if(taille == 0)
-	{
 		return (struct ext2_dir_entry_2 *) NULL;
-	}
 
 	/* sinon on crée une entrée */
 	e2_dir_entry_entree = malloc(taille);
@@ -588,7 +591,7 @@ struct ext2_dir_entry_2 *e2_dir_get (file_t of)
 	/* on garde la position à laquelle on est dans le bloc */
 	e2_dir_get_offset += taille;
 
-	/* subtilité
+	/* subtilité !!
 	 * on stocke le nombre de passages dans cette fonction
 	 * dans la structure file_t ce qui nous permet de savoir
 	 * quand on change de répertoire
@@ -607,10 +610,16 @@ struct ext2_dir_entry_2 *e2_dir_get (file_t of)
 /* affiche un repertoire donne par son inode */
 int e2_ls (ctxt_t c, inum_t i)
 {
-	char * lenom = malloc(500);
-	struct ext2_dir_entry_2 * item;
-	file_t of;
+	char * lenom = NULL;
+	struct ext2_dir_entry_2 * item = NULL;
+	file_t of = NULL;
 
+	lenom = malloc(500);
+	
+	if(lenom == NULL) /* plus de place dispo en RAM */
+	{
+		return -1;
+	}
 	of = e2_file_open(c, i);
 
 	if(0 == S_ISDIR(of->inode->i_mode))
@@ -621,6 +630,9 @@ int e2_ls (ctxt_t c, inum_t i)
 	/*	C'est bien un répertoire	*/
 	while((item = e2_dir_get(of)) != NULL)
 	{
+		/* j'affiche un peu plus que le strict nécessaire demandé en exercice
+		 * c'est plus joli.
+		 */
 		snprintf(lenom, item->name_len + 14, "%4d (%4d ) %s", 
 				item->inode,
 				item->rec_len, 
@@ -638,7 +650,7 @@ int e2_ls (ctxt_t c, inum_t i)
 /* recherche un composant de chemin dans un repertoire */
 inum_t e2_dir_lookup (ctxt_t c, inum_t i, char *str, int len)
 {
-	struct ext2_dir_entry_2 * item;
+	struct ext2_dir_entry_2 * item = NULL;
 	inum_t inum = 0;
 	file_t of;
 
@@ -651,29 +663,18 @@ inum_t e2_dir_lookup (ctxt_t c, inum_t i, char *str, int len)
 		return 0;
 	}
 
-	printf("recherché : %s (%d) INODE : %d \n", str, len, i);
-
+	/* tant qu'on a des éléments dans le répertoire */
 	while((item = e2_dir_get(of)) != NULL)
 	{
-		printf("item->name : %s (%d) recherché : %s (%d)\n", item->name, item->name_len, str, len);
-
+		/* On a trouvé le bon objet */
 		if( len == item->name_len && strncmp(item->name, str, len) == 0)
 		{
-			/* On a trouvé le bon objet */
-			inum = item->inode;
+			inum = (int) item->inode;
 			break;
 		}
 	}
 
 	e2_file_close(of);
-
-	/* nous n'avons pas trouvé */
-	/* Erreur */
-	if(inum == 0)
-	{
-		printf("Erreur\n");
-		errno = -2 ;
-	}
 
 	return inum;
 }
@@ -695,11 +696,10 @@ inum_t e2_namei (ctxt_t c, char *path)
 	while((bla2 = strtok_r(path , "/", &saveptr)) != NULL)
 	{
 		itmp = e2_dir_lookup(c, inode_repertoire, bla2, strlen(bla2));
+
+		/* itmp == 0 : on n'a pas trouvé l'objet */
 		if(itmp == 0)
-		{
-			printf("itmp = 0\n");
 			return 0;
-		}
 		inode_repertoire = itmp;
 		path = NULL;
 	}
