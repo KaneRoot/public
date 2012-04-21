@@ -5,8 +5,11 @@ Le fichier fstab sert à indiquer les partitions à monter, au démarrage ou plu
 Exemple simple, on indique que la partition /dev/sda1 (ou on la désigne par son UUID ou son label) est associée au répertoire /mnt/dossier et donc l'administrateur n'a plus qu'à taper "mount /mnt/dossier".
 On peut également indiquer des répertoires distants à monter (via sshfs par exemple, très pratique).
 
+Parmis les options possibles, il y a le type de système de fichiers de la partition montée, des options liées à ce type de parititon, on indique ensuite la programmation d'archivage de la partition et enfin à quelle fréquence on souhaite faire des tests sur le système de fichier monté (0 = pas de test, 1 ou 2 = tests très fréquents).
+
+
 2.
-La commande dd fait une copie par bloc d'un système de fichiers. Ce qui est pratique pour des backup.
+La commande dd fait une copie par bloc d'un système de fichiers. Ce qui est pratique pour des backup. On fait une copie d'une partition ou d'un disque entier dans un fichier et inversement.
 
 3.
 Il n'y a que des 0 jusqu'au superblock.
@@ -19,12 +22,33 @@ Il y a 3 répertoires.
 La taille d'un bloc est de 1024 octets.
 Il y a 8192 blocs par groupe.
 
-L'inode 13 pointe vers le fichier /foo/bar.
+L'inode 13 pointe vers le fichier /foo/bar, qui contient du texte.
 
 Les numéros de blocs sont : 46, 47, 48.
 
 On peut le trouver en tapant "bmap nomdufichier 0" (puis 1, 2 … jusqu'au nombre de blocs du fichier) ou "blocks nomdufichieroudossier".
 
+Pour le contenu des répertoires, voici ce que sort mon programme 6.
+
+Explications : numéro d'inode ( taille de l'inode du répertoire ) nom de l'entrée
+
+Pour l'inode 2 :
+	2 (  12 ) .
+	2 (  12 ) ..
+	11 (  20 ) lost+found
+	12 ( 980 ) foo
+
+Pour l'inode 12 :
+	12 (  12 ) .
+	2 (  12 ) ..
+	13 (  12 ) bar
+	14 ( 988 ) team
+
+Pour l'inode 11 :
+	11 (  12 ) .
+	2 (1012 ) ..
+
+####################################################
 
 Concernant le programme : 
 
