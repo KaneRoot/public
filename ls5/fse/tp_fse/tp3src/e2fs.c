@@ -114,8 +114,8 @@ void e2_ctxt_close (ctxt_t c)
 	close(c->fd);
 	free(c->gd);
 
-	struct buffer * tmp;
-	struct buffer * tmp2;
+	struct buffer * tmp = NULL;
+	struct buffer * tmp2 = NULL;
 
 	tmp = c->last;
 
@@ -300,7 +300,7 @@ pblk_t e2_inode_to_pblk (ctxt_t c, inum_t i)
 struct ext2_inode *e2_inode_read (ctxt_t c, inum_t i, buf_t b)
 {
 	int nombre_inodes_par_bloc;
-	struct ext2_inode * inode;
+	struct ext2_inode * inode = NULL;
 
 	nombre_inodes_par_bloc = e2_ctxt_blksize(c) / sizeof(struct ext2_inode);
 
@@ -379,6 +379,13 @@ int e2_cat (ctxt_t c, inum_t i, int disp_pblk)
 
 	/* on récupère le buffer de l'inode */
 	b = e2_buffer_get(c, num_bloc);
+
+	/* si on nous retourne un buffer vide */
+	if(b == NULL)
+	{
+		return -1;
+	}
+
 	e2_buffer_put(c, b);
 
 	/* on va lire l'inode */
@@ -448,7 +455,6 @@ file_t e2_file_open (ctxt_t c, inum_t i)
 	/* si on n'arrive pas à avoir le bloc contenant l'inode */
 	if( NULL == b)
 	{
-		errno = -3;
 		return (file_t) NULL;
 	}
 	e2_buffer_put(c, b);
@@ -460,7 +466,7 @@ file_t e2_file_open (ctxt_t c, inum_t i)
 	/* si on n'arrive pas à récupérer l'inode */
 	if(0 == fichier->inode)
 	{
-		errno = -4;
+		errno = -3;
 		return (file_t) NULL;
 	}
 
@@ -512,7 +518,6 @@ int e2_file_getc (file_t of)
 		b = e2_buffer_get(of->ctxt, e2_inode_lblk_to_pblk(of->ctxt, of->inode, of->curblk ));
 		if( NULL == b)
 		{
-			errno = -1;
 			return 0;
 		}
 		e2_buffer_put(of->ctxt, b);
@@ -585,7 +590,6 @@ struct ext2_dir_entry_2 *e2_dir_get (file_t of)
 	b = e2_buffer_get(of->ctxt, of->inode->i_block[(e2_dir_get_offset + 2) / taille_bloc]);
 	if(b == NULL) /* on ne trouve pas le buffer */
 	{
-		errno = -2;
 		return NULL;
 	}
 	e2_buffer_put(of->ctxt, b);

@@ -2,8 +2,8 @@ I.
 
 1.
 Le fichier fstab sert à indiquer les partitions à monter, au démarrage ou plus généralement à indiquer sur quel dossier on va monter une partition.
-Exemple simple, on indique que la partition /dev/sda1 (ou on la désigne par son UUID) est associée au répertoire /mnt/dossier et donc l'administrateur n'a plus qu'à taper "mount /mnt/dossier".
-On peut également indiquer des répertoires distants à monter (via sshfs par exemple).
+Exemple simple, on indique que la partition /dev/sda1 (ou on la désigne par son UUID ou son label) est associée au répertoire /mnt/dossier et donc l'administrateur n'a plus qu'à taper "mount /mnt/dossier".
+On peut également indiquer des répertoires distants à monter (via sshfs par exemple, très pratique).
 
 2.
 La commande dd fait une copie par bloc d'un système de fichiers. Ce qui est pratique pour des backup.
@@ -26,3 +26,10 @@ Les numéros de blocs sont : 46, 47, 48.
 On peut le trouver en tapant "bmap nomdufichier 0" (puis 1, 2 … jusqu'au nombre de blocs du fichier) ou "blocks nomdufichieroudossier".
 
 
+Concernant le programme : 
+
+Tout compile correctement. 
+Tout fonctionne.
+Pas d'erreur sous valgrind (une ou deux mais pas importantes).
+Pas de fuite de mémoire. 
+Le code est commenté au possible, je pense que plus aurait été de trop.
