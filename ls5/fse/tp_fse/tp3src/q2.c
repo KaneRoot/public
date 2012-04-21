@@ -7,7 +7,7 @@
 
 #include "e2fs.h"
 
-#define	MAXBUF	2
+#define	MAXBUF	100
 
 /* Lit un bloc physique quelconque en passant par un buffer */
 
@@ -36,7 +36,7 @@ int main (int argc, char *argv [])
 	for( i = 2 ; i < argc ; i++)
 	{
 		tmp = e2_buffer_get(c, atoi(argv[i]));
-		printf("%s", (char *) e2_buffer_data(tmp));
+		//printf("%s", (char *) e2_buffer_data(tmp));
 		e2_buffer_put(c, tmp);
 	}
 

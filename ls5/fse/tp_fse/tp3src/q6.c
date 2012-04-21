@@ -28,7 +28,7 @@ int main (int argc, char *argv [])
 
 	if(e2_ls(c, atoi(argv[2])) != 0)
 	{
-		printf("Il y a eu une erreur\n");
+		printf("Il y a eu une erreur - inode = %d bien un répertoire ?\n", atoi(argv[2]));
 	}
 
     e2_ctxt_close (c) ;

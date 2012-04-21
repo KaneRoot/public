@@ -25,7 +25,8 @@ int main (int argc, char *argv [])
     }
 
     /* A REDIGER */
-	file_t fichier = e2_file_open(c, atoi(argv[2]));
+	file_t fichier = NULL;
+	fichier = e2_file_open(c, atoi(argv[2]));
 
 	int car = 0;
 	while((car = e2_file_getc(fichier)) != EOF)

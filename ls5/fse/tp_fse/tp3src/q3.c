@@ -44,6 +44,7 @@ int main (int argc, char *argv [])
 
 	printf("Taille du fichier : %d\n", inode->i_size);
 
+	free(inode);
 	e2_ctxt_close (c) ;
 
     exit (0) ;
