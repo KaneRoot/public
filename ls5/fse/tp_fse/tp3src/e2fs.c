@@ -477,7 +477,7 @@ void e2_file_close (file_t of)
 /* renvoie EOF ou un caractere valide */
 int e2_file_getc (file_t of)
 {
-	int taille_bloc = e2_ctxt_blksize(c);
+	int taille_bloc = e2_ctxt_blksize(of->ctxt);
 	int car;
 	buf_t b;
 
@@ -538,7 +538,7 @@ struct ext2_dir_entry_2 *e2_dir_get (file_t of)
 {
 	buf_t b;
 	int taille = 0;
-	int taille_bloc = e2_ctxt_blksize(c);
+	int taille_bloc = e2_ctxt_blksize(of->ctxt);
 
 	static struct ext2_dir_entry_2 * e2_dir_entry_entree = NULL;
 	static int e2_dir_get_offset = 0;
@@ -565,7 +565,10 @@ struct ext2_dir_entry_2 *e2_dir_get (file_t of)
 	}
 
 	/* on va chercher le buffer qui contient l'inode dont on a besoin */
-	b = e2_buffer_get(of->ctxt, of->inode->i_block[e2_dir_get_offset + 2 / taille_bloc]);
+	b = e2_buffer_get(of->ctxt, of->inode->i_block[(e2_dir_get_offset + 2) / taille_bloc]);
+	if(b == NULL)
+	{
+	}
 	e2_buffer_put(of->ctxt, b);
 
 	/* on récupère sa taille */
@@ -573,7 +576,9 @@ struct ext2_dir_entry_2 *e2_dir_get (file_t of)
 
 	/* Si on arrive à la fin du répertoire */
 	if(taille == 0)
+	{
 		return (struct ext2_dir_entry_2 *) NULL;
+	}
 
 	/* sinon on crée une entrée */
 	e2_dir_entry_entree = malloc(taille);
@@ -650,7 +655,7 @@ inum_t e2_dir_lookup (ctxt_t c, inum_t i, char *str, int len)
 
 	while((item = e2_dir_get(of)) != NULL)
 	{
-		// printf("item->name : %s (%d) recherché : %s (%d)\n", item->name, item->name_len, str, len);
+		printf("item->name : %s (%d) recherché : %s (%d)\n", item->name, item->name_len, str, len);
 
 		if( len == item->name_len && strncmp(item->name, str, len) == 0)
 		{
