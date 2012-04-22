@@ -652,9 +652,17 @@ int e2_ls (ctxt_t c, inum_t i)
 	}
 	of = e2_file_open(c, i);
 
+	if(of == NULL)
+	{
+		free(lenom);
+		return -1;
+	}
+
 	if(0 == S_ISDIR(of->inode->i_mode))
 	{
 		/*	Ce n'est pas un répertoire	*/
+		free(lenom);
+		e2_file_close(of);
 		return -1;
 	}
 	/*	C'est bien un répertoire	*/
@@ -682,14 +690,19 @@ inum_t e2_dir_lookup (ctxt_t c, inum_t i, char *str, int len)
 {
 	struct ext2_dir_entry_2 * item = NULL;
 	inum_t inum = 0;
-	file_t of;
+	file_t of = NULL;
 
 	of = e2_file_open(c, i);
+
+	/* si le malloc s'est mal effectué */
+	if(of == NULL)
+		return 0;
 
 	if(0 == S_ISDIR(of->inode->i_mode))
 	{
 		/* Ce n'est pas un répertoire */
 		errno = -1;
+		e2_file_close(of);
 		return 0;
 	}
 

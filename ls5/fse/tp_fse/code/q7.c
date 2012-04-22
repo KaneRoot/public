@@ -47,7 +47,7 @@ int main (int argc, char *argv [])
 		/* si ce n'est pas un répertoire */
 		if(retour == -1)
 		{
-			e2_cat(c, numero_inode, 0);
+			retour = e2_cat(c, numero_inode, 0);
 		}
 	}
 
