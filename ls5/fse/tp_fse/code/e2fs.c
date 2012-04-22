@@ -234,10 +234,15 @@ buf_t e2_buffer_get (ctxt_t c, pblk_t blkno)
 	/* allocation d'un bloc */
 	tmp->data = malloc(e2_ctxt_blksize(c));
 
+	/* si l'allocation n'a pas fonctionnée */
+	if(tmp->data == NULL)
+	{
+		return NULL;
+	}
+
 	/* on va chercher le bloc */
 	if((e2_block_fetch(c, blkno, tmp->data)) == 0)
 	{
-		errno = -1;
 		return NULL;
 	}
 	tmp->blkno = blkno;
@@ -347,7 +352,6 @@ pblk_t e2_inode_lblk_to_pblk (ctxt_t c, struct ext2_inode *in, lblk_t blkno)
 
 		if( e2_block_fetch(c, in->i_block[12], data) == 0)
 		{
-			errno = -2;
 			return 0;
 		}
 		memcpy(&info, (data + blkno % tbloc), sizeof(int));
@@ -577,6 +581,14 @@ struct ext2_dir_entry_2 *e2_dir_get (file_t of)
 	{
 		of->pos = 0;
 		e2_dir_get_offset = 0;
+	}
+
+	/* si on arrive à la fin du répertoire */
+	if(e2_dir_get_offset == of->len)
+	{
+		of->pos = 0;
+		e2_dir_get_offset = 0;
+		return (struct ext2_dir_entry_2 *) NULL;
 	}
 
 	/* si ce n'est pas un répertoire */

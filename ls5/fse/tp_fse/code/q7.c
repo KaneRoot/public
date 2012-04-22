@@ -12,6 +12,7 @@
 int main (int argc, char *argv [])
 {
     ctxt_t c ;
+	int retour = 0;
 	inum_t numero_inode;
 
     if (argc != 3)
@@ -35,10 +36,20 @@ int main (int argc, char *argv [])
 		if(errno == -1)
 		{
 			printf("L'objet n'a pas été trouvé\n");
-			exit(1);
+			e2_ctxt_close(c);
+			exit( 1 );
 		}
 	}
-	printf("Num inode : %d\n", numero_inode);
+	else
+	{
+		retour = e2_ls(c, numero_inode);
+
+		/* si ce n'est pas un répertoire */
+		if(retour == -1)
+		{
+			e2_cat(c, numero_inode, 0);
+		}
+	}
 
 	e2_ctxt_close (c) ;
 
