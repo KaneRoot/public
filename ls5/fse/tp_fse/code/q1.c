@@ -8,17 +8,6 @@
 #include "e2fs.h"
 
 #define	MAXBUF	100
-struct context
-{
-    int fd ;
-    struct ext2_super_block sb ;
-    int ngroups ;			/* nombre de groupes dans gd [] */
-    struct ext2_group_desc *gd ;	/* c'est un tableau */
-    /* ce qui suit concerne les lectures bufferisees */
-    struct buffer *last ;		/* pointe sur dernier buffer */
-    int bufstat_read ;			/* nombre de demandes de lecture */
-    int bufstat_cached ;		/* nombre de lectures en cache */
-} ;
 
 /* Lit un bloc physique quelconque (sans passer par les buffers) */
 
@@ -26,7 +15,8 @@ struct context
 int main (int argc, char *argv [])
 {
     ctxt_t c ;
-	void * bloc;
+	void * bloc = NULL;
+	char * str = NULL;
 
     if (argc != 3)
     {
@@ -41,7 +31,9 @@ int main (int argc, char *argv [])
 		exit (1) ;
     }
 
-	/*
+	/*	Voici quelques affichages que je faisais pour faire des tests au début
+	 *	Je les laisse volontairement pour plus tard, m'en souvenir.
+	 *
 
 	printf("Nombre de blocks : %d\n", c->sb.s_blocks_count);
 	printf("Nombre de blocks par groupes : %d\n", c->sb.s_blocks_per_group);
@@ -51,17 +43,39 @@ int main (int argc, char *argv [])
 
 	*/
 
-	bloc = malloc( 1024 << c->sb.s_log_block_size);
+	bloc = malloc(e2_ctxt_blksize(c));
+	if(bloc == NULL)
+	{
+		fprintf(stderr, "Impossible de faire un malloc\n");
+		e2_ctxt_close(c);
+		exit(1);
+	}
+	
+	str = malloc(e2_ctxt_blksize(c) + 1);
+	if(str == NULL)
+	{
+		fprintf(stderr, "Impossible de faire un malloc\n");
+		free(bloc);
+		e2_ctxt_close(c);
+		exit(2);
+	}
 
 	if((e2_block_fetch(c, atoi(argv[2]), bloc)) == 0)
 	{
-		printf("Numéro d'erreur : %d\n", errno);
-		exit(1);
+		fprintf(stderr, "Numéro d'erreur : %d\n", errno);
+		free(str);
+		free(bloc);
+		e2_ctxt_close(c);
+		exit(3);
 	}
 
-	printf("%s\n", (char *) bloc);
-    e2_ctxt_close (c) ;
+	snprintf(str, e2_ctxt_blksize(c), "%s", (char *) bloc);
+	printf("%s\n", str);
+
+	/* désallocations */
 	free(bloc);
+	free(str);
+    e2_ctxt_close (c) ;
 
     exit (0) ;
 }

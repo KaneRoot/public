@@ -10,6 +10,8 @@
 int main (int argc, char *argv [])
 {
     ctxt_t c ;
+	int car = 0;
+	file_t fichier = NULL;
 
     if (argc != 3)
     {
@@ -24,11 +26,14 @@ int main (int argc, char *argv [])
 		exit (1) ;
     }
 
-    /* A REDIGER */
-	file_t fichier = NULL;
 	fichier = e2_file_open(c, atoi(argv[2]));
+	if(fichier == NULL)
+	{
+		fprintf(stdout, "Erreur : création du fichier impossible \n");
+		e2_ctxt_close(c);
+		exit(1);
+	}
 
-	int car = 0;
 	while((car = e2_file_getc(fichier)) != EOF)
 		printf("%c",(char) car);
 

@@ -13,6 +13,9 @@
 int main (int argc, char *argv [])
 {
     ctxt_t c ;
+	pblk_t num_bloc;
+	struct ext2_inode * inode = NULL;
+	buf_t b = NULL;
 
     if (argc != 3)
     {
@@ -27,19 +30,28 @@ int main (int argc, char *argv [])
 		exit (1) ;
     }
 
-    /* A REDIGER */
+	num_bloc = e2_inode_to_pblk(c, atoi(argv[2]));
 
-	pblk_t num_bloc = e2_inode_to_pblk(c, atoi(argv[2]));
+	if(num_bloc == -1)
+	{
+		fprintf(stdout, "Erreur : numéro d'inode < 0\n");
+		exit(1);
+	}
+
 	printf("Numéro de bloc : %d\n", num_bloc);
-	buf_t b = e2_buffer_get(c, num_bloc);
+	b = e2_buffer_get(c, num_bloc);
+	if(b == NULL)
+	{
+		fprintf(stdout, "Erreur : buffer null\n");
+		exit(2);
+	}
 	e2_buffer_put(c, b);
 
-	struct ext2_inode * inode;
-
-	if( (inode = e2_inode_read(c, atoi(argv[2]), b)) == NULL)
+	inode = e2_inode_read(c, atoi(argv[2]), b);
+	if(inode == NULL)
 	{
-		printf("Il ya eu une erreur\n");
-		exit(1);
+		fprintf(stdout, "Erreur : impossible de lire l'inode \n");
+		exit(3);
 	}
 
 	printf("Taille du fichier : %d\n", inode->i_size);

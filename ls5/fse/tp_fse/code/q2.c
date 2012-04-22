@@ -14,7 +14,8 @@
 int main (int argc, char *argv [])
 {
 	int i;
-    ctxt_t c ;
+    ctxt_t c = NULL;
+	buf_t tmp = NULL;
 
     if (argc < 3)
     {
@@ -28,10 +29,6 @@ int main (int argc, char *argv [])
 		perror ("e2_ctxt_init") ;
 		exit (1) ;
     }
-
-    /* A REDIGER */
-
-	buf_t tmp;
 
 	for( i = 2 ; i < argc ; i++)
 	{

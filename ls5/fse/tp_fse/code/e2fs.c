@@ -231,8 +231,12 @@ buf_t e2_buffer_get (ctxt_t c, pblk_t blkno)
 		free(tmp->data);
 		tmp->data = NULL;
 	}
+
 	/* allocation d'un bloc */
-	tmp->data = malloc(e2_ctxt_blksize(c));
+	if(tmp->data == NULL)
+	{
+		tmp->data = malloc(e2_ctxt_blksize(c));
+	}
 
 	/* si l'allocation n'a pas fonctionnée */
 	if(tmp->data == NULL)
@@ -290,6 +294,11 @@ void e2_buffer_stats (ctxt_t c)
 /* recupere le numéro du bloc contenant l'inode */
 pblk_t e2_inode_to_pblk (ctxt_t c, inum_t i)
 {
+	if(i < 0)
+	{
+		errno = -1;
+		return -1;
+	}
 	int nb_inodes_par_groupe = c->sb.s_inodes_per_group;
 	int numero_groupe_bloc = (i-1)/nb_inodes_par_groupe;
 	int nombre_inodes_par_bloc = e2_ctxt_blksize(c) / sizeof(struct ext2_inode);
@@ -381,13 +390,17 @@ int e2_cat (ctxt_t c, inum_t i, int disp_pblk)
 
 	num_bloc = e2_inode_to_pblk(c, i);
 
+	/* si on nous retourne -1 (i < 0) */
+	if(num_bloc == -1)
+		return -1;
+
 	/* on récupère le buffer de l'inode */
 	b = e2_buffer_get(c, num_bloc);
 
 	/* si on nous retourne un buffer vide */
 	if(b == NULL)
 	{
-		return -1;
+		return -2;
 	}
 
 	e2_buffer_put(c, b);
@@ -652,6 +665,7 @@ int e2_ls (ctxt_t c, inum_t i)
 	}
 	of = e2_file_open(c, i);
 
+	/* si nous n'avons pas réussi à ouvrir le fichier */
 	if(of == NULL)
 	{
 		free(lenom);
