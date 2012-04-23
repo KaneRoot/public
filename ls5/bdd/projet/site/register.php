@@ -33,7 +33,8 @@ if(! isset($_POST['estCli']))
 			if( ! oci_execute($stmt))
 				die("Il y a eu une erreur dans l'insertion d'un nouveau gestionnaire.");
 
-			$_SESSION['estCli'] = false;
+			/* si un gestionnaire s'est enregistré, il est connecté automatiquement */
+			$_SESSION['connexion'] = "gestionnaire";
 			$_SESSION['login'] = $_POST['r_login'];
 			$_SESSION['compagnie'] = $_POST['r_compagnie'];
 
@@ -60,7 +61,8 @@ if(! isset($_POST['estCli']))
 
 			header('Location:~pittoli/coClient.php');
 
-			$_SESSION['estCli'] = true;
+			/* si un client s'enregistre, il est connecté automatiquement */
+			$_SESSION['connexion'] = "client";
 			$_SESSION['login'] = $_POST['r_login'];
 			$_SESSION['nom'] = $_POST['r_nom'];
 			$_SESSION['prenom'] = $_POST['r_prenom'];

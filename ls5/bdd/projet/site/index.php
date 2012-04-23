@@ -1,4 +1,6 @@
 <?php 
+	session_start();
+
 	$_TITRE_PAGE="BDD - accueil";
 	include("includes/in_entete"); 
 ?>
