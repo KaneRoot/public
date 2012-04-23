@@ -1,3 +1,3 @@
 #!/bin/bash
 
-cp -r site/* ~/public_html/
+cp -r * ~/public_html/

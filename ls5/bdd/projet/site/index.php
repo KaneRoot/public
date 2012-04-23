@@ -9,7 +9,7 @@
 
 		<div class="row">
 			<div class="five columns panel">
-				<h4>Bla ?</h4>
+				<h4>Bienvenue !</h4>
 				<dl class="tabs">
 					<dd><a href="#connexion" class="active">Connexion</a></dd>
 					<dd><a href="#connexionAdmin">Connexion Admin</a></dd>

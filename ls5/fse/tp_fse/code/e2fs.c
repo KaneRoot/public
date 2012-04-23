@@ -304,9 +304,7 @@ pblk_t e2_inode_to_pblk (ctxt_t c, inum_t i)
 	int nombre_inodes_par_bloc = e2_ctxt_blksize(c) / sizeof(struct ext2_inode);
 
 	/* le numéro du bloc physique */
-	int num_bloc = c->gd[numero_groupe_bloc].bg_inode_table + ((i-1) % nb_inodes_par_groupe) / nombre_inodes_par_bloc;
-
-	return num_bloc;
+	return c->gd[numero_groupe_bloc].bg_inode_table + ((i-1) % nb_inodes_par_groupe) / nombre_inodes_par_bloc;
 }
 
 /* extrait l'inode du buffer ; j'ai préféré en faire une copie
