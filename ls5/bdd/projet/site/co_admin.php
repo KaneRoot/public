@@ -12,8 +12,8 @@ if(	isset($_POST['c_login']) && strlen($_POST['c_login']) > 0 &&
 	$_POST['c_mdp'] = "'" . $_POST['c_mdp'] . "'";
 
 	/* pas sécurisé */
-	$query = "select * from CLIENT where loginClient=" . $_POST['c_login'] . 
-		"and mdpClient=" . $_POST['c_mdp'] ;
+	$query = "select * from GESTIONNAIRE where loginGestionnaire=" . $_POST['c_login'] . 
+		"and mdpGestionnaire=" . $_POST['c_mdp'] ;
 
 	$stmt = oci_parse($conn, $query);
 	if( ! oci_execute($stmt))
@@ -22,13 +22,13 @@ if(	isset($_POST['c_login']) && strlen($_POST['c_login']) > 0 &&
 	if(oci_fetch_assoc($stmt))
 	{
 		/* Le type de connexion */
-		$_SESSION['connexion'] = "client";
+		$_SESSION['connexion'] = "gestionnaire";
 		$_SESSION['login'] = $_POST['c_login'];
-		header("Location: client.php");
+		header("Location: gestionnaire.php");
 	}
 	else
 	{
-		header("Location: connexion.php");
+		header("Location: connexionAdmin.php");
 	}
 
 }

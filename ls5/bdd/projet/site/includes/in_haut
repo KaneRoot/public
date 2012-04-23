@@ -7,16 +7,19 @@
 			<div class="eight columns">
 				<p></p>
 				<p>
-					<a href="index.php"		class="nice small radius red button">Accueil</a>
 <?php 
 if(isset($_SESSION['connexion'], $_SESSION['login']) && 
 		(strcmp($_SESSION['connexion'], "client") == 0 || strcmp($_SESSION['connexion'], "gestionnaire") == 0))
 {
-	echo '<a href="deconnexion.php"		class="nice small radius blue button">Déconnexion</a>';
+	?>
+	<a href="client.php"		class="nice small radius red button">Accueil</a>
+	<a href="deconnexion.php"		class="nice small radius blue button">Déconnexion</a>
+	<?php
 }
 else
 {
 	?>
+	<a href="index.php"		class="nice small radius red button">Accueil</a>
 	<a href="connexion.php"	class="nice small radius blue button">Connexion client</a>
 	<a href="connexionAdmin.php" class="nice small radius blue button">Connexion admin</a>
 	<?php
