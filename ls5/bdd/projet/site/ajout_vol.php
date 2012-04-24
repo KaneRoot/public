@@ -3,21 +3,9 @@
 	$_TITRE_PAGE="BDD - ajout vol";
 	include("includes/in_entete"); 
 	include("co.php");
+	include("fonctions.php");
 
-
-/* pas secure */
-$query = "select idCompagnie 
-from GESTIONNAIRE
-where UPPER(loginGestionnaire) = UPPER( " . $_SESSION['login'] . ")";
-
-$stmt = oci_parse($conn, $query);
-if( ! oci_execute($stmt))
-	die("Il y a eu une erreur dans la recherche de la compagnie du gestionnaire.");
-
-if( ! ( $row = oci_fetch_assoc($stmt)))
-	die("Il y a eu une erreur dans la recherche de la compagnie du gestionnaire.");
-
-$compagnie = $row['IDCOMPAGNIE'];
+$compagnie = getCompagnie();
 
 if(isset($_POST['idvol']) && $_POST['idvol'] > 0 &&
 		isset($_POST['idvilledepart'], $_POST['idvillearrivee'], 

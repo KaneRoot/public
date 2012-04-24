@@ -3,8 +3,15 @@
 session_start();
 
 include("co.php");
+include("fonctions.php");
 
-$_TITRE_PAGE="BDD - vols (survol) ";
+
+/* on s'assure que la personne est connectée et gestionnaire */
+estGestionnaire();
+
+$compagnie = getCompagnie();
+
+$_TITRE_PAGE="BDD - vols de la compagnie";
 include("includes/in_entete"); 
 
 ?>
@@ -15,7 +22,7 @@ include("includes/in_entete");
 
 		<div class="row">
 			<div class="twelve columns panel">
-			<h5>Visuel sur l'ensemble des vols </h5>
+			<h5>Visuel sur l'ensemble de nos vols.</h5>
 <?php
 
 /* requête un peu complexe */
@@ -32,7 +39,8 @@ $query =
 from VOL V 
 JOIN COMPAGNIE C ON V.idCompagnie=C.idCompagnie
 JOIN VILLE X ON X.idVille=V.idVilleDepart
-JOIN VILLE Y ON Y.idVille=V.idVilleArrivee";
+JOIN VILLE Y ON Y.idVille=V.idVilleArrivee
+where V.idCompagnie=$compagnie";
 
 $stmt = oci_parse($conn, $query);
 if(! oci_execute($stmt))
@@ -43,6 +51,8 @@ echo "<p>idVol | Compagnie | Ville de départ | Ville d'arrivée | date de dépa
 echo "<p>";
 while($row = oci_fetch_assoc($stmt))
 {
+	echo "<a href=modifier_vols.php?idvol=" . $row['IDVOL'] . ">";
+
 	echo	$row['IDVOL'] . " | " .
 			$row['COMPAGNIE'] . " | " .
 			$row['VDEPART'] . " | " .
@@ -53,7 +63,7 @@ while($row = oci_fetch_assoc($stmt))
 			$row['BILLETSACHETES'] . " | " .
 			$row['BILLETSRESTANTS']
 			
-			. "<br />\n";
+			. "</a><br />\n";
 }
 echo "</p>";
 
