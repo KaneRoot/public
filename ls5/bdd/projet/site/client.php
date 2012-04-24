@@ -27,7 +27,7 @@ elseif( 0 != strcmp("client", $_SESSION['connexion']) )
 				<p>Here are your options.</p>
 		<p>
 		<a href="vols.php" class="nice small radius blue button">Reserver un vol</a><br /><br />
-		<a href="vols_global.php" class="nice small radius blue button">Voir les vols</a><br />
+		<a href="consulter_vols.php" class="nice small radius blue button">Voir les vols</a><br />
 		</p>
 			</div>
 		</div>
