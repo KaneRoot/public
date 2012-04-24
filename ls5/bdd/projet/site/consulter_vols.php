@@ -25,7 +25,10 @@ $query =
 	V.idVol as idvol, 
 	C.nomCompagnie as compagnie, 
 	X.nomVille as vdepart, Y.nomVille as varrivee, 
-	V.dateDepart, V.dateArrivee,
+	to_char(V.dateDepart, 'yyyy/mm/dd hh24:mi:ss') as datedepart, 
+	to_char(V.dateArrivee, 'yyyy/mm/dd hh24:mi:ss') as datearrivee,
+	trunc((V.dateArrivee - V.dateDepart)*24) as dureeh,
+	trunc( MOD(( (V.dateArrivee - V.dateDepart)*24*60),60)) as dureem,
 	V.idCompagnie as idcompagnie,
 	nb_billets_reserve(V.idVol, V.idCompagnie) as billetsreserves,
 	nb_billets_achetes(V.idVol, V.idCompagnie) as billetsachetes,
@@ -51,6 +54,7 @@ if(! oci_execute($stmt))
 				<th>Ville d'arrivée</th>
 				<th>Date de départ</th>
 				<th>Date d'arrivée</th>
+				<th>Durée</th>
 				<th>Nb billets réservés</th>
 				<th>Nb billets achetés</th>
 				<th>Nb billets restants</th>
@@ -67,6 +71,7 @@ while($row = oci_fetch_assoc($stmt))
 		"<td>" . $row['VARRIVEE'] . " </td> " .
 		"<td>" . $row['DATEDEPART'] . " </td> " .
 		"<td>" . $row['DATEARRIVEE'] . " </td> " . 
+		"<td>" . $row['DUREEH'] .":". $row['DUREEM'] . " </td> " . 
 		"<td>" . $row['BILLETSRESERVES'] . " </td> " . 
 		"<td>" . $row['BILLETSACHETES'] . " </td> " .
 		"<td>" . $row['BILLETSRESTANTS'] . "</td>";
