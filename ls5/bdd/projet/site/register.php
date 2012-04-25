@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 function existe($val)
 {
 	$retour = true;
@@ -13,11 +15,14 @@ function existe($val)
 
 include("co.php");
 
-if(! isset($_POST['estCli']))
+if(! isset($_SESSION['connexion']))
 {
 	// Quelqu'un tente de s'enregistrer
 	if(existe(array($_POST['r_login'], $_POST['r_mdp'])))
 	{
+		/* Pour la connexion automatique */
+		$login = $_POST['r_login'];
+
 		$_POST['r_login'] = "'". $_POST['r_login'] . "'";
 		$_POST['r_mdp'] = "'". $_POST['r_mdp'] . "'";
 
@@ -35,7 +40,7 @@ if(! isset($_POST['estCli']))
 
 			/* si un gestionnaire s'est enregistré, il est connecté automatiquement */
 			$_SESSION['connexion'] = "gestionnaire";
-			$_SESSION['login'] = $_POST['r_login'];
+			$_SESSION['login'] = $login;
 			$_SESSION['compagnie'] = $_POST['r_compagnie'];
 
 			header("Location: gestionnaire.php");
@@ -55,13 +60,13 @@ if(! isset($_POST['estCli']))
 				$_POST['r_adresse'] . ", ". 
 				$_POST['r_numtel']	. " )";
 			$stmt = oci_parse($conn, $query);
-			echo "\n<br />La requête : ". $query . "<br />\n";
+			//echo "\n<br />La requête : ". $query . "<br />\n";
 			if( ! oci_execute($stmt))
 				die("Il y a eu une erreur dans l'insertion d'un nouveau client.");
 
 			/* si un client s'enregistre, il est connecté automatiquement */
 			$_SESSION['connexion'] = "client";
-			$_SESSION['login'] = $_POST['r_login'];
+			$_SESSION['login'] = $login;
 			$_SESSION['nom'] = $_POST['r_nom'];
 			$_SESSION['prenom'] = $_POST['r_prenom'];
 

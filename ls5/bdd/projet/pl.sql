@@ -5,3 +5,4 @@
 @plsql/majmiles.sql
 @plsql/nbbillets.sql
 @plsql/reserver.sql
+@plsql/nbescales.sql

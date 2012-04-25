@@ -25,11 +25,17 @@ include("includes/in_entete");
 if(isset($_GET['classement']))
 {
 	$classement = "ORDER BY ";
-	if(strcmp($_GET['classement'], "prix" ))
-		$classement .= ;
+	if(strcmp($_GET['classement'], "duree" ) == 0)
+		$classement .= "dureeh ASC, dureem ASC";
+	else if(strcmp($_GET['classement'], "nb_escales") == 0)
+		$classement .= "escales ASC";
+	else if(strcmp($_GET['classement'], "date_de_depart") == 0)
+		$classement .= "datedepart ASC";
+	else if(strcmp($_GET['classement'], "prix") == 0)
+		$classement .= "prix ASC";
 }
-
 /* requête un peu complexe */
+/* TODO ajouter le nombre d'escales, le prix du billet le moins cher */
 $query = 
 "select 
 	V.idVol as idvol, 
@@ -42,12 +48,14 @@ $query =
 	V.idCompagnie as idcompagnie,
 	nb_billets_reserve(V.idVol, V.idCompagnie) as billetsreserves,
 	nb_billets_achetes(V.idVol, V.idCompagnie) as billetsachetes,
-	nb_billets_restants(V.idVol, V.idCompagnie) as billetsrestants
+	nb_billets_restants(V.idVol, V.idCompagnie) as billetsrestants,
+	nb_escales(V.idVol, V.idCompagnie) as escales,
+	prixmin(V.idVol, V.idCompagnie) as prix
 from VOL V 
 JOIN COMPAGNIE C ON V.idCompagnie=C.idCompagnie
 JOIN VILLE X ON X.idVille=V.idVilleDepart
 JOIN VILLE Y ON Y.idVille=V.idVilleArrivee
-where V.dateDepart > SYSDATE
+where V.dateDepart > SYSDATE 
 ";
 
 if(isset($classement))
@@ -58,11 +66,6 @@ if(! oci_execute($stmt))
 	die("Il y a eu une erreur lors de la recherche des vols. ");
 
 ?>
-	<p> Classer : 
-	<a href"?classement=prix" >par prix</a> 
-	<a href"?classement=date_de_depart" >par date de départ</a> 
-	<a href"?classement=nb_escales" >par nombre d'escales</a>.
-	</p>
 	<table>
 		<thead>
 			<tr>
@@ -70,12 +73,14 @@ if(! oci_execute($stmt))
 				<th>Compagnie</th>
 				<th>Ville de départ</th>
 				<th>Ville d'arrivée</th>
-				<th>Date de départ</th>
+				<th><a href="?classement=date_de_depart" >Date de départ</a></th>
 				<th>Date d'arrivée</th>
-				<th>Durée</th>
-				<th>Nb billets réservés</th>
-				<th>Nb billets achetés</th>
-				<th>Nb billets restants</th>
+				<th><a href="?classement=duree">Durée</a></th>
+				<th>Billets réservés</th>
+				<th>Billets achetés</th>
+				<th>Billets restants</th>
+				<th><a href="?classement=prix" >Prix</a></th>
+				<th><a href="?classement=nb_escales" >Nb d'escales</a></th>
 			</tr>
 		</thead>
 
@@ -92,7 +97,9 @@ while($row = oci_fetch_assoc($stmt))
 		"<td>" . $row['DUREEH'] .":". $row['DUREEM'] . " </td> " . 
 		"<td>" . $row['BILLETSRESERVES'] . " </td> " . 
 		"<td>" . $row['BILLETSACHETES'] . " </td> " .
-		"<td>" . $row['BILLETSRESTANTS'] . "</td>";
+		"<td>" . $row['BILLETSRESTANTS'] . "</td>" .
+		"<td>" . $row['PRIX'] . "</td>" .
+		"<td>" . $row['ESCALES'] . "</td>";
 
 	echo "</tr>\n";
 }

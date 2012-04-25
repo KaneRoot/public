@@ -118,17 +118,16 @@ else if(! isset($_SESSION['date_depart']) && isset($_SESSION['ville_depart'], $_
 			<fieldset>
 			<select id="date_depart" name="date_depart">
 <?php 
+$vdepart = $_SESSION['ville_depart'];
+$varrivee = $_SESSION['ville_arrivee'];
 
-//$ordre = "ORDER BY ";
-//
-// to_char(V.dateArrivee-V.dateDepart, 'yyyy/mm/dd hh24:mi:ss') as duree
 $query = "select V.idVol as idvol, V.idCompagnie as idcompagnie, C.nomCompagnie as nomcompagnie, 
 to_char(V.dateDepart, 'yyyy/mm/dd hh24:mi:ss') as ledatedepart,
 to_char(V.dateArrivee, 'yyyy/mm/dd hh24:mi:ss') as ledatearrivee,
-V.dateArrivee-V.dateDepart as duree
+trunc((V.dateArrivee - V.dateDepart)*24) as dureeh,
+trunc( MOD(( (V.dateArrivee - V.dateDepart)*24*60),60)) as dureem
 from VOL V JOIN COMPAGNIE C ON V.idCompagnie = C.idCompagnie
-where V.idVilleDepart=" . $_SESSION['ville_depart'] . 
-" and V.idVilleArrivee= " . $_SESSION['ville_arrivee'] . " and SYSDATE < V.dateDepart";
+where V.idVilleDepart=$vdepart and V.idVilleArrivee=$varrivee and SYSDATE < V.dateDepart";
 
 $stmt = oci_parse($conn, $query);
 if(! oci_execute($stmt))
@@ -137,8 +136,10 @@ if(! oci_execute($stmt))
 while($row = oci_fetch_assoc($stmt))
 {
 	echo "<option value='" . $row['IDVOL'] . "_" . $row['IDCOMPAGNIE'] . "' >" . 
-		$row['NOMCOMPAGNIE']. ". Date de départ : " .$row['LEDATEDEPART'] . " Date d'arrivée : " . $row['LEDATEARRIVEE'] . 
-		" durée : " . $row['DUREE'] . " </option>\n";
+		$row['NOMCOMPAGNIE']. ". Date de départ : " .
+		$row['LEDATEDEPART'] . " Date d'arrivée : " . 
+		$row['LEDATEARRIVEE'] . 
+		" durée : " . $row['DUREEH'] . ":" . $row['DUREEM'] . " </option>\n";
 }
 ?>
 			</select>
