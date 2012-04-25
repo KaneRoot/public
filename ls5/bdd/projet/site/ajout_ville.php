@@ -20,7 +20,7 @@ if(isset($_POST['addville']) && strlen($_POST['addville']) > 0)
 		<?php include("includes/in_haut"); ?>
 	
 		<div class="row">
-			<div class="six columns">
+			<div class="six columns panel">
 				<form class="nice" action="" method="POST" >
 					<fieldset>
 					<h5>Ajout d'une ville</h5>
@@ -31,7 +31,7 @@ if(isset($_POST['addville']) && strlen($_POST['addville']) > 0)
 					<input type="reset" value="Oublier ça" />
 				</form>
 			</div>
-			<div class="six columns">
+			<div class="five columns panel">
 				<h5>Les villes déjà présentes</h5>
 <?php
 

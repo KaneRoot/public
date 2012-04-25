@@ -7,7 +7,7 @@ include("fonctions.php");
 
 
 /* on s'assure que la personne est connectée et gestionnaire */
-estGestionnaire();
+verifier_est_gestionnaire();
 
 $compagnie = getCompagnie();
 

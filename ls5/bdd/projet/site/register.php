@@ -21,7 +21,7 @@ if(! isset($_SESSION['connexion']))
 	if(existe(array($_POST['r_login'], $_POST['r_mdp'])))
 	{
 		/* Pour la connexion automatique */
-		$login = $_POST['r_login'];
+		$login = "'" .$_POST['r_login'] . "'";
 
 		$_POST['r_login'] = "'". $_POST['r_login'] . "'";
 		$_POST['r_mdp'] = "'". $_POST['r_mdp'] . "'";
