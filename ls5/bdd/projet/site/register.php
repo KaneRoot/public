@@ -38,7 +38,7 @@ if(! isset($_POST['estCli']))
 			$_SESSION['login'] = $_POST['r_login'];
 			$_SESSION['compagnie'] = $_POST['r_compagnie'];
 
-			echo "<p><a href='gestionnaire.php' >Aller sur la page d'accueil.</a></p>";
+			header("Location: gestionnaire.php");
 		}
 		// Enregistrement d'un client
 		else if(existe(array($_POST['r_nom'], $_POST['r_prenom'], $_POST['r_adresse'])))
@@ -59,15 +59,13 @@ if(! isset($_POST['estCli']))
 			if( ! oci_execute($stmt))
 				die("Il y a eu une erreur dans l'insertion d'un nouveau client.");
 
-			header('Location:~pittoli/coClient.php');
-
 			/* si un client s'enregistre, il est connecté automatiquement */
 			$_SESSION['connexion'] = "client";
 			$_SESSION['login'] = $_POST['r_login'];
 			$_SESSION['nom'] = $_POST['r_nom'];
 			$_SESSION['prenom'] = $_POST['r_prenom'];
 
-			echo "<p><a href='client.php' >Aller sur la page d'accueil.</a></p>";
+			header("Location: client.php");
 		}
 		else
 		{

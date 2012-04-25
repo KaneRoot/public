@@ -19,6 +19,16 @@ include("includes/in_entete");
 			<h5>Visuel sur l'ensemble des vols.</h5>
 <?php
 
+/* choix du classement */
+
+/* À FINIR TODO */
+if(isset($_GET['classement']))
+{
+	$classement = "ORDER BY ";
+	if(strcmp($_GET['classement'], "prix" ))
+		$classement .= ;
+}
+
 /* requête un peu complexe */
 $query = 
 "select 
@@ -37,14 +47,22 @@ from VOL V
 JOIN COMPAGNIE C ON V.idCompagnie=C.idCompagnie
 JOIN VILLE X ON X.idVille=V.idVilleDepart
 JOIN VILLE Y ON Y.idVille=V.idVilleArrivee
+where V.dateDepart > SYSDATE
 ";
+
+if(isset($classement))
+	$query .= $classement;
 
 $stmt = oci_parse($conn, $query);
 if(! oci_execute($stmt))
 	die("Il y a eu une erreur lors de la recherche des vols. ");
 
 ?>
-
+	<p> Classer : 
+	<a href"?classement=prix" >par prix</a> 
+	<a href"?classement=date_de_depart" >par date de départ</a> 
+	<a href"?classement=nb_escales" >par nombre d'escales</a>.
+	</p>
 	<table>
 		<thead>
 			<tr>

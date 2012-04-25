@@ -24,10 +24,10 @@ INSERT INTO VILLE VALUES(seq_ville.nextVal, 'LARIS');
 INSERT INTO VILLE VALUES(seq_ville.nextVal, 'SARIS');
 
 -- idVol idCompagnie idVilleDepart idVilleArrivee dateDepart dateArrivee
-INSERT INTO VOL VALUES(1, 2, 2, 4, to_date('2012/03/16 21:02:44', 'yyyy/mm/dd hh24:mi:ss'), to_date('2012/04/18 21:02:44', 'yyyy/mm/dd hh24:mi:ss'));
-INSERT INTO VOL VALUES(1, 3, 2, 4, to_date('2012/03/29 18:02:44', 'yyyy/mm/dd hh24:mi:ss'), to_date('2012/04/18 21:02:44', 'yyyy/mm/dd hh24:mi:ss'));
-INSERT INTO VOL VALUES(2, 2, 3, 4, to_date('2012/03/16 21:02:44', 'yyyy/mm/dd hh24:mi:ss'), to_date('2012/04/18 21:02:44', 'yyyy/mm/dd hh24:mi:ss'));
-INSERT INTO VOL VALUES(3, 2, 4, 2, to_date('2012/03/16 21:02:44', 'yyyy/mm/dd hh24:mi:ss'), to_date('2012/04/18 21:02:44', 'yyyy/mm/dd hh24:mi:ss'));
+INSERT INTO VOL VALUES(1, 2, 2, 4, to_date('2012/05/16 21:02:44', 'yyyy/mm/dd hh24:mi:ss'), to_date('2012/05/18 21:02:44', 'yyyy/mm/dd hh24:mi:ss'));
+INSERT INTO VOL VALUES(1, 3, 2, 4, to_date('2012/05/29 18:02:44', 'yyyy/mm/dd hh24:mi:ss'), to_date('2012/05/29 21:02:44', 'yyyy/mm/dd hh24:mi:ss'));
+INSERT INTO VOL VALUES(2, 2, 3, 4, to_date('2012/05/16 21:02:44', 'yyyy/mm/dd hh24:mi:ss'), to_date('2012/05/16 22:12:44', 'yyyy/mm/dd hh24:mi:ss'));
+INSERT INTO VOL VALUES(3, 2, 4, 2, to_date('2012/05/16 21:02:44', 'yyyy/mm/dd hh24:mi:ss'), to_date('2012/05/16 22:52:10', 'yyyy/mm/dd hh24:mi:ss'));
 
 -- idEscale idVille idVol idCompagnie
 INSERT INTO ESCALE VALUES(seq_escale.nextVal, 2, 1, 2);

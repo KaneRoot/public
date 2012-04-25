@@ -111,6 +111,36 @@ while($ligne = oci_fetch_assoc($stmt))
 			<h5>Les billets associés à ce vol</h5>
 			<hr />
 			<div class="six columns panel">
+				<table>
+					<thead>
+						<th>id</th>
+						<th>Prix</th>
+						<th>Promo</th>
+						<th>État</th>
+					</thead>
+
+<?php
+$query = "select * from BILLET
+where idVol = " . $idvol . " and idCompagnie=" . $compagnie ;
+
+$stmt = oci_parse($conn, $query);
+if(! oci_execute($stmt))
+	die("Erreur à la récupération des billets.");
+
+while($row = oci_fetch_assoc($stmt))
+{
+	echo "<tr>";
+	echo 
+		"<td>" . $row['IDBILLET'] . "</td>" .
+		"<td>" . $row['PRIX'] . "</td>" .
+		"<td>" . $row['PROMO'] . "</td>" .
+		"<td>" . $row['ETATBILLET'] . "</td>";
+	echo "</tr>\n";
+
+}
+
+?>
+				</table>
 			</div>
 			<div class="five columns panel">
 
