@@ -112,6 +112,7 @@ while($ligne = oci_fetch_assoc($stmt))
 			<hr />
 			<div class="six columns panel">
 <?php
+	suppression_billet($idvol, $compagnie, $conn);
 	afficher_billets($idvol, $compagnie, $conn);
 ?>
 			</div>

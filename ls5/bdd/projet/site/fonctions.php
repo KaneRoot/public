@@ -86,6 +86,7 @@ function get_prochain_idvol($conn)
 }
 function afficher_les_vols($conn)
 {
+	supprimer_vol($conn);
 	/* À FINIR TODO */
 	if(isset($_GET['classement']))
 	{
@@ -151,6 +152,7 @@ function afficher_les_vols($conn)
 					<th>Billets restants</th>
 					<th><a href="?classement=prix" >Prix</a></th>
 					<th><a href="?classement=nb_escales" >Nb d'escales</a></th>
+					<?php if(estGestionnaire()) { echo "<th>Suppr</th>"; } ?>
 				</tr>
 			</thead>
 
@@ -158,14 +160,15 @@ function afficher_les_vols($conn)
 	while($row = oci_fetch_assoc($stmt))
 	{
 		echo "<tr>";
+		$vol = $row['IDVOL'];
 
 		if(estGestionnaire())
 		{
-			echo "<td><a href='modifier_vols.php?idvol=" . $row['IDVOL'] . "'. >" . $row['IDVOL']. "</a></td>";
+			echo "<td><a href='modifier_vols.php?idvol=$vol'. >$vol</a></td>";
 		}
 		else
 		{
-			echo "<td>" . $row['IDVOL']. "</td>";
+			echo "<td>$vol</td>";
 		}
 
 		echo 
@@ -181,6 +184,8 @@ function afficher_les_vols($conn)
 			"<td>" . $row['PRIX'] . "</td>" .
 			"<td>" . $row['ESCALES'] . "</td>";
 
+			if(estGestionnaire()) { echo "<td><a href='?supprimer_vol=$vol' >X</a></td>"; }
+
 		echo "</tr>\n";
 	}
 
@@ -188,15 +193,45 @@ function afficher_les_vols($conn)
 		</table>
 	<?php
 }
+function supprimer_vol($conn)
+{
+	if(! isset($_GET['supprimer_vol']))
+		return false;
+
+	$idvol_to_delete = $_GET['supprimer_vol'];
+	$compagnie = getCompagnie();
+
+	$query = "delete from VOL where idVol=$idvol_to_delete and idCompagnie=$compagnie";
+	$stmt = oci_parse($conn, $query);
+	if(! oci_execute($stmt))
+		die("Erreur à la récupération des billets.");
+
+	echo '<div class="alert-box success">';
+	echo "Vol numéro $idvol_to_delete supprimé de la compagnie $compagnie.";
+	echo '<a href="" class="close">&times;</a>';
+	echo '</div>';
+
+}
 function afficher_billets($idvol, $compagnie, $conn)
 {
 	?>
+		<!-- Début de la fonction d'affichage des billets -->
 				<table>
 					<thead>
 						<th>id</th>
 						<th>Prix</th>
 						<th>Promo</th>
 						<th>État</th>
+						<?php
+						if(estGestionnaire())
+						{
+							echo "<th>Supprimer</th>";
+						}
+						else
+						{
+							echo "<th>Réserver</th> <th> Acheter </th>";
+						}
+						?>
 					</thead>
 
 <?php
@@ -209,12 +244,22 @@ if(! oci_execute($stmt))
 
 while($row = oci_fetch_assoc($stmt))
 {
+	$idbillet = $row['IDBILLET'];
 	echo "<tr>";
-	echo 
-		"<td>" . $row['IDBILLET'] . "</td>" .
-		"<td>" . $row['PRIX'] . "</td>" .
-		"<td>" . $row['PROMO'] . "</td>" .
-		"<td>" . $row['ETATBILLET'] . "</td>";
+		echo 
+			"<td>" . $row['IDBILLET'] . "</td>" .
+			"<td>" . $row['PRIX'] . "</td>" .
+			"<td>" . $row['PROMO'] . "</td>" .
+			"<td>" . $row['ETATBILLET'] . "</td>";
+		if(estGestionnaire())
+		{
+			echo "<td><a href='?suppression_billet=$idbillet&idvol=$idvol' >DELETE ME</a></td>";
+		}
+		else
+		{
+			echo "	<td><a href='?reserverbillet=$idbillet&idvol=$idvol' >RESERVER</a></td>
+					<td><a href='?acheterbillet=$idbillet&idvol=$idvol' >ACHETER</a></td>";
+		}
 	echo "</tr>\n";
 
 }
@@ -222,5 +267,26 @@ while($row = oci_fetch_assoc($stmt))
 ?>
 				</table>
 	<?php
+}
+
+function suppression_billet($idvol, $compagnie, $conn)
+{
+	if( ! isset($_GET['idvol'], $_GET['suppression_billet']))
+		return false;
+
+	$idvol = $_GET['idvol'];
+	$idbillet = $_GET['suppression_billet'];
+
+	?>
+	<div class="alert-box success">
+	<?php echo "billet supprimé : $idbillet du vol $idvol de la compagnie $compagnie."; ?>
+		<a href="" class="close">&times;</a>
+	</div>
+	<?php
+	$query = "delete from BILLET where idBillet=$idbillet";
+	$stmt = oci_parse($conn, $query);
+	if(! oci_execute($stmt))
+		die("Erreur à la récupération des billets.");
+
 }
 ?>

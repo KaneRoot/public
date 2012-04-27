@@ -5,6 +5,7 @@
 	include("co.php");
 	include("fonctions.php");
 
+verifier_est_gestionnaire();
 $compagnie = getCompagnie();
 
 if(isset($_POST['idvol']) && $_POST['idvol'] > 0 &&
@@ -50,26 +51,18 @@ $prochainidvol = get_prochain_idvol($conn);
 			</div>
 			<div class="six columns">
 					<fieldset>
-						<h5>Les villes de départ et d'arrivée </h5>
+						<label for='idvilledepart' class="green radius label" >Ville de départ.</label><br />
 						<select id="idvilledepart" name="idvilledepart">
 <?php
 
-$query = "select * from VILLE";
-$stmt = oci_parse($conn, $query);
-if(! oci_execute($stmt))
-	die("Il y a eu une erreur durant la recherche des villes." );
-
-/* et voici une technique de haut vol pour pas me retaper la requête */
-$options = "";
-
-while($row = oci_fetch_assoc($stmt))
-	$options .= "<option value='" . $row['IDVILLE'] . "' >" .
-	$row['NOMVILLE'] . "</option>\n";
+/* Récupération de l'ensemble des villes. */
+$options = get_villes_pour_select($conn);
 
 echo $options;
 ?>
 
 						</select>
+						<label for='idvillearrivee' class="green radius label" >Ville d'arrivée.</label><br />
 						<select id="idvillearrivee" name="idvillearrivee">
 							<?php echo $options ; ?>
 						</select>
@@ -94,4 +87,22 @@ echo $options;
 	</div>
 <?php 
 	include("includes/in_pied"); 
+
+
+function get_villes_pour_select($conn)
+{
+	$query = "select * from VILLE";
+	$stmt = oci_parse($conn, $query);
+	if(! oci_execute($stmt))
+		die("Il y a eu une erreur durant la recherche des villes." );
+
+	/* et voici une technique de haut vol pour pas me retaper la requête */
+	$options = "";
+
+	while($row = oci_fetch_assoc($stmt))
+		$options .= "<option value='" . $row['IDVILLE'] . "' >" .
+		$row['NOMVILLE'] . "</option>\n";
+
+	return $options;
+}
 ?>
