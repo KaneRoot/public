@@ -158,7 +158,17 @@ function afficher_les_vols($conn)
 	while($row = oci_fetch_assoc($stmt))
 	{
 		echo "<tr>";
-		echo	"<td>" . $row['IDVOL'] . "</td>" .
+
+		if(estGestionnaire())
+		{
+			echo "<td><a href='modifier_vols.php?idvol=" . $row['IDVOL'] . "'. >" . $row['IDVOL']. "</a></td>";
+		}
+		else
+		{
+			echo "<td>" . $row['IDVOL']. "</td>";
+		}
+
+		echo 
 			"<td>" . $row['COMPAGNIE'] . " </td> " .
 			"<td>" . $row['VDEPART'] . " </td> " .
 			"<td>" . $row['VARRIVEE'] . " </td> " .
