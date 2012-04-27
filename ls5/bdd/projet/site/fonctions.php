@@ -289,4 +289,91 @@ function suppression_billet($idvol, $compagnie, $conn)
 		die("Erreur à la récupération des billets.");
 
 }
+
+function afficher_escales($idvol, $compagnie, $conn)
+{
+
+	$query = "select E.idescale as idescale, V.nomVille as nomville 
+		from VILLE V JOIN ESCALE E ON E.idVille = V.idVille
+		where E.idVol=$idvol and E.idCompagnie=$compagnie";
+
+	$stmt = oci_parse($conn, $query);
+	if(! oci_execute($stmt))
+		die("Erreur à la récupération des info sur les escales.");
+	
+	$options = "";
+	while($row = oci_fetch_assoc($stmt))
+	{
+		$idescale = $row['IDESCALE'];
+		$nomville= $row['NOMVILLE'];
+		$options .= "<tr><td>$idescale</td><td>$nomville</td>";
+		if(estGestionnaire())
+			$options .= "<td><a href='?supprimer_escale=$idescale&idvol=$idvol' >XXX</a></td>";
+		$options .= "</tr>\n";
+	}
+	?>
+		<table>
+			<thead>
+				<th>id escale</th>
+				<th>ville</th>
+				<?php if(estGestionnaire()) { echo "<th>Supprimer</th>"; } ?>
+			</thead>
+	<?php
+		echo $options;
+	?>
+
+		</table>
+	<?php
+}
+function ajout_escale($idvol, $compagnie, $conn)
+{
+	if(! isset($_POST['escale_a_ajouter']))
+		return false;
+	$v = $_POST['escale_a_ajouter'];
+	$query = "insert into ESCALE VALUES(seq_escale.nextVal, $v, $idvol, $compagnie)";
+	$stmt = oci_parse($conn, $query);
+	if(! oci_execute($stmt))
+		die("Erreur à l'insertion d'une nouvelle escale.");
+
+}
+function suppression_escale($idvol, $compagnie, $conn)
+{
+	if(! isset($_GET['supprimer_escale']))
+		return false;
+
+	$escale = $_GET['supprimer_escale'];
+	$query = "delete from ESCALE where idEscale=$escale";
+	$stmt = oci_parse($conn, $query);
+	if(! oci_execute($stmt))
+		die("Erreur à la suppression de l'escale.");
+
+}
+function afficher_ajout_escale($idvol, $compagnie, $conn)
+{
+	$query = "select idVille, nomVille from VILLE where idVille not in
+		(select idVille from ESCALE where idVol=$idvol and idCompagnie=$compagnie)";
+
+	$stmt = oci_parse($conn, $query);
+	if(! oci_execute($stmt))
+		die("Erreur à la récupération des info sur les escales.");
+	
+	$options = "";
+	while($row = oci_fetch_assoc($stmt))
+	{
+		$idville = $row['IDVILLE'];
+		$nomville= $row['NOMVILLE'];
+		$options .= "<option value=$idville >$nomville</option>\n";
+	}
+
+	?>
+	<form class="nice" action="?idvol=<?php echo $idvol; ?>" method="POST" >
+		<label for='escale_a_ajouter' class="blue radius label" >Escale à ajouter</label><br />
+		<select id="escale_a_ajouter" name="escale_a_ajouter">
+		<?php echo $options; ?>
+		</select>
+
+		<input type="submit" value="Ajouter cette escale à ce vol" />
+	</form>
+	<?php
+}
 ?>
