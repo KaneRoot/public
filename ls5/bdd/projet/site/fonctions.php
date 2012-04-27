@@ -277,16 +277,17 @@ function suppression_billet($idvol, $compagnie, $conn)
 	$idvol = $_GET['idvol'];
 	$idbillet = $_GET['suppression_billet'];
 
+	$query = "delete from BILLET where idBillet=$idbillet";
+	$stmt = oci_parse($conn, $query);
+	if(! oci_execute($stmt))
+		die("Erreur à la récupération des billets.");
+
 	?>
 	<div class="alert-box success">
 	<?php echo "billet supprimé : $idbillet du vol $idvol de la compagnie $compagnie."; ?>
 		<a href="" class="close">&times;</a>
 	</div>
 	<?php
-	$query = "delete from BILLET where idBillet=$idbillet";
-	$stmt = oci_parse($conn, $query);
-	if(! oci_execute($stmt))
-		die("Erreur à la récupération des billets.");
 
 }
 
@@ -334,6 +335,12 @@ function ajout_escale($idvol, $compagnie, $conn)
 	$stmt = oci_parse($conn, $query);
 	if(! oci_execute($stmt))
 		die("Erreur à l'insertion d'une nouvelle escale.");
+	?>
+	<div class="alert-box success">
+	<?php echo "Ajout d'une escale au vol $idvol de la compagnie $compagnie."; ?>
+		<a href="" class="close">&times;</a>
+	</div>
+	<?php
 
 }
 function suppression_escale($idvol, $compagnie, $conn)
@@ -346,6 +353,13 @@ function suppression_escale($idvol, $compagnie, $conn)
 	$stmt = oci_parse($conn, $query);
 	if(! oci_execute($stmt))
 		die("Erreur à la suppression de l'escale.");
+
+	?>
+	<div class="alert-box error">
+	<?php echo "Suppression de l'escale $escale."; ?>
+		<a href="" class="close">&times;</a>
+	</div>
+	<?php
 
 }
 function afficher_ajout_escale($idvol, $compagnie, $conn)
