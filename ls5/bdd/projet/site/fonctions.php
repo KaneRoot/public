@@ -129,6 +129,8 @@ function afficher_les_vols($conn)
 
 	if(isset($compagnie))
 		$query .= " and V.idCompagnie=$compagnie ";
+	else
+		$query .= " and nb_billets_restants(V.idVol, V.idCompagnie) > 0 ";
 
 	if(isset($classement))
 		$query .= $classement;
