@@ -444,4 +444,148 @@ function afficher_ajout_escale($idvol, $compagnie, $conn)
 	</form>
 	<?php
 }
+function afficher_reservations($conn)
+{
+
+	if(! isset($_SESSION['idclient']))
+		return false;
+
+	$idclient = $_SESSION['idclient'];
+
+	$query = "select R.idBillet as idbillet, 
+		to_char(R.dateReservation, 'yyyy/mm/dd hh24:mi:ss') as datereservation,
+		B.prix as prix,
+		B.promo as promo,
+		V.idvol as vol,
+		T.nomVille as villedepart,
+		X.nomVille as villearrivee
+		from RESERVATION R JOIN BILLET B ON B.idBillet = R.idBillet
+		JOIN VOL V ON V.idVol = B.idVol and V.idCompagnie = B.idCompagnie
+		JOIN VILLE T ON T.idVille = V.idVilleDepart
+		JOIN VILLE X ON X.idVille = V.idVilleArrivee
+		where idClient=$idclient";
+	
+	$stmt = oci_parse($conn, $query);
+	if(! oci_execute($stmt))
+		die("Erreur à la récupération des info sur les réservations.");
+
+	?>
+
+		<table>
+			<thead>
+				<th>idBillet</th>
+				<th>prix</th>
+				<th>promo</th>
+				<th>prix sans les frais</th>
+				<th>Ville de départ</th>
+				<th>Ville d'arrivée</th>
+				<th>N° Vol</th>
+				<th>date de réservation</th>
+			</thead>
+		<?php
+	while($row = oci_fetch_assoc($stmt))
+	{
+		$idbillet = $row['IDBILLET'];
+		$date = $row['DATERESERVATION'];
+		$prix = $row['PRIX'];
+		$promo = $row['PROMO'];
+		$villedepart = $row['VILLEDEPART'];
+		$villearrivee = $row['VILLEARRIVEE'];
+		$idvol = $row['VOL'];
+
+		echo "<tr>\n";
+		echo "
+			<td>$idbillet</td>
+			<td>$prix</td>
+			<td>$promo</td>
+			<td>" . ($prix - $promo) . "</td>
+			<td>$villedepart</td>
+			<td>$villearrivee</td>
+			<td>$idvol</td>
+			<td>$date</td>";
+
+		echo	"\n</tr>\n";
+
+	}
+	echo "</table>\n";
+
+}
+
+function afficher_achats($conn)
+{
+	if(! isset($_SESSION['idclient']))
+		return false;
+
+	$idclient = $_SESSION['idclient'];
+
+	$query = "select A.idBillet as idbillet, 
+		to_char(A.dateAchat, 'yyyy/mm/dd hh24:mi:ss') as dateachat,
+		to_char(V.dateDepart, 'yyyy/mm/dd hh24:mi:ss') as datedepart,
+		to_char(V.dateArrivee, 'yyyy/mm/dd hh24:mi:ss') as datearrivee,
+		B.prix as prix,
+		B.promo as promo,
+		V.idvol as vol,
+		T.nomVille as villedepart,
+		X.nomVille as villearrivee
+		from BILLET_CLIENT A JOIN BILLET B ON B.idBillet = A.idBillet
+		JOIN VOL V ON V.idVol = B.idVol and V.idCompagnie = B.idCompagnie
+		JOIN VILLE T ON T.idVille = V.idVilleDepart
+		JOIN VILLE X ON X.idVille = V.idVilleArrivee
+		where A.idClient=$idclient";
+	
+	$stmt = oci_parse($conn, $query);
+	if(! oci_execute($stmt))
+		die("Erreur à la récupération des info sur les réservations.");
+
+	?>
+
+		<table>
+			<thead>
+				<th>idBillet</th>
+				<th>N° Vol</th>
+				<th>prix</th>
+				<th>promo</th>
+				<th>prix avec les frais</th>
+				<th>Ville de départ</th>
+				<th>Ville d'arrivée</th>
+				<th>Date de départ</th>
+				<th>Date d'arrivée</th>
+				<th>date d'achat</th>
+			</thead>
+		<?php
+
+	while($row = oci_fetch_assoc($stmt))
+	{
+		$idbillet = $row['IDBILLET'];
+		$dateachat = $row['DATEACHAT'];
+		$datedepart = $row['DATEDEPART'];
+		$datearrivee = $row['DATEARRIVEE'];
+		$prix = $row['PRIX'];
+		$promo = $row['PROMO'];
+		$villedepart = $row['VILLEDEPART'];
+		$villearrivee = $row['VILLEARRIVEE'];
+		$idvol = $row['VOL'];
+
+		$prixtotal = $prix - $promo;
+
+		echo "<tr>\n";
+
+		echo "
+			<td>$idbillet </td>
+			<td>$idvol </td>
+			<td>$prix </td>
+			<td>$promo </td>
+			<td>$prixtotal</td>
+			<td>$villedepart </td>
+			<td>$villearrivee </td>
+			<td>$datedepart </td>
+			<td>$datearrivee </td>
+			<td>$dateachat </td>
+			";
+
+		echo	"\n</tr>\n";
+
+	}
+	echo "</table>\n";
+}
 ?>

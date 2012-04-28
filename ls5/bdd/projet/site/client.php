@@ -31,5 +31,23 @@ elseif( 0 != strcmp("client", $_SESSION['connexion']) )
 				</p>
 			</div>
 		</div>
+		<div class="row">
+			<h5>Vos réservations en cours</h5>
+			<hr />
+			<div class="eight columns panel">
+<?php
+afficher_reservations($conn);
+?>
+			</div>
+		</div>
+		<div class="row">
+			<h5>Vos achats passés</h5>
+			<hr />
+			<div class="eleven columns panel">
+<?php
+afficher_achats($conn);
+?>
+			</div>
+		</div>
 	</div>
 <?php include("includes/in_pied"); ?>
