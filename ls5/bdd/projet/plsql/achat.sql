@@ -15,9 +15,13 @@ IS
 BEGIN
 
 	dbms_output.enable(1000);
-	select etatBillet into etatBillet_v 
-	from BILLET 
-	where idBillet = idBillet_p;
+	BEGIN
+		select etatBillet into etatBillet_v from BILLET where idBillet = idBillet_p;
+
+		EXCEPTION
+			when NO_DATA_FOUND THEN
+				dbms_output.put_line('PAS TROUVE ETAT');
+	end ;
 
 	if etatBillet_v = 'A'
 	then
@@ -30,22 +34,38 @@ BEGIN
 	end if;
 
 	-- on récupère l'idCompagnie et l'idVol
-	select idCompagnie, idVol into idCompagnie_v, idVol_v
-		from BILLET
-		where idBillet = idBillet_p;
+	BEGIN
+		select idCompagnie, idVol into idCompagnie_v, idVol_v
+			from BILLET
+			where idBillet = idBillet_p;
+		EXCEPTION
+			when NO_DATA_FOUND THEN
+				dbms_output.put_line('PAS TROUVE IDCOMPAGNIE NI OU IDVOL');
+	end ;
 
 	-- s'il doit avoir une réduction de prix
-	select miles into miles_v
-		from CARTE_FIDELITE
-		where idClient = idClient_p and idCompagnie = idCompagnie_v;
+	begin
+		select miles into miles_v
+			from CARTE_FIDELITE
+			where idClient = idClient_p and idCompagnie = idCompagnie_v;
+		EXCEPTION
+			when NO_DATA_FOUND THEN
+				INSERT INTO CARTE_FIDELITE VALUES(idCompagnie_v, idClient_p, 0);
+	end ;
+
 	
 	-- on met à jour les miles
 	majMiles(idClient_p,idCompagnie_v);
 
 	-- nouveau nb de miles
-	select miles into miles2_v
-		from CARTE_FIDELITE
-		where idClient = idClient_p and idCompagnie = idCompagnie_v;
+	begin
+		select miles into miles2_v
+			from CARTE_FIDELITE
+			where idClient = idClient_p and idCompagnie = idCompagnie_v;
+		EXCEPTION
+			when NO_DATA_FOUND THEN
+				dbms_output.put_line('PAS TROUVE MILES');
+	end ;
 	
 	-- si nb miles actuels < ancien = 100€ de réduction
 	if miles_v > miles2_v
@@ -71,7 +91,6 @@ BEGIN
 			update BILLET set prix=prix*1.03 where idCompagnie = idCompagnie_v and idVol = idVol_v and (promo is null or promo=0);
 		end if;
 	END ;
-
 END;
 /
 SHOW ERRORS procedure achat;
