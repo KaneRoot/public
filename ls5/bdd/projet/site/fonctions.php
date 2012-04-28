@@ -307,6 +307,21 @@ function achat_billet($idvol, $compagnie, $conn)
 }
 function reservation_billet($idvol, $compagnie, $conn)
 {
+	if(! isset($_GET['reserverbillet']))
+		return false;
+
+	if(! isset($_SESSION['idclient']))
+		return false;
+
+	$idclient = $_SESSION['idclient'];
+	$idbillet = $_GET['reserverbillet'];
+
+	$query = 'begin reserver(:p1, :p2); end;';
+	$stmt = oci_parse($conn, $query );
+	oci_bind_by_name($stmt, ':p1', $idclient);
+	oci_bind_by_name($stmt, ':p2', $idbillet);
+	if(! oci_execute($stmt))
+		die("Erreur à la réservation du billet.");
 }
 function suppression_billet($idvol, $compagnie, $conn)
 {

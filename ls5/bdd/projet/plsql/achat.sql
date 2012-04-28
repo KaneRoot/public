@@ -27,6 +27,7 @@ BEGIN
 	then
 		-- test pour si le billet est déjà réservé
 		dbms_output.put_line('PROCEDURE ACHAT : DÉJÀ ACHETÉ');
+		raise_application_error(-20000, 'DEJA ACHETE');
 	elsif etatBillet_v = 'R'
 	then
 		-- si déjà réservé
