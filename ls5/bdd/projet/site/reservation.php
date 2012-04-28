@@ -33,7 +33,7 @@ if( isset($_POST['ville_arrivee']) )
 				<p>Voici la page où vous pouvez sélectionner le vol que vous allez prendre !</p>
 			</div>
 			<div class="two columns panel">
-				<p><a href="vols.php?restart=oui">Oubliez mes choix ! </a></p>
+				<p><a href="reservation.php?restart=oui">Oubliez mes choix ! </a></p>
 			</div>
 		</div>
 		<div class="row">
@@ -47,7 +47,7 @@ if(! isset($_SESSION['ville_depart']) && ! isset($_SESSION['ville_arrivee']))
 {
 	?>
 			<h5>Choisissez la ville de départ</h5>
-			<form class="nice" action="vols.php" method="POST" >
+			<form class="nice" action="reservation.php" method="POST" >
 				<fieldset>
 				<p>Généralement c'est pas un vrai choix ça.</p>
 
@@ -80,7 +80,7 @@ else if( ! isset($_SESSION['ville_arrivee']) )
 {
 	?>
 			<h5>Choisissez la ville d'arrivée</h5>
-			<form class="nice" action="vols.php" method="POST" >
+			<form class="nice" action="reservation.php" method="POST" >
 				<fieldset>
 				<p>Généralement ça c'est un vrai choix.</p>
 
@@ -114,7 +114,7 @@ else if(! isset($_SESSION['date_depart']) && isset($_SESSION['ville_depart'], $_
 {
 	?>
 		<h5>Choisissez votre date et horraire de départ.</h5>
-		<form class="nice" action="vols.php" method="POST" >
+		<form class="nice" action="reservation.php" method="POST" >
 			<fieldset>
 			<select id="date_depart" name="date_depart">
 <?php 

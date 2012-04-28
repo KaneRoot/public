@@ -108,6 +108,7 @@ function afficher_les_vols($conn)
 	"select 
 		V.idVol as idvol, 
 		C.nomCompagnie as compagnie, 
+		C.idCompagnie as idcompagnie,
 		X.nomVille as vdepart, Y.nomVille as varrivee, 
 		to_char(V.dateDepart, 'yyyy/mm/dd hh24:mi:ss') as datedepart, 
 		to_char(V.dateArrivee, 'yyyy/mm/dd hh24:mi:ss') as datearrivee,
@@ -152,44 +153,61 @@ function afficher_les_vols($conn)
 					<th>Billets restants</th>
 					<th><a href="?classement=prix" >Prix</a></th>
 					<th><a href="?classement=nb_escales" >Nb d'escales</a></th>
-					<?php if(estGestionnaire()) { echo "<th>Suppr</th>"; } ?>
+<?php 
+					
+if(estGestionnaire()) 
+{ 
+	echo "<th>Suppr</th>"; 
+} 
+else
+{
+	echo "<th>Voir billets</th>";
+}
+?>
 				</tr>
 			</thead>
 
-	<?php
-	while($row = oci_fetch_assoc($stmt))
+<?php
+while($row = oci_fetch_assoc($stmt))
+{
+	echo "<tr>";
+	$vol = $row['IDVOL'];
+	$compagnie = $row['IDCOMPAGNIE'];
+
+	if(estGestionnaire())
 	{
-		echo "<tr>";
-		$vol = $row['IDVOL'];
-
-		if(estGestionnaire())
-		{
-			echo "<td><a href='modifier_vols.php?idvol=$vol'. >$vol</a></td>";
-		}
-		else
-		{
-			echo "<td>$vol</td>";
-		}
-
-		echo 
-			"<td>" . $row['COMPAGNIE'] . " </td> " .
-			"<td>" . $row['VDEPART'] . " </td> " .
-			"<td>" . $row['VARRIVEE'] . " </td> " .
-			"<td>" . $row['DATEDEPART'] . " </td> " .
-			"<td>" . $row['DATEARRIVEE'] . " </td> " . 
-			"<td>" . $row['DUREEH'] .":". $row['DUREEM'] . " </td> " . 
-			"<td>" . $row['BILLETSRESERVES'] . " </td> " . 
-			"<td>" . $row['BILLETSACHETES'] . " </td> " .
-			"<td>" . $row['BILLETSRESTANTS'] . "</td>" .
-			"<td>" . $row['PRIX'] . "</td>" .
-			"<td>" . $row['ESCALES'] . "</td>";
-
-			if(estGestionnaire()) { echo "<td><a href='?supprimer_vol=$vol' >X</a></td>"; }
-
-		echo "</tr>\n";
+		echo "<td><a href='modifier_vols.php?idvol=$vol'. >$vol</a></td>";
 	}
+	else
+	{
+		echo "<td>$vol</td>";
+	}
+	echo 
+		"<td>" . $row['COMPAGNIE'] . " </td> " .
+		"<td>" . $row['VDEPART'] . " </td> " .
+		"<td>" . $row['VARRIVEE'] . " </td> " .
+		"<td>" . $row['DATEDEPART'] . " </td> " .
+		"<td>" . $row['DATEARRIVEE'] . " </td> " . 
+		"<td>" . $row['DUREEH'] .":". $row['DUREEM'] . " </td> " . 
+		"<td>" . $row['BILLETSRESERVES'] . " </td> " . 
+		"<td>" . $row['BILLETSACHETES'] . " </td> " .
+		"<td>" . $row['BILLETSRESTANTS'] . "</td>" .
+		"<td>" . $row['PRIX'] . "</td>" .
+		"<td>" . $row['ESCALES'] . "</td>";
 
-	?>
+if(estGestionnaire()) 
+{ 
+	echo "<td><a href='?supprimer_vol=$vol' >X</a></td>"; 
+}
+else
+{
+	echo "<td><a href='voir_billets.php?idvol=$vol&idcompagnie=$compagnie' >Voir billets</a></td>";
+}
+
+	echo "</tr>\n";
+}
+
+?>
 		</table>
 	<?php
 }
@@ -257,8 +275,8 @@ while($row = oci_fetch_assoc($stmt))
 		}
 		else
 		{
-			echo "	<td><a href='?reserverbillet=$idbillet&idvol=$idvol' >RESERVER</a></td>
-					<td><a href='?acheterbillet=$idbillet&idvol=$idvol' >ACHETER</a></td>";
+			echo "	<td><a href='?reserverbillet=$idbillet&idvol=$idvol&idcompagnie=$compagnie' >RESERVER</a></td>
+					<td><a href='?acheterbillet=$idbillet&idvol=$idvol&idcompagnie=$compagnie' >ACHETER</a></td>";
 		}
 	echo "</tr>\n";
 
@@ -268,7 +286,18 @@ while($row = oci_fetch_assoc($stmt))
 				</table>
 	<?php
 }
+function achat_billet($idvol, $compagnie, $conn)
+{
+	if(! isset($_GET['acheterbillet']))
+		return false;
 
+	$idbillet = $_GET['acheterbillet'];
+
+	$query = "
+}
+function reservation_billet($idvol, $compagnie, $conn)
+{
+}
 function suppression_billet($idvol, $compagnie, $conn)
 {
 	if( ! isset($_GET['idvol'], $_GET['suppression_billet']))
