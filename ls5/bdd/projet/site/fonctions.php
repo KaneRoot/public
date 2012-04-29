@@ -255,8 +255,14 @@ function afficher_billets($idvol, $compagnie, $conn)
 					</thead>
 
 <?php
-$query = "select * from BILLET
-where idVol = " . $idvol . " and idCompagnie=" . $compagnie ;
+$query = 
+"
+select * from BILLET 
+where idVol=$idvol and 
+idCompagnie=$compagnie
+";
+if(! estGestionnaire())
+	$query .= " and etatBillet is null";
 
 $stmt = oci_parse($conn, $query);
 if(! oci_execute($stmt))
@@ -271,6 +277,7 @@ while($row = oci_fetch_assoc($stmt))
 			"<td>" . $row['PRIX'] . "</td>" .
 			"<td>" . $row['PROMO'] . "</td>" .
 			"<td>" . $row['ETATBILLET'] . "</td>";
+
 		if(estGestionnaire())
 		{
 			echo "<td><a href='?suppression_billet=$idbillet&idvol=$idvol' >DELETE ME</a></td>";
@@ -522,6 +529,7 @@ function afficher_achats($conn)
 
 	$query = "select A.idBillet as idbillet, 
 		to_char(A.dateAchat, 'yyyy/mm/dd hh24:mi:ss') as dateachat,
+		to_char(A.dateAchat, 'hh24') as heureachat,
 		to_char(V.dateDepart, 'yyyy/mm/dd hh24:mi:ss') as datedepart,
 		to_char(V.dateArrivee, 'yyyy/mm/dd hh24:mi:ss') as datearrivee,
 		B.prix as prix,
@@ -547,12 +555,12 @@ function afficher_achats($conn)
 				<th>N° Vol</th>
 				<th>prix</th>
 				<th>promo</th>
-				<th>prix avec les frais</th>
 				<th>Ville de départ</th>
 				<th>Ville d'arrivée</th>
 				<th>Date de départ</th>
 				<th>Date d'arrivée</th>
 				<th>date d'achat</th>
+				<th>prix final</th>
 			</thead>
 		<?php
 
@@ -567,8 +575,16 @@ function afficher_achats($conn)
 		$villedepart = $row['VILLEDEPART'];
 		$villearrivee = $row['VILLEARRIVEE'];
 		$idvol = $row['VOL'];
+		$heureachat = $row['HEUREACHAT']; 
 
 		$prixtotal = $prix - $promo;
+
+		if($heureachat >= 2 && $heureachat < 6)
+			$prixtotal += 5;
+		else if( $heureachat >= 6 && $heureachat < 22)
+			$prixtotal += 20;
+		else
+			$prixtotal += 12;
 
 		echo "<tr>\n";
 
@@ -577,12 +593,12 @@ function afficher_achats($conn)
 			<td>$idvol </td>
 			<td>$prix </td>
 			<td>$promo </td>
-			<td>$prixtotal</td>
 			<td>$villedepart </td>
 			<td>$villearrivee </td>
 			<td>$datedepart </td>
 			<td>$datearrivee </td>
 			<td>$dateachat </td>
+			<td>$prixtotal</td>
 			";
 
 		echo	"\n</tr>\n";

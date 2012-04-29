@@ -67,11 +67,10 @@ BEGIN
 			when NO_DATA_FOUND THEN
 				dbms_output.put_line('PAS TROUVE MILES');
 	end ;
-	
+
 	-- si nb miles actuels < ancien = 100€ de réduction
-	if miles_v > miles2_v
-	then
-		UPDATE BILLET SET prix=prix-100 where idBillet = idBillet_p;
+	if miles_v > miles2_v then
+		UPDATE BILLET SET prix = greatest(prix-100, 1) where idBillet = idBillet_p;
 	end if;
 
 	-- si on a une réservation	
@@ -89,7 +88,7 @@ BEGIN
 
 		if(nbbilletsvendus_v mod 10) = 0
 		then
-			update BILLET set prix=prix*1.03 where idCompagnie = idCompagnie_v and idVol = idVol_v and (promo is null or promo=0);
+			update BILLET set prix=prix*1.03 where idCompagnie = idCompagnie_v and idVol = idVol_v and (promo is null or promo=0) and etatBillet is null;
 		end if;
 	END ;
 END;
