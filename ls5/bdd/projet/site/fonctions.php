@@ -8,14 +8,15 @@ function getCompagnie()
 
 	$query = "select idCompagnie 
 	from GESTIONNAIRE
-	where UPPER(loginGestionnaire) = UPPER( " . $_SESSION['login'] . ")";
+	where UPPER(loginGestionnaire) = UPPER(:login)";
 
 	$stmt = oci_parse($conn, $query);
+	oci_bind_by_name($stmt, ':login', $_SESSION['login']);
 	if( ! oci_execute($stmt))
-	die("Il y a eu une erreur dans la recherche de la compagnie du gestionnaire.");
+		die("Il y a eu une erreur dans la recherche de la compagnie du gestionnaire.");
 
 	if( ! ( $row = oci_fetch_assoc($stmt)))
-	die("Il y a eu une erreur dans la recherche de la compagnie du gestionnaire.");
+		die("Il y a eu une erreur dans la recherche de la compagnie du gestionnaire.");
 
 	$compagnie = $row['IDCOMPAGNIE'];
 
@@ -59,16 +60,21 @@ function ajout_billet($idvol, $compagnie, $conn)
 	if(isset($_POST['prix']))
 	{
 		$prix = $_POST['prix'];
-		$promotion = "NULL";
+		$promo = 'NULL';
 
 		if(isset($_POST['promotion']))
-			$promotion = $_POST['promotion'];
+			$promo = $_POST['promotion'];
 
 		$query =
-		"insert into BILLET VALUES(seq_billet.nextVal, $idvol, $compagnie,
-			$prix, $promotion, NULL)";
+		"insert into BILLET VALUES(seq_billet.nextVal, :idvol, :compagnie,
+			:prix, :promo, NULL)";
 		
 		$stmt = oci_parse($conn, $query);
+		oci_bind_by_name($stmt, ':idvol', $idvol);
+		oci_bind_by_name($stmt, ':compagnie', $compagnie);
+		oci_bind_by_name($stmt, ':prix', $prix);
+		oci_bind_by_name($stmt, ':promo', $promo);
+
 		if(! oci_execute($stmt))
 			die("Erreur à l'update de la table. <br /> $query");
 	}
@@ -76,8 +82,11 @@ function ajout_billet($idvol, $compagnie, $conn)
 function get_prochain_idvol($conn)
 {
 	$compagnie = getCompagnie();
-	$query = "select max(idVol)+1 as prochainid from VOL where idCompagnie=$compagnie";
+	$query = "select max(idVol)+1 as prochainid from VOL where idCompagnie=:compagnie";
+
 	$stmt = oci_parse($conn, $query);
+	oci_bind_by_name($stmt, ':compagnie', $compagnie);
+
 	if(! oci_execute($stmt))
 		die("Erreur à l'update de la table. <br /> $query");
 	$row = oci_fetch_assoc($stmt);
@@ -201,7 +210,9 @@ while($row = oci_fetch_assoc($stmt))
 
 if(estGestionnaire()) 
 { 
-	echo "<td><a href='?supprimer_vol=$vol' >X</a></td>"; 
+	echo "<td><a href='?supprimer_vol=$vol' >
+		<label class='blue radius label' >DELETE ME</label>
+		</a></td>"; 
 }
 else
 {
@@ -285,7 +296,9 @@ while($row = oci_fetch_assoc($stmt))
 
 		if(estGestionnaire())
 		{
-			echo "<td><a href='?suppression_billet=$idbillet&idvol=$idvol' >DELETE ME</a></td>";
+			echo "<td><a href='?suppression_billet=$idbillet&idvol=$idvol' >
+				<label class='blue radius label' >DELETE ME</label>
+				</a></td>";
 		}
 		else
 		{
