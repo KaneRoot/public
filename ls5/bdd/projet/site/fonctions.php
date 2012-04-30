@@ -525,6 +525,26 @@ function afficher_reservations($conn)
 
 	$idclient = $_SESSION['idclient'];
 
+	$query = "select 
+		R.idBillet as idbillet
+		from RESERVATION R JOIN BILLET B ON B.idBillet = R.idBillet
+		JOIN VOL V ON V.idVol = B.idVol and V.idCompagnie = B.idCompagnie
+		where ((V.dateDepart-SYSDATE)*24 <= 73 or (R.dateReservation - SYSDATE)* 24 >= 47) and R.idClient = :client";
+
+	$stmt = oci_parse($conn, $query);
+	oci_bind_by_name($stmt, ':client', $idclient);
+	if(! oci_execute($stmt))
+		die("Erreur à la récupération des info sur les réservations.");
+
+	while($row = oci_fetch_assoc($stmt))
+	{
+		echo '<div class="alert-box error">';
+		echo 'Attention, réservation ' . $row['IDBILLET'] . " expire dans moins d'une heure !";
+		echo '<a href="" class="close">&times;</a>';
+		echo '</div>';
+	}
+
+	/* Autre partie */
 	$query = "select R.idBillet as idbillet, 
 		to_char(R.dateReservation, 'yyyy/mm/dd hh24:mi:ss') as datereservation,
 		B.prix as prix,
