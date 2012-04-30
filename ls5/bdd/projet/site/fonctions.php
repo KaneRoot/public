@@ -259,10 +259,12 @@ function afficher_billets($idvol, $compagnie, $conn)
 						<th>id</th>
 						<th>Prix</th>
 						<th>Promo</th>
+						<th>Prix HT</th>
 						<?php
 						if(estGestionnaire())
 						{
-							echo "<th>Supprimer</th>";
+							echo "<th>ÉTAT</th>
+								<th>Supprimer</th>";
 						}
 						else
 						{
@@ -273,12 +275,14 @@ function afficher_billets($idvol, $compagnie, $conn)
 
 <?php
 $query = 
-"select B.idBillet as idBillet, B.prix as prix, B.promo as promo
+"select B.idBillet as idBillet, B.prix as prix, B.promo as promo,
+B.prix - B.promo as prixht, B.etatBillet as etat
 from BILLET B
 where B.idVol=:idvol and B.idCompagnie=:compagnie ";
 if(! estGestionnaire())
 	$query .= ' and B.etatBillet is null';
 
+$query .= " ORDER BY prixht ASC";
 $stmt = oci_parse($conn, $query);
 oci_bind_by_name($stmt, ':idvol', $idvol);
 oci_bind_by_name($stmt, ':compagnie', $compagnie);
@@ -293,10 +297,12 @@ while($row = oci_fetch_assoc($stmt))
 		echo 
 			"<td>$idbillet</td>" .
 			'<td>' . $row['PRIX'] . '</td>' .
-			'<td>' . $row['PROMO'] . '</td>';
+			'<td>' . $row['PROMO'] . '</td>' .
+			'<td>' . $row['PRIXHT'] . '</td>';
 
 		if(estGestionnaire())
 		{
+			echo "<td>" . $row['ETAT'] . "</td>";
 			echo "<td><a href='?suppression_billet=$idbillet&idvol=$idvol' >
 				<label class='blue radius label' >DELETE ME</label>
 				</a></td>";
@@ -545,7 +551,7 @@ function afficher_reservations($conn)
 				<th>idBillet</th>
 				<th>prix</th>
 				<th>promo</th>
-				<th>prix sans les frais</th>
+				<th>prix HT</th>
 				<th>Ville de départ</th>
 				<th>Ville d'arrivée</th>
 				<th>N° Vol</th>

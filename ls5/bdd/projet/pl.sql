@@ -4,5 +4,7 @@
 @plsql/etatreservation.sql
 @plsql/majmiles.sql
 @plsql/nbbillets.sql
-@plsql/reserver.sql
 @plsql/nbescales.sql
+@plsql/prixmin.sql
+@plsql/reserver.sql
+

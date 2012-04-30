@@ -43,6 +43,8 @@ create table VOL
 	dateDepart date NOT NULL,
 	dateArrivee date NOT NULL,
 	CONSTRAINT pk_vol PRIMARY KEY(idVol, idCompagnie),
+	CONSTRAINT ck_vol_dates CHECK(dateDepart < dateArrivee),
+	CONSTRAINT ck_vol_villes CHECK(idVilleDepart != idVilleArrivee),
 	CONSTRAINT fk_vol_compagnie FOREIGN KEY (idCompagnie) REFERENCES COMPAGNIE ON DELETE CASCADE,
 	CONSTRAINT fk_vol_villedepart FOREIGN KEY (idVilleDepart) REFERENCES VILLE ON DELETE CASCADE,
 	CONSTRAINT fk_vol_villearrivee FOREIGN KEY (idVilleArrivee) REFERENCES VILLE ON DELETE CASCADE
