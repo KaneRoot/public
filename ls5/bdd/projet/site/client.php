@@ -25,10 +25,28 @@ elseif( 0 != strcmp("client", $_SESSION['connexion']) )
 			<div class="five columns panel">
 				<h4>Bienvenue cher client!</h4>
 				<p>Here are your options.</p>
-		<p>
-		<a href="vols.php" class="nice small radius blue button">Reserver un vol</a><br /><br />
-		<a href="consulter_vols.php" class="nice small radius blue button">Voir les vols</a><br />
-		</p>
+				<p>
+				<a href="reservation.php" class="nice small radius blue button">Reserver un vol</a><br /><br />
+				<a href="consulter_vols.php" class="nice small radius blue button">Voir les vols</a><br />
+				</p>
+			</div>
+		</div>
+		<div class="row">
+			<h5>Vos réservations en cours</h5>
+			<hr />
+			<div class="eight columns panel">
+<?php
+afficher_reservations($conn);
+?>
+			</div>
+		</div>
+		<div class="row">
+			<h5>Vos achats passés</h5>
+			<hr />
+			<div class="eleven columns panel">
+<?php
+afficher_achats($conn);
+?>
 			</div>
 		</div>
 	</div>

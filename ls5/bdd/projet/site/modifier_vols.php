@@ -108,10 +108,27 @@ while($ligne = oci_fetch_assoc($stmt))
 			</form>
 		</div>
 		<div class="row">
+			<h5>Escales</h5>
+			<hr />
+			<div class="six columns panel">
+<?php
+	suppression_escale($idvol, $compagnie, $conn);
+	ajout_escale($idvol, $compagnie, $conn);
+	afficher_escales($idvol, $compagnie, $conn);
+?>
+			</div>
+			<div class="five columns panel">
+<?php
+	afficher_ajout_escale($idvol, $compagnie, $conn);
+?>
+			</div>
+		</div>
+		<div class="row">
 			<h5>Les billets associés à ce vol</h5>
 			<hr />
 			<div class="six columns panel">
 <?php
+	suppression_billet($idvol, $compagnie, $conn);
 	afficher_billets($idvol, $compagnie, $conn);
 ?>
 			</div>

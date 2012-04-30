@@ -19,11 +19,13 @@ if(	isset($_POST['c_login']) && strlen($_POST['c_login']) > 0 &&
 	if( ! oci_execute($stmt))
 		die("Il y a eu une erreur à la connexion du client.");
 
-	if(oci_fetch_assoc($stmt))
+	if($row = oci_fetch_assoc($stmt))
 	{
 		/* Le type de connexion */
 		$_SESSION['connexion'] = "client";
 		$_SESSION['login'] = $_POST['c_login'];
+		$_SESSION['idclient'] = $row['IDCLIENT'];
+
 		header("Location: client.php");
 	}
 	else

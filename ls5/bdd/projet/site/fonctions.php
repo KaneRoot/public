@@ -86,6 +86,7 @@ function get_prochain_idvol($conn)
 }
 function afficher_les_vols($conn)
 {
+	supprimer_vol($conn);
 	/* À FINIR TODO */
 	if(isset($_GET['classement']))
 	{
@@ -107,6 +108,7 @@ function afficher_les_vols($conn)
 	"select 
 		V.idVol as idvol, 
 		C.nomCompagnie as compagnie, 
+		C.idCompagnie as idcompagnie,
 		X.nomVille as vdepart, Y.nomVille as varrivee, 
 		to_char(V.dateDepart, 'yyyy/mm/dd hh24:mi:ss') as datedepart, 
 		to_char(V.dateArrivee, 'yyyy/mm/dd hh24:mi:ss') as datearrivee,
@@ -127,6 +129,8 @@ function afficher_les_vols($conn)
 
 	if(isset($compagnie))
 		$query .= " and V.idCompagnie=$compagnie ";
+	else
+		$query .= " and nb_billets_restants(V.idVol, V.idCompagnie) > 0 ";
 
 	if(isset($classement))
 		$query .= $classement;
@@ -151,47 +155,114 @@ function afficher_les_vols($conn)
 					<th>Billets restants</th>
 					<th><a href="?classement=prix" >Prix</a></th>
 					<th><a href="?classement=nb_escales" >Nb d'escales</a></th>
+<?php 
+					
+if(estGestionnaire()) 
+{ 
+	echo "<th>Suppr</th>"; 
+} 
+else
+{
+	echo "<th>Voir billets</th>";
+}
+?>
 				</tr>
 			</thead>
 
-	<?php
-	while($row = oci_fetch_assoc($stmt))
+<?php
+while($row = oci_fetch_assoc($stmt))
+{
+	echo "<tr>";
+	$vol = $row['IDVOL'];
+	$compagnie = $row['IDCOMPAGNIE'];
+
+	if(estGestionnaire())
 	{
-		echo "<tr>";
-		echo	"<td>" . $row['IDVOL'] . "</td>" .
-			"<td>" . $row['COMPAGNIE'] . " </td> " .
-			"<td>" . $row['VDEPART'] . " </td> " .
-			"<td>" . $row['VARRIVEE'] . " </td> " .
-			"<td>" . $row['DATEDEPART'] . " </td> " .
-			"<td>" . $row['DATEARRIVEE'] . " </td> " . 
-			"<td>" . $row['DUREEH'] .":". $row['DUREEM'] . " </td> " . 
-			"<td>" . $row['BILLETSRESERVES'] . " </td> " . 
-			"<td>" . $row['BILLETSACHETES'] . " </td> " .
-			"<td>" . $row['BILLETSRESTANTS'] . "</td>" .
-			"<td>" . $row['PRIX'] . "</td>" .
-			"<td>" . $row['ESCALES'] . "</td>";
-
-		echo "</tr>\n";
+		echo "<td><a href='modifier_vols.php?idvol=$vol'. >$vol</a></td>";
 	}
+	else
+	{
+		echo "<td>$vol</td>";
+	}
+	echo 
+		"<td>" . $row['COMPAGNIE'] . " </td> " .
+		"<td>" . $row['VDEPART'] . " </td> " .
+		"<td>" . $row['VARRIVEE'] . " </td> " .
+		"<td>" . $row['DATEDEPART'] . " </td> " .
+		"<td>" . $row['DATEARRIVEE'] . " </td> " . 
+		"<td>" . $row['DUREEH'] .":". $row['DUREEM'] . " </td> " . 
+		"<td>" . $row['BILLETSRESERVES'] . " </td> " . 
+		"<td>" . $row['BILLETSACHETES'] . " </td> " .
+		"<td>" . $row['BILLETSRESTANTS'] . "</td>" .
+		"<td>" . $row['PRIX'] . "</td>" .
+		"<td>" . $row['ESCALES'] . "</td>";
 
-	?>
+if(estGestionnaire()) 
+{ 
+	echo "<td><a href='?supprimer_vol=$vol' >X</a></td>"; 
+}
+else
+{
+	echo "<td><a href='voir_billets.php?idvol=$vol&idcompagnie=$compagnie' >Voir billets</a></td>";
+}
+
+	echo "</tr>\n";
+}
+
+?>
 		</table>
 	<?php
+}
+function supprimer_vol($conn)
+{
+	if(! isset($_GET['supprimer_vol']))
+		return false;
+
+	$idvol_to_delete = $_GET['supprimer_vol'];
+	$compagnie = getCompagnie();
+
+	$query = "delete from VOL where idVol=$idvol_to_delete and idCompagnie=$compagnie";
+	$stmt = oci_parse($conn, $query);
+	if(! oci_execute($stmt))
+		die("Erreur à la récupération des billets.");
+
+	echo '<div class="alert-box success">';
+	echo "Vol numéro $idvol_to_delete supprimé de la compagnie $compagnie.";
+	echo '<a href="" class="close">&times;</a>';
+	echo '</div>';
+
 }
 function afficher_billets($idvol, $compagnie, $conn)
 {
 	?>
+		<!-- Début de la fonction d'affichage des billets -->
 				<table>
 					<thead>
 						<th>id</th>
 						<th>Prix</th>
 						<th>Promo</th>
 						<th>État</th>
+						<?php
+						if(estGestionnaire())
+						{
+							echo "<th>Supprimer</th>";
+						}
+						else
+						{
+							echo "<th>Réserver</th> <th> Acheter </th>";
+						}
+						?>
 					</thead>
 
 <?php
-$query = "select * from BILLET
-where idVol = " . $idvol . " and idCompagnie=" . $compagnie ;
+$query = 
+"
+select * from BILLET 
+where idVol=$idvol and 
+idCompagnie=$compagnie
+";
+if(! estGestionnaire())
+	$query .= " and etatBillet is null";
 
 $stmt = oci_parse($conn, $query);
 if(! oci_execute($stmt))
@@ -199,12 +270,23 @@ if(! oci_execute($stmt))
 
 while($row = oci_fetch_assoc($stmt))
 {
+	$idbillet = $row['IDBILLET'];
 	echo "<tr>";
-	echo 
-		"<td>" . $row['IDBILLET'] . "</td>" .
-		"<td>" . $row['PRIX'] . "</td>" .
-		"<td>" . $row['PROMO'] . "</td>" .
-		"<td>" . $row['ETATBILLET'] . "</td>";
+		echo 
+			"<td>" . $row['IDBILLET'] . "</td>" .
+			"<td>" . $row['PRIX'] . "</td>" .
+			"<td>" . $row['PROMO'] . "</td>" .
+			"<td>" . $row['ETATBILLET'] . "</td>";
+
+		if(estGestionnaire())
+		{
+			echo "<td><a href='?suppression_billet=$idbillet&idvol=$idvol' >DELETE ME</a></td>";
+		}
+		else
+		{
+			echo "	<td><a href='?reserverbillet=$idbillet&idvol=$idvol&idcompagnie=$compagnie' >RESERVER</a></td>
+					<td><a href='?acheterbillet=$idbillet&idvol=$idvol&idcompagnie=$compagnie' >ACHETER</a></td>";
+		}
 	echo "</tr>\n";
 
 }
@@ -212,5 +294,316 @@ while($row = oci_fetch_assoc($stmt))
 ?>
 				</table>
 	<?php
+}
+function achat_billet($idvol, $compagnie, $conn)
+{
+	if(! isset($_GET['acheterbillet']))
+		return false;
+
+	if(! isset($_SESSION['idclient']))
+		return false;
+
+	$idclient = $_SESSION['idclient'];
+	$idbillet = $_GET['acheterbillet'];
+
+	$query = 'begin achat(:p1, :p2); end;';
+	$stmt = oci_parse($conn, $query );
+	oci_bind_by_name($stmt, ':p1', $idclient);
+	oci_bind_by_name($stmt, ':p2', $idbillet);
+	if(! oci_execute($stmt))
+		die("Erreur à l'achat du billet.");
+
+}
+function reservation_billet($idvol, $compagnie, $conn)
+{
+	if(! isset($_GET['reserverbillet']))
+		return false;
+
+	if(! isset($_SESSION['idclient']))
+		return false;
+
+	$idclient = $_SESSION['idclient'];
+	$idbillet = $_GET['reserverbillet'];
+
+	$query = 'begin reserver(:p1, :p2); end;';
+	$stmt = oci_parse($conn, $query );
+	oci_bind_by_name($stmt, ':p1', $idclient);
+	oci_bind_by_name($stmt, ':p2', $idbillet);
+	if(! oci_execute($stmt))
+		die("Erreur à la réservation du billet.");
+}
+function suppression_billet($idvol, $compagnie, $conn)
+{
+	if( ! isset($_GET['idvol'], $_GET['suppression_billet']))
+		return false;
+
+	$idvol = $_GET['idvol'];
+	$idbillet = $_GET['suppression_billet'];
+
+	$query = "delete from BILLET where idBillet=$idbillet";
+	$stmt = oci_parse($conn, $query);
+	if(! oci_execute($stmt))
+		die("Erreur à la récupération des billets.");
+
+	?>
+	<div class="alert-box success">
+	<?php echo "billet supprimé : $idbillet du vol $idvol de la compagnie $compagnie."; ?>
+		<a href="" class="close">&times;</a>
+	</div>
+	<?php
+
+}
+
+function afficher_escales($idvol, $compagnie, $conn)
+{
+
+	$query = "select E.idescale as idescale, V.nomVille as nomville 
+		from VILLE V JOIN ESCALE E ON E.idVille = V.idVille
+		where E.idVol=$idvol and E.idCompagnie=$compagnie";
+
+	$stmt = oci_parse($conn, $query);
+	if(! oci_execute($stmt))
+		die("Erreur à la récupération des info sur les escales.");
+	
+	$options = "";
+	while($row = oci_fetch_assoc($stmt))
+	{
+		$idescale = $row['IDESCALE'];
+		$nomville= $row['NOMVILLE'];
+		$options .= "<tr><td>$idescale</td><td>$nomville</td>";
+		if(estGestionnaire())
+			$options .= "<td><a href='?supprimer_escale=$idescale&idvol=$idvol' >XXX</a></td>";
+		$options .= "</tr>\n";
+	}
+	?>
+		<table>
+			<thead>
+				<th>id escale</th>
+				<th>ville</th>
+				<?php if(estGestionnaire()) { echo "<th>Supprimer</th>"; } ?>
+			</thead>
+	<?php
+		echo $options;
+	?>
+
+		</table>
+	<?php
+}
+function ajout_escale($idvol, $compagnie, $conn)
+{
+	if(! isset($_POST['escale_a_ajouter']))
+		return false;
+	$v = $_POST['escale_a_ajouter'];
+	$query = "insert into ESCALE VALUES(seq_escale.nextVal, $v, $idvol, $compagnie)";
+	$stmt = oci_parse($conn, $query);
+	if(! oci_execute($stmt))
+		die("Erreur à l'insertion d'une nouvelle escale.");
+	?>
+	<div class="alert-box success">
+	<?php echo "Ajout d'une escale au vol $idvol de la compagnie $compagnie."; ?>
+		<a href="" class="close">&times;</a>
+	</div>
+	<?php
+
+}
+function suppression_escale($idvol, $compagnie, $conn)
+{
+	if(! isset($_GET['supprimer_escale']))
+		return false;
+
+	$escale = $_GET['supprimer_escale'];
+	$query = "delete from ESCALE where idEscale=$escale";
+	$stmt = oci_parse($conn, $query);
+	if(! oci_execute($stmt))
+		die("Erreur à la suppression de l'escale.");
+
+	?>
+	<div class="alert-box error">
+	<?php echo "Suppression de l'escale $escale."; ?>
+		<a href="" class="close">&times;</a>
+	</div>
+	<?php
+
+}
+function afficher_ajout_escale($idvol, $compagnie, $conn)
+{
+	$query = "select idVille, nomVille from VILLE where idVille not in
+		(select idVille from ESCALE where idVol=$idvol and idCompagnie=$compagnie)";
+
+	$stmt = oci_parse($conn, $query);
+	if(! oci_execute($stmt))
+		die("Erreur à la récupération des info sur les escales.");
+	
+	$options = "";
+	while($row = oci_fetch_assoc($stmt))
+	{
+		$idville = $row['IDVILLE'];
+		$nomville= $row['NOMVILLE'];
+		$options .= "<option value=$idville >$nomville</option>\n";
+	}
+
+	?>
+	<form class="nice" action="?idvol=<?php echo $idvol; ?>" method="POST" >
+		<label for='escale_a_ajouter' class="blue radius label" >Escale à ajouter</label><br />
+		<select id="escale_a_ajouter" name="escale_a_ajouter">
+		<?php echo $options; ?>
+		</select>
+
+		<input type="submit" value="Ajouter cette escale à ce vol" />
+	</form>
+	<?php
+}
+function afficher_reservations($conn)
+{
+
+	if(! isset($_SESSION['idclient']))
+		return false;
+
+	$idclient = $_SESSION['idclient'];
+
+	$query = "select R.idBillet as idbillet, 
+		to_char(R.dateReservation, 'yyyy/mm/dd hh24:mi:ss') as datereservation,
+		B.prix as prix,
+		B.promo as promo,
+		V.idvol as vol,
+		T.nomVille as villedepart,
+		X.nomVille as villearrivee
+		from RESERVATION R JOIN BILLET B ON B.idBillet = R.idBillet
+		JOIN VOL V ON V.idVol = B.idVol and V.idCompagnie = B.idCompagnie
+		JOIN VILLE T ON T.idVille = V.idVilleDepart
+		JOIN VILLE X ON X.idVille = V.idVilleArrivee
+		where idClient=$idclient";
+	
+	$stmt = oci_parse($conn, $query);
+	if(! oci_execute($stmt))
+		die("Erreur à la récupération des info sur les réservations.");
+
+	?>
+
+		<table>
+			<thead>
+				<th>idBillet</th>
+				<th>prix</th>
+				<th>promo</th>
+				<th>prix sans les frais</th>
+				<th>Ville de départ</th>
+				<th>Ville d'arrivée</th>
+				<th>N° Vol</th>
+				<th>date de réservation</th>
+			</thead>
+		<?php
+	while($row = oci_fetch_assoc($stmt))
+	{
+		$idbillet = $row['IDBILLET'];
+		$date = $row['DATERESERVATION'];
+		$prix = $row['PRIX'];
+		$promo = $row['PROMO'];
+		$villedepart = $row['VILLEDEPART'];
+		$villearrivee = $row['VILLEARRIVEE'];
+		$idvol = $row['VOL'];
+
+		echo "<tr>\n";
+		echo "
+			<td>$idbillet</td>
+			<td>$prix</td>
+			<td>$promo</td>
+			<td>" . ($prix - $promo) . "</td>
+			<td>$villedepart</td>
+			<td>$villearrivee</td>
+			<td>$idvol</td>
+			<td>$date</td>";
+
+		echo	"\n</tr>\n";
+
+	}
+	echo "</table>\n";
+
+}
+
+function afficher_achats($conn)
+{
+	if(! isset($_SESSION['idclient']))
+		return false;
+
+	$idclient = $_SESSION['idclient'];
+
+	$query = "select A.idBillet as idbillet, 
+		to_char(A.dateAchat, 'yyyy/mm/dd hh24:mi:ss') as dateachat,
+		to_char(A.dateAchat, 'hh24') as heureachat,
+		to_char(V.dateDepart, 'yyyy/mm/dd hh24:mi:ss') as datedepart,
+		to_char(V.dateArrivee, 'yyyy/mm/dd hh24:mi:ss') as datearrivee,
+		B.prix as prix,
+		B.promo as promo,
+		V.idvol as vol,
+		T.nomVille as villedepart,
+		X.nomVille as villearrivee
+		from BILLET_CLIENT A JOIN BILLET B ON B.idBillet = A.idBillet
+		JOIN VOL V ON V.idVol = B.idVol and V.idCompagnie = B.idCompagnie
+		JOIN VILLE T ON T.idVille = V.idVilleDepart
+		JOIN VILLE X ON X.idVille = V.idVilleArrivee
+		where A.idClient=$idclient";
+	
+	$stmt = oci_parse($conn, $query);
+	if(! oci_execute($stmt))
+		die("Erreur à la récupération des info sur les réservations.");
+
+	?>
+
+		<table>
+			<thead>
+				<th>idBillet</th>
+				<th>N° Vol</th>
+				<th>prix</th>
+				<th>promo</th>
+				<th>Ville de départ</th>
+				<th>Ville d'arrivée</th>
+				<th>Date de départ</th>
+				<th>Date d'arrivée</th>
+				<th>date d'achat</th>
+				<th>prix final</th>
+			</thead>
+		<?php
+
+	while($row = oci_fetch_assoc($stmt))
+	{
+		$idbillet = $row['IDBILLET'];
+		$dateachat = $row['DATEACHAT'];
+		$datedepart = $row['DATEDEPART'];
+		$datearrivee = $row['DATEARRIVEE'];
+		$prix = $row['PRIX'];
+		$promo = $row['PROMO'];
+		$villedepart = $row['VILLEDEPART'];
+		$villearrivee = $row['VILLEARRIVEE'];
+		$idvol = $row['VOL'];
+		$heureachat = $row['HEUREACHAT']; 
+
+		$prixtotal = $prix - $promo;
+
+		if($heureachat >= 2 && $heureachat < 6)
+			$prixtotal += 5;
+		else if( $heureachat >= 6 && $heureachat < 22)
+			$prixtotal += 20;
+		else
+			$prixtotal += 12;
+
+		echo "<tr>\n";
+
+		echo "
+			<td>$idbillet </td>
+			<td>$idvol </td>
+			<td>$prix </td>
+			<td>$promo </td>
+			<td>$villedepart </td>
+			<td>$villearrivee </td>
+			<td>$datedepart </td>
+			<td>$datearrivee </td>
+			<td>$dateachat </td>
+			<td>$prixtotal</td>
+			";
+
+		echo	"\n</tr>\n";
+
+	}
+	echo "</table>\n";
 }
 ?>

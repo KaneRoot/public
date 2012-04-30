@@ -8,13 +8,26 @@
 				<p></p>
 				<p>
 <?php 
+if(! isset($conn))
+	include("co.php");
+include("fonctions.php");
+
 if(isset($_SESSION['connexion'], $_SESSION['login']) && 
 		(strcmp($_SESSION['connexion'], "client") == 0 || strcmp($_SESSION['connexion'], "gestionnaire") == 0))
 {
-	?>
-	<a href="client.php"		class="nice small radius red button">Accueil</a>
-	<a href="deconnexion.php"		class="nice small radius blue button">Déconnexion</a>
-	<?php
+	echo '<a href="client.php"		class="nice small radius red button">Accueil</a>';
+	if(estGestionnaire())
+	{
+		echo ' 
+			<a href="ajout_vol.php" class="nice small radius blue button">Ajouter un vol</a>
+			<a href="ajout_ville.php" class="nice small radius blue button">Ajouter une ville</a>
+			';
+	}
+	echo '
+		<a href="vols_global.php" class="nice small radius blue button">Voir les vols</a>
+		<a href="deconnexion.php" class="nice small radius blue button">Déconnexion</a>
+		';
+
 }
 else
 {

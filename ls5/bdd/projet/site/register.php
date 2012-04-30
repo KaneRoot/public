@@ -60,7 +60,6 @@ if(! isset($_SESSION['connexion']))
 				$_POST['r_adresse'] . ", ". 
 				$_POST['r_numtel']	. " )";
 			$stmt = oci_parse($conn, $query);
-			//echo "\n<br />La requête : ". $query . "<br />\n";
 			if( ! oci_execute($stmt))
 				die("Il y a eu une erreur dans l'insertion d'un nouveau client.");
 
@@ -69,6 +68,17 @@ if(! isset($_SESSION['connexion']))
 			$_SESSION['login'] = $login;
 			$_SESSION['nom'] = $_POST['r_nom'];
 			$_SESSION['prenom'] = $_POST['r_prenom'];
+
+			$query = "select idClient from CLIENT where loginClient=$login";
+			$stmt = oci_parse($conn, $query);
+			if( ! oci_execute($stmt))
+				die("Il y a eu une erreur dans l'insertion d'un nouveau client.");
+
+			if( ! ( $row = oci_fetch_assoc($stmt)))
+				die("Il y a eu une erreur dans l'insertion d'un nouveau client.");
+
+			$_SESSION['idclient'] = $row['IDCLIENT'];
+
 
 			header("Location: client.php");
 		}
