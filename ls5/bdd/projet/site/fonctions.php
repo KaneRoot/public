@@ -254,10 +254,9 @@ function afficher_billets($idvol, $compagnie, $conn)
 		<!-- Début de la fonction d'affichage des billets -->
 				<table>
 					<thead>
-						<th><a href="" data-reveal-id="testModal">id</a></th>
+						<th>id</th>
 						<th>Prix</th>
 						<th>Promo</th>
-						<th>État</th>
 						<?php
 						if(estGestionnaire())
 						{
@@ -272,15 +271,14 @@ function afficher_billets($idvol, $compagnie, $conn)
 
 <?php
 $query = 
-"
-select * from BILLET 
-where idVol=$idvol and 
-idCompagnie=$compagnie
-";
+"select * from BILLET where idVol=:idvol and idCompagnie=:compagnie ";
 if(! estGestionnaire())
 	$query .= " and etatBillet is null";
 
 $stmt = oci_parse($conn, $query);
+oci_bind_by_name($stmt, ':idvol', $idvol);
+oci_bind_by_name($stmt, ':compagnie', $compagnie);
+
 if(! oci_execute($stmt))
 	die("Erreur à la récupération des billets.");
 
@@ -291,8 +289,7 @@ while($row = oci_fetch_assoc($stmt))
 		echo 
 			"<td>" . $row['IDBILLET'] . "</td>" .
 			"<td>" . $row['PRIX'] . "</td>" .
-			"<td>" . $row['PROMO'] . "</td>" .
-			"<td>" . $row['ETATBILLET'] . "</td>";
+			"<td>" . $row['PROMO'] . "</td>";
 
 		if(estGestionnaire())
 		{
