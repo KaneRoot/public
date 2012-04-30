@@ -97,6 +97,10 @@ function get_prochain_idvol($conn)
 }
 function afficher_les_vols($conn)
 {
+	affichage_vols($conn);
+}
+function affichage_vols($vdepart, $varrivee, $conn)
+{
 	supprimer_vol($conn);
 
 	if(isset($_GET['classement']))
@@ -139,6 +143,11 @@ function afficher_les_vols($conn)
 	JOIN VILLE Y ON Y.idVille=V.idVilleArrivee
 	where V.dateDepart > SYSDATE 
 	";
+
+	if(strlen($vdepart) > 0)
+		$query .= " and V.idVilleDepart=$vdepart";
+	if(strlen($varrivee) > 0)
+		$query .= " and V.idVilleArrivee=$varrivee";
 
 	if(isset($compagnie))
 		$query .= " and V.idCompagnie=$compagnie ";

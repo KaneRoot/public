@@ -33,7 +33,7 @@ if( isset($_POST['ville_arrivee']) )
 				<p>Voici la page où vous pouvez sélectionner le vol que vous allez prendre !</p>
 			</div>
 			<div class="two columns panel">
-				<p><a href="reservation.php?restart=oui">Oubliez mes choix ! </a></p>
+				<p><a href="reservation.php?restart=oui" class="button" >Oubliez mes choix ! </a></p>
 			</div>
 		</div>
 		<div class="row">
@@ -56,9 +56,10 @@ if(! isset($_SESSION['ville_depart']) && ! isset($_SESSION['ville_arrivee']))
 	<?php
 		/* c'est ici qu'on va afficher les vols */
 	$query = "
-select V.idVille as idville, V.nomVille as nomville
+select DISTINCT V.idVille as idville, V.nomVille as nomville
 from VILLE V JOIN VOL X ON X.idVilleDepart = V.idVille
 where SYSDATE < X.dateDepart
+ and nb_billets_restants(X.idVol, X.idCompagnie) > 0
 	";
 	$stmt = oci_parse($conn, $query);
 	if(! oci_execute($stmt))
@@ -91,8 +92,12 @@ else if( ! isset($_SESSION['ville_arrivee']) )
 
 		/* c'est ici qu'on va afficher les vols */
 	$query = "
-select idVille, nomVille from VILLE where idVille in
-(select idVilleArrivee from VOL where idVilleDepart=$idVilleDepart and SYSDATE < dateDepart)
+select distinct idVille, nomVille from VILLE where idVille in
+(
+ select idVilleArrivee from VOL 
+ where idVilleDepart=$idVilleDepart and SYSDATE < dateDepart
+ and nb_billets_restants(idVol, idCompagnie) > 0
+)
 ";
 	$stmt = oci_parse($conn, $query);
 	if(! oci_execute($stmt))
@@ -114,39 +119,12 @@ else if(! isset($_SESSION['date_depart']) && isset($_SESSION['ville_depart'], $_
 {
 	?>
 		<h5>Choisissez votre date et horaire de départ.</h5>
-		<form class="nice" action="reservation.php" method="POST" >
-			<fieldset>
-			<select id="date_depart" name="date_depart">
 <?php 
+
 $vdepart = $_SESSION['ville_depart'];
 $varrivee = $_SESSION['ville_arrivee'];
 
-$query = "select V.idVol as idvol, V.idCompagnie as idcompagnie, C.nomCompagnie as nomcompagnie, 
-to_char(V.dateDepart, 'yyyy/mm/dd hh24:mi:ss') as ledatedepart,
-to_char(V.dateArrivee, 'yyyy/mm/dd hh24:mi:ss') as ledatearrivee,
-trunc((V.dateArrivee - V.dateDepart)*24) as dureeh,
-trunc( MOD(( (V.dateArrivee - V.dateDepart)*24*60),60)) as dureem
-from VOL V JOIN COMPAGNIE C ON V.idCompagnie = C.idCompagnie
-where V.idVilleDepart=$vdepart and V.idVilleArrivee=$varrivee and SYSDATE < V.dateDepart";
-
-$stmt = oci_parse($conn, $query);
-if(! oci_execute($stmt))
-	die("Il y a eu une erreur lors de l'affichage des différents vols.");
-
-while($row = oci_fetch_assoc($stmt))
-{
-	echo "<option value='" . $row['IDVOL'] . "_" . $row['IDCOMPAGNIE'] . "' >" . 
-		$row['NOMCOMPAGNIE']. ". Date de départ : " .
-		$row['LEDATEDEPART'] . " Date d'arrivée : " . 
-		$row['LEDATEARRIVEE'] . 
-		" durée : " . $row['DUREEH'] . ":" . $row['DUREEM'] . " </option>\n";
-}
-?>
-			</select>
-			<input type="submit" value="Go !" />
-		</form>
-
-<?php
+affichage_vols($vdepart, $varrivee, $conn);
 }
 ?>
 			</div>
