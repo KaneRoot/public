@@ -223,8 +223,11 @@ function supprimer_vol($conn)
 	$idvol_to_delete = $_GET['supprimer_vol'];
 	$compagnie = getCompagnie();
 
-	$query = "delete from VOL where idVol=$idvol_to_delete and idCompagnie=$compagnie";
+	$query = "delete from VOL where idVol=:idvoltodelete and idCompagnie=:idCompagnie";
 	$stmt = oci_parse($conn, $query);
+	oci_bind_by_name($stmt, ':idvoltodelete', $idvol_to_delete);
+	oci_bind_by_name($stmt, ':idCompagnie', $compagnie);
+
 	if(! oci_execute($stmt))
 		die("Erreur à la récupération des billets.");
 
@@ -353,7 +356,7 @@ function suppression_billet($idvol, $compagnie, $conn)
 		die("Erreur à la récupération des billets.");
 
 	?>
-	<div class="alert-box success">
+	<div class="alert-box error">
 	<?php echo "billet supprimé : $idbillet du vol $idvol de la compagnie $compagnie."; ?>
 		<a href="" class="close">&times;</a>
 	</div>
