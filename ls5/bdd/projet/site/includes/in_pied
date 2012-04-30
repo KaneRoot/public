@@ -5,5 +5,20 @@
 	<script src="javascripts/app.js"></script>
 	<script src="javascripts/personnalisation.js"></script>
 
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('#myModal').click(function() {
+			$('#myModal').reveal();
+		});
+	});
+
+	$('#myModal').reveal({
+		animation: 'fadeAndPop', //fade, fadeAndPop, none
+		animationspeed: 300, //how fast animtions are
+		closeOnBackgroundClick: true, //if you click background will modal close?
+		dismissModalClass: 'close-reveal-modal' //the class of a button or element that will close an open modal
+	});
+</script>
+
 </body>
 </html>

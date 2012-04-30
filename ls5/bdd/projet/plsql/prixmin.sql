@@ -6,7 +6,7 @@ return NUMBER
 IS
 	prix_min_v NUMBER;
 BEGIN
-	select MIN(prix) into prix_min_v
+	select MIN(prix - promo) into prix_min_v
 	FROM BILLET
 	WHERE idVol = idVol_p and idCompagnie = idCompagnie_p and etatBillet is null;
 

@@ -254,7 +254,7 @@ function afficher_billets($idvol, $compagnie, $conn)
 		<!-- Début de la fonction d'affichage des billets -->
 				<table>
 					<thead>
-						<th>id</th>
+						<th><a href="" data-reveal-id="testModal">id</a></th>
 						<th>Prix</th>
 						<th>Promo</th>
 						<th>État</th>
@@ -302,11 +302,33 @@ while($row = oci_fetch_assoc($stmt))
 		}
 		else
 		{
-			echo "	<td><a href='?reserverbillet=$idbillet&idvol=$idvol&idcompagnie=$compagnie' >RESERVER</a></td>
-					<td><a href='?acheterbillet=$idbillet&idvol=$idvol&idcompagnie=$compagnie' >ACHETER</a></td>";
+			?>
+		<div id="reserverModal<?php echo $idbillet; ?>" class="reveal-modal">
+			<h2>Reserver le billet <?php echo $idbillet; ?> ?</h2>
+			<p class="lead">Oui hein ? Il est vraiment bien ce billet.</p>
+			<a class="close-reveal-modal">&#215;</a>
+			<?php echo "<a href='?reserverbillet=$idbillet&idvol=$idvol&idcompagnie=$compagnie' class='nice radius button' >Réserver !</a>"; ?>
+		</div>
+		<div id="acheterModal<?php echo $idbillet; ?>" class="reveal-modal">
+			<h2>Acheter le billet <?php echo $idbillet; ?> ?</h2>
+			<p class="lead">Oui hein ? Il est vraiment bien ce billet.</p>
+			<a class="close-reveal-modal">&#215;</a>
+			<?php echo "<a href='?acheterbillet=$idbillet&idvol=$idvol&idcompagnie=$compagnie' class='nice radius button' >Acheter !</a>"; ?>
+		</div>
+			<?php
+			echo "	
+			<td>
+			<a data-reveal-id='reserverModal$idbillet' href='#' >
+				<label class='blue radius label' >RESERVER</label>
+			</a>
+			</td>
+			<td>
+			<a data-reveal-id='acheterModal$idbillet' href='#' >
+				<label class='blue radius label' >ACHETER</label>
+			</a>
+			</td>";
 		}
 	echo "</tr>\n";
-
 }
 
 ?>
@@ -508,6 +530,7 @@ function afficher_reservations($conn)
 	if(! oci_execute($stmt))
 		die("Erreur à la récupération des info sur les réservations.");
 
+	/* On affiche un message si on a réservé il y a plus de 47h ou si le départ est dans 73h */
 	?>
 
 		<table>
@@ -574,9 +597,10 @@ function afficher_achats($conn)
 		JOIN VOL V ON V.idVol = B.idVol and V.idCompagnie = B.idCompagnie
 		JOIN VILLE T ON T.idVille = V.idVilleDepart
 		JOIN VILLE X ON X.idVille = V.idVilleArrivee
-		where A.idClient=$idclient";
+		where A.idClient=:idclient";
 	
 	$stmt = oci_parse($conn, $query);
+	oci_bind_by_name($stmt, ':idclient', $idclient);
 	if(! oci_execute($stmt))
 		die("Erreur à la récupération des info sur les réservations.");
 
