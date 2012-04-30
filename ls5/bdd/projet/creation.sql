@@ -65,11 +65,11 @@ create table BILLET
 	idVol number(10) NOT NULL,
 	idCompagnie number(10) NOT NULL,
 	prix number(15) NOT NULL,
-	promo number(10),
+	promo number(10) NOT NULL DEFAULT 0,
 	etatBillet char(1),
 	CONSTRAINT pk_billet PRIMARY KEY(idBillet),
 	CONSTRAINT ck_billet_etatbillet CHECK(etatBillet in ('A', 'R')),
-	CONSTRAINT ck_billet_prix CHECK(prix >= 0),
+	CONSTRAINT ck_billet_prix CHECK(prix - promo >= 0),
 	CONSTRAINT fk_billet_vol_compagnie FOREIGN KEY (idVol, idCompagnie) REFERENCES VOL ON DELETE CASCADE
 );
 create table BILLET_CLIENT

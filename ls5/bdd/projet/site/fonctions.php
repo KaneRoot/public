@@ -62,7 +62,7 @@ function ajout_billet($idvol, $compagnie, $conn)
 	if(isset($_POST['prix']))
 	{
 		$prix = $_POST['prix'];
-		$promo = 'NULL';
+		$promo = 0;
 
 		if(isset($_POST['promotion']))
 			$promo = $_POST['promotion'];
