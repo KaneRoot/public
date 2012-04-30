@@ -6,17 +6,19 @@ function getCompagnie()
 	if(! isset($conn))
 		include('co.php');
 
+	$login = $_SESSION['login'];
+
 	$query = "select idCompagnie 
 	from GESTIONNAIRE
 	where UPPER(loginGestionnaire) = UPPER(:login)";
 
 	$stmt = oci_parse($conn, $query);
-	oci_bind_by_name($stmt, ':login', $_SESSION['login']);
+	oci_bind_by_name($stmt, ':login', $login);
 	if( ! oci_execute($stmt))
 		die("Il y a eu une erreur dans la recherche de la compagnie du gestionnaire.");
 
 	if( ! ( $row = oci_fetch_assoc($stmt)))
-		die("Il y a eu une erreur dans la recherche de la compagnie du gestionnaire.");
+		die("Il y a eu une erreur dans la recherche de la compagnie du gestionnaire $login.");
 
 	$compagnie = $row['IDCOMPAGNIE'];
 

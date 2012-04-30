@@ -113,7 +113,7 @@ select idVille, nomVille from VILLE where idVille in
 else if(! isset($_SESSION['date_depart']) && isset($_SESSION['ville_depart'], $_SESSION['ville_arrivee']))
 {
 	?>
-		<h5>Choisissez votre date et horraire de départ.</h5>
+		<h5>Choisissez votre date et horaire de départ.</h5>
 		<form class="nice" action="reservation.php" method="POST" >
 			<fieldset>
 			<select id="date_depart" name="date_depart">
