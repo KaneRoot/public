@@ -96,7 +96,7 @@ function get_prochain_idvol($conn)
 function afficher_les_vols($conn)
 {
 	supprimer_vol($conn);
-	/* À FINIR TODO */
+
 	if(isset($_GET['classement']))
 	{
 		$classement = "ORDER BY ";
@@ -271,9 +271,11 @@ function afficher_billets($idvol, $compagnie, $conn)
 
 <?php
 $query = 
-"select * from BILLET where idVol=:idvol and idCompagnie=:compagnie ";
+"select B.idBillet as idBillet, B.prix as prix, B.promo as promo
+from BILLET B
+where B.idVol=:idvol and B.idCompagnie=:compagnie ";
 if(! estGestionnaire())
-	$query .= " and etatBillet is null";
+	$query .= ' and B.etatBillet is null';
 
 $stmt = oci_parse($conn, $query);
 oci_bind_by_name($stmt, ':idvol', $idvol);
@@ -285,11 +287,11 @@ if(! oci_execute($stmt))
 while($row = oci_fetch_assoc($stmt))
 {
 	$idbillet = $row['IDBILLET'];
-	echo "<tr>";
+	echo '<tr>';
 		echo 
-			"<td>" . $row['IDBILLET'] . "</td>" .
-			"<td>" . $row['PRIX'] . "</td>" .
-			"<td>" . $row['PROMO'] . "</td>";
+			"<td>$idbillet</td>" .
+			'<td>' . $row['PRIX'] . '</td>' .
+			'<td>' . $row['PROMO'] . '</td>';
 
 		if(estGestionnaire())
 		{
@@ -351,7 +353,7 @@ function achat_billet($conn)
 		die("Erreur à l'achat du billet.");
 
 	echo '<div class="alert-box success">';
-	echo "billet acheté : $idbillet ."; 
+	echo "Billet acheté : $idbillet ."; 
 	echo '<a href="" class="close">&times;</a>';
 	echo "</div>";
 
@@ -373,6 +375,12 @@ function reservation_billet($idvol, $compagnie, $conn)
 	oci_bind_by_name($stmt, ':p2', $idbillet);
 	if(! oci_execute($stmt))
 		die("Erreur à la réservation du billet.");
+
+	echo '<div class="alert-box success">';
+	echo "Billet réservé : $idbillet ."; 
+	echo '<a href="" class="close">&times;</a>';
+	echo "</div>";
+
 }
 function suppression_billet($idvol, $compagnie, $conn)
 {
@@ -562,9 +570,21 @@ function afficher_reservations($conn)
 			<td>$villedepart</td>
 			<td>$villearrivee</td>
 			<td>$idvol</td>
-			<td>$date</td>
-			<td><a href='?acheterbillet=$idbillet' >ACHAT</a></td>
-			";
+			<td>$date</td>";
+			?>
+		<div id="acheterModal<?php echo $idbillet; ?>" class="reveal-modal">
+			<h2>Acheter le billet <?php echo $idbillet; ?> ?</h2>
+			<p class="lead">Oui hein ? Il est vraiment bien ce billet.</p>
+			<a class="close-reveal-modal">&#215;</a>
+			<?php echo "<a href='?acheterbillet=$idbillet' class='nice radius button' >Acheter !</a>"; ?>
+		</div>
+		<?php
+		echo "
+			<td>
+			<a data-reveal-id='acheterModal$idbillet' href='#' >
+				<label class='blue radius label' >ACHETER</label>
+			</a>
+			</td>";
 
 		echo	"\n</tr>\n";
 
