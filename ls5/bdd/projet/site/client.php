@@ -35,7 +35,7 @@ afficher_reservations($conn);
 				<hr />
 				<p>Here are your options.</p>
 				<hr />
-				<p><a href="reservation.php" class="nice large radius red button">Reserver</a><br /> </p>
+				<p><a href="reservation.php" class="nice large radius red button">Réserver</a><br /> </p>
 				<p><a href="consulter_vols.php" class="nice large radius blue button">Voir les vols</a></p>
 			</div>
 		</div>

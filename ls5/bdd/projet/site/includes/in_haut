@@ -23,6 +23,12 @@ if(isset($_SESSION['connexion'], $_SESSION['login']) &&
 			<a href="ajout_ville.php" class="nice small radius blue button">Ajouter une ville</a>
 			';
 	}
+	else
+	{
+		echo '
+				<a href="reservation.php" class="nice small radius red button">Réserver</a>
+			';
+	}
 	echo '
 		<a href="vols_global.php" class="nice small radius blue button">Voir les vols</a>
 		<a href="deconnexion.php" class="nice small radius blue button">Déconnexion</a>
