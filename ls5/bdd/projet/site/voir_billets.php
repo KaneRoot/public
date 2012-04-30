@@ -27,7 +27,7 @@ include("includes/in_entete");
 		<?php echo "<h5>Les billets du vol $idvol de la compagnie $compagnie </h5>"; ?>
 			<div class="twelve columns panel">
 <?php
-achat_billet($idvol,  $compagnie, $conn);
+achat_billet($conn);
 reservation_billet($idvol, $compagnie, $conn);
 afficher_billets($idvol, $compagnie, $conn);
 ?>

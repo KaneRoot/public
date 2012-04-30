@@ -22,28 +22,27 @@ elseif( 0 != strcmp("client", $_SESSION['connexion']) )
 		<?php include("includes/in_haut"); ?>
 
 		<div class="row">
-			<div class="five columns panel">
-				<h4>Bienvenue cher client!</h4>
-				<p>Here are your options.</p>
-				<p>
-				<a href="reservation.php" class="nice small radius blue button">Reserver un vol</a><br /><br />
-				<a href="consulter_vols.php" class="nice small radius blue button">Voir les vols</a><br />
-				</p>
-			</div>
-		</div>
-		<div class="row">
 			<h5>Vos réservations en cours</h5>
 			<hr />
-			<div class="eight columns panel">
+			<div class="eight columns">
 <?php
+achat_billet($conn);
 afficher_reservations($conn);
 ?>
+			</div>
+			<div class="three columns">
+				<h4 class="green radius label" >Bienvenue cher client !</h4>
+				<hr />
+				<p>Here are your options.</p>
+				<hr />
+				<p><a href="reservation.php" class="nice large radius red button">Reserver</a><br /> </p>
+				<p><a href="consulter_vols.php" class="nice large radius blue button">Voir les vols</a></p>
 			</div>
 		</div>
 		<div class="row">
 			<h5>Vos achats passés</h5>
 			<hr />
-			<div class="eleven columns panel">
+			<div class="ten columns">
 <?php
 afficher_achats($conn);
 ?>

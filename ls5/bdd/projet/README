@@ -8,3 +8,7 @@ fouchal@unistra.fr
 Création et suppression des tables = OK.
 Insertion tables = OK.
 Quelques procédures = OK.
+
+
+set pagesize 100
+set linesize 200

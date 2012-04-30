@@ -6,3 +6,5 @@
 
 -- INSERTIONS 
 @insertion.sql
+
+@creation.sql
