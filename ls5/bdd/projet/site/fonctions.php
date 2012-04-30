@@ -99,6 +99,8 @@ function afficher_les_vols($conn)
 			$classement .= "datedepart ASC";
 		else if(strcmp($_GET['classement'], "prix") == 0)
 			$classement .= "prix ASC";
+		else if(strcmp($_GET['classement'], "compagnie") == 0)
+			$classement .= "C.idCompagnie ASC";
 	}
 	if(estGestionnaire())
 		$compagnie = getCompagnie();
@@ -144,7 +146,7 @@ function afficher_les_vols($conn)
 			<thead>
 				<tr>
 					<th>id</th>
-					<th>Compagnie</th>
+					<th><a href='?classement=compagnie' >Compagnie</a></th>
 					<th>Ville de départ</th>
 					<th>Ville d'arrivée</th>
 					<th><a href="?classement=date_de_depart" >Date de départ</a></th>
@@ -295,7 +297,7 @@ while($row = oci_fetch_assoc($stmt))
 				</table>
 	<?php
 }
-function achat_billet($idvol, $compagnie, $conn)
+function achat_billet($conn)
 {
 	if(! isset($_GET['acheterbillet']))
 		return false;
@@ -312,6 +314,11 @@ function achat_billet($idvol, $compagnie, $conn)
 	oci_bind_by_name($stmt, ':p2', $idbillet);
 	if(! oci_execute($stmt))
 		die("Erreur à l'achat du billet.");
+
+	echo '<div class="alert-box success">';
+	echo "billet acheté : $idbillet ."; 
+	echo '<a href="" class="close">&times;</a>';
+	echo "</div>";
 
 }
 function reservation_billet($idvol, $compagnie, $conn)
@@ -372,7 +379,9 @@ function afficher_escales($idvol, $compagnie, $conn)
 		$nomville= $row['NOMVILLE'];
 		$options .= "<tr><td>$idescale</td><td>$nomville</td>";
 		if(estGestionnaire())
-			$options .= "<td><a href='?supprimer_escale=$idescale&idvol=$idvol' >XXX</a></td>";
+			$options .= "<td><a href='?supprimer_escale=$idescale&idvol=$idvol' >
+				<label class='blue radius label' >DELETE ME</label>
+				</a></td>";
 		$options .= "</tr>\n";
 	}
 	?>
@@ -394,8 +403,12 @@ function ajout_escale($idvol, $compagnie, $conn)
 	if(! isset($_POST['escale_a_ajouter']))
 		return false;
 	$v = $_POST['escale_a_ajouter'];
-	$query = "insert into ESCALE VALUES(seq_escale.nextVal, $v, $idvol, $compagnie)";
+	$query = "insert into ESCALE VALUES(seq_escale.nextVal, :idescale, :idvol, :compagnie)";
 	$stmt = oci_parse($conn, $query);
+	oci_bind_by_name($stmt, ':idescale', $v);
+	oci_bind_by_name($stmt, ':idvol', $idvol);
+	oci_bind_by_name($stmt, ':compagnie', $compagnie);
+
 	if(! oci_execute($stmt))
 		die("Erreur à l'insertion d'une nouvelle escale.");
 	?>
@@ -472,9 +485,10 @@ function afficher_reservations($conn)
 		JOIN VOL V ON V.idVol = B.idVol and V.idCompagnie = B.idCompagnie
 		JOIN VILLE T ON T.idVille = V.idVilleDepart
 		JOIN VILLE X ON X.idVille = V.idVilleArrivee
-		where idClient=$idclient";
+		where idClient=:client";
 	
 	$stmt = oci_parse($conn, $query);
+	oci_bind_by_name($stmt, ':client', $idclient);
 	if(! oci_execute($stmt))
 		die("Erreur à la récupération des info sur les réservations.");
 
@@ -490,6 +504,7 @@ function afficher_reservations($conn)
 				<th>Ville d'arrivée</th>
 				<th>N° Vol</th>
 				<th>date de réservation</th>
+				<th>Acheter</th>
 			</thead>
 		<?php
 	while($row = oci_fetch_assoc($stmt))
@@ -511,7 +526,9 @@ function afficher_reservations($conn)
 			<td>$villedepart</td>
 			<td>$villearrivee</td>
 			<td>$idvol</td>
-			<td>$date</td>";
+			<td>$date</td>
+			<td><a href='?acheterbillet=$idbillet' >ACHAT</a></td>
+			";
 
 		echo	"\n</tr>\n";
 
