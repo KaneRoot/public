@@ -26,6 +26,7 @@ elseif( 0 != strcmp("client", $_SESSION['connexion']) )
 			<hr />
 			<div class="eight columns">
 <?php
+annuler_reservation($conn);
 achat_billet($conn);
 afficher_reservations($conn);
 ?>

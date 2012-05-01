@@ -8,4 +8,5 @@
 @plsql/prixmin.sql
 @plsql/reserver.sql
 @plsql/nettoyage.sql
+@plsql/annuler_reservation.sql
 

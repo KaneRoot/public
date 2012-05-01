@@ -351,6 +351,29 @@ while($row = oci_fetch_assoc($stmt))
 				</table>
 	<?php
 }
+function annuler_reservation($conn)
+{
+	if(! isset($_GET['annulerreservation'], $_SESSION['idclient']))
+		return false;
+
+	$idclient = $_SESSION['idclient'];
+	$idbillet = $_GET['annulerreservation'];
+
+	$query = "begin annuler_reservation(:client, :idbillet); end;";
+
+	$stmt = oci_parse($conn, $query );
+	oci_bind_by_name($stmt, ':client', $idclient);
+	oci_bind_by_name($stmt, ':idbillet', $idbillet);
+
+	if(! oci_execute($stmt))
+		die("Erreur à l'annulation de la réservation.");
+
+	echo '<div class="alert-box success">';
+	echo "Annulation de la réservation du billet : $idbillet ."; 
+	echo '<a href="" class="close">&times;</a>';
+	echo "</div>";
+
+}
 function achat_billet($conn)
 {
 	if(! isset($_GET['acheterbillet']))
@@ -585,6 +608,7 @@ function afficher_reservations($conn)
 				<th>Ville d'arrivée</th>
 				<th>N° Vol</th>
 				<th>date de réservation</th>
+				<th>Annuler</th>
 				<th>Acheter</th>
 			</thead>
 		<?php
@@ -609,6 +633,12 @@ function afficher_reservations($conn)
 			<td>$idvol</td>
 			<td>$date</td>";
 			?>
+		<div id="annulerModal<?php echo $idbillet; ?>" class="reveal-modal">
+			<h2>Annuler la réservation <?php echo $idbillet; ?> ?</h2>
+			<p class="lead">Vous êtes sûr ?</p>
+			<a class="close-reveal-modal">&#215;</a>
+			<?php echo "<a href='?annulerreservation=$idbillet' class='nice radius button' >Annuler !</a>"; ?>
+		</div>
 		<div id="acheterModal<?php echo $idbillet; ?>" class="reveal-modal">
 			<h2>Acheter le billet <?php echo $idbillet; ?> ?</h2>
 			<p class="lead">Oui hein ? Il est vraiment bien ce billet.</p>
@@ -617,11 +647,12 @@ function afficher_reservations($conn)
 		</div>
 		<?php
 		echo "
-			<td>
-			<a data-reveal-id='acheterModal$idbillet' href='#' >
+			<td><a data-reveal-id='annulerModal$idbillet' href='#' >
+				<label class='blue radius label' >Annuler</label>
+			</a></td>
+			<td><a data-reveal-id='acheterModal$idbillet' href='#' >
 				<label class='blue radius label' >ACHETER</label>
-			</a>
-			</td>";
+			</a></td>";
 
 		echo	"\n</tr>\n";
 
