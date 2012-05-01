@@ -1,12 +1,3 @@
-fouchal@unistra.fr
-
-set pagesize 100
-set linesize 200
-
-Création et suppression des tables = OK.
-Insertion tables = OK.
-Procédures = OK.
-
 Pour simplifier les tests : tout.sql qui permet de supprimer puis recréer les tables, faire les insertions et recréer les procédures.
 
 Le site est dans 'site/' .
@@ -15,6 +6,4 @@ Le diagramme MCD est le fichier diagramme.dia qui s'ouvre avec le logiciel dia.
 Une version png est disponible également.
 
 Via le site j'appelle des procédures et des fonctions plsql, 
-j'utilise beaucoup PHP et quelques effets graphiques disponibles grâce à CSS3 et javascript.
-
-Les fichiers 
+j'utilise beaucoup PHP et quelques effets graphiques disponibles grâce à CSS3 et javascript pour rendre le site plus dynamique.

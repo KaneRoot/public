@@ -245,7 +245,9 @@ function supprimer_vol($conn)
 	$idvol_to_delete = $_GET['supprimer_vol'];
 	$compagnie = getCompagnie();
 
-	$query = "delete from VOL where idVol=:idvoltodelete and idCompagnie=:idCompagnie";
+	/* on passe par une procédure pour changer. */
+	$query = "begin annuler_vol(:idvoltodelete, :idCompagnie); end;";
+
 	$stmt = oci_parse($conn, $query);
 	oci_bind_by_name($stmt, ':idvoltodelete', $idvol_to_delete);
 	oci_bind_by_name($stmt, ':idCompagnie', $compagnie);
