@@ -24,6 +24,7 @@ ALTER TABLE RESERVATION 	DROP 	CONSTRAINT fk_reservation_client ;
 ALTER TABLE RESERVATION 	DROP 	CONSTRAINT fk_reservation_billet ;
 ALTER TABLE ARCHIVES		DROP	CONSTRAINT fk_archives_client ;
 ALTER TABLE ARCHIVES		DROP	CONSTRAINT fk_archives_vol ;
+ALTER TABLE ARCHIVES		DROP	CONSTRAINT fk_archives_billet ;
 
 -- Suppression des PK en second
 ALTER TABLE CLIENT			DROP 	CONSTRAINT pk_client ;

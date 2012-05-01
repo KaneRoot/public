@@ -1,7 +1,10 @@
 -- procédure pour archiver les billets enregistrés
 create or replace procedure archivage
 IS
-	CURSOR curseur IS SELECT * FROM BILLET WHERE etatBillet='A' and idBillet in (select idBillet from BILLET_CLIENT);
+	CURSOR curseur IS 
+		SELECT * FROM BILLET 
+		WHERE etatBillet='A' and idBillet in (select idBillet from BILLET_CLIENT)
+		and idBillet not in (select idBillet from ARCHIVES);
 	dateachat_v BILLET_CLIENT.dateAchat%TYPE;
 	idclient_v CLIENT.idClient%TYPE;
 BEGIN 
@@ -13,7 +16,7 @@ BEGIN
 		-- archives : idArchive, idVol, idCompagnie, prix, promo, dateAchat
 		insert into ARCHIVES 
 		VALUES(seq_archives.nextVal, ligne.idVol, ligne.idCompagnie, 
-				ligne.prix, ligne.promo, dateachat_v, idclient_v);
+				ligne.prix, ligne.promo, dateachat_v, idclient_v, ligne.idBillet);
 	END LOOP;
 END;
 /

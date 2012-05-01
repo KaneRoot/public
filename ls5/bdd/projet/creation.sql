@@ -110,9 +110,11 @@ create table ARCHIVES
 	promo number(10) NOT NULL,
 	dateAchat date NOT NULL,
 	idClient number(15) NOT NULL,
+	idBillet number(15) NOT NULL,
 	CONSTRAINT pk_archives PRIMARY KEY(idArchive),
 	CONSTRAINT fk_archives_client FOREIGN KEY (idClient) REFERENCES CLIENT,
-	CONSTRAINT fk_archives_vol FOREIGN KEY (idVol,idCompagnie) REFERENCES VOL
+	CONSTRAINT fk_archives_vol FOREIGN KEY (idVol,idCompagnie) REFERENCES VOL,
+	CONSTRAINT fk_archives_billet FOREIGN KEY (idBillet) REFERENCES BILLET
 );
 
 CREATE SEQUENCE seq_client MINVALUE 0 START WITH 1 INCREMENT BY 1 CACHE 10;
