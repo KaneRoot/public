@@ -65,7 +65,7 @@ create table BILLET
 	idVol number(10) NOT NULL,
 	idCompagnie number(10) NOT NULL,
 	prix number(15) NOT NULL,
-	promo number(10) NOT NULL DEFAULT 0,
+	promo number(10) DEFAULT(0) NOT NULL ,
 	etatBillet char(1),
 	CONSTRAINT pk_billet PRIMARY KEY(idBillet),
 	CONSTRAINT ck_billet_etatbillet CHECK(etatBillet in ('A', 'R')),
@@ -101,6 +101,20 @@ create table RESERVATION
 	CONSTRAINT fk_reservation_billet FOREIGN KEY (idBillet) REFERENCES BILLET ON DELETE CASCADE
 );
 
+create table ARCHIVES
+(
+	idArchive number(10),
+	idVol number(10) NOT NULL,
+	idCompagnie number(10) NOT NULL, 
+	prix number(15) NOT NULL,
+	promo number(10) NOT NULL,
+	dateAchat date NOT NULL,
+	idClient number(15) NOT NULL,
+	CONSTRAINT pk_archives PRIMARY KEY(idArchive),
+	CONSTRAINT fk_archives_client FOREIGN KEY (idClient) REFERENCES CLIENT,
+	CONSTRAINT fk_archives_vol FOREIGN KEY (idVol,idCompagnie) REFERENCES VOL
+);
+
 CREATE SEQUENCE seq_client MINVALUE 0 START WITH 1 INCREMENT BY 1 CACHE 10;
 CREATE SEQUENCE seq_gestionnaire MINVALUE 0 START WITH 1 INCREMENT BY 1 CACHE 10;
 CREATE SEQUENCE seq_billet MINVALUE 0 START WITH 1 INCREMENT BY 1 CACHE 10;
@@ -108,3 +122,4 @@ CREATE SEQUENCE seq_billet_client MINVALUE 0 START WITH 1 INCREMENT BY 1 CACHE 1
 CREATE SEQUENCE seq_ville MINVALUE 0 START WITH 1 INCREMENT BY 1 CACHE 10;
 CREATE SEQUENCE seq_compagnie MINVALUE 0 START WITH 1 INCREMENT BY 1 CACHE 10;
 CREATE SEQUENCE seq_escale MINVALUE 0 START WITH 1 INCREMENT BY 1 CACHE 10;
+CREATE SEQUENCE seq_archives MINVALUE 0 START WITH 1 INCREMENT BY 1 CACHE 10;

@@ -22,6 +22,8 @@ ALTER TABLE CARTE_FIDELITE 	DROP 	CONSTRAINT fk_carte_fidelite_compagnie ;
 ALTER TABLE CARTE_FIDELITE 	DROP 	CONSTRAINT fk_carte_fidelite_client ;
 ALTER TABLE RESERVATION 	DROP 	CONSTRAINT fk_reservation_client ;
 ALTER TABLE RESERVATION 	DROP 	CONSTRAINT fk_reservation_billet ;
+ALTER TABLE ARCHIVES		DROP	CONSTRAINT fk_archives_client ;
+ALTER TABLE ARCHIVES		DROP	CONSTRAINT fk_archives_vol ;
 
 -- Suppression des PK en second
 ALTER TABLE CLIENT			DROP 	CONSTRAINT pk_client ;
@@ -34,6 +36,7 @@ ALTER TABLE VOL				DROP 	CONSTRAINT pk_vol ;
 ALTER TABLE ESCALE			DROP 	CONSTRAINT pk_escale ;
 ALTER TABLE VILLE			DROP 	CONSTRAINT pk_ville ;
 ALTER TABLE CARTE_FIDELITE 	DROP 	CONSTRAINT pk_carte_fidelite ;
+ALTER TABLE ARCHIVES		DROP	CONSTRAINT pk_archives ;
 
 -- Suppression des tables en dernier
 DROP TABLE  CLIENT ;
@@ -46,6 +49,7 @@ DROP TABLE  BILLET ;
 DROP TABLE  BILLET_CLIENT ;
 DROP TABLE  CARTE_FIDELITE ;
 DROP TABLE  RESERVATION ;
+DROP TABLE  ARCHIVES ;
 
 -- Suppression des séquences
 DROP SEQUENCE seq_client ;
@@ -55,3 +59,4 @@ DROP SEQUENCE seq_billet_client ;
 DROP SEQUENCE seq_ville ;
 DROP SEQUENCE seq_compagnie ;
 DROP SEQUENCE seq_escale ;
+DROP SEQUENCE seq_archives ;
