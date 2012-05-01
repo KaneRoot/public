@@ -97,7 +97,7 @@ function get_prochain_idvol($conn)
 }
 function afficher_les_vols($conn)
 {
-	affichage_vols($conn);
+	affichage_vols('', '',$conn);
 }
 function affichage_vols($vdepart, $varrivee, $conn)
 {

@@ -1,9 +1,13 @@
+Attention, ce fichier n'est plus forcément à jour.
+
+Pour plus de précision sur l'état réel des tables : creation.sql
+
 Pour les clés primaire : PK
 
 escale( 
 		idEscale number(10) PK, 
-		#idVilleDepart varchar2(50), 
-		#idVilleArrivee varchar2(50))
+		#idVol number(15), 
+		#idVille varchar2(50))
 
 vol( 
 		idVol number(10) PK , 
@@ -11,9 +15,8 @@ vol(
 		dateDepart date, 
 		dateArrivee date, 
 		#idVilleArrivee number(15),
-		#idVilleDepart number(15), 
-		nombreBillets number(4), 
-		nombreBilletsReserves number(4))
+		#idVilleDepart number(15)
+   )
 
 compagnie( 
 		idCompagnie number(10) PK, 
@@ -43,10 +46,6 @@ billet(
 		#idVol number(10) , 
 		#idClient number(15), 
 		#idCompagnie number(10) )
-
-vol_escale( 
-		#idVol number(10) PK, 
-		#idEscale number(10) PK)
 
 billet_client( 
 		idAchat number(15) PK, 

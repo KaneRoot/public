@@ -1,3 +1,8 @@
+Attention, ce fichier n'est pas forcément à jour.
+
+Pour plus de précision sur ce qui a été réellement fait, il faut voir le fichier creation.sql
+
+
 Contraintes :
 
 Ne doit pas être nul : nomCompagnie, le nom des villes, les dates (toutes), les "miles", toutes les clés primaires.
@@ -37,16 +42,16 @@ SEC :
 	* ESCALE
 PK : idEscale
 UNIQUE :
-FK : idVilleDepart, idVilleArrivee
-NN : idVilleDepart, idVilleArrivee
-CHECK : idVilleDepart != idVilleArrivee
-SEC : idVilleDepart, idVilleArrivee
+FK : idVille, idVol
+NN : idVille, idVol
+CHECK : 
+SEC : 
 
 	* VOL
 PK : idVol, nomCompagnie
 UNIQUE : (idVilleDepart, idVilleArrivee)
 FK : idVilleDepart, idVilleArrivee
-NN : idVilleDepart, idVilleArrivee, dateDepart, dateArrivee, nombreBillets, nombreBilletsReserves
+NN : idVilleDepart, idVilleArrivee, dateDepart, dateArrivee
 CHECK : nombreBillets >= 0
 SEC : idVilleDepart, idVilleArrivee, idCompagnie
 
@@ -54,8 +59,8 @@ SEC : idVilleDepart, idVilleArrivee, idCompagnie
 PK : idBillet, idVol, idCompagnie
 UNIQUE : 
 FK : idVol, idCompagnie
-NN : prix
-CHECK : prix > 0
+NN : prix, promo
+CHECK : prix-promo > 0
 SEC : idVol, idCompagnie
 
 	* BILLET_CLIENT
@@ -79,10 +84,3 @@ FK : idClient, idBillet
 NN : dateReservation
 CHECK : 
 SEC : idClient, idBillet
-
-	* VOL_ESCALE
-PK : idVol, idEscale
-FK : idVol, idEscale
-NN :
-CHECK :
-SEC : idVol, idEscale
