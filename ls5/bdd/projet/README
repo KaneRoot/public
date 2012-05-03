@@ -1,5 +1,6 @@
 Pour simplifier les tests : tout.sql qui permet de supprimer puis recréer les tables, faire les insertions et recréer les procédures.
 
+
 Le site est dans 'site/' .
 
 Le diagramme MCD est le fichier diagramme.dia qui s'ouvre avec le logiciel dia.
