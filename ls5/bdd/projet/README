@@ -7,6 +7,8 @@ Le diagramme MCD est le fichier diagramme.dia qui s'ouvre avec le logiciel dia.
 Une version png est disponible également.
 À savoir que j'indique les clés étrangères et les contraintes en commentaire sur chaque table dans le MCD.
 
+Attention : si un paramètre peut être "null" alors à côté du champ le rond n'est pas noir.
+
 
 Via le site j'appelle des procédures et des fonctions plsql.
 J'utilise beaucoup PHP et quelques effets graphiques disponibles grâce à CSS3 et javascript pour rendre le site plus dynamique et convivial.
