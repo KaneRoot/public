@@ -1,0 +1,35 @@
+\section{Démarche et difficultés techniques}
+
+En premier lieu je me suis demandé comment le serveur allait gérer les clients, 
+s'il allait falloir séparer le vendeur des enchérisseurs dans des structures de données différentes. 
+Finalement j'ai préféré regrouper les deux dans une seule structure "client\_s". 
+J'ai assez vite repris le code du premier TP avec l'utilisation du "select" qui est 
+très pratique et permet de ne pas avoir à gérer de threads.
+
+Toujours dans cette optique de ne pas avoir à gérer de threads, j'ai choisi d'utiliser un signal (SIGALRM)
+pour la gestion du temps dans mon programme lorsque l'enchère a débuté.
+
+J'ai pensé à faire de la compilation de bibliothèque partagée (déjà fait pour d'autres programmes) mais comme je n'ai
+pas de fonctions similaires dans tous les programmes -mis à part "quitter" et "main"- cela ne m'a pas semblé nécessaire.
+
+Il a fallu que j'apprenne à me servir de SVN, bien que ce n'était pas très compliqué et 
+étant habitué de GIT cela ne m'a pas posé trop de soucis.
+
+\subsection{Gestion de la pile IPv4 IPv6}
+
+Pas de gestion de la double pile.
+Mon programme est cependant fonctionnel et répond au cahier des charges.
+
+J'ai également lu l'article de Stéphane Bortzmeyer \cite{BORTZMEYER} 
+concernant la double couche IPv4 et v6, 
+qui explique que la programmation en v6 est compatible avec la v4 nativement, 
+mais que cette fonctionnalité est désactivée par défaut
+\protect\footnote{ Lien vers l'article : http://www.bortzmeyer.org/bindv6only.html }.
+
+\subsection{Tests}
+
+J'ai pratiqué de nombreux tests en vérifiant les différents cas d'erreur possibles.
+À chaque ajout de fonctionnalité j'ai recompilé puis testé 
+l'intégralité des fonctions du programme.
+
+%\protect\footnote{Git : gestionnaire de versionnement. } 

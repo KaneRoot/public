@@ -1,0 +1,24 @@
+%\chapter{}
+\chapter{Le code}
+\section{Organisation du code}
+Mon code est séparé assez simplement, de manière classique le serveur et les clients ont chacun un fichier .c (le code), un .h (les prototypes) et un Makefile.
+Ensuite nous avons le répertoire lib/ qui contient :
+\begin{itemize}
+\item messages.h, l'ensemble des messages affichés.
+\item structures.h, les structures utilisées pour définir un message, les contextes
+\protect\footnote{
+	Un contexte est l'ensemble des variables globales réunies dans une structure pour 
+	rendre le code plus propre et facile à lire.
+}
+, un produit ou les informations pour assurer l'identification
+\protect\footnote{
+	L'identification se fait via un nom d'utilisateur et un mot de passe chiffré.
+} d'un client.
+\item definitions.h, l'ensemble des constantes utilisées dans les trois programmes.
+\item utilisateurs\_enregistrés : les enchérisseurs pour lesquels on accepte la connexion
+\protect\footnote{
+	Le fichier utilisateurs\_enregistrés est écrit de la manière suivante : "pseudo-de-connexion:mot-de-passe-chiffré".
+	Voir le fichier "readme.md" pour connaître les utilisateurs déjà enregistrés.
+}.
+\end{itemize}
+

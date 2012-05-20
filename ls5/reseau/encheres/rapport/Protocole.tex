@@ -1,0 +1,76 @@
+\section{Protocole}
+Tous les messages transmis entre le serveur et les clients passent par l'envoi d'un "paquet"
+\protect\footnote{
+	Le "paquet" est une structure (message\_s) définie dans ./lib/definitions.h . 
+	Le champ le plus important est "type" qui définit le type de message 
+	(demande de connexion, envoi d'une offre sur un produit etc.).
+	C'est à partir de lui qu'on articule tout le reste du code.
+}.
+
+\subsection{La connexion}
+\begin{enumerate}
+\item On démarre le serveur.
+	\begin{enumerate}
+	\item Initialisation des sockets.
+	\item Quelques variables sont initialisées.
+	\end{enumerate}
+\item On lance client\_seller .
+	\begin{enumerate}
+	\item Le vendeur se connecte.
+	\item Le serveur lui attribue un numéro.
+	\end{enumerate}
+\item On lance une (ou plusieurs) fois client\_bidder.
+	\begin{enumerate}
+	\item Le client entre son nom et son mot de passe
+\protect\footnote{
+Le fichier lib/utilisateurs\_enregistres contient les informations sur les utilisateurs qui ont le droit de participer.
+Et il est construit de la manière suivante: "nom de l'utilisateur:mot de passe chiffré".
+}.
+	\item Il envoie une requête de connexion au serveur.
+	\item Le serveur lui répond (acceptation ou rejet).
+		\begin{itemize}
+		\item Si la connexion est acceptée, le client obtient un numéro de client.
+		\end{itemize}
+	\end{enumerate}
+\end{enumerate}
+
+\subsection{Une fois connecté}
+Le fonctionnement du programme est relativement simple.
+
+Tout s'articule autour de la commande "select".
+Les deux types de clients ont leur entrée standard et le socket (udp ou tcp) 
+de connexion au serveur qui sont écoutés par "select".
+Le serveur écoute le socket udp et tcp de connexion ainsi que des sockets tcp de chaque vendeur.
+Lors de la réception d'un message, on regarde le champ "type" du paquet via la commande "switch".
+Le vendeur et l'enchérisseur ont quelques commandes définies.
+
+Le vendeur peut :
+\begin{itemize}
+\item Ajouter des articles en vente.
+\item Voir les enchères actuelles.
+\item Démarrer les enchères.
+\end{itemize}
+
+Le client peut :
+\begin{itemize}
+\item Demander les articles en vente.
+\item Faire une offre sur l'article courant.
+\item Demander l'article actuellement en vente (l'article courant).
+\end{itemize}
+
+\subsection{Le déroulement des enchères}
+Une fois que la connexion entre le serveur et les clients est établie, 
+le vendeur envoie des objets à vendre à un certain prix.
+Une fois fini, il fait démarrer les enchères.
+À partir de là les clients sont informés que les enchères ont débuté.
+Ils ont un temps défini pour envoyer leur offre (TEMPS\_ATTENTE dans definitions.h).
+Si un client fait une offre valable (supérieure à la précédente offre et supérieure à l'offre de départ),
+le compteur est remis au temps maximal.
+
+Lorsque l'enchère est terminée pour un objet, tous les enchérisseurs sont informés.
+Ils reçoivent également les informations à propos de l'article suivant.
+Encore une fois, c'est au vendeur de débuter l'enchère sur cet article.
+
+Une fois qu'il n'y a plus d'articles en vente, les enchères sont finies
+et le vendeur reçoit le nom de la personne qui a remporté chaque article ainsi que son prix de vente et
+également les objets non vendus.
