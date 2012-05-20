@@ -1,0 +1,43 @@
+#	Exemple pour utiliser ce fichier 
+#		E_perso pers = new E_perso(10,200,10);
+#		Map m = new Map(1000,300,pers);
+#		E_fixe e = new E_fixe(200,100,20,null);
+#
+#		m.addPoint(new Point2d(0,250));
+#		m.getPerso().setPosition(m.getPerso().getPosition().getX(),
+#			m.getYSol(m.getPerso().getPosition().getX()));
+#		
+#		m.addElem(e);
+#
+
+nom:test?
+
+#taille:X:Y
+taille:1000:300
+
+# perso:classe_à_charger_de_perso(dans notre cas : E_perso):X:Y:autresinfos
+perso:E_perso:100:200:10
+
+# depart:X
+# arrivee:X
+
+# depart:10
+arrivee:1000
+
+sol:0:250
+sol:200:200
+sol:400:250
+sol:600:200
+sol:650:250
+sol:800:250
+sol:900:245
+sol:1500:100
+sol:5000:300
+
+# les autres objets
+# classe:options
+E_fixe:200:100:20
+E_fixe:240:150:20
+E_fixe:270:150:20
+
+# checkpoints ?

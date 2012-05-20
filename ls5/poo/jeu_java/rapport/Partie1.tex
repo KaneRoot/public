@@ -1,0 +1,104 @@
+\chapter{Le sujet traité}
+
+Notre choix s'est porté sur un jeu du même type que Super Mario.
+Une sorte d'action / aventure relativement classique donc.
+
+\section{Motivations}
+
+Nous avons choisi ce genre de jeu car son développement nous semblait ludique.
+
+Le projet à la base a été de faire une sorte de Super Mario assez classique, avec des objets de différents types :
+\begin{itemize}
+	\item fixes et passifs ;
+	\item fixes et mortels pour notre personnage ;
+	\item fixes et que l'on peut attraper (une vie, une pièce d'armure, peu importe) ;
+	\item dynamiques et passifs (un élément du décors qui bouge) ;
+	\item dynamiques et mortels (des ennemis, classiquement).
+\end{itemize}
+
+Un type bien distinct de tout ça : le sol.
+Le sol n'est qu'une succession de points que nous relions ensemble.
+
+
+\section{Les classes principales de notre application.}
+
+Nous avons voulu nous rapprocher du modèle MVC sans pour autant nous y contraindre.
+
+L'une des classes principales est ControleurMenu, qui permet la gestion de l'affichage.
+Lors du lancement du jeu nous avons la création des différents menus et l'affichage du menu principal nous demandant si on souhaite commencer une nouvelle partie,
+continuer notre partie ou choisir un niveau.
+Une fois que nous choisissons de lancer le jeu, cette classe lance la partie et affiche le jeu puis revient sur le menu une fois la partie terminée ou si on appui sur la touche "echap".
+
+À savoir que le code est très largement découpé et par conséquent, 
+à part pour cette classe, 
+il nous est difficile de définir une classe ayant une position plus centrale qu'une autre dans notre application.
+
+Nous pouvons cependant citer les classes "VueMenu" et "Élément" qui définissent respectivement un menu et un élément.
+
+Une classe assez conséquente également est "ChargementMap" (franglais detected) 
+qui permet de charger une carte à partir d'un fichier texte.
+
+Pour finir, les classes définies dans le package controleur.thread permettent de calculer régulièrement les interactions avec le décors.
+
+\section{Organisation au sein du groupe.}
+
+L'organisation du groupe s'est faite assez naturellement.
+
+Tout d'abord, nous décidons ensemble de ce qu'il faut ajouter au jeu, 
+la ligne directrice du projet, mais également beaucoup de points techniques.
+Ces décisions se sont passées lors de nos rencontres.
+À partir de ces rencontres nous avons fait des todo-list et on s'est partagé le travail en fonction de nos goûts.
+
+Philippe a fait les menus, la classe principale de gestion du programme et a mis en place un système de fichiers de configuration qui sont chargés dynamiquement (côté développement).
+Mais il a également mis en place le système de versionnement, le Makefile et presque l'intégralité de la documentation.
+
+Kilian s'est occupé des classes définissant les objets, leurs différentes interactions; collision et déplacement; Il a mis en place l'affichage du jeu ainsi que son moteur selon le paradigme MVC. 
+Enfin, il a créé le diagramme UML modélisant les différentes composantes du jeu.
+
+Ce rapport a été rédigé par Philippe puis relu et amélioré par Kilian.
+
+\section{Comment jouer au jeu.}
+
+Il n'y a que 4 touches à retenir pour y jouer et qui servent à déplacer le personnage.
+
+\begin{itemize}
+	\item Q ou 4 : aller à gauche ;
+	\item D ou 6 : aller à droite ;
+	\item Z ou 8 : sauter.
+	\item S ou 5 : utiliser le jet-pack.
+\end{itemize}
+
+Nous pouvons également mettre le jeu en pause via la touche "p".
+Enfin, la touche "echap" permet de revenir au menu.
+
+\section{Les difficultés rencontrées.}
+
+Tout d'abord, nous n'avons pas souvent eu un sujet aussi vague à développer.
+Un réel problème quand nous sommes aussi "libres" est que nous n'avons pas forcément une ligne directrice pour nous guider.
+
+Pour palier à ça, nous avions prévu de nous voir chaque semaine pour discuter du projet, ce qu'on avait fait et ce qu'il restait à faire.
+La première semaine, nous avons décidé du jeu que nous voulions faire.
+Les grandes idées, les grosses lignes.
+Nous avons donc mis en place une todo-list, un serveur \cite{GIT} GIT \protect\footnote{Git : gestionnaire de versionnement. } sur une de nos machines et un petit récapitulatif de la bonne utilisation de l'outil.
+%-- Note de bas de page sur les stades
+
+%-- Fin Note de bas de page sur les stades
+
+\section{Les possibilités d'amélioration du jeu.}
+
+Les possibilités pour améliorer le jeu sont multiples.
+
+Tout d'abord, nous pouvons ajouter plus d'objets, chose assez simple.
+Il faudrait un level design plus élaboré, nous n'avons pas de carte à proprement parlé, simplement des tests de carte.
+Ensuite il serait intéressant d'avoir une histoire, et un personnage un peu plus charismatique.
+
+L'intégration du son nous semble importante, et nous avons quelques pistes que nous n'avons malheureusement pas eu le temps de creuser.
+
+Bien sûr, rien n'empêche de rajouter des sprites plus jolies pour le personnage et des images globalement plus belles pour tout le reste du jeu.
+
+
+Autre idée d'amélioration : faire une copie des maps.
+Avec ça nous pourrions rejouer une partie au lieu de quitter le jeu et de revenir.
+Cette idée est déjà à moitié implémentée.
+
+\clearpage

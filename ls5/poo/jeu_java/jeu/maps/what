@@ -1,0 +1,43 @@
+nom:what?
+
+#taille:X:Y
+taille:1000:300
+
+# perso:classe_à_charger_de_perso(dans notre cas : E_perso):X:Y:autresinfos
+perso:E_perso:100:200:10
+
+# depart:X
+# arrivee:X
+
+# depart:10
+arrivee:4680
+
+sol:0:250
+sol:200:200
+sol:300:100
+sol:400:250
+sol:600:200
+sol:625:225
+sol:650:250
+sol:800:250
+sol:900:245
+sol:1500:100
+sol:3000:250
+sol:4000:200
+sol:5000:300
+
+# les autres objets
+# classe:options
+E_fixe:200:100:20
+E_fixe:200:130:20
+E_fixe:240:150:20
+E_item:50:50:10
+E_item:100:20:10
+E_item:3000:40:10
+E_item:4000:100:10
+E_item:4400:150:10
+
+
+E_lethal:150:100:30
+
+# checkpoints ?

@@ -1,0 +1,10 @@
+\select@language {french}
+\contentsline {chapter}{\numberline {1}Introduction}{2}
+\contentsline {chapter}{\numberline {2}Le sujet trait\IeC {\'e}}{3}
+\contentsline {section}{\numberline {2.1}Motivations}{3}
+\contentsline {section}{\numberline {2.2}Les classes principales de notre application.}{3}
+\contentsline {section}{\numberline {2.3}Organisation au sein du groupe.}{4}
+\contentsline {section}{\numberline {2.4}Comment jouer au jeu.}{4}
+\contentsline {section}{\numberline {2.5}Les difficult\IeC {\'e}s rencontr\IeC {\'e}es.}{5}
+\contentsline {section}{\numberline {2.6}Les possibilit\IeC {\'e}s d'am\IeC {\'e}lioration du jeu.}{5}
+\contentsline {chapter}{\numberline {3}Conclusion}{6}
