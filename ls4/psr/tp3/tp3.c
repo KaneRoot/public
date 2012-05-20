@@ -131,7 +131,7 @@ void exo5(int n)
 int main(int argc, char * argv[])
 {
 	//int i;
-	//exo2(atoi(argv[1]));
+	exo2(atoi(argv[1]));
 	//exo3();
 	//printf("%d \n",syracuse(10));
 	/*for(i = 1 ; i < INT_MAX ; i++)
@@ -140,14 +140,13 @@ int main(int argc, char * argv[])
 		syracuse();
 	}
 	*/
+	/*
 	pipe(p);
 	if(argc == 2)
 		exo5(atoi(argv[1]));
 	else
 		printf("Usage : bla nb\n");
-
-	
-	
+	*/
 	return EXIT_SUCCESS;
 }
 
