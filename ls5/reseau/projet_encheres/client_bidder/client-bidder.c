@@ -71,32 +71,54 @@ void sortie_programme(void)
 }
 void init_programme(int argc, char *argv[])
 {
-	if(argc == 1)
-	{
-		printf(m_connexion_par_defaut);
-	}
 	int port;
 	char ip[TAILLE_BUFFER];
 
 	ctxt.numero_client = CB_CLIENT_NON_CONNECTE;
-	port = (argc == 3) ? atoi(argv[2]) : PORT;
-	if(argc >= 2)
-		memcpy(ip, argv[1], TAILLE_BUFFER);
-	else
+
+	/** Tout est par défaut. */
+	if(argc == 1)
+	{
+		printf(m_connexion_par_defaut);
+		port = PORT;
 		memcpy(ip, ADRESSE_PAR_DEFAUT, TAILLE_BUFFER);
+	}
+	else
+	{
+		memcpy(ip, argv[1], TAILLE_BUFFER);
+		port = (argc == 3) ? atoi(argv[2]) : PORT;
+	}
 
-    // socket factory
-    if((ctxt.sockfd = socket(AF_INET, SOCK_DGRAM, 0)) == -1) 
-		quitter("socket");
+	if(NULL == strstr(ip, ":")) // S'il n'y a pas de ':' alors IPv4
+	{
+		if(inet_pton(AF_INET, ip, &ctxt.server.sin_addr) < 0)
+		{
+			quitter("inet_pton");
+		}
+		ctxt.server.sin_family		= AF_INET;
+		ctxt.server.sin_port		= htons(port);
+		ctxt.addrlen = sizeof(struct sockaddr_in);
 
-    // init remote addr structure and other params
-    ctxt.server.sin_family = AF_INET;
-	ctxt.server.sin_port   = htons(port);
-    ctxt.addrlen           = sizeof(struct sockaddr_in);
+		if((ctxt.sockfd = socket(AF_INET, SOCK_DGRAM, 0)) == -1) 
+			quitter("socket");
+	}
+	else
+	{
+		// get addr from command line and convert it
+		if(inet_pton(AF_INET6, ip, &ctxt.server6.sin6_addr) < 0)
+		{
+			quitter("inet_pton");
+		}
+		else
+		{
+			ctxt.addrlen = sizeof(struct sockaddr_in6);
+			ctxt.server6.sin6_family	= AF_INET6;
+			ctxt.server6.sin6_port		= htons(port + 1);
 
-    // get addr from command line and convert it
-    if(inet_pton(AF_INET, ip, &ctxt.server.sin_addr) < 0)
-		quitter("inet_pton");
+			if((ctxt.sockfd = socket(AF_INET6, SOCK_DGRAM, 0)) == -1) 
+				quitter("socket");
+		}
+	}
 
 	ctxt.produit_courant = 0;
 	connexion();
@@ -214,6 +236,8 @@ void recevoir_donnee(void)
 				printf("J'ai remporté \033[36m'%s'\033[00m pour \033[32m%d €\033[00m TTC.\n", ctxt.mes.message, ctxt.mes.offre);
 				recevoir_paquet(&ctxt.mes);
 			}
+			// Fin du scénario
+			sortie_programme();
 			break;
 		case T_DECONNEXION :
 			sortie_programme();
@@ -278,9 +302,18 @@ void envoyer_paquet(message_s m)
 	m.id = ctxt.numero_client;
 	memcpy(m.ident.nom, ctxt.ident.nom, TAILLE_BUFFER);
 	memcpy(m.ident.passwd, ctxt.ident.passwd, TAILLE_BUFFER);
-	if(sendto(ctxt.sockfd, &m, sizeof(message_s), 0,
-				(struct sockaddr *) &ctxt.server, ctxt.addrlen) < 0)
-		perror("Erreur à l'envoi d'un message");
+	if(ctxt.addrlen == sizeof(struct sockaddr_in6))
+	{
+		if(sendto(ctxt.sockfd, &m, sizeof(message_s), 0,
+					(struct sockaddr *) &ctxt.server6, ctxt.addrlen) < 0)
+			perror("Erreur à l'envoi d'un message");
+	}
+	else
+	{
+		if(sendto(ctxt.sockfd, &m, sizeof(message_s), 0,
+					(struct sockaddr *) &ctxt.server, ctxt.addrlen) < 0)
+			perror("Erreur à l'envoi d'un message");
+	}
 }
 void recevoir_paquet(message_s * m)
 {

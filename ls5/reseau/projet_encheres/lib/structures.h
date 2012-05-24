@@ -33,6 +33,7 @@ typedef struct {
 typedef struct {
 	int fd;								/* socket */
 	struct sockaddr_in adr;				/* info @ */
+	struct sockaddr_in6 adr6;				/* info @ */
 	socklen_t len;						/* taille @ */
 	int type;							/* 1 si acheteur, 0 si vendeur. */
 	identification_s ident;				/* L'identité du client. */
@@ -52,8 +53,12 @@ typedef struct {
 	int secondes_restantes;				/* Attente entre produits */
 	int tcp_sock;						/* réception TCP */
 	int udp_sock;						/* réception UDP */
+	int udp_sock6;						/* réception UDP v6. */
+	int sock_tmp;						/* Sock. temporaire de réception udp (v4 ou v6). */
 	socklen_t addrlen;					/* La taille d'une adresse, ici 4 octets */
+	socklen_t addrlen6;					/* La taille d'une adresse v6. */
 	struct sockaddr_in addrtmp;			/* Structure d'adresse temporaire. */
+	struct sockaddr_in6 addrtmp6;		/* Structure d'adresse temporaire v6. */
 	fd_set readfds;						/* Les descripteurs où il y a de l'activité. */
 	fd_set masterfds;					/* Les descripteurs que l'on surveille. */
 	int nb_clients_co;					/* nombre de clients connectés */
@@ -83,6 +88,7 @@ typedef struct {
 	fd_set readfds;						/* Les descripteurs où il y a de l'activité. */
 	int sockfd;							/* Socket de communication avec le serveur. */
 	struct sockaddr_in server;			/* L'adresse du serveur. */
+	struct sockaddr_in6 server6;			/* L'adresse du serveur. */
 	socklen_t addrlen;					/* La taille de l'adresse du serveur. */
 	message_s mes;						/* Le message courant (reçu ou envoyé). */
 	objet_t produit_courant;			/* Identifiant de l'article courant. */

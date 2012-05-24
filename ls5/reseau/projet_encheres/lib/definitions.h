@@ -40,7 +40,9 @@ typedef int prix_t;
 #define PRODUIT_NON_ACHETE					-1
 #define TEMPS_ATTENTE						20
 #define PORT								9000
+#define PORT6								PORT + 1
 #define ADRESSE_PAR_DEFAUT					"127.0.0.1"
+#define ADRESSE_PAR_DEFAUT6					"::1"
 #define FICHIER_UTILISATEURS				"../lib/utilisateurs_enregistres"
 #define MDP_SALT							"$1$........"
 

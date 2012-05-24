@@ -17,14 +17,29 @@ Il a fallu que j'apprenne à me servir de SVN, bien que ce n'était pas très co
 
 \subsection{Gestion de la pile IPv4 IPv6}
 
-Pas de gestion de la double pile.
-Mon programme est cependant fonctionnel et répond au cahier des charges.
+La double pile est gérée simplement. 
+Sur le serveur j'ai deux sockets udp pour gérer les deux versions du protocole IP,
+   et la commande "select" me permet de savoir quel est le socket sur lequel il y a de l'activité.
+
+Concernant le stockage en mémoire des différentes adresses (v4 ou v6), 
+		   ma structure client\_s possède les deux structures 
+		   de données liées aux différentes adresses
+\protect\footnote{ Les structures sockaddr\_in et sockaddr\_in6. }.
+Pour savoir si je dois discuter avec le client en v4 ou en v6, 
+je garde en mémoire la taille de son adresse
+\protect\footnote{ Dans ma structure client\_s : l'attribut addrlen. }.
+
+À savoir que le port d'écoute du serveur en UDP IPv6 est le numéro de port entré
+en paramètre (ou celui par défaut) plus un.
+Ceci n'est pas à prendre en compte lorsque l'on rentre le numéro de port en ligne de commande.
+J'ai considéré ceci comme un détail d'implémentation.
 
 J'ai également lu l'article de Stéphane Bortzmeyer \cite{BORTZMEYER} 
 concernant la double couche IPv4 et v6, 
 qui explique que la programmation en v6 est compatible avec la v4 nativement, 
 mais que cette fonctionnalité est désactivée par défaut
 \protect\footnote{ Lien vers l'article : http://www.bortzmeyer.org/bindv6only.html }.
+Ceci aurait pu simplifier le programme.
 
 \subsection{Tests}
 

@@ -253,6 +253,8 @@ void recevoir_donnee(void)
 
 				recevoir_paquet(&mes);
 			}
+			// Fin du scénario
+			sortie_programme();
 			break;
 		default :
 			printf(m_mauvais_type);

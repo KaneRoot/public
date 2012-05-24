@@ -58,12 +58,15 @@ void boucle_select(void)
 				//printf("Il y a de l'activité sur %d\n", i);
 				if(i == ctxt.tcp_sock)		// connexion entrante
 					attendre_vendeur();
-				else if (i == ctxt.udp_sock)
+				else if (i == ctxt.udp_sock || i == ctxt.udp_sock6)
+				{
+					ctxt.sock_tmp = i;
 					attendre_utilisateur();
+				}
 				else if(i == 0)
 					sortie_programme();
-				else if(i >= 5 && i < NB_CLIENTS + 5)	// utilisateurs
-					recevoir_vendeur(i - 5);
+				else if(i >= 6 && i < NB_CLIENTS + 6)	// utilisateurs
+					recevoir_vendeur(i - 6);
 			}
 		}
 	}
@@ -85,7 +88,6 @@ void init_programme(int argc, char **argv)
 	ctxt.debut_encheres = ENCHERES_NON_DEBUTEES;
 	ctxt.secondes_restantes = TEMPS_ATTENTE;
 	init_sockets(port);
-	//attendre_vendeur();
 
 	/** ALARM = signal que l'on utilise pour gérer le temps. */
 	struct sigaction action;
@@ -96,11 +98,13 @@ void init_programme(int argc, char **argv)
 	FD_SET(0, &ctxt.masterfds);
 	FD_SET(ctxt.tcp_sock, &ctxt.masterfds);
 	FD_SET(ctxt.udp_sock, &ctxt.masterfds);
+	FD_SET(ctxt.udp_sock6, &ctxt.masterfds);
 }
 void init_sockets(int port)
 {
 	int yes = 1;
     struct sockaddr_in my_addr;
+    struct sockaddr_in6 my_addr6;
 
     if((ctxt.tcp_sock = socket(AF_INET, SOCK_STREAM, 0)) == -1)
 		quitter("socket TCP");
@@ -108,10 +112,19 @@ void init_sockets(int port)
     if((ctxt.udp_sock = socket(AF_INET, SOCK_DGRAM, 0)) == -1)
 		quitter("socket UDP");
 
-    my_addr.sin_family		= AF_INET;
-    my_addr.sin_port		= htons(port);
-	my_addr.sin_addr.s_addr	= INADDR_ANY;
-    ctxt.addrlen                 = sizeof(struct sockaddr_in);
+    if((ctxt.udp_sock6 = socket(AF_INET6, SOCK_DGRAM, 0)) == -1)
+		quitter("socket UDP 6");
+
+    my_addr.sin_family			= AF_INET;
+    my_addr.sin_port			= htons(port);
+	my_addr.sin_addr.s_addr		= INADDR_ANY;
+    ctxt.addrlen                = sizeof(struct sockaddr_in);
+
+    my_addr6.sin6_family		= AF_INET6;
+    my_addr6.sin6_port			= htons(port + 1);
+	my_addr6.sin6_addr			= in6addr_any;
+    ctxt.addrlen6               = sizeof(struct sockaddr_in6);
+
     memset(ctxt.tampon,'\0',TAILLE_BUFFER);
 
 	/** 
@@ -125,6 +138,9 @@ void init_sockets(int port)
 		quitter("bind tcp");
 
     if(bind(ctxt.udp_sock, (struct sockaddr *)&my_addr, ctxt.addrlen) == -1)
+		quitter("bind udp");
+
+    if(bind(ctxt.udp_sock6, (struct sockaddr *)&my_addr6, ctxt.addrlen6) == -1)
 		quitter("bind udp");
 
     if(listen(ctxt.tcp_sock, LISTEN_BACKLOG) == -1)
@@ -162,8 +178,17 @@ void attendre_utilisateur(void)
 				mes.type = T_VALIDATION_CONNEXION;
 
 				/** On initialise les variables liées à ce nouvel utilisateur. */
-				ctxt.client[i].adr = ctxt.addrtmp;
 				ctxt.client[i].len = ctxt.addrlen;
+				if(ctxt.addrlen6 == ctxt.client[i].len)
+				{
+					printf(m_connexion_v6);
+					ctxt.client[i].adr6 = ctxt.addrtmp6;
+				}
+				else
+				{
+					printf(m_connexion_v4);
+					ctxt.client[i].adr = ctxt.addrtmp;
+				}
 				ctxt.client[i].type = 1;	
 				ctxt.client[i].fd = 1;
 				memcpy(ctxt.client[i].ident.nom, mes.ident.nom, TAILLE_BUFFER);
@@ -333,12 +358,6 @@ void faire_quitter_les_clients(void)
 			dire(i, "");
 	}
 }
-/** Réception d'un message en UDP. */
-int reception_paquet(message_s * m, struct sockaddr_in * adresse, socklen_t * taille)
-{
-	return recvfrom(ctxt.udp_sock, (void *) m, sizeof(message_s), 0,
-				(struct sockaddr *) adresse, taille) ;
-}
 /** Envoyer les produits à un client qui les réclame. */
 void envoi_produits(idclient_t num_cli)
 {
@@ -415,12 +434,23 @@ void envoi_paquet(idclient_t id, message_s mes)
 	/** Si c'est un client BIDDER. */
 	if(ctxt.client[id].type == 1)
 	{
-		if( 0 > sendto( ctxt.udp_sock, 
-					&mes, sizeof(message_s), 
-					0,
-					(struct sockaddr *) &ctxt.client[id].adr, 
-					ctxt.client[id].len))
-			quitter("sendto");
+		/** S'il est connecté en IPv6. */
+		if(ctxt.client[id].len == ctxt.addrlen6)
+		{
+			if( 0 > sendto( ctxt.udp_sock6, &mes, sizeof(message_s), 
+						0,
+						(struct sockaddr *) &ctxt.client[id].adr6, 
+						ctxt.client[id].len))
+				quitter("sendto");
+		}
+		else
+		{
+			if( 0 > sendto( ctxt.udp_sock, &mes, sizeof(message_s), 
+						0,
+						(struct sockaddr *) &ctxt.client[id].adr, 
+						ctxt.client[id].len))
+				quitter("sendto");
+		}
 	}
 	else
 	{
@@ -546,6 +576,9 @@ void fin_encheres(void)
 	 */
 	mes.type = T_FIN_TRANSMISSION;
 	envoyer_a_tous(mes);
+	
+	/** Puis on sort du programme. */
+	sortie_programme();
 }
 void envoyer_paquet_aux_clients_bidder(message_s mes)
 {
@@ -596,13 +629,34 @@ int est_autorise(message_s mes)
 }
 void renvoi_erreur_connexion(message_s mes)
 {
+	/** 
+	 * Fonction un peu spéciale, on n'envoi pas un message 
+	 * à un client présent dans la structure client_s 
+	 */
 	mes.type = T_CONNEXION_REFUSEE;
-	sendto(ctxt.udp_sock, (void *) &mes, sizeof(message_s), 0,
-			(struct sockaddr *) &ctxt.addrtmp, ctxt.addrlen);
+	if(ctxt.addrlen == ctxt.addrlen6)
+	{
+		sendto(ctxt.sock_tmp, (void *) &mes, sizeof(message_s), 0,
+				(struct sockaddr *) &ctxt.addrtmp6, ctxt.addrlen);
+	}
+	else
+	{
+		sendto(ctxt.sock_tmp, (void *) &mes, sizeof(message_s), 0,
+				(struct sockaddr *) &ctxt.addrtmp, ctxt.addrlen);
+	}
 }
 void recevoir_message_udp(message_s * mes)
 {
-	if(recvfrom(ctxt.udp_sock, mes, sizeof(message_s), 0,
-				(struct sockaddr *) &ctxt.addrtmp, &ctxt.addrlen) == -1)
-			quitter("réception paquet");
+	if(ctxt.sock_tmp == ctxt.udp_sock6)
+	{
+		if(recvfrom(ctxt.sock_tmp, mes, sizeof(message_s), 0,
+					(struct sockaddr *) &ctxt.addrtmp6, &ctxt.addrlen) == -1)
+				quitter("réception paquet ipv6");
+	}
+	else
+	{
+		if(recvfrom(ctxt.sock_tmp, mes, sizeof(message_s), 0,
+					(struct sockaddr *) &ctxt.addrtmp, &ctxt.addrlen) == -1)
+				quitter("réception paquet ipv4");
+	}
 }

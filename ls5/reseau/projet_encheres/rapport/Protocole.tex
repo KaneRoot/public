@@ -3,9 +3,26 @@ Tous les messages transmis entre le serveur et les clients passent par l'envoi d
 \protect\footnote{
 	Le "paquet" est une structure (message\_s) définie dans ./lib/definitions.h . 
 	Le champ le plus important est "type" qui définit le type de message 
-	(demande de connexion, envoi d'une offre sur un produit etc.).
+	(demande de connexion, envoi d'une offre sur un produit, etc.).
 	C'est à partir de lui qu'on articule tout le reste du code.
 }.
+\subsection{Avant-propos}
+Le client "bidder" prend deux paramètres (facultatifs) au lancement,
+l'adresse du serveur et le port de connexion.
+Si vous entrez une adresse IPv4 il se connectera en IPv4, sinon en v6.
+Par défaut l'adresse est l'adresse locale, et le port 9000.
+Si on ne rentre qu'un paramètre, ce sera l'adresse de connexion, 
+   si on en rentre deux ce sera l'adresse suivie du port.
+
+Le client "seller" prend les mêmes paramètres, mais ne se connecte qu'en IPv4.
+
+Ceci nous donne :
+\begin{itemize}
+\item ./client\_bidder [IP-V4-OU-V6 [PORT]] ;
+\item ./client\_seller [IP-V4 [PORT]] ;
+\item ./server [PORT] ;
+\end{itemize}
+
 
 \subsection{La connexion}
 \begin{enumerate}
@@ -44,6 +61,8 @@ Le serveur écoute le socket udp et tcp de connexion ainsi que des sockets tcp d
 Lors de la réception d'un message, on regarde le champ "type" du paquet via la commande "switch".
 Le vendeur et l'enchérisseur ont quelques commandes définies.
 
+\clearpage
+
 Le vendeur peut :
 \begin{itemize}
 \item Ajouter des articles en vente.
@@ -57,6 +76,8 @@ Le client peut :
 \item Faire une offre sur l'article courant.
 \item Demander l'article actuellement en vente (l'article courant).
 \end{itemize}
+
+Si on écrit sur la fenêtre du serveur, on quitte le programme (et ses clients).
 
 \subsection{Le déroulement des enchères}
 Une fois que la connexion entre le serveur et les clients est établie, 

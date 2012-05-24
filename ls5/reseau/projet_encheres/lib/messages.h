@@ -34,6 +34,7 @@ const char * m_ligne_vide =
 const char * m_connexion_par_defaut = 
 "Vous n'avez entré aucun paramètre.\n"
 "Connexion par défaut en local et sur le port 9000\n";
+
 const char * m_demande_action_seller =
 "\n"
 "1. Démarrer les enchères.\n"
@@ -55,16 +56,20 @@ const char * m_debut_prog =
 const char * message_envoi_objets = 
 "À partir d'ici nous allons envoyer des objets. "
 "\033[31mAppuyez sur ^D pour finir.\033[00m\n";
+const char * m_connexion_v6 = "Connexion d'une personne en IP v6.\n";
+const char * m_connexion_v4 = "Connexion d'une personne en IP v4.\n";
 
 const char * m_sender_nom_objet = "Veuillez entrer le nom de l'objet à envoyer : ";
 const char * m_sender_prix_depart = "Veuillez entrer son prix de départ : ";
 const char * m_sender_prix_minimal = "Veuillez entrer le prix minimum à atteindre : ";
-const char * m_sortie_programme = "Vous avez fait ^D, vous quittez le programme\n";
 const char * m_demande_nom = "Votre nom : ";
 const char * m_demande_pass = "Votre mot de passe : ";
 const char * m_reception_message = "\033[36m####\033[00m ";
 const char * m_encheres_non_demarrees = 
 "\033[31m\tIl manque des participants pour les enchères !\033[00m \n";
+
+const char * m_sortie_programme = 
+"\033[36mLe programme se termine.\033[00m\n";
 
 char * m_err_reception_offre_encheres_non_debutees = 
 "\033[31mLes enchères n'ont pas débutées.\033[00m ";
