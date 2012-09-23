@@ -39,6 +39,8 @@ bool MyApp::OnInit()
 	aide_menu->Append(M_VERSION, wxT("Version\tCtrl-V"));
 
 	m_MainFrame->SetMenuBar(menu_bar);
+	m_MainFrame->CreateMyToolBar();
+
 	m_MainFrame->Show(TRUE);
 
 	return TRUE;
