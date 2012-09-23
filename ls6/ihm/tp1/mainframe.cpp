@@ -3,13 +3,12 @@
 #include <wx/wx.h>
 #include <wx/accel.h>
 
+#include "dialogs.h"
 #include "mainframe.h"
-
 
 
 BEGIN_EVENT_TABLE(CMainFrame, wxFrame)
 END_EVENT_TABLE()
-
 
 
 CMainFrame::CMainFrame(const wxString& title, const wxPoint& pos, const wxSize& size)

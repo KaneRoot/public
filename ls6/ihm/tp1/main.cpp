@@ -1,6 +1,7 @@
 
 #include "wx/wx.h" 
 #include "mainframe.h"
+#include "dialogs.h"
 #include <wx/menu.h>
 
 class MyApp: public wxApp 
@@ -42,6 +43,10 @@ bool MyApp::OnInit()
 	m_MainFrame->CreateMyToolBar();
 
 	m_MainFrame->Show(TRUE);
+
+	VersionDialog vdlg(m_MainFrame, -1, wxT("Version"));
+
+	vdlg.ShowModal();
 
 	return TRUE;
 } 
