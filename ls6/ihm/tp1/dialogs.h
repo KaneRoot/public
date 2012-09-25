@@ -10,4 +10,10 @@ class VersionDialog: public wxDialog {
 	private :
 			 DECLARE_EVENT_TABLE()
 };
+class ColorDialog: public wxDialog {
+	public :
+		     ColorDialog(wxWindow *parent, wxWindowID id, const wxString &title);
+	private :
+			 DECLARE_EVENT_TABLE()
+};
 #endif

@@ -43,7 +43,7 @@ bool MyApp::OnInit()
 
 	m_MainFrame->Show(TRUE);
 
-	VersionDialog vdlg(m_MainFrame, -1, wxT("Version"));
+	ColorDialog vdlg(m_MainFrame, -1, wxT("Couleur"));
 
 	vdlg.ShowModal();
 
