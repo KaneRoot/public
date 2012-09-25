@@ -7,5 +7,6 @@
 int srvtcp() { return 0; }
 int main(int argc, char **argv)
 {
+	printf("srvtcp\n");
 	return EXIT_SUCCESS;
 }

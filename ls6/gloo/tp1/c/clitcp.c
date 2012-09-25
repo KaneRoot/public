@@ -7,5 +7,6 @@
 int clitcp() { return 0 ; }
 int main(int argc, char **argv)
 {
+	printf("clitcp\n");
 	return EXIT_SUCCESS;
 }
