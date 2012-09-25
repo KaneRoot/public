@@ -1,8 +1,7 @@
-
 #include "wx/wx.h" 
-#include "mainframe.h"
-#include "dialogs.h"
 #include <wx/menu.h>
+#include "dialogs.h"
+#include "mainframe.h"
 
 class MyApp: public wxApp 
 {
@@ -32,8 +31,8 @@ bool MyApp::OnInit()
 	option_menu->Append(M_COULEUR, wxT("Couleur\tCtrl-C"));
 	option_menu->Append(M_GESTION_TRIANGLES, wxT("Gestion des triangles\tCtrl-T"));
 	option_menu->AppendCheckItem(M_TOOLBAR, wxT("Barre de menu\tCtrl-B"));
-	option_menu->Check(M_TOOLBAR,TRUE);
-	option_menu->Enable(M_GESTION_TRIANGLES,false);
+	option_menu->Check(M_TOOLBAR, TRUE);
+	option_menu->Enable(M_GESTION_TRIANGLES, false);
 
 	wxMenu *aide_menu = new wxMenu;
 	menu_bar->Append(aide_menu, wxT("Aide"));

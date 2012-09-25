@@ -1,7 +1,7 @@
 CC = g++
 
-drawtri : main.o mainframe.o dialogs.o
-	$(CC) -o drawtri main.o mainframe.o `wx-config --libs`
+drawtri : dialogs.o main.o mainframe.o
+	$(CC) -o drawtri dialogs.o main.o mainframe.o `wx-config --libs`
 
 main.o : main.cpp
 	$(CC) `wx-config --cxxflags` -c main.cpp -o main.o
