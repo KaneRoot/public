@@ -3,7 +3,7 @@
 #
 CLI = clitcp
 SRV = srvtcp
-APPL = $(CLI) $(SRV)
+APPL = philippe.pittoli
 SHELL = /bin/sh
 PRINTER = philippe
 COMPRESS = gzip
@@ -19,14 +19,16 @@ MANDIR = $(prefix)/man
 MANEXT = 1
 
 LIBS =
-EXEC = $(APPL)
+EXEC = $(CLI) $(SRV)
 OBJS = common.o srvtcp.o clitcp.o
 CLIOBJS = clitcp.o common.o
 SRVOBJS = srvtcp.o common.o
 SRCS = common.c srvtcp.c clitcp.c
-INCL =
+INCL = common.h srvtcp.h clitcp.h
 
-MANS = $(APPL).$(MANEXT)
+CLIMAN = $(CLI).$(MANEXT)
+SRVMAN = $(SRV).$(MANEXT)
+MANS = $(CLIMAN) $(SRVMAN)
 SOURCES = README COPYRIGHT INSTALL Makefile $(SRCS) $(INCL) $(MANS)
 
 #
@@ -43,15 +45,12 @@ clitcp : $(CLIOBJS)
 srvtcp : $(SRVOBJS)
 	$(LD) $(LDFLAGS) $(SRVOBJS) $(LIBS) -o $@
 
-#$(APPL) : $(OBJS)
-#	$(LD) $(LDFLAGS) $(OBJS) $(LIBS) -o $@
-
 clean :
-	-@rm $(OBJS) $(EXEC) 1>/dev/null 2>&1
+	-@rm $(OBJS) $(EXEC) $(APPL).tar* 1>/dev/null 2>&1
 install :
 	install -m 755 -o root -g staff $(EXEC) $(BINDIR)
 install_man :
-	install -m 644 $(APPL).$(MANEXT) $(MANDIR)/man$(MANEXT)
+	install -m 644 $(MANS) $(MANDIR)/man.$(MANEXT)/
 print : $(SRCS) $(INCL)
 	-@$(PRINTER) $?
 	-@touch $@
@@ -61,3 +60,9 @@ tar :
 	tar cvf $(APPL).tar $(SOURCES)
 archive : tar
 	$(COMPRESS) $(APPL).tar
+
+# $@ : nom de la cible
+# $< : nom de la première dépendance
+# $^ : liste des dépendances
+# $? : liste des dépendances plus récentes que la cible
+# $* : nom du fichier sans suffixe
