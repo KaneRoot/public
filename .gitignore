@@ -4,3 +4,11 @@
 *.odt
 *.class
 *.gch
+*.aux
+*.bbl
+*.blg
+*.dvi
+*.idx
+*.log
+*.toc
+
