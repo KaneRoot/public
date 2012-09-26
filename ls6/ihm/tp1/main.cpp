@@ -43,9 +43,9 @@ bool MyApp::OnInit()
 
 	m_MainFrame->Show(TRUE);
 
-	ProprietesDialog vdlg(m_MainFrame, -1, wxT("Proprietes"));
-
-	vdlg.ShowModal();
+	// Test des boîtes de dialogue
+	//	ProprietesDialog vdlg(m_MainFrame, -1, wxT("Proprietes"));
+	//	vdlg.ShowModal();
 
 	return TRUE;
 } 

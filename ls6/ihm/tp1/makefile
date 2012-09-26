@@ -1,4 +1,5 @@
 CC = g++
+ARCHIVE = philippe.pittoli
 
 drawtri : dialogs.o main.o mainframe.o
 	$(CC) -o drawtri dialogs.o main.o mainframe.o `wx-config --libs`
@@ -12,7 +13,9 @@ mainframe.o : mainframe.cpp
 dialogs.o : dialogs.cpp
 	$(CC) `wx-config --cxxflags` -c dialogs.cpp -o dialogs.o
 
+archive : 
+	-@tar cvfz $(ARCHIVE).tar.gz *
 
 clean : 
-	rm -f *.o drawtri 
+	rm -f *.o drawtri $(ARCHIVE).tar.gz
 	

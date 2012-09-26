@@ -85,7 +85,7 @@ TriangleDialog::TriangleDialog( wxWindow *parent, wxWindowID id, const wxString 
 	wxStaticText *item3 = new wxStaticText( this, V_ID_TEXTE, 
 			wxT("Liste des triangles"), 
 			wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE );
-	wxString choix[] = { wxT("Triangle0"),wxT("Triangle1"),wxT("Triangle2") };
+	wxString choix[] = { wxT("Triangle0"), wxT("Triangle1"), wxT("Triangle2") };
 	wxListBox *item4 = new wxListBox(this, ID_LISTE_BOITE, wxDefaultPosition,  wxDefaultSize, 3, choix);
 
 	// Boutons
@@ -112,40 +112,49 @@ TriangleDialog::TriangleDialog( wxWindow *parent, wxWindowID id, const wxString 
 ProprietesDialog::ProprietesDialog( wxWindow *parent, wxWindowID id, const wxString &title) : wxDialog( parent, id, title)
 {
 	// Conteneurs
-	wxBoxSizer *item0 = new wxBoxSizer( wxVERTICAL );
-	wxBoxSizer *item1 = new wxBoxSizer( wxHORIZONTAL );
-	wxBoxSizer *item2 = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer *conteneur_0 = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer *conteneur_1 = new wxBoxSizer( wxHORIZONTAL );
+	wxBoxSizer *conteneur_2 = new wxBoxSizer( wxVERTICAL );
 
-	wxStaticText *item3 = new wxStaticText( this, V_ID_TEXTE, 
+	// Textes
+	wxStaticText *texte_id_triangle = new wxStaticText( this, V_ID_TEXTE, 
 			wxT("Identifiant du triangle"), 
 			wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE );
-	wxTextCtrl *item4 = new wxTextCtrl(this, ID_BOITE_TEXTE);
-	wxStaticText *item5 = new wxStaticText( this, V_ID_TEXTE, 
+
+	wxStaticText *texte_epaisseur_trait = new wxStaticText( this, V_ID_TEXTE, 
 			wxT("Epaisseur trait"), 
 			wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE );
 
-	 wxSpinCtrl *item6 = new wxSpinCtrl(this, ID_EPAISSEUR_TRAIT_SPINCTRL, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 100, 2, wxT("EpaisseurTrait"));
+	// Autres objets
+	wxTextCtrl *textctrl_id_boite_texte = new wxTextCtrl(this, ID_BOITE_TEXTE,
+			wxT("Triangle 0"));
+
+	 wxSpinCtrl *spinctl_epaisseur_trait = new wxSpinCtrl(this, ID_EPAISSEUR_TRAIT_SPINCTRL, 
+			 wxEmptyString, wxDefaultPosition, wxDefaultSize, 
+			 wxSP_ARROW_KEYS, 0, 100, 2, wxT("EpaisseurTrait"));
 
 	wxString couleurs[] = { wxT("Rouge"), wxT("Vert"), wxT("Bleu")};
-	wxRadioBox *item7 = new wxRadioBox(this, COULEUR_RD_BOX, wxT("Couleurs"), wxDefaultPosition, wxDefaultSize, 3, couleurs);
+	wxRadioBox *radiobox_couleur = new wxRadioBox(this, COULEUR_RD_BOX, 
+			wxT("Couleurs"), wxDefaultPosition, wxDefaultSize, 3, couleurs);
 
-	// Boutons
-	wxButton *item8 = new wxButton( this, wxID_OK, wxT("OK"), wxDefaultPosition);
+	wxButton *button_ok = new wxButton( this, wxID_OK, wxT("OK"), wxDefaultPosition);
 
-	item0->Add( item1, 0, wxALIGN_CENTRE|wxALL, 5 );
+	// Ajout des objets aux conteneurs
+	conteneur_0->Add( conteneur_1, 0, wxALIGN_CENTRE|wxALL, 5 );
+	conteneur_0->Add( button_ok, 0, wxALIGN_CENTRE|wxALL, 5 );
 
-	item1->Add( item2, 0, wxALIGN_CENTRE|wxALL, 5 );
-	item1->Add( item7, 0, wxALIGN_CENTRE|wxALL, 5 );
+	conteneur_1->Add( conteneur_2, 0, wxALIGN_CENTRE|wxALL, 5 );
+	conteneur_1->Add( radiobox_couleur, 0, wxALIGN_CENTRE|wxALL, 5 );
 
-	item2->Add( item3, 0, wxALIGN_CENTRE|wxALL, 5 );
-	item2->Add( item4, 0, wxALIGN_CENTRE|wxALL, 5 );
-	item2->Add( item5, 0, wxALIGN_CENTRE|wxALL, 5 );
-	item2->Add( item6, 0, wxALIGN_CENTRE|wxALL, 5 );
-	item0->Add( item8, 0, wxALIGN_CENTRE|wxALL, 5 );
+	conteneur_2->Add( texte_id_triangle, 0, wxALIGN_CENTRE|wxALL, 5 );
+	conteneur_2->Add( textctrl_id_boite_texte, 0, wxALIGN_CENTRE|wxALL, 5 );
+	conteneur_2->Add( texte_epaisseur_trait, 0, wxALIGN_CENTRE|wxALL, 5 );
+	conteneur_2->Add( spinctl_epaisseur_trait, 0, wxALIGN_CENTRE|wxALL, 5 );
 
+	// Affichage
 	this->SetAutoLayout( TRUE );
-	this->SetSizer( item0 );
-	item0->Fit( this );
-	item0->SetSizeHints( this );
+	this->SetSizer( conteneur_0 );
+	conteneur_0->Fit( this );
+	conteneur_0->SetSizeHints( this );
 	 
 }
