@@ -2,6 +2,8 @@
 #include <wx/button.h>
 #include <wx/stattext.h>
 #include <wx/sizer.h>
+#include <wx/textctrl.h>
+#include <wx/spinctrl.h>
 #include "dialogs.h"
 
 BEGIN_EVENT_TABLE(VersionDialog, wxDialog)
@@ -11,6 +13,8 @@ END_EVENT_TABLE ()
 BEGIN_EVENT_TABLE(EpaisseurDialog, wxDialog)
 END_EVENT_TABLE ()
 BEGIN_EVENT_TABLE(TriangleDialog, wxDialog)
+END_EVENT_TABLE ()
+BEGIN_EVENT_TABLE(ProprietesDialog, wxDialog)
 END_EVENT_TABLE ()
 
 VersionDialog::VersionDialog( wxWindow *parent, wxWindowID id, const wxString &title) : wxDialog( parent, id, title)
@@ -98,6 +102,46 @@ TriangleDialog::TriangleDialog( wxWindow *parent, wxWindowID id, const wxString 
 	item2->Add( item5, 0, wxALIGN_CENTRE|wxALL, 5 );
 	item2->Add( item6, 0, wxALIGN_CENTRE|wxALL, 5 );
 	item2->Add( item7, 0, wxALIGN_CENTRE|wxALL, 5 );
+
+	this->SetAutoLayout( TRUE );
+	this->SetSizer( item0 );
+	item0->Fit( this );
+	item0->SetSizeHints( this );
+	 
+}
+ProprietesDialog::ProprietesDialog( wxWindow *parent, wxWindowID id, const wxString &title) : wxDialog( parent, id, title)
+{
+	// Conteneurs
+	wxBoxSizer *item0 = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer *item1 = new wxBoxSizer( wxHORIZONTAL );
+	wxBoxSizer *item2 = new wxBoxSizer( wxVERTICAL );
+
+	wxStaticText *item3 = new wxStaticText( this, V_ID_TEXTE, 
+			wxT("Identifiant du triangle"), 
+			wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE );
+	wxTextCtrl *item4 = new wxTextCtrl(this, ID_BOITE_TEXTE);
+	wxStaticText *item5 = new wxStaticText( this, V_ID_TEXTE, 
+			wxT("Epaisseur trait"), 
+			wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE );
+
+	 wxSpinCtrl *item6 = new wxSpinCtrl(this, ID_EPAISSEUR_TRAIT_SPINCTRL, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 100, 2, wxT("EpaisseurTrait"));
+
+	wxString couleurs[] = { wxT("Rouge"), wxT("Vert"), wxT("Bleu")};
+	wxRadioBox *item7 = new wxRadioBox(this, COULEUR_RD_BOX, wxT("Couleurs"), wxDefaultPosition, wxDefaultSize, 3, couleurs);
+
+	// Boutons
+	wxButton *item8 = new wxButton( this, wxID_OK, wxT("OK"), wxDefaultPosition);
+
+	item0->Add( item1, 0, wxALIGN_CENTRE|wxALL, 5 );
+
+	item1->Add( item2, 0, wxALIGN_CENTRE|wxALL, 5 );
+	item1->Add( item7, 0, wxALIGN_CENTRE|wxALL, 5 );
+
+	item2->Add( item3, 0, wxALIGN_CENTRE|wxALL, 5 );
+	item2->Add( item4, 0, wxALIGN_CENTRE|wxALL, 5 );
+	item2->Add( item5, 0, wxALIGN_CENTRE|wxALL, 5 );
+	item2->Add( item6, 0, wxALIGN_CENTRE|wxALL, 5 );
+	item0->Add( item8, 0, wxALIGN_CENTRE|wxALL, 5 );
 
 	this->SetAutoLayout( TRUE );
 	this->SetSizer( item0 );

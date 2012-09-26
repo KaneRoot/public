@@ -43,7 +43,7 @@ bool MyApp::OnInit()
 
 	m_MainFrame->Show(TRUE);
 
-	TriangleDialog vdlg(m_MainFrame, -1, wxT("Triangle"));
+	ProprietesDialog vdlg(m_MainFrame, -1, wxT("Proprietes"));
 
 	vdlg.ShowModal();
 
