@@ -3,7 +3,8 @@
 
 #include "wx/wx.h" 
 
-enum { V_ID_TEXTE = 10000, SLIDER_EPAISSEUR_TRAIT, COULEUR_RD_BOX};
+enum { V_ID_TEXTE = 10000, SLIDER_EPAISSEUR_TRAIT, COULEUR_RD_BOX, 
+	ID_LISTE_BOITE, TEXTE_PROPRIETES, TEXTE_SUPPRIMER};
 class VersionDialog: public wxDialog {
 	public :
 		     VersionDialog(wxWindow *parent, wxWindowID id, const wxString &title);
