@@ -1,9 +1,15 @@
 #include "wx/wx.h" 
+#include <wx/button.h>
+#include <wx/stattext.h>
 #include "dialogs.h"
 
 BEGIN_EVENT_TABLE(VersionDialog, wxDialog)
 END_EVENT_TABLE ()
 BEGIN_EVENT_TABLE(ColorDialog, wxDialog)
+END_EVENT_TABLE ()
+BEGIN_EVENT_TABLE(EpaisseurDialog, wxDialog)
+END_EVENT_TABLE ()
+BEGIN_EVENT_TABLE(TriangleDialog, wxDialog)
 END_EVENT_TABLE ()
 
 VersionDialog::VersionDialog( wxWindow *parent, wxWindowID id, const wxString &title) : wxDialog( parent, id, title)
@@ -22,15 +28,61 @@ VersionDialog::VersionDialog( wxWindow *parent, wxWindowID id, const wxString &t
 	item0->SetSizeHints( this );
 	 
 }
+EpaisseurDialog::EpaisseurDialog( wxWindow *parent, wxWindowID id, const wxString &title) : wxDialog( parent, id, title)
+{
+	wxBoxSizer *item0 = new wxBoxSizer( wxVERTICAL );
+	wxStaticText *item1 = new wxStaticText( this, V_ID_TEXTE, 
+			wxT("Choisir la nouvelle épaisseur de trait"), 
+			wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE );
+	wxSlider *item2 = new wxSlider(this, SLIDER_EPAISSEUR_TRAIT, 5, 0, 10, wxDefaultPosition, 
+			wxDefaultSize, wxSL_HORIZONTAL, wxDefaultValidator, wxT("Epaisseur"));
+	wxButton *item3 = new wxButton( this, wxID_OK, wxT("OK"), wxDefaultPosition);
+
+	item0->Add( item1, 0, wxALIGN_CENTRE|wxALL, 5 );
+	item0->Add( item2, 0, wxALIGN_CENTRE|wxALL, 5 );
+	item0->Add( item3, 0, wxALIGN_CENTRE|wxALL, 5 );
+
+	this->SetAutoLayout( TRUE );
+	this->SetSizer( item0 );
+	item0->Fit( this );
+	item0->SetSizeHints( this );
+	 
+}
 ColorDialog::ColorDialog( wxWindow *parent, wxWindowID id, const wxString &title) : wxDialog( parent, id, title)
 {
 	wxBoxSizer *item0 = new wxBoxSizer( wxVERTICAL );
 	wxStaticText *item1 = new wxStaticText( this, V_ID_TEXTE, 
-			wxT("Couleurs o/"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE );
-	wxButton *item2 = new wxButton( this, wxID_OK, wxT("OK"), wxDefaultPosition);
+			wxT("Choisir la nouvelle couleur"), 
+			wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE );
+	wxString strs8[] = { wxT("Rouge"), wxT("Vert"), wxT("Bleu")};
+	wxRadioBox *item2 = new wxRadioBox(this, COULEUR_RD_BOX, wxT("Couleurs"), wxDefaultPosition, wxDefaultSize, 3, strs8);
+
+	wxButton *item3 = new wxButton( this, wxID_OK, wxT("OK"), wxDefaultPosition);
 
 	item0->Add( item1, 0, wxALIGN_CENTRE|wxALL, 5 );
 	item0->Add( item2, 0, wxALIGN_CENTRE|wxALL, 5 );
+	item0->Add( item3, 0, wxALIGN_CENTRE|wxALL, 5 );
+
+	this->SetAutoLayout( TRUE );
+	this->SetSizer( item0 );
+	item0->Fit( this );
+	item0->SetSizeHints( this );
+	 
+}
+TriangleDialog::TriangleDialog( wxWindow *parent, wxWindowID id, const wxString &title) : wxDialog( parent, id, title)
+{
+	wxBoxSizer *item0 = new wxBoxSizer( wxVERTICAL );
+	wxStaticText *item1 = new wxStaticText( this, V_ID_TEXTE, 
+			wxT("Choisir la nouvelle couleur"), 
+			wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE );
+	wxString strs8[] = { wxT("Rouge"), wxT("Vert"), wxT("Bleu")};
+	wxRadioBox *item2 = new wxRadioBox(this, COULEUR_RD_BOX, wxT("Couleurs"), wxDefaultPosition, wxDefaultSize, 3, strs8);
+
+	wxButton *item3 = new wxButton( this, wxID_OK, wxT("OK"), wxDefaultPosition);
+
+	item0->Add( item1, 0, wxALIGN_CENTRE|wxALL, 5 );
+	item0->Add( item2, 0, wxALIGN_CENTRE|wxALL, 5 );
+	item0->Add( item3, 0, wxALIGN_CENTRE|wxALL, 5 );
 
 	this->SetAutoLayout( TRUE );
 	this->SetSizer( item0 );
