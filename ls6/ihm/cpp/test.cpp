@@ -70,8 +70,3 @@ int main() {
 	test_strings();
 	return 0;
 }
-// Constructeur de copie
-//Personnage::Personnage(Personnage const& personnageACopier) : m_vie(personnageACopier.m_vie), m_mana(personnageACopier.m_mana), m_arme(0)
-//{
-//	m_arme = new Arme(*(personnageACopier.m_arme));
-//}
