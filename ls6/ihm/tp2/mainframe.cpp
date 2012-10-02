@@ -61,16 +61,29 @@ void CMainFrame::OnSave(wxCommandEvent& event)
 }
 void CMainFrame::OnEpaisseurTrait(wxCommandEvent& event)
 {
+	EpaisseurDialog vdlg(this, -1, wxT("Epaisseur du trait"));
+	vdlg.ShowModal();
 }
 void CMainFrame::OnColor(wxCommandEvent& event)
 {
+	ColorDialog vdlg(this, -1, wxT("Couleur"));
+	vdlg.ShowModal();
 }
 void CMainFrame::OnGestionTriangles(wxCommandEvent& event)
 {
+	TriangleDialog vdlg(this, -1, wxT("Gestion des triangles"));
+	vdlg.ShowModal();
 }
 void CMainFrame::OnToolBar(wxCommandEvent& event)
 {
+	// On masque / affiche la barre d'outils
+	if(m_toolbar->IsShownOnScreen())
+		m_toolbar->Hide();
+	else
+		m_toolbar->Show(true);
 }
 void CMainFrame::OnVersion(wxCommandEvent& event)
 {
+	VersionDialog vdlg(this, -1, wxT("Version"));
+	vdlg.ShowModal();
 }
