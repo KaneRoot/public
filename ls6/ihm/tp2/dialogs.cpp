@@ -32,10 +32,17 @@ VersionDialog::VersionDialog( wxWindow *parent, wxWindowID id, const wxString &t
 	conteneur->SetSizeHints( this );
 	 
 }
+VersionDialog::~VersionDialog()
+{
+	/*
+	delete button_ok;
+	delete texte;
+	delete conteneur;
+	*/
+}
 EpaisseurDialog::EpaisseurDialog( wxWindow *parent, wxWindowID id, const wxString &title) : wxDialog( parent, id, title)
 {
 	conteneur = new wxBoxSizer( wxVERTICAL );
-	wxBoxSizer *conteneur = new wxBoxSizer( wxVERTICAL );
 	texte = new wxStaticText( this, V_ID_TEXTE, wxT("Choisir la nouvelle épaisseur de trait"));
 
 	slider = new wxSlider(this, SLIDER_EPAISSEUR_TRAIT, 5, 0, 10, wxDefaultPosition, 
@@ -51,6 +58,15 @@ EpaisseurDialog::EpaisseurDialog( wxWindow *parent, wxWindowID id, const wxStrin
 	conteneur->Fit( this );
 	conteneur->SetSizeHints( this );
 	 
+}
+EpaisseurDialog::~EpaisseurDialog()
+{
+	/*
+	delete conteneur;
+	delete texte;
+	delete slider;
+	delete button_ok;
+	*/
 }
 ColorDialog::ColorDialog( wxWindow *parent, wxWindowID id, const wxString &title) : wxDialog( parent, id, title)
 {
@@ -71,6 +87,15 @@ ColorDialog::ColorDialog( wxWindow *parent, wxWindowID id, const wxString &title
 	conteneur->Fit( this );
 	conteneur->SetSizeHints( this );
 	 
+}
+ColorDialog::~ColorDialog()
+{
+	/*
+	delete conteneur;
+	delete texte;
+	delete rb_couleurs;
+	delete button_ok;
+	*/
 }
 TriangleDialog::TriangleDialog( wxWindow *parent, wxWindowID id, const wxString &title) : wxDialog( parent, id, title)
 {
@@ -103,6 +128,17 @@ TriangleDialog::TriangleDialog( wxWindow *parent, wxWindowID id, const wxString 
 	conteneur[0]->Fit( this );
 	conteneur[0]->SetSizeHints( this );
 }
+TriangleDialog::~TriangleDialog()
+{
+	/*
+	for( int i(0) ; i < 3 ; i++)
+		delete conteneur[i];
+	delete texte;
+	delete liste_triangles;
+	for( int i(0) ; i < 3 ; i++)
+		delete bouton[i];
+	*/
+}
 ProprietesDialog::ProprietesDialog( wxWindow *parent, wxWindowID id, const wxString &title) : wxDialog( parent, id, title)
 {
 	// Conteneurs
@@ -112,7 +148,6 @@ ProprietesDialog::ProprietesDialog( wxWindow *parent, wxWindowID id, const wxStr
 
 	// Textes
 	texte_id_triangle = new wxStaticText( this, V_ID_TEXTE, wxT("Identifiant du triangle"));
-
 	texte_epaisseur_trait = new wxStaticText( this, V_ID_TEXTE, wxT("Epaisseur trait"));
 
 	// Autres objets
@@ -145,5 +180,17 @@ ProprietesDialog::ProprietesDialog( wxWindow *parent, wxWindowID id, const wxStr
 	this->SetSizer( conteneur[0] );
 	conteneur[0]->Fit( this );
 	conteneur[0]->SetSizeHints( this );
-	 
+}
+ProprietesDialog::~ProprietesDialog()
+{
+	/*
+	for( int i(0) ; i < 3 ; i++)
+		delete conteneur[i];
+	delete texte_id_triangle;
+	delete texte_epaisseur_trait;
+	delete textctrl_id_boite_texte;
+	delete spinctl_epaisseur_trait;
+	delete radiobox_couleur;
+	delete button_ok;
+	*/
 }
