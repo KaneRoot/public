@@ -16,9 +16,17 @@ public:
 
 private:
 	wxToolBar *m_toolbar;
+	void OnNew(wxCommandEvent& event);
+	void OnQuit(wxCommandEvent& event);
+	void OnOpen(wxCommandEvent& event);
+	void OnSave(wxCommandEvent& event);
+	void OnEpaisseurTrait(wxCommandEvent& event);
+	void OnColor(wxCommandEvent& event);
+	void OnGestionTriangles(wxCommandEvent& event);
+	void OnToolBar(wxCommandEvent& event);
+	void OnVersion(wxCommandEvent& event);
+
 	DECLARE_EVENT_TABLE();
-
-
 }; //MyFrame
 
 #endif

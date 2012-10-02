@@ -8,6 +8,15 @@
 
 
 BEGIN_EVENT_TABLE(CMainFrame, wxFrame)
+	EVT_MENU(M_NOUVEAU_FICHIER, CMainFrame::OnNew)
+	EVT_MENU(M_QUITTER, CMainFrame::OnQuit)
+	EVT_MENU(M_OUVRIR, CMainFrame::OnOpen)
+	EVT_MENU(M_SAUVEGARDER, CMainFrame::OnSave)
+	EVT_MENU(M_EPAISSEUR_TRAIT, CMainFrame::OnEpaisseurTrait)
+	EVT_MENU(M_COULEUR, CMainFrame::OnColor)
+	EVT_MENU(M_GESTION_TRIANGLES, CMainFrame::OnGestionTriangles)
+	EVT_MENU(M_TOOLBAR, CMainFrame::OnToolBar)
+	EVT_MENU(M_VERSION, CMainFrame::OnVersion)
 END_EVENT_TABLE()
 
 
@@ -36,4 +45,32 @@ void CMainFrame::CreateMyToolBar()
 	m_toolbar->Realize();
 
 	SetToolBar(m_toolbar);
+}
+void CMainFrame::OnNew(wxCommandEvent& event)
+{
+}
+void CMainFrame::OnQuit(wxCommandEvent& event)
+{
+	Close(TRUE);
+}
+void CMainFrame::OnOpen(wxCommandEvent& event)
+{
+}
+void CMainFrame::OnSave(wxCommandEvent& event)
+{
+}
+void CMainFrame::OnEpaisseurTrait(wxCommandEvent& event)
+{
+}
+void CMainFrame::OnColor(wxCommandEvent& event)
+{
+}
+void CMainFrame::OnGestionTriangles(wxCommandEvent& event)
+{
+}
+void CMainFrame::OnToolBar(wxCommandEvent& event)
+{
+}
+void CMainFrame::OnVersion(wxCommandEvent& event)
+{
 }
