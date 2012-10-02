@@ -1,0 +1,19 @@
+sujet 5 : http://icps.u-strasbg.fr/~vivien/Enseignement/PPP-2001-2002/
+
+Certains tris ne sont pas valides, il faut trouver lesquels et les corriger.
+
+
+##############################
+
+Les tris 2, 3 et 5 ont un problème : 
+	-16 -10 -9 -6 -4 -3 0 0 0 0 
+	-9 -16 0 -6 -10 0 -3 -4 0 0 
+	-10 -9 -6 -4 -3 0 0 -16 0 0 
+	-16 -10 -9 -6 -4 -3 0 0 0 0 
+	0 -16 -10 -9 -6 -4 -3 0 0 0 
+	-16 -10 -9 -6 -4 -3 0 0 0 0 
+
+Donc les tris : 
+  TriMax(B, taille);
+  TriElim(B, taille);
+  BinInsertion(B, 0, taille-1);
