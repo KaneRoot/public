@@ -17,6 +17,7 @@ bool MyApp::OnInit()
 	m_MainFrame = new CMainFrame( wxString("Fenêtre", wxConvUTF8), wxPoint(50,50), wxSize(450,340) );
 	wxMenuBar *menu_bar = new wxMenuBar;
 	wxMenu *file_menu = new wxMenu;
+
 	menu_bar->Append(file_menu, wxT("Fichier"));
 	file_menu->Append(M_NOUVEAU_FICHIER, wxT("Nouveau\tCtrl-N"));
 	file_menu->AppendSeparator();

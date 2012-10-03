@@ -15,7 +15,7 @@ enum { V_ID_TEXTE = 10000, SLIDER_EPAISSEUR_TRAIT, COULEUR_RD_BOX,
 class VersionDialog: public wxDialog {
 	public :
 		    VersionDialog(wxWindow *parent, wxWindowID id, const wxString &title);
-			~VersionDialog();
+			virtual	~VersionDialog();
 	private :
 			wxBoxSizer *conteneur;
 			wxStaticText *texte;
@@ -25,7 +25,7 @@ class VersionDialog: public wxDialog {
 class EpaisseurDialog: public wxDialog {
 	public :
 		    EpaisseurDialog(wxWindow *parent, wxWindowID id, const wxString &title);
-			~EpaisseurDialog();
+			virtual ~EpaisseurDialog();
 	private :
 			wxBoxSizer *conteneur;
 			wxStaticText *texte;
@@ -36,7 +36,7 @@ class EpaisseurDialog: public wxDialog {
 class ColorDialog: public wxDialog {
 	public :
 		    ColorDialog(wxWindow *parent, wxWindowID id, const wxString &title);
-			~ColorDialog();
+			virtual ~ColorDialog();
 	private :
 			wxBoxSizer *conteneur;
 			wxStaticText *texte;
@@ -47,18 +47,18 @@ class ColorDialog: public wxDialog {
 class TriangleDialog: public wxDialog {
 	public :
 		    TriangleDialog(wxWindow *parent, wxWindowID id, const wxString &title);
-			~TriangleDialog();
+			virtual ~TriangleDialog();
+			wxListBox *liste_triangles;
 	private :
 			wxBoxSizer *conteneur[3];
 			wxStaticText *texte;
-			wxListBox *liste_triangles;
 			wxButton *bouton[3];
 			DECLARE_EVENT_TABLE()
 };
 class ProprietesDialog: public wxDialog {
 	public :
 		    ProprietesDialog(wxWindow *parent, wxWindowID id, const wxString &title);
-			~ProprietesDialog();
+			virtual ~ProprietesDialog();
 	private :
 			wxBoxSizer *conteneur[3];
 			wxStaticText *texte_epaisseur_trait;

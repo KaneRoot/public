@@ -30,10 +30,10 @@ void CMainFrame::CreateMyToolBar()
 	m_toolbar = CreateToolBar(wxNO_BORDER | wxTB_HORIZONTAL | wxTB_TEXT, TOOLBAR_TOOLS);
 	wxBitmap toolBarBitmaps[4];
 
-	toolBarBitmaps[0] = wxBitmap(wxT("new.bmp"),wxBITMAP_TYPE_BMP);
-	toolBarBitmaps[1] = wxBitmap(wxT("open.bmp"),wxBITMAP_TYPE_BMP);
-	toolBarBitmaps[2] = wxBitmap(wxT("save.bmp"),wxBITMAP_TYPE_BMP);
-	toolBarBitmaps[3] = wxBitmap(wxT("draw.bmp"),wxBITMAP_TYPE_BMP);
+	toolBarBitmaps[0] = wxBitmap(wxT("img/new.bmp"),wxBITMAP_TYPE_BMP);
+	toolBarBitmaps[1] = wxBitmap(wxT("img/open.bmp"),wxBITMAP_TYPE_BMP);
+	toolBarBitmaps[2] = wxBitmap(wxT("img/save.bmp"),wxBITMAP_TYPE_BMP);
+	toolBarBitmaps[3] = wxBitmap(wxT("img/draw.bmp"),wxBITMAP_TYPE_BMP);
 
 	m_toolbar->SetToolBitmapSize(wxSize(toolBarBitmaps[0].GetWidth(), toolBarBitmaps[0].GetHeight()));
 	m_toolbar->AddTool(M_NOUVEAU_FICHIER, wxT("Nouveau"), toolBarBitmaps[0]);
@@ -72,6 +72,10 @@ void CMainFrame::OnColor(wxCommandEvent& event)
 void CMainFrame::OnGestionTriangles(wxCommandEvent& event)
 {
 	TriangleDialog vdlg(this, -1, wxT("Gestion des triangles"));
+	vdlg.liste_triangles->Clear();
+	vdlg.liste_triangles->Append(wxT("Triangle 1"));
+	vdlg.liste_triangles->Append(wxT("Triangle 2"));
+	vdlg.liste_triangles->SetSelection(1);
 	vdlg.ShowModal();
 }
 void CMainFrame::OnToolBar(wxCommandEvent& event)
