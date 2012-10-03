@@ -148,6 +148,8 @@ TriangleDialog::~TriangleDialog()
 void TriangleDialog::OnProprietes(wxCommandEvent& event)
 {
 	ProprietesDialog vdlg( this, -1, wxT("Proprietes"));
+	wxString nouveau_texte( liste_triangles->GetStringSelection());
+	vdlg.ChangerTexteIdTriangle(nouveau_texte); // Mettre le nouveau texte
 	vdlg.ShowModal();
 }
 void TriangleDialog::OnSupprimer(wxCommandEvent& event)
@@ -212,9 +214,10 @@ ProprietesDialog::~ProprietesDialog()
 	delete button_ok;
 	*/
 }
-void ProprietesDialog::ChangerTexteIdTriangle(wxStaticText& idTriangle)
+void ProprietesDialog::ChangerTexteIdTriangle(wxString& idTriangle)
 {
-	texte_id_triangle->SetLabel(idTriangle.GetLabel());
+	textctrl_id_boite_texte->Clear();
+	textctrl_id_boite_texte->AppendText(idTriangle);
 }
 void ProprietesDialog::ChangerEpaisseurTrait(int epaisseur)
 {

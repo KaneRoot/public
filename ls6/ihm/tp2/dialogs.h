@@ -61,7 +61,7 @@ class ProprietesDialog: public wxDialog {
 	public :
 		    ProprietesDialog(wxWindow *parent, wxWindowID id, const wxString &title);
 			virtual ~ProprietesDialog();
-			void ChangerTexteIdTriangle(wxStaticText& idTriangle);
+			void ChangerTexteIdTriangle(wxString& idTriangle);
 			void ChangerEpaisseurTrait(int epaisseur);
 			void ChangerCouleurTriangle(int couleur);
 	private :
