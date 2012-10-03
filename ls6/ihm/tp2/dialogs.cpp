@@ -4,6 +4,10 @@
 #include <wx/sizer.h>
 #include <wx/textctrl.h>
 #include <wx/spinctrl.h>
+#include <wx/dynarray.h>
+#include <wx/listctrl.h>
+#include <wx/listbox.h>
+#include <wx/combobox.h>
 #include "dialogs.h"
 
 BEGIN_EVENT_TABLE(VersionDialog, wxDialog)
@@ -13,6 +17,8 @@ END_EVENT_TABLE ()
 BEGIN_EVENT_TABLE(EpaisseurDialog, wxDialog)
 END_EVENT_TABLE ()
 BEGIN_EVENT_TABLE(TriangleDialog, wxDialog)
+	EVT_BUTTON(TEXTE_PROPRIETES, TriangleDialog::OnProprietes)
+	EVT_BUTTON(TEXTE_SUPPRIMER, TriangleDialog::OnSupprimer)
 END_EVENT_TABLE ()
 BEGIN_EVENT_TABLE(ProprietesDialog, wxDialog)
 END_EVENT_TABLE ()
@@ -139,6 +145,18 @@ TriangleDialog::~TriangleDialog()
 		delete bouton[i];
 	*/
 }
+void TriangleDialog::OnProprietes(wxCommandEvent& event)
+{
+	ProprietesDialog vdlg( this, -1, wxT("Proprietes"));
+	vdlg.ShowModal();
+}
+void TriangleDialog::OnSupprimer(wxCommandEvent& event)
+{
+	wxArrayInt selections;
+	liste_triangles->GetSelections(selections);
+	for( int i(0) ; i < selections.GetCount() ; i++)
+		liste_triangles->Delete(selections.Item(i));
+}
 ProprietesDialog::ProprietesDialog( wxWindow *parent, wxWindowID id, const wxString &title) : wxDialog( parent, id, title)
 {
 	// Conteneurs
@@ -151,14 +169,14 @@ ProprietesDialog::ProprietesDialog( wxWindow *parent, wxWindowID id, const wxStr
 	texte_epaisseur_trait = new wxStaticText( this, V_ID_TEXTE, wxT("Epaisseur trait"));
 
 	// Autres objets
-	textctrl_id_boite_texte = new wxTextCtrl(this, ID_BOITE_TEXTE, wxT("Triangle 0"));
+	textctrl_id_boite_texte = new wxTextCtrl(this, ID_BOITE_TEXTE, wxT("Valeur par défaut"));
 
 	spinctl_epaisseur_trait = new wxSpinCtrl(this, ID_EPAISSEUR_TRAIT_SPINCTRL, 
 			 wxEmptyString, wxDefaultPosition, wxDefaultSize, 
 			 wxSP_ARROW_KEYS, 0, 100, 2, wxT("EpaisseurTrait"));
 
 	wxString couleurs[] = { wxT("Rouge"), wxT("Vert"), wxT("Bleu")};
-	radiobox_couleur = new wxRadioBox(this, COULEUR_RD_BOX, 
+	radiobox_couleur = new wxRadioBox( this, COULEUR_RD_BOX, 
 			wxT("Couleurs"), wxDefaultPosition, wxDefaultSize, 3, couleurs);
 
 	button_ok = new wxButton( this, wxID_OK, wxT("OK"), wxDefaultPosition);
@@ -193,4 +211,14 @@ ProprietesDialog::~ProprietesDialog()
 	delete radiobox_couleur;
 	delete button_ok;
 	*/
+}
+void ProprietesDialog::ChangerTexteIdTriangle(wxStaticText& idTriangle)
+{
+	texte_id_triangle->SetLabel(idTriangle.GetLabel());
+}
+void ProprietesDialog::ChangerEpaisseurTrait(int epaisseur)
+{
+}
+void ProprietesDialog::ChangerCouleurTriangle(int couleur)
+{
 }

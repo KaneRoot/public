@@ -53,12 +53,17 @@ class TriangleDialog: public wxDialog {
 			wxBoxSizer *conteneur[3];
 			wxStaticText *texte;
 			wxButton *bouton[3];
+			void OnProprietes(wxCommandEvent& event);
+			void OnSupprimer(wxCommandEvent& event);
 			DECLARE_EVENT_TABLE()
 };
 class ProprietesDialog: public wxDialog {
 	public :
 		    ProprietesDialog(wxWindow *parent, wxWindowID id, const wxString &title);
 			virtual ~ProprietesDialog();
+			void ChangerTexteIdTriangle(wxStaticText& idTriangle);
+			void ChangerEpaisseurTrait(int epaisseur);
+			void ChangerCouleurTriangle(int couleur);
 	private :
 			wxBoxSizer *conteneur[3];
 			wxStaticText *texte_epaisseur_trait;
