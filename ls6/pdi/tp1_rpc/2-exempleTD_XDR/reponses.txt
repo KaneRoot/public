@@ -1,0 +1,2 @@
+Il faut au moins 20 octets pour stocker chaine0.
+36 pour chaine1.
