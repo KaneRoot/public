@@ -16,6 +16,11 @@ public:
 
 private:
 	wxToolBar *m_toolbar;
+
+	int epaisseur_trait_courante;
+	wxColour couleur_courante; 
+	bool is_drawing;
+
 	void OnNew(wxCommandEvent& event);
 	void OnQuit(wxCommandEvent& event);
 	void OnOpen(wxCommandEvent& event);
