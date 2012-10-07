@@ -20,42 +20,42 @@ int est_valide(int * x, int taille) {
 void afficher_validite(int *x, int taille) {
 	int i ;
 	if(VRAI == est_valide(x,taille))
-		printf("\033[32mCet algo est valide : \033[00m\t\t");
+		printf("%20s : ", "\033[32mvalide\033[00m");
 	else
-		printf("\033[31mCet algo n'est pas valide : \033[00m\t");
+		printf("%20s : ", "\033[31mnon valide\033[00m");
 	for( i = 0 ; i < taille ; i++)
-		printf(" %d ", x[i]);
+		printf(" %3d ", x[i]);
 	printf("\n");
 }
 void algo_test(int *A, int *B, int taille) {
 	Recopie(A, B, taille);
 	TriFusion(B, 0, taille-1);
-	printf("Tri fusion : \t");
+	printf("%15s : ", "tri fusion");
 	afficher_validite(B,taille);
 
 	Recopie(A, B, taille);
 	TriMax(B, taille);
-	printf("Tri max : \t");
+	printf("%15s : ", "tri max");
 	afficher_validite(B,taille);
 
 	Recopie(A, B, taille);
 	TriElim(B, taille);
-	printf("Tri elim : \t");
+	printf("%15s : ", "tri elimination");
 	afficher_validite(B,taille);
 
 	Recopie(A, B, taille);
 	TrierTas(B, taille);
-	printf("Tri tas :\t ");
+	printf("%15s : ", "tri tas");
 	afficher_validite(B,taille);
 
 	Recopie(A, B, taille);
 	BinInsertion(B, 0, taille-1);
-	printf("bininsertion : \t");
+	printf("%15s : ", "bininsertion");
 	afficher_validite(B,taille);
 
 	Recopie(A, B, taille);
 	TriRapide(B, 0, taille-1);
-	printf("tri rapide : \t");
+	printf("%15s : ", "tri rapide");
 	afficher_validite(B,taille);
 
 }
@@ -70,6 +70,7 @@ int main()
 
 	for( i = 0 ; i < taille ; i++)
 		A[i] = (i % 3) * (taille - i) * -1;
+	A[5] = 3;
 
 	algo_test(A,B,taille);
 	return 0;
