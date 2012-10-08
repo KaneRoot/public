@@ -17,17 +17,24 @@ int est_valide(int * x, int taille) {
 
 	return VRAI;
 }
-void afficher_validite(int *x, int taille) {
-	int i ;
-	if(VRAI == est_valide(x,taille))
-		printf("%20s : ", "\033[32mvalide\033[00m");
-	else
-		printf("%20s : ", "\033[31mnon valide\033[00m");
+void afficher_tableau(int *x, int taille)
+{
+	int i;
 	for( i = 0 ; i < taille ; i++)
 		printf(" %3d ", x[i]);
 	printf("\n");
 }
+void afficher_validite(int *x, int taille) {
+	if(VRAI == est_valide(x,taille))
+		printf("%20s : ", "\033[32mvalide\033[00m");
+	else
+		printf("%20s : ", "\033[31mnon valide\033[00m");
+	afficher_tableau(x,taille);
+}
 void algo_test(int *A, int *B, int taille) {
+	printf("\033[33mAvant les tests : \t\t\033[00m");
+	afficher_tableau(A,taille);
+
 	Recopie(A, B, taille);
 	TriFusion(B, 0, taille-1);
 	printf("%15s : ", "tri fusion");
