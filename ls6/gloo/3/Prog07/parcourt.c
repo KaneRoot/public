@@ -6,38 +6,39 @@
 
 
 typedef struct cell {
-struct cell * suivant;
-int        valeurs[N];
+	struct cell * suivant;
+	int        valeurs[N];
 } Cellule;
 
 
 Cellule * allocation()
 {
-  Cellule * tmp = malloc(sizeof(Cellule*));
-  return tmp;
+	Cellule * tmp = malloc(sizeof(Cellule*));
+	return tmp;
 }
 
 int longueur(Cellule * liste)
 {
-  if (liste==NULL)
-    return 0;
-  else
-    return (1+longueur(liste->suivant));
+	if (liste==NULL)
+		return 0;
+	else
+		return (1+longueur(liste->suivant));
 }
 
 
 int main()
 {
-  Cellule * maliste=allocation();
-  Cellule * copie=maliste;
-  int i, j;
+	Cellule * maliste=allocation();
+	Cellule * copie=maliste;
+	int i, j;
 
-  for(i=0; i<M; i++){
-    maliste->suivant=allocation();
-    maliste=maliste->suivant;
-    for(j=0; j<N; j++)
-      maliste->valeurs[j] = random();
-  }
+	for(i=0; i<M; i++){
+		maliste->suivant=allocation();
+		maliste=maliste->suivant;
+		for(j=0; j<N; j++)
+			maliste->valeurs[j] = random();
+	}
 
-  return longueur(copie);
+	printf(" %d\n", longueur(copie));
+	return 0;
 }

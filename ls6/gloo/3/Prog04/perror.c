@@ -11,7 +11,7 @@ int main (void)
 
     tab = malloc (SIZE * sizeof(int));
 
-    if ((tab = NULL)) {
+    if ((tab == NULL)) {
         perror ("malloc()");
         exit (-1);
     }
