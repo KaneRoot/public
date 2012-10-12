@@ -5,7 +5,7 @@
 #include <rpc/xdr.h>
 #include <rpc/rpc.h>
 
-#define PROGNUM 0x20000110
+#define PROGNUM 0x20000115
 #define VERSNUM 1
 #define PROCNUM 1
 

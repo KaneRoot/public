@@ -1,8 +1,14 @@
 #include "include.h"
 
 // procédure RPC de division de deux entiers
-int * divise(xdr_entiers2 *e)
+entiers2 * divise(entiers2 *e)
 { 
+	int x,y;
+	x = e->x / e->y;
+	y = e->x % e->y;
+	e->x = x;
+	e->y = y;
+	return e;
 }
 
 int main (void)
