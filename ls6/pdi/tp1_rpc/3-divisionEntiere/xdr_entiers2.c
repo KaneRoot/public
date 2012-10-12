@@ -8,8 +8,8 @@ bool_t xdr_entiers2(XDR *xdrs, entiers2 *e)
 	// ce switch n'a pas vraiment d'intérêt
 	switch(xdrs->x_op)
 	{
-		case XDR_ENCODE : res = (xdr_int(xdrs,&e->x) && xdr_int(xdrs,&e->y));
-		case XDR_DECODE : res = (xdr_int(xdrs,&e->x) && xdr_int(xdrs,&e->y));
+		case XDR_ENCODE : res = (xdr_int(xdrs,&e->x) && xdr_int(xdrs,&e->y)); break;
+		case XDR_DECODE : res = (xdr_int(xdrs,&e->x) && xdr_int(xdrs,&e->y)); break;
 		default : res = (xdr_int(xdrs,&e->x) && xdr_int(xdrs,&e->y));
 	}
 	return res;
