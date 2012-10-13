@@ -11,15 +11,15 @@ int main (int argc, char **argv)
 
 	int i,j;
 	int stat;
-	matrix res ;
+	matrix res;
 	matrix_duo argument;
 	
 	for(i = 0 ; i < TAILLE ; i++)
 	{
 		for(j = 0 ; j < TAILLE ; j++)
 		{
-			argument.a.m[i][j] = i + j % 3;
-			argument.b.m[j][i] = i + j % 3;
+			argument.a.m[i*TAILLE + j] = i + j % 3;
+			argument.b.m[i*TAILLE + j] = i + j % 3 +1;
 		}
 		printf("\n");
 	}

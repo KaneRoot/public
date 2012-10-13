@@ -14,7 +14,7 @@
 // Peut être utilisé pour la division (x/y) et pour le retour (x=quotient, y=reste).
 typedef struct
 {
-	int m[TAILLE][TAILLE];
+	int m[TAILLE * TAILLE];
 } matrix ;
 
 typedef struct
@@ -24,8 +24,8 @@ typedef struct
 } matrix_duo;
 
 // Définition du filtre XDR pour la structure matrix
-bool_t xdr_matrix(XDR *, matrix **) ;
-bool_t xdr_matrix_duo(XDR *, matrix_duo *) ;
+bool_t xdr_matrix(XDR *, matrix *) ;
+bool_t xdr_matrix_duo(XDR *, matrix_duo*) ;
 void afficher_matrice(matrix *m);
 
 #endif // __INCLUDE_H__

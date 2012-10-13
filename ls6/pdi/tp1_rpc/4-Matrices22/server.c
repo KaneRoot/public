@@ -4,6 +4,7 @@
 matrix * addition(matrix_duo *d)
 { 
 	static matrix m;
+	static matrix *pm = &m;
 	int i, j;
 
 	printf("Reçu a : "); afficher_matrice(&d->a);
@@ -11,9 +12,11 @@ matrix * addition(matrix_duo *d)
 
 	for(i = 0 ; i < TAILLE ; i++)
 		for(j = 0 ; j < TAILLE ; j++)
-			m.m[i][j] = d->a.m[i][j] + d->b.m[i][j];
+			m.m[i*TAILLE + j] = d->a.m[i*TAILLE + j] + d->b.m[i*TAILLE + j];
+	printf("Matrice résultat : ");
+	afficher_matrice(pm);
 
-	return (&m);
+	return (pm);
 }
 
 int main (void)
