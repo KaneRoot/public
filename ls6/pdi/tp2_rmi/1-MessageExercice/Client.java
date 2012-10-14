@@ -12,7 +12,7 @@ public class Client
 		}
 		try
 		{
-			Message b = (Message) Naming.lookup("//" + args[1] + "/Message") ;
+			Message b = (Message) Naming.lookup("//"+args[0]+":"+args[1]+"/Message");
 			System.out.println("Le client recoit : " + b.messageDistant()) ; 
 		}
 		catch (NotBoundException re) { System.out.println(re) ; }

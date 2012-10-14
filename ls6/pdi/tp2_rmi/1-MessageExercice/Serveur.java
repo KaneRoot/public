@@ -14,7 +14,7 @@ public class Serveur
 		{
 			System.out.println("Connexion au port : " + args[0]);
 			MessageImpl objLocal = new MessageImpl () ;
-			Naming.rebind( "//localhost:" + args[0] + "/Message" ,objLocal) ;
+			Naming.rebind( "rmi://localhost:" + args[0] + "/Message" ,objLocal) ;
 			System.out.println("Serveur pret") ;
 		}
 		catch (RemoteException re) { System.out.println(re) ; }
