@@ -39,6 +39,8 @@ int main()
 			maliste->valeurs[j] = random();
 	}
 
+	// on ne peut pas renvoyer plus de 255
+	// car le code de retour est codé sur un char
 	printf(" %d\n", longueur(copie));
 	return 0;
 }

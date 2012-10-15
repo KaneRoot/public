@@ -50,12 +50,13 @@ int main()
 	for(n=1; n<100; n++)
 	{
 		/* calcul de fibonacci*/
-		tmp=fib2;
-		fib2=fib1+fib2;
-		fib1=tmp;
+		tmp = fib2;
+		fib2 = fib1+fib2;
+		fib1 = tmp;
 
 		/* n%40 prend des valeurs entre 0 et 39 */
-		table_hachage[fib2%N] = insertion(table_hachage[fib2%N], fib2);
+		// Cela peut prendre des valeurs négatives, puisque nous avons des entiers signés
+		table_hachage[((fib2%N)+N)%N] = insertion(table_hachage[((fib2%N)+N)%N], fib2);
 	}
 
 	return 0;
