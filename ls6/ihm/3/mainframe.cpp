@@ -125,7 +125,6 @@ void CMainFrame::OnSave(wxCommandEvent& event)
 		r = tab_tri[i].colour.Red();
 		g = tab_tri[i].colour.Green();
 		b = tab_tri[i].colour.Blue();
-		std::cout << r << " " << g << " " << b << std::endl;
 		fs	<< r << " " << g << " " << b << std::endl;
 		fs	<< tab_tri[i].thickness << std::endl << std::endl;
 	}
