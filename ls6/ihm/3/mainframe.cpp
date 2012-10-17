@@ -1,8 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <fstream>
+
 #include <wx/wx.h>
 #include <wx/accel.h>
+#include <wx/toolbar.h>
 
+#include "triangle.h"
 #include "dialogs.h"
 #include "mainframe.h"
 
@@ -21,7 +25,7 @@ END_EVENT_TABLE()
 
 
 CMainFrame::CMainFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
-: wxFrame((wxFrame *)NULL, -1, title, pos, size) 
+: wxFrame((wxFrame *)NULL, -1, title, pos, size), num_tri(0)
 {
 } //constructor
 
@@ -41,6 +45,7 @@ void CMainFrame::CreateMyToolBar()
 	m_toolbar->AddTool(M_SAUVEGARDER, wxT("Sauvegarder"), toolBarBitmaps[2]);
 	m_toolbar->AddSeparator();
 	m_toolbar->AddTool(M_GESTION_TRIANGLES, wxT("Gestion des triangles"), toolBarBitmaps[3], wxT("Gestion des triangles"));
+	m_toolbar->EnableTool(M_GESTION_TRIANGLES, false);
 
 	m_toolbar->Realize();
 
@@ -55,9 +60,75 @@ void CMainFrame::OnQuit(wxCommandEvent& event)
 }
 void CMainFrame::OnOpen(wxCommandEvent& event)
 {
+	//std::cout << "coucou" << std::endl;
+	wxFileDialog fenetre_dialogue(this, wxT("Choix d'un fichier"), wxT("./"), wxT("trian.tri"), wxT("*.*"), wxFD_OPEN);
+	fenetre_dialogue.ShowModal();
+
+	std::ifstream fo(fenetre_dialogue.GetPath().fn_str(), std::ios::in);
+
+	// if open file failed, show an error message box
+	if (!fo)
+	{
+		wxString errormsg, caption;
+		errormsg.Printf(wxT("Unable to open file "));
+		errormsg.Append(fenetre_dialogue.GetPath());
+		caption.Printf(wxT("Erreur"));
+		wxMessageDialog msg(this, errormsg, caption, wxOK | wxCENTRE | wxICON_ERROR);
+		msg.ShowModal();
+		return ;
+	}
+	int i, r,g,b;
+	
+	fo >> num_tri;
+	for( i = 0 ; i < num_tri ; i++)
+	{
+		//tab_tri[i] = Triangle();
+		
+		fo  >> tab_tri[i].p1.x >> tab_tri[i].p1.y 
+			>> tab_tri[i].p2.x >> tab_tri[i].p2.y 
+			>> tab_tri[i].p3.x >> tab_tri[i].p3.y;
+		fo	>> r >> g >> b;
+		tab_tri[i].colour.Set(r,g,b);
+		fo >> tab_tri[i].thickness;
+	}
+	if(num_tri > 0)
+	{
+		m_toolbar->EnableTool(M_GESTION_TRIANGLES, true);
+		this->GetMenuBar()->Enable(M_GESTION_TRIANGLES, true);
+	}
+
 }
 void CMainFrame::OnSave(wxCommandEvent& event)
 {
+	wxFileDialog fenetre_dialogue(this, wxT("Sauvegarde"), wxT("./"), wxT("trian.tri"), wxT("*.*"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+	fenetre_dialogue.ShowModal();
+
+	std::ofstream fs(fenetre_dialogue.GetPath().fn_str(), std::ios::out);
+	if (!fs)
+	{
+		wxString errormsg, caption;
+		errormsg.Printf(wxT("Unable to open file "));
+		errormsg.Append(fenetre_dialogue.GetPath());
+		caption.Printf(wxT("Erreur"));
+		wxMessageDialog msg(this, errormsg, caption, wxOK | wxCENTRE | wxICON_ERROR);
+		msg.ShowModal();
+		return ;
+	}
+	fs << num_tri << std::endl;
+	fs << std::endl;
+	int i, r,g,b;
+	for( i = 0 ; i < num_tri ; i++)
+	{
+		fs  << tab_tri[i].p1.x << " " << tab_tri[i].p1.y << " "
+			<< tab_tri[i].p2.x << " " << tab_tri[i].p2.y << " "
+			<< tab_tri[i].p3.x << " " << tab_tri[i].p3.y << std::endl;
+		r = tab_tri[i].colour.Red();
+		g = tab_tri[i].colour.Green();
+		b = tab_tri[i].colour.Blue();
+		std::cout << r << " " << g << " " << b << std::endl;
+		fs	<< r << " " << g << " " << b << std::endl;
+		fs	<< tab_tri[i].thickness << std::endl << std::endl;
+	}
 }
 void CMainFrame::OnEpaisseurTrait(wxCommandEvent& event)
 {

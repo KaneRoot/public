@@ -2,6 +2,7 @@
 #ifndef __MAINFRAME_H__
 #define __MAINFRAME_H__
 
+#include "triangle.h"
 #include "wx/wx.h"
 
 enum { M_NOUVEAU_FICHIER, M_OUVRIR, M_SAUVEGARDER, M_QUITTER, 
@@ -13,6 +14,8 @@ class CMainFrame: public wxFrame {
 public:
 	CMainFrame(const wxString& title, const wxPoint& pos, const wxSize& size);
 	void CreateMyToolBar();
+	int num_tri;
+	Triangle tab_tri[5];
 
 private:
 	wxToolBar *m_toolbar;
