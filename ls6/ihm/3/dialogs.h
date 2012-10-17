@@ -7,6 +7,7 @@
 #include <wx/sizer.h>
 #include <wx/textctrl.h>
 #include <wx/spinctrl.h>
+#include "mainframe.h"
 
 enum { V_ID_TEXTE = 10000, SLIDER_EPAISSEUR_TRAIT, COULEUR_RD_BOX, 
 	ID_LISTE_BOITE, TEXTE_PROPRIETES, TEXTE_SUPPRIMER, ID_BOITE_TEXTE,
@@ -49,6 +50,7 @@ class TriangleDialog: public wxDialog {
 		    TriangleDialog(wxWindow *parent, wxWindowID id, const wxString &title);
 			virtual ~TriangleDialog();
 			wxListBox *liste_triangles;
+			CMainFrame *main_frame;
 	private :
 			wxBoxSizer *conteneur[3];
 			wxStaticText *texte;

@@ -92,6 +92,9 @@ void CMainFrame::OnOpen(wxCommandEvent& event)
 		fo	>> r >> g >> b;
 		tab_tri[i].colour.Set(r,g,b);
 		fo >> tab_tri[i].thickness;
+		tab_tri[i].existe = 1;
+		tab_tri[i].nom << wxT("triangle ");
+	   	tab_tri[i].nom = tab_tri[i].nom << i;
 	}
 	if(num_tri > 0)
 	{
@@ -148,7 +151,10 @@ void CMainFrame::OnGestionTriangles(wxCommandEvent& event)
 	int i ; 
 	for(i = 0 ; i < num_tri ; i++)
 	{
-		vdlg.liste_triangles->Append(wxT("triangle ") );
+		if(tab_tri[i].existe != 0)
+		{
+			vdlg.liste_triangles->Append(tab_tri[i].nom);
+		}
 	}
 	vdlg.liste_triangles->SetSelection(0);
 	vdlg.ShowModal();

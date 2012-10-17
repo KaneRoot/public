@@ -105,6 +105,7 @@ ColorDialog::~ColorDialog()
 }
 TriangleDialog::TriangleDialog( wxWindow *parent, wxWindowID id, const wxString &title) : wxDialog( parent, id, title)
 {
+	main_frame = (CMainFrame *) parent;
 	// Conteneurs
 	conteneur[0] = new wxBoxSizer( wxVERTICAL );
 	conteneur[1] = new wxBoxSizer( wxHORIZONTAL );
@@ -147,8 +148,20 @@ TriangleDialog::~TriangleDialog()
 }
 void TriangleDialog::OnProprietes(wxCommandEvent& event)
 {
+	int i(0), j(0);
+
 	ProprietesDialog vdlg( this, -1, wxT("Proprietes"));
-	wxString nouveau_texte( liste_triangles->GetStringSelection());
+	wxString nouveau_texte( liste_triangles->GetStringSelection() );
+
+	for(i = 0, j = -1 ; j < liste_triangles->GetSelection() ; i++)
+	{
+		if(main_frame->tab_tri[i].existe == 1)
+			j++;
+	}
+
+	std::cout<<main_frame->tab_tri[j].p1.x<<std::endl;
+	// TODO : les valeurs de la couleur etc. doivent etre init correctement ici
+	
 	vdlg.ChangerTexteIdTriangle(nouveau_texte); // Mettre le nouveau texte
 	vdlg.ShowModal();
 }
@@ -156,8 +169,16 @@ void TriangleDialog::OnSupprimer(wxCommandEvent& event)
 {
 	wxArrayInt selections;
 	liste_triangles->GetSelections(selections);
-	for( int i(0) ; i < selections.GetCount() ; i++)
+	for( int i(0), j(-1), k(0) ; i < selections.GetCount() ; i++)
+	{
+		while( k < selections.Item(i))
+		{
+			if(main_frame->tab_tri[i].existe == 1)
+				j++;
+		}
+		
 		liste_triangles->Delete(selections.Item(i));
+	}
 }
 ProprietesDialog::ProprietesDialog( wxWindow *parent, wxWindowID id, const wxString &title) : wxDialog( parent, id, title)
 {

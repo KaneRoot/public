@@ -17,6 +17,8 @@ class Triangle
 		point p3;
 
 		wxColour colour;
+		int existe;
+		wxString nom;
 
 		float thickness; // epaisseur de trait 
 };
