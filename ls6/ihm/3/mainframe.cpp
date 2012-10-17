@@ -1,6 +1,8 @@
+#include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
 #include <fstream>
+#include <string>
 
 #include <wx/wx.h>
 #include <wx/accel.h>
@@ -143,9 +145,12 @@ void CMainFrame::OnGestionTriangles(wxCommandEvent& event)
 {
 	TriangleDialog vdlg(this, -1, wxT("Gestion des triangles"));
 	vdlg.liste_triangles->Clear();
-	vdlg.liste_triangles->Append(wxT("Triangle 1"));
-	vdlg.liste_triangles->Append(wxT("Triangle 2"));
-	vdlg.liste_triangles->SetSelection(1);
+	int i ; 
+	for(i = 0 ; i < num_tri ; i++)
+	{
+		vdlg.liste_triangles->Append(wxT("triangle ") );
+	}
+	vdlg.liste_triangles->SetSelection(0);
 	vdlg.ShowModal();
 }
 void CMainFrame::OnToolBar(wxCommandEvent& event)
