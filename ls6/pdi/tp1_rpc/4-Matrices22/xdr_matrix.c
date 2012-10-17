@@ -42,7 +42,7 @@ bool_t xdr_matrix(XDR *xdrs, matrix *m)
 }
 bool_t xdr_matrix_duo(XDR *xdrs, matrix_duo *d)
 {
-	if(xdrs->x_op == XDR_DECODE && d == NULL)
+	if(xdrs->x_op == XDR_DECODE)
 	{
 		printf("malloc matrix_duo\n");
 		d = malloc(sizeof(matrix_duo));
