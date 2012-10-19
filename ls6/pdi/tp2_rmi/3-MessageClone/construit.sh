@@ -8,7 +8,7 @@ rmic MessageImpl
 mkdir tServeur
 mkdir tClient
 
-for i in Client MessageImpl_Stub MessageImpl Message
+for i in Client MessageImpl_Stub Message
 do  cp $i.class tClient ; done
 
 for i in Serveur MessageImpl_Stub MessageImpl Message
