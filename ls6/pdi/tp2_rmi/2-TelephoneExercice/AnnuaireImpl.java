@@ -21,6 +21,10 @@ public class AnnuaireImpl extends UnicastRemoteObject implements Annuaire
 	{
 		numeros.remove(nom) ;
 	}
+	public Hashtable lister() throws RemoteException
+	{
+		return numeros;
+	}
 
 	public String chercheNom(String nom) throws RemoteException
 	{
