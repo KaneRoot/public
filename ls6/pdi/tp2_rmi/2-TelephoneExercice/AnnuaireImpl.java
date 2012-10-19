@@ -13,6 +13,14 @@ public class AnnuaireImpl extends UnicastRemoteObject implements Annuaire
 		numeros.put("milou", "06 50 40 36 76") ;
 		numeros.put("tournesol", "06 07 33 72 06") ;
 	}
+	public void ajoute(String nom, String num) throws RemoteException
+	{
+		numeros.put(nom,num) ;
+	}
+	public void supprime(String nom) throws RemoteException
+	{
+		numeros.remove(nom) ;
+	}
 
 	public String chercheNom(String nom) throws RemoteException
 	{
