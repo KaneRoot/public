@@ -1,0 +1,6 @@
+
+MessageImpl hérite UnicastRemoteObject 
+MessageImpl implémente Message
+Message implémente Remote
+MessageImpl_Stub hérite de java.rmi.server.RemoteStub
+
