@@ -7,5 +7,5 @@ all :
 	cd tServeur ; java Serveur
 
 clean : 
-	-rm -r *.class tServeur tClient tReste
+	-rm -r *.class tServeur tClient
 # je n'utilise pas detruit.sh

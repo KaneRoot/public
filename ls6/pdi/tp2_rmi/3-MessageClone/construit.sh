@@ -4,7 +4,7 @@ set -v
 javac *.java
 rmic MessageImpl
 
-\rm -rf tServeur tClient tReste
+\rm -rf tServeur tClient
 mkdir tServeur
 mkdir tClient
 
