@@ -5,13 +5,13 @@ public class Lance
 {
   public static void main(String[] args)
   {
-    if (args.length < 2)
+    if (args.length < 3)
     {
-      System.out.println("Usage : java Lance <ServeurDeClasses> <classeProg> <progArgs>") ;
+      System.out.println("Usage : java Lance <ServeurDeClasses> <noPort> <classeALancer> <NoPortRMIreg> <progArgs>") ;
       System.exit(0) ;
     }
     
-    String base = "http://" + args[0] + ":2048/" ;
+    String base = "http://" + args[0] + ":" + args[1] +"/" ;
     System.setProperty("java.security.policy","java.policy") ;
     
     if (System.getSecurityManager() == null)
@@ -21,13 +21,13 @@ public class Lance
     try
     {
       java.net.URL codebase = new java.net.URL(base) ;
-      Class prog = java.rmi.server.RMIClassLoader.loadClass(codebase, args[1]) ;
+      Class prog = java.rmi.server.RMIClassLoader.loadClass(codebase, args[2]) ;
       Class [] mainargs = {args.getClass()} ;
       java.lang.reflect.Method method = prog.getDeclaredMethod("main", mainargs) ;
-      String[] anArray = new String[args.length-2] ;
+      String[] anArray = new String[args.length-3] ;
       for (int i = 0; i < anArray.length; i++)
       {
-	anArray[i] = args[i+2] ;
+	anArray[i] = args[i+3] ;
       }
       Object arguments[] = {anArray} ;
       method.invoke(null,arguments) ;

@@ -4,19 +4,19 @@ public class Client
 {
   public static void main(String[] args)
   {
-    if (args.length != 1)
+    System.out.println("Client args : " + args[0] + " " + args[1] + "-" + args.length) ;
+    if (args.length != 2)
     {
-      System.out.println("Usage : java Client <machineServeur>") ;
+      System.out.println("Usage : java Client <machineServeur> <NoPort>") ;
       System.exit(0) ;
     }
-    System.out.println("Client args : " + args[0] + "-" + args.length) ;
     if (System.getSecurityManager() == null)
     {
       System.setSecurityManager(new RMISecurityManager()) ;
     }
     try
     {
-      Annuaire annuaire = (Annuaire) Naming.lookup("rmi://"+args[0]+"/LAnnuaire") ;
+      Annuaire annuaire = (Annuaire) Naming.lookup("rmi://"+args[0]+":"+args[1]+"/LAnnuaire") ;
       System.out.println("Liste annuaire\n"+annuaire.listerNoms()) ;
     }
     catch (Exception e)
