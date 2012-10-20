@@ -4,8 +4,6 @@ import java.rmi.server.UnicastRemoteObject ;
 
 public class OpMatriceImpl extends UnicastRemoteObject implements OpMatrice
 {
-	Hashtable numeros = new Hashtable() ;
-
 	public OpMatriceImpl() throws RemoteException
 	{
 		super() ;
@@ -32,12 +30,16 @@ public class OpMatriceImpl extends UnicastRemoteObject implements OpMatrice
 				for(k = 0 ; k < a.length ; k++)
 					somme += a[i][k] * b[k][j];
 
-				m[i][j] = somme;
+				mult[i][j] = somme;
 			}
 		return mult;
 	}
 	public static void main(String[] args)
 	{
+		if(args.length != 1)
+		{
+			System.out.println("Usage : java OpMatriceImpl <port>");
+		}
 		try
 		{
 			OpMatriceImpl opMatrice = new OpMatriceImpl () ;

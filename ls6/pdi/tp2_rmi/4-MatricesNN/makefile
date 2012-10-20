@@ -1,4 +1,6 @@
 
 all :
-	javac *.java
+	javac Op*.java Client.java
 
+clean :
+	rm *.class

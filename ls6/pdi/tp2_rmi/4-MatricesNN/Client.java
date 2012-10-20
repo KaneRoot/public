@@ -4,9 +4,9 @@ import java.net.* ;
 
 public class Client
 {
-	public final static int A = 10;
-	public final static int B = 10;
-	OpMatrice opMatrice;
+	public final static int A = 2;
+	public final static int B = 2;
+	public static OpMatrice opMatrice;
 
 	public static void afficher_matrice(int[][] x)
 	{
@@ -24,12 +24,14 @@ public class Client
 
 	public static void main(String[] args)
 	{
+
+		if(args.length != 2)
+		{
+			System.out.println("Usage : java Client <serveur> <port>");
+		}
+
 		int[][] a = new int[A][B];
 		int[][] b = new int[A][B];
-		System.out.println(" a ");
-		afficher_matrice(a);
-		System.out.println(" b ");
-		afficher_matrice(b);
 
 		for(int i = 0 ; i < A ; i++)
 			for(int j = 0 ; j < B ; j++)
@@ -38,12 +40,20 @@ public class Client
 				b[i][j] = ((1 + i * j) * 3) % 6;
 			}
 
+		System.out.println(" a ");
+		afficher_matrice(a);
+		System.out.println(" b ");
+		afficher_matrice(b);
 		try
 		{
 			opMatrice = (OpMatrice) Naming.lookup("rmi://"+args[0]+":"+args[1]+"/OpMatrice") ;
-			int[][] resultat = opMatrice.sommeMatrice(a,b);
-			System.out.println(" resultat ");
-			afficher_matrice(resultat);
+			int[][] resultatsomme = opMatrice.sommeMatrice(a,b);
+			int[][] resultatmultiplication = opMatrice.multiplicationMatrice(a,b);
+			System.out.println(" resultat somme ");
+			afficher_matrice(resultatsomme);
+
+			System.out.println(" resultat multiplication ");
+			afficher_matrice(resultatmultiplication);
 		}
 		catch (Exception e)
 		{
