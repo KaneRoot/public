@@ -4,7 +4,7 @@ public class Supprime
 {
 	public static void main(String[] args)
 	{
-		if (args.length != 4)
+		if (args.length != 3)
 		{
 			System.out.println("Usage : java Supprime <machineServeur> <NoPort> <nom_a_supprimer> ") ;
 			System.exit(0) ;

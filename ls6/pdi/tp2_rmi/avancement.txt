@@ -2,3 +2,10 @@
 2. Fini.
 3. Fini.
 4. Fini.
+5. Fini.
+
+NOTES : 
+
+Exercice 5 : j'ai fait un makefile qui remplace l'utilisation des divers scripts.
+C'est plus simple à utiliser, car il y a des valeurs par défaut, 
+tout est inclut dans le même fichier de manière plutôt lisible…
