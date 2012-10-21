@@ -1,15 +1,17 @@
 import java.rmi.* ;
 
-public class Client
+public class Supprime
 {
 	public static void main(String[] args)
 	{
-		System.out.println("Client args : " + args[0] + " " + args[1] + "-" + args.length) ;
-		if (args.length != 2)
+		if (args.length != 4)
 		{
-			System.out.println("Usage : java Client <machineServeur> <NoPort>") ;
+			System.out.println("Usage : java Supprime <machineServeur> <NoPort> <nom_a_supprimer> ") ;
 			System.exit(0) ;
 		}
+
+		System.out.println("Supprime args : " + args[0] + " " + args[1] + " " + args[2] + " - " + args.length) ;
+
 		if (System.getSecurityManager() == null)
 		{
 			System.setSecurityManager(new RMISecurityManager()) ;
@@ -17,11 +19,11 @@ public class Client
 		try
 		{
 			Annuaire annuaire = (Annuaire) Naming.lookup("rmi://"+args[0]+":"+args[1]+"/LAnnuaire") ;
-			System.out.println("Liste annuaire\n"+annuaire.listerNoms()) ;
+			annuaire.enleveNom(args[2]);
 		}
 		catch (Exception e)
 		{
-			System.out.println("Client : " + e.getMessage()) ;
+			System.out.println("Supprime : " + e.getMessage()) ;
 			e.printStackTrace() ;
 		}
 	}

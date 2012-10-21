@@ -1,3 +1,4 @@
+# par défaut
 MACHINE1 = localhost
 MACHINE2 = localhost
 CLASS_SERVER_PORT = 10000
