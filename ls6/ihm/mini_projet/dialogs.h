@@ -1,7 +1,7 @@
 #ifndef __DIALOGS_H__
 #define __DIALOGS_H__
 
-#include "wx/wx.h" 
+#include <wx/wx.h> 
 #include <wx/button.h>
 #include <wx/stattext.h>
 #include <wx/sizer.h>
