@@ -20,7 +20,7 @@ class Triangle
 		int existe;
 		wxString nom;
 
-		float thickness; // epaisseur de trait 
+		int thickness; // epaisseur de trait 
 };
 
 

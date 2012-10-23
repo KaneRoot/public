@@ -161,7 +161,6 @@ void TriangleDialog::OnProprietes(wxCommandEvent& event)
 	}
 
 	//std::cout<<main_frame->tab_tri[j].p1.x<<std::endl;
-	// TODO : les valeurs de la couleur etc. doivent etre init correctement ici
 	
 	// Choix couleur 
 	if(main_frame->tab_tri[j].colour.Red() == 255)
@@ -171,22 +170,29 @@ void TriangleDialog::OnProprietes(wxCommandEvent& event)
 	else
 		vdlg.radiobox_couleur->SetSelection(2);
 
+	vdlg.spinctl_epaisseur_trait->SetValue(main_frame->tab_tri[j].thickness);
+
 	vdlg.ChangerTexteIdTriangle(nouveau_texte); // Mettre le nouveau texte
 	vdlg.ShowModal();
 }
 void TriangleDialog::OnSupprimer(wxCommandEvent& event)
 {
+	// TODO FINIR ça qui fonctionne pas tout à fait 
 	wxArrayInt selections;
 	liste_triangles->GetSelections(selections);
 	for( int i(0), j(-1), k(0) ; i < selections.GetCount() ; i++)
 	{
-		while( k < selections.Item(i))
+		std::cout << "selection " << selections.Item(i) << std::endl;
+		while( j < selections.Item(i))
 		{
-			if(main_frame->tab_tri[i].existe == 1)
+			if(main_frame->tab_tri[k].existe == 1)
 				j++;
+			k++;
 		}
 		
 		liste_triangles->Delete(selections.Item(i));
+		main_frame->tab_tri[j].existe = 0;
+		k = 0;
 	}
 }
 ProprietesDialog::ProprietesDialog( wxWindow *parent, wxWindowID id, const wxString &title) : wxDialog( parent, id, title)
