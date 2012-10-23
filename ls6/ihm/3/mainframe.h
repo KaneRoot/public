@@ -16,6 +16,10 @@ public:
 	void CreateMyToolBar();
 	int num_tri;
 	Triangle tab_tri[5];
+	bool existeTriangle();
+	void supprimerTriangle(int i);
+	void supprimerTousTriangles();
+	void activerGestionTriangles(bool oui_ou_non);
 
 private:
 	wxToolBar *m_toolbar;

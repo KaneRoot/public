@@ -55,6 +55,8 @@ void CMainFrame::CreateMyToolBar()
 }
 void CMainFrame::OnNew(wxCommandEvent& event)
 {
+	supprimerTousTriangles();
+	activerGestionTriangles(false);
 }
 void CMainFrame::OnQuit(wxCommandEvent& event)
 {
@@ -93,15 +95,32 @@ void CMainFrame::OnOpen(wxCommandEvent& event)
 		tab_tri[i].colour.Set(r,g,b);
 		fo >> tab_tri[i].thickness;
 		tab_tri[i].existe = 1;
+		tab_tri[i].nom = wxT("");
 		tab_tri[i].nom << wxT("triangle ");
 	   	tab_tri[i].nom = tab_tri[i].nom << i;
 	}
 	if(num_tri > 0)
 	{
-		m_toolbar->EnableTool(M_GESTION_TRIANGLES, true);
-		this->GetMenuBar()->Enable(M_GESTION_TRIANGLES, true);
+		this->activerGestionTriangles(true);
 	}
 
+}
+void CMainFrame::supprimerTousTriangles()
+{
+	for(int i(0) ; i < 5 ; i++)
+		supprimerTriangle(i);
+	num_tri = 0;
+}
+void CMainFrame::supprimerTriangle(int i)
+{
+	tab_tri[i].existe = 0;
+	if( num_tri != 0)
+		num_tri--;
+}
+void CMainFrame::activerGestionTriangles(bool b)
+{
+	m_toolbar->EnableTool(M_GESTION_TRIANGLES, b);
+	this->GetMenuBar()->Enable(M_GESTION_TRIANGLES, b);
 }
 void CMainFrame::OnSave(wxCommandEvent& event)
 {
@@ -146,10 +165,14 @@ void CMainFrame::OnColor(wxCommandEvent& event)
 }
 void CMainFrame::OnGestionTriangles(wxCommandEvent& event)
 {
+	if( ! existeTriangle() )
+	{
+		activerGestionTriangles(false);
+	}
 	TriangleDialog vdlg(this, -1, wxT("Gestion des triangles"));
 	vdlg.liste_triangles->Clear();
 	int i ; 
-	for(i = 0 ; i < num_tri ; i++)
+	for(i = 0 ; i < 5 ; i++)
 	{
 		if(tab_tri[i].existe != 0)
 		{
@@ -171,4 +194,14 @@ void CMainFrame::OnVersion(wxCommandEvent& event)
 {
 	VersionDialog vdlg(this, -1, wxT("Version"));
 	vdlg.ShowModal();
+}
+
+// S'il existe un triangle
+bool CMainFrame::existeTriangle()
+{
+	bool res = false;
+	for(int i(0) ; i < 5 && res == false ; i++)
+		if( tab_tri[i].existe == 1 )
+			res = true;
+	return res;
 }

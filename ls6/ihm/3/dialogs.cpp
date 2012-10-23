@@ -177,22 +177,25 @@ void TriangleDialog::OnProprietes(wxCommandEvent& event)
 }
 void TriangleDialog::OnSupprimer(wxCommandEvent& event)
 {
-	// TODO FINIR ça qui fonctionne pas tout à fait 
 	wxArrayInt selections;
 	liste_triangles->GetSelections(selections);
 	for( int i(0), j(-1), k(0) ; i < selections.GetCount() ; i++)
 	{
-		std::cout << "selection " << selections.Item(i) << std::endl;
+		k = -1;
+		j = -1;
 		while( j < selections.Item(i))
 		{
+			k++;
 			if(main_frame->tab_tri[k].existe == 1)
 				j++;
-			k++;
 		}
-		
 		liste_triangles->Delete(selections.Item(i));
-		main_frame->tab_tri[j].existe = 0;
-		k = 0;
+		main_frame->supprimerTriangle(k); 
+	}
+	if( ! main_frame->existeTriangle())
+	{
+		main_frame->activerGestionTriangles(false);
+		Close();
 	}
 }
 ProprietesDialog::ProprietesDialog( wxWindow *parent, wxWindowID id, const wxString &title) : wxDialog( parent, id, title)
