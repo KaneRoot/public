@@ -8,6 +8,7 @@
 #include <wx/listctrl.h>
 #include <wx/listbox.h>
 #include <wx/combobox.h>
+#include <wx/colour.h>
 #include "dialogs.h"
 
 BEGIN_EVENT_TABLE(VersionDialog, wxDialog)
@@ -159,9 +160,17 @@ void TriangleDialog::OnProprietes(wxCommandEvent& event)
 			j++;
 	}
 
-	std::cout<<main_frame->tab_tri[j].p1.x<<std::endl;
+	//std::cout<<main_frame->tab_tri[j].p1.x<<std::endl;
 	// TODO : les valeurs de la couleur etc. doivent etre init correctement ici
 	
+	// Choix couleur 
+	if(main_frame->tab_tri[j].colour.Red() == 255)
+		vdlg.radiobox_couleur->SetSelection(0);
+	else if(main_frame->tab_tri[j].colour.Green() == 255)
+		vdlg.radiobox_couleur->SetSelection(1);
+	else
+		vdlg.radiobox_couleur->SetSelection(2);
+
 	vdlg.ChangerTexteIdTriangle(nouveau_texte); // Mettre le nouveau texte
 	vdlg.ShowModal();
 }

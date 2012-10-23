@@ -66,13 +66,14 @@ class ProprietesDialog: public wxDialog {
 			void ChangerTexteIdTriangle(wxString& idTriangle);
 			void ChangerEpaisseurTrait(int epaisseur);
 			void ChangerCouleurTriangle(int couleur);
+			wxRadioBox *radiobox_couleur;
+
 	private :
 			wxBoxSizer *conteneur[3];
 			wxStaticText *texte_epaisseur_trait;
 			wxStaticText *texte_id_triangle;
 			wxSpinCtrl *spinctl_epaisseur_trait;
 			wxTextCtrl *textctrl_id_boite_texte;
-			wxRadioBox *radiobox_couleur;
 			wxButton *button_ok;
 			DECLARE_EVENT_TABLE()
 };
