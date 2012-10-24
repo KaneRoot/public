@@ -1,11 +1,12 @@
-1. Fini.
-2. Fini.
-3. Fini.
-4. Fini.
-5. Fini.
+1. Fini. Compile et retourne le bon résultat.
+2. Fini. Compile et retourne le bon résultat.
+3. Fini. Compile et retourne le bon résultat.
+4. Fini. Compile et retourne le bon résultat.
+5. Fini. Compile et retourne le bon résultat.
 
 NOTES : 
 
 Exercice 5 : j'ai fait un makefile qui remplace l'utilisation des divers scripts.
 C'est plus simple à utiliser, car il y a des valeurs par défaut, 
 tout est inclut dans le même fichier de manière plutôt lisible…
+L'exercice consistait à reproduire des scripts shells alors je les ai également fait et testés.

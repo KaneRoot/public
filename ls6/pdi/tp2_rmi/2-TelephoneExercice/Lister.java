@@ -10,7 +10,7 @@ public class Lister
 		Iterator it;
 		if (args.length != 0)
 		{
-			System.out.println("Usage : java Lister"); //<machine du Serveur> <port du rmiregistry>") ;
+			System.out.println("Usage : java Lister");
 			System.exit(0) ;
 		}
 		try
