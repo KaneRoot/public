@@ -33,10 +33,10 @@ OpenGLCanvas::~OpenGLCanvas(void)
 void OnPaint( wxPaintEvent& event )
 {
 }
-void OnSize( wxSizeEvent& event );
+void OnSize( wxSizeEvent& event )
 {
 }
-void OnEraseBackground( wxEraseEvent& event );
+void OnEraseBackground( wxEraseEvent& event )
 {
 }
 
