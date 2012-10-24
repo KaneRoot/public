@@ -39,6 +39,7 @@ public class OpMatriceImpl extends UnicastRemoteObject implements OpMatrice
 		if(args.length != 1)
 		{
 			System.out.println("Usage : java OpMatriceImpl <port>");
+			System.exit(-1);
 		}
 		try
 		{

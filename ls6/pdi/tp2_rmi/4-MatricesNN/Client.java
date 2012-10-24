@@ -28,6 +28,7 @@ public class Client
 		if(args.length != 2)
 		{
 			System.out.println("Usage : java Client <serveur> <port>");
+			System.exit(-1);
 		}
 
 		int[][] a = new int[A][B];
