@@ -44,7 +44,7 @@ public class OpMatriceImpl extends UnicastRemoteObject implements OpMatrice
 		try
 		{
 			OpMatriceImpl opMatrice = new OpMatriceImpl () ;
-			Naming.rebind("rmi://localhost:" + args[0] + "/OpMatrice", opMatrice) ;
+			Naming.rebind("rmi://0.0.0.0:" + args[0] + "/OpMatrice", opMatrice) ;
 			System.out.println("OpMatrice en service") ;
 		}
 		catch (Exception e)
