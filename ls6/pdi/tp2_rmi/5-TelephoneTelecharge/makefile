@@ -7,7 +7,7 @@ NAME_TO_ADD = coin
 NUM_TO_ADD = "06 66 66 66 66"
 
 all :
-	echo -ne "1. make compile\n2. make class_serveur\n3. (autre terminal) make serveur\n4. (autre terminal) make (client|ajoute|supprime)"
+	@echo -ne "1. make compile\n2. make class_serveur\n3. (autre terminal) make serveur\n4. (autre terminal) make (client|ajoute|supprime)"
 
 compile :
 	javac *.java
