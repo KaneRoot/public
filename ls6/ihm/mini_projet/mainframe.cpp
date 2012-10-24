@@ -4,6 +4,7 @@
 #include <fstream>
 #include <string>
 
+#include "openglcanvas.h"
 #include <wx/wx.h>
 #include <wx/accel.h>
 #include <wx/toolbar.h>
@@ -29,6 +30,8 @@ END_EVENT_TABLE()
 CMainFrame::CMainFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 : wxFrame((wxFrame *)NULL, -1, title, pos, size), num_tri(0)
 {
+	canvas_opengl = new OpenGLCanvas(this,CANVAS_OPENGL, wxDefaultPosition, wxDefaultSize, 
+			0, wxT("MonGLCanvas"));
 } //constructor
 
 void CMainFrame::CreateMyToolBar()

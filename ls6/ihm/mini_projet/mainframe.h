@@ -2,12 +2,15 @@
 #ifndef __MAINFRAME_H__
 #define __MAINFRAME_H__
 
+#include "openglcanvas.h"
 #include "triangle.h"
 #include "wx/wx.h"
 
 enum { M_NOUVEAU_FICHIER, M_OUVRIR, M_SAUVEGARDER, M_QUITTER, 
 	M_EPAISSEUR_TRAIT, M_COULEUR, M_GESTION_TRIANGLES, M_TOOLBAR,
-	M_VERSION, TOOLBAR_TOOLS};
+	M_VERSION, TOOLBAR_TOOLS,
+	CANVAS_OPENGL
+};
 
 
 class CMainFrame: public wxFrame {
@@ -20,6 +23,7 @@ public:
 	void supprimerTriangle(int i);
 	void supprimerTousTriangles();
 	void activerGestionTriangles(bool oui_ou_non);
+	OpenGLCanvas *canvas_opengl;
 
 private:
 	wxToolBar *m_toolbar;
