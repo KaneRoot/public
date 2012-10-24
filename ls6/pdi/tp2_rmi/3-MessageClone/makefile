@@ -1,11 +1,16 @@
 # exécute ce qu'il faut
-all :
-	-pkill rmiregistry 
-	sleep 1 # sinon rmiregistry n'a pas le temps de se faire kill
+all : lancer_serveur
+
+lancer_serveur : destroy
 	rmiregistry &
 	./construit.sh
 	cd tServeur ; java Serveur
 
+destroy :
+	@-pkill rmiregistry 
+	@sleep 1
+
 clean : 
-	-rm -r *.class tServeur tClient
+	@-rm -r *.class tServeur tClient
+
 # je n'utilise pas detruit.sh
