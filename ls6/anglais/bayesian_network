@@ -1,14 +1,20 @@
 Bayesian network is based on the Bayes' theorem that we already talked about in class.
-This Bayesian, or « belief », network has the purpose to show some conditional probabilities and causalities relationships between variables.
-The variables are often events.
-What is called « conditional probability » is the probability of an event occurring given that another event occured before.
-We can found some representations of this kind of networks on the internet, like this :
+This model is probabilistic and is mainly used in data mining, in medical and industrial diagnostic and in spam detection.
+This Bayesian, or « belief », network has the purpose to show conditional probabilities and causalities relationships between variables.
+The variables can be events, or states.
+What is called « conditional probability » is the probability of an event occurring given that another event occurred before.
+We can found some representations of this kind of networks (acyclic graphs) on the internet, like this :
 
 SCHEMA
 
 The circles are called « nodes » and contains the variable name.
 There are links (arrows) between them, which are called « arcs » and they represent a dependence. 
-In a Bayesian network, only the variables without arrows are independant.
-With this figure (from wikipedia), we have the « sprinkler » which is the child of the variable « rain ».
+In a Bayesian network, only the variables without arrows are independent.
+With this figure (from Wikipedia), we have the « sprinkler » which is the child of the variable « rain ».
 « Grass wet » is caused by one (or more) of its parents.
-Bayesian networks are acyclic.
+With the graph, we can make a table with the probability of an event occurs or not given the fact that an other event is occurred before or not.
+The grass has a great probability of being wet if the event « rain » occurs, less if not.
+
+The graph is the first step in the construction of a Bayesian network, 
+then we can take statistics to determinate a table of probabilities for each variable from the structure, 
+conditionally to their dependences.
