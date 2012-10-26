@@ -1,0 +1,2 @@
+\rm -f *~ \#*  pok *Operations.java *Helper.java *Holder.java *POA.java annu.ior iorfile.java *.class _*
+\rm -f Icarre.java

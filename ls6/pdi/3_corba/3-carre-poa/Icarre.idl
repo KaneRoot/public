@@ -1,0 +1,4 @@
+interface Icarre
+{
+  long carre(in long source) ;
+} ;
