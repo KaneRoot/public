@@ -1,0 +1,3 @@
+set -v
+idlj -fall *.idl
+javac *.java 

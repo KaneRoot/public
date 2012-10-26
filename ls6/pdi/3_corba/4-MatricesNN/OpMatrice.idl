@@ -1,0 +1,10 @@
+const string iorfile = "annu.ior" ;
+
+typedef sequence <long> Vector ;
+typedef sequence <Vector> Matrice ;
+
+interface OpMatrice
+{
+  Matrice multiplicationMatrice(in Matrice a, in Matrice b) ;
+} ;
+
