@@ -1,0 +1,19 @@
+                                   
+1)
+Contrary to what we could think, a dual core CPU with two 3 GHz cores is not equivalent to a 6 GHz one.
+The first reason is that a part of the power is used for the coordination between the both cores (they have to ensure cache coherency for instance). 
+The second explanation is that the 2 cores power may not be well used (they may have to wait for each other). 
+The difference is all the more relevant when it comes to single-threaded applications : only one core will be used in this case. 
+Of course, one core can be dedicated to the application, and the other one to the system, but that one won't make the most of its power.
+
+
+2)
+It is said that “cache is king” because it beats the hyperthreading and multicore solutions. 
+The main disadvantage of these is that they are mainly efficient for multi-threaded applications only, and even with these applications it brings a new cache coherency issue.
+With a multi-threaded application, even a well-written one, if  the two or more threads need to access to the same data, they will have to wait for each other and the multi-core CPU will be barely useless.
+If they don't, the main problem will be with the cache, again. The hyperthreading method implies a shared cache with two threads (on the same core) and the L1 cache is the tiniest cache on the die.
+So there will be a cache-miss issue due to the lack of space, without mentioning that we can't expect as much as multi-core performances and functionnalities. 
+The multi-core system is barely like having several CPU on the motherboard, the cores don't share registers and most of the ALU. The issue is still the cache, even if there is more space.
+On the contrary, the cache is as much efficient for the multi-threaded as for the single-threaded applications.
+Increasing cache tends to be the chosen solution, because the bigger the cache is, the less often RAM will be used (RAM is 10 to 50 times slower than cache). 
+
