@@ -1,5 +1,5 @@
 CC = g++
-OPTIONS = `wx-config --libs --gl-libs` `wx-config --cxxflags`
+OPTIONS = `wx-config --libs --gl-libs` `wx-config --cxxflags` -lGL
 ARCHIVE = philippe.pittoli
 PROG = drawtri
 VALGRIND_OPTIONS = --leak-check=full -v
@@ -7,7 +7,7 @@ VALGRIND_OPTIONS = --leak-check=full -v
 all : $(PROG)
 
 $(PROG) : dialogs.o main.o mainframe.o openglcanvas.o
-	$(CC) -o $(PROG) dialogs.o main.o mainframe.o  $(OPTIONS)
+	$(CC) -o $(PROG) dialogs.o main.o mainframe.o openglcanvas.o $(OPTIONS)
 
 main.o : main.cpp
 	$(CC) $(OPTIONS) -c main.cpp -o main.o
