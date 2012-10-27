@@ -49,6 +49,16 @@ void OpenGLCanvas::Draw()
 	glOrtho(-w/2., w/2., -h/2., h/2., -1., 3.);
 	glMatrixMode( GL_MODELVIEW );
 	glLoadIdentity();
-	glClearColor( .3f, .4f, .6f, 1 );
+	glClearColor( 1.f, 1.f, 1.f, 1 );
 	glClear( GL_COLOR_BUFFER_BIT);
+	/*
+	glBegin(GL_LINES);
+		glVertex2i(0,0);glVertex2i(0,20);
+		glVertex2i(0,0);glVertex2i(20,0);
+	glEnd(); 
+	*/
+	glBegin(GL_TRIANGLES);
+		glColor3d(0,0,0);
+		glVertex2i(0,0); glVertex2i(10,10); glVertex2i(0,10);
+	glEnd();
 }
