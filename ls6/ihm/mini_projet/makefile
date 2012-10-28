@@ -6,7 +6,7 @@ VALGRIND_OPTIONS = --leak-check=full -v
 
 all : $(PROG)
 
-$(PROG) : openglcanvas.o mainframe.o dialogs.o main.o 
+$(PROG) : mainframe.o openglcanvas.o dialogs.o main.o 
 	$(CC) -o $(PROG)  mainframe.o dialogs.o main.o openglcanvas.o $(OPTIONS)
 
 main.o : main.cpp

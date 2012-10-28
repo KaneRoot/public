@@ -209,3 +209,15 @@ bool CMainFrame::existeTriangle()
 			res = true;
 	return res;
 }
+int CMainFrame::getNombreTriangles()
+{
+	return num_tri;
+}
+void CMainFrame::setNombreTriangles(int n)
+{
+	num_tri = n;
+}
+Triangle * CMainFrame::getTri(int n)
+{
+	return &tab_tri[n];
+}

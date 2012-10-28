@@ -1,6 +1,8 @@
 #ifndef __MAINFRAME_H__
 #define __MAINFRAME_H__
 
+class OpenGLCanvas;
+
 #include <wx/glcanvas.h>
 #include "openglcanvas.h"
 #include "triangle.h"
@@ -22,7 +24,11 @@ public:
 	void supprimerTriangle(int i);
 	void supprimerTousTriangles();
 	void activerGestionTriangles(bool oui_ou_non);
-	wxGLCanvas *canvas_opengl;
+	OpenGLCanvas *canvas_opengl;
+
+	int getNombreTriangles();
+	void setNombreTriangles(int n);
+	Triangle * getTri(int n);
 
 private:
 	wxToolBar *m_toolbar;
