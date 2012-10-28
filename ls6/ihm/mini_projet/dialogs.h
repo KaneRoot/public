@@ -45,10 +45,12 @@ class ColorDialog: public wxDialog {
 		    ColorDialog(wxWindow *parent, wxWindowID id, const wxString &title);
 			virtual ~ColorDialog();
 	private :
+			CMainFrame *main_frame;
 			wxBoxSizer *conteneur;
 			wxStaticText *texte;
 			wxRadioBox *rb_couleurs;
 			wxButton *button_ok;
+			void OnChangerCouleur(wxCommandEvent& e);
 			DECLARE_EVENT_TABLE()
 };
 class TriangleDialog: public wxDialog {
@@ -56,8 +58,8 @@ class TriangleDialog: public wxDialog {
 		    TriangleDialog(wxWindow *parent, wxWindowID id, const wxString &title);
 			virtual ~TriangleDialog();
 			wxListBox *liste_triangles;
-			CMainFrame *main_frame;
 	private :
+			CMainFrame *main_frame;
 			wxBoxSizer *conteneur[3];
 			wxStaticText *texte;
 			wxButton *bouton[3];

@@ -1,17 +1,3 @@
-#include <iostream>
-#include <stdio.h>
-#include <stdlib.h>
-#include <fstream>
-#include <string>
-
-#include <wx/wx.h>
-#include <wx/accel.h>
-#include <wx/toolbar.h>
-#include <wx/glcanvas.h>
-
-#include "openglcanvas.h"
-#include "triangle.h"
-#include "dialogs.h"
 #include "mainframe.h"
 
 
@@ -26,7 +12,6 @@ BEGIN_EVENT_TABLE(CMainFrame, wxFrame)
 	EVT_MENU(M_TOOLBAR, CMainFrame::OnToolBar)
 	EVT_MENU(M_VERSION, CMainFrame::OnVersion)
 END_EVENT_TABLE()
-
 
 CMainFrame::CMainFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 : wxFrame((wxFrame *)NULL, -1, title, pos, size), num_tri(0)
@@ -54,26 +39,26 @@ void CMainFrame::CreateMyToolBar()
 	m_toolbar->EnableTool(M_GESTION_TRIANGLES, false);
 
 	m_toolbar->Realize();
-
 	SetToolBar(m_toolbar);
 }
+
 void CMainFrame::OnNew(wxCommandEvent& event)
 {
 	supprimerTousTriangles();
 	activerGestionTriangles(false);
 }
+
 void CMainFrame::OnQuit(wxCommandEvent& event)
 {
 	Close(TRUE);
 }
+
 void CMainFrame::OnOpen(wxCommandEvent& event)
 {
 	//std::cout << "coucou" << std::endl;
 	wxFileDialog fenetre_dialogue(this, wxT("Choix d'un fichier"), wxT("./"), wxT("trian.tri"), wxT("*.*"), wxFD_OPEN);
 	fenetre_dialogue.ShowModal();
-
 	std::ifstream fo(fenetre_dialogue.GetPath().fn_str(), std::ios::in);
-
 	// if open file failed, show an error message box
 	if (!fo)
 	{
@@ -86,12 +71,10 @@ void CMainFrame::OnOpen(wxCommandEvent& event)
 		return ;
 	}
 	int i, r,g,b;
-	
 	fo >> num_tri;
 	for( i = 0 ; i < num_tri ; i++)
 	{
 		//tab_tri[i] = Triangle();
-		
 		fo  >> tab_tri[i].p1.x >> tab_tri[i].p1.y 
 			>> tab_tri[i].p2.x >> tab_tri[i].p2.y 
 			>> tab_tri[i].p3.x >> tab_tri[i].p3.y;
@@ -107,30 +90,32 @@ void CMainFrame::OnOpen(wxCommandEvent& event)
 	{
 		this->activerGestionTriangles(true);
 	}
-
 }
+
 void CMainFrame::supprimerTousTriangles()
 {
-	for(int i(0) ; i < 5 ; i++)
+	for(int i(0) ; i < NOMBRE_TRIANGLES_MAX ; i++)
 		supprimerTriangle(i);
 	num_tri = 0;
 }
+
 void CMainFrame::supprimerTriangle(int i)
 {
 	tab_tri[i].existe = 0;
 	if( num_tri != 0)
 		num_tri--;
 }
+
 void CMainFrame::activerGestionTriangles(bool b)
 {
 	m_toolbar->EnableTool(M_GESTION_TRIANGLES, b);
 	this->GetMenuBar()->Enable(M_GESTION_TRIANGLES, b);
 }
+
 void CMainFrame::OnSave(wxCommandEvent& event)
 {
 	wxFileDialog fenetre_dialogue(this, wxT("Sauvegarde"), wxT("./"), wxT("trian.tri"), wxT("*.*"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
 	fenetre_dialogue.ShowModal();
-
 	std::ofstream fs(fenetre_dialogue.GetPath().fn_str(), std::ios::out);
 	if (!fs)
 	{
@@ -157,16 +142,19 @@ void CMainFrame::OnSave(wxCommandEvent& event)
 		fs	<< tab_tri[i].thickness << std::endl << std::endl;
 	}
 }
+
 void CMainFrame::OnEpaisseurTrait(wxCommandEvent& event)
 {
 	EpaisseurDialog vdlg(this, -1, wxT("Epaisseur du trait"));
 	vdlg.ShowModal();
 }
+
 void CMainFrame::OnColor(wxCommandEvent& event)
 {
 	ColorDialog vdlg(this, -1, wxT("Couleur"));
 	vdlg.ShowModal();
 }
+
 void CMainFrame::OnGestionTriangles(wxCommandEvent& event)
 {
 	if( ! existeTriangle() )
@@ -176,7 +164,7 @@ void CMainFrame::OnGestionTriangles(wxCommandEvent& event)
 	TriangleDialog vdlg(this, -1, wxT("Gestion des triangles"));
 	vdlg.liste_triangles->Clear();
 	int i ; 
-	for(i = 0 ; i < 5 ; i++)
+	for(i = 0 ; i < NOMBRE_TRIANGLES_MAX ; i++)
 	{
 		if(tab_tri[i].existe != 0)
 		{
@@ -186,6 +174,7 @@ void CMainFrame::OnGestionTriangles(wxCommandEvent& event)
 	vdlg.liste_triangles->SetSelection(0);
 	vdlg.ShowModal();
 }
+
 void CMainFrame::OnToolBar(wxCommandEvent& event)
 {
 	// On masque / affiche la barre d'outils
@@ -194,6 +183,7 @@ void CMainFrame::OnToolBar(wxCommandEvent& event)
 	else
 		m_toolbar->Show(true);
 }
+
 void CMainFrame::OnVersion(wxCommandEvent& event)
 {
 	VersionDialog vdlg(this, -1, wxT("Version"));
@@ -204,20 +194,13 @@ void CMainFrame::OnVersion(wxCommandEvent& event)
 bool CMainFrame::existeTriangle()
 {
 	bool res = false;
-	for(int i(0) ; i < 5 && res == false ; i++)
+	for(int i(0) ; i < NOMBRE_TRIANGLES_MAX && res == false ; i++)
 		if( tab_tri[i].existe == 1 )
 			res = true;
 	return res;
 }
-int CMainFrame::getNombreTriangles()
-{
-	return num_tri;
-}
-void CMainFrame::setNombreTriangles(int n)
-{
-	num_tri = n;
-}
-Triangle * CMainFrame::getTri(int n)
-{
-	return &tab_tri[n];
-}
+
+int CMainFrame::getNombreTriangles() { return num_tri; }
+void CMainFrame::setNombreTriangles(int n) { num_tri = n; }
+Triangle * CMainFrame::getTri(int n) { return &tab_tri[n]; }
+wxColour * CMainFrame::getCouleurCourante() { return &couleur_courante; }

@@ -3,6 +3,7 @@
 BEGIN_EVENT_TABLE(VersionDialog, wxDialog)
 END_EVENT_TABLE ()
 BEGIN_EVENT_TABLE(ColorDialog, wxDialog)
+	EVT_RADIOBOX(COULEUR_RD_BOX, ColorDialog::OnChangerCouleur)
 END_EVENT_TABLE ()
 BEGIN_EVENT_TABLE(EpaisseurDialog, wxDialog)
 END_EVENT_TABLE ()
@@ -28,6 +29,7 @@ VersionDialog::VersionDialog( wxWindow *parent, wxWindowID id, const wxString &t
 	conteneur->SetSizeHints( this );
 	 
 }
+
 VersionDialog::~VersionDialog()
 {
 	/*
@@ -36,6 +38,7 @@ VersionDialog::~VersionDialog()
 	delete conteneur;
 	*/
 }
+
 EpaisseurDialog::EpaisseurDialog( wxWindow *parent, wxWindowID id, const wxString &title) : wxDialog( parent, id, title)
 {
 	conteneur = new wxBoxSizer( wxVERTICAL );
@@ -55,6 +58,7 @@ EpaisseurDialog::EpaisseurDialog( wxWindow *parent, wxWindowID id, const wxStrin
 	conteneur->SetSizeHints( this );
 	 
 }
+
 EpaisseurDialog::~EpaisseurDialog()
 {
 	/*
@@ -64,26 +68,32 @@ EpaisseurDialog::~EpaisseurDialog()
 	delete button_ok;
 	*/
 }
+
 ColorDialog::ColorDialog( wxWindow *parent, wxWindowID id, const wxString &title) : wxDialog( parent, id, title)
 {
+	main_frame = (CMainFrame *) parent;
 	conteneur = new wxBoxSizer( wxVERTICAL );
 	texte = new wxStaticText( this, V_ID_TEXTE, wxT("Choisir la nouvelle couleur"));
-
 	wxString strs8[] = { wxT("Rouge"), wxT("Vert"), wxT("Bleu")};
-	rb_couleurs = new wxRadioBox(this, COULEUR_RD_BOX, wxT("Couleurs"), wxDefaultPosition, wxDefaultSize, 3, strs8);
-
+	rb_couleurs = new wxRadioBox(this, COULEUR_RD_BOX, 
+			wxT("Couleurs"), wxDefaultPosition, wxDefaultSize, 3, strs8);
 	button_ok = new wxButton( this, wxID_OK, wxT("OK"), wxDefaultPosition);
+	int indice_couleur = 0;
+	if(main_frame->getCouleurCourante()->Green() == 255)
+		indice_couleur = 1;
+	else if(main_frame->getCouleurCourante()->Blue() == 255)
+		indice_couleur = 2;
 
+	rb_couleurs->SetSelection(indice_couleur);
 	conteneur->Add( texte, 0, wxALIGN_CENTRE|wxALL, 5 );
 	conteneur->Add( rb_couleurs, 0, wxALIGN_CENTRE|wxALL, 5 );
 	conteneur->Add( button_ok, 0, wxALIGN_CENTRE|wxALL, 5 );
-
 	this->SetAutoLayout( TRUE );
 	this->SetSizer( conteneur );
 	conteneur->Fit( this );
 	conteneur->SetSizeHints( this );
-	 
 }
+
 ColorDialog::~ColorDialog()
 {
 	/*
@@ -93,6 +103,26 @@ ColorDialog::~ColorDialog()
 	delete button_ok;
 	*/
 }
+void ColorDialog::OnChangerCouleur(wxCommandEvent& e)
+{
+	int indice_couleur = rb_couleurs->GetSelection();
+	if(indice_couleur == 0)
+	{
+		main_frame->getCouleurCourante()->Set(255,0,0);
+		std::cout << "coucou" << std::endl;
+	}
+	else if(indice_couleur == 1)
+	{
+		main_frame->getCouleurCourante()->Set(0,255,0);
+		std::cout << "coucou1" << std::endl;
+	}
+	else
+	{
+		main_frame->getCouleurCourante()->Set(0,0,255);
+		std::cout << "coucou2" << std::endl;
+	}
+}
+
 TriangleDialog::TriangleDialog( wxWindow *parent, wxWindowID id, const wxString &title) : wxDialog( parent, id, title)
 {
 	main_frame = (CMainFrame *) parent;
@@ -100,31 +130,26 @@ TriangleDialog::TriangleDialog( wxWindow *parent, wxWindowID id, const wxString 
 	conteneur[0] = new wxBoxSizer( wxVERTICAL );
 	conteneur[1] = new wxBoxSizer( wxHORIZONTAL );
 	conteneur[2] = new wxBoxSizer( wxVERTICAL );
-
 	texte = new wxStaticText( this, V_ID_TEXTE, wxT("Liste des triangles"));
 	wxString choix[] = { wxT("Triangle0"), wxT("Triangle1"), wxT("Triangle2") };
 	liste_triangles = new wxListBox(this, ID_LISTE_BOITE, wxDefaultPosition,  wxDefaultSize, 3, choix);
-
 	// Boutons
 	bouton[0] = new wxButton( this, TEXTE_PROPRIETES, wxT("Propriétés"), wxDefaultPosition);
 	bouton[1] = new wxButton( this, TEXTE_SUPPRIMER, wxT("Supprimer"), wxDefaultPosition);
 	bouton[2] = new wxButton( this, wxID_OK, wxT("OK"), wxDefaultPosition);
-
 	conteneur[0]->Add( texte, 0, wxALIGN_CENTRE|wxALL, 5 );
 	conteneur[0]->Add( conteneur[1], 0, wxALIGN_CENTRE|wxALL, 5 );
-
 	conteneur[1]->Add( liste_triangles, 0, wxALIGN_CENTRE|wxALL, 5 );
 	conteneur[1]->Add( conteneur[2], 0, wxALIGN_CENTRE|wxALL, 5 );
-
 	conteneur[2]->Add( bouton[0], 0, wxALIGN_CENTRE|wxALL, 5 );
 	conteneur[2]->Add( bouton[1], 0, wxALIGN_CENTRE|wxALL, 5 );
 	conteneur[2]->Add( bouton[2], 0, wxALIGN_CENTRE|wxALL, 5 );
-
 	this->SetAutoLayout( TRUE );
 	this->SetSizer( conteneur[0] );
 	conteneur[0]->Fit( this );
 	conteneur[0]->SetSizeHints( this );
 }
+
 TriangleDialog::~TriangleDialog()
 {
 	/*
@@ -136,6 +161,7 @@ TriangleDialog::~TriangleDialog()
 		delete bouton[i];
 	*/
 }
+
 void TriangleDialog::OnProprietes(wxCommandEvent& event)
 {
 	int i(0), j(0);
@@ -164,6 +190,7 @@ void TriangleDialog::OnProprietes(wxCommandEvent& event)
 	vdlg.ChangerTexteIdTriangle(nouveau_texte); // Mettre le nouveau texte
 	vdlg.ShowModal();
 }
+
 void TriangleDialog::OnSupprimer(wxCommandEvent& event)
 {
 	wxArrayInt selections;
@@ -187,6 +214,7 @@ void TriangleDialog::OnSupprimer(wxCommandEvent& event)
 		Close();
 	}
 }
+
 ProprietesDialog::ProprietesDialog( wxWindow *parent, wxWindowID id, const wxString &title) : wxDialog( parent, id, title)
 {
 	// Conteneurs
@@ -229,6 +257,7 @@ ProprietesDialog::ProprietesDialog( wxWindow *parent, wxWindowID id, const wxStr
 	conteneur[0]->Fit( this );
 	conteneur[0]->SetSizeHints( this );
 }
+
 ProprietesDialog::~ProprietesDialog()
 {
 	/*
@@ -242,14 +271,17 @@ ProprietesDialog::~ProprietesDialog()
 	delete button_ok;
 	*/
 }
+
 void ProprietesDialog::ChangerTexteIdTriangle(wxString& idTriangle)
 {
 	textctrl_id_boite_texte->Clear();
 	textctrl_id_boite_texte->AppendText(idTriangle);
 }
+
 void ProprietesDialog::ChangerEpaisseurTrait(int epaisseur)
 {
 }
+
 void ProprietesDialog::ChangerCouleurTriangle(int couleur)
 {
 }
