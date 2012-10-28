@@ -6,8 +6,8 @@ VALGRIND_OPTIONS = --leak-check=full -v
 
 all : $(PROG)
 
-$(PROG) : mainframe.o openglcanvas.o dialogs.o main.o 
-	$(CC) -o $(PROG)  mainframe.o dialogs.o main.o openglcanvas.o $(OPTIONS)
+$(PROG) : mainframe.o triangle.o openglcanvas.o dialogs.o main.o 
+	$(CC) -o $(PROG)  mainframe.o triangle.o dialogs.o main.o openglcanvas.o $(OPTIONS)
 
 main.o : main.cpp
 	$(CC) $(OPTIONS) -c main.cpp -o main.o
@@ -20,6 +20,9 @@ dialogs.o : dialogs.h dialogs.cpp
 
 openglcanvas.o : openglcanvas.h openglcanvas.cpp
 	$(CC) $(OPTIONS) -c openglcanvas.cpp -o openglcanvas.o
+
+triangle.o : triangle.h triangle.cpp
+	$(CC) $(OPTIONS) -c triangle.cpp -o triangle.o
 
 archive : 
 	-@tar cvfz $(ARCHIVE).tar.gz *

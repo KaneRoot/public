@@ -16,7 +16,18 @@ class OpenGLCanvas;
 
 #include "openglcanvas.h"
 #include "triangle.h"
+#include "definitions.h"
 #include "dialogs.h"
+
+typedef struct {
+	bool is_drawing;
+	int nb_points_definis;
+	point point_courant;
+	int epaisseur_trait_courante;
+	wxColour couleur_courante; 
+	Triangle triangle_courant; // le triangle qu'on crée
+} ctxt_dessin;
+
 
 enum { NOMBRE_TRIANGLES_MAX = 5 };
 
@@ -30,7 +41,7 @@ class CMainFrame: public wxFrame {
 public:
 	CMainFrame(const wxString& title, const wxPoint& pos, const wxSize& size);
 	int num_tri;
-	Triangle tab_tri[5];
+	Triangle tab_tri[NOMBRE_TRIANGLES_MAX];
 
 	void CreateMyToolBar();
 	bool existeTriangle();
@@ -38,17 +49,21 @@ public:
 	void supprimerTousTriangles();
 	void activerGestionTriangles(bool oui_ou_non);
 	OpenGLCanvas *canvas_opengl;
+
 	int getNombreTriangles();
 	void setNombreTriangles(int n);
 	Triangle * getTri(int n);
 	wxColour * getCouleurCourante();
+	void setCouleurCourante(int r, int g, int b);
+	void setDrawing(bool b);
+	bool isDrawing();
+	void setPointCourant(float x, float y);
+	Triangle * getTriangleCourant();
+	void ajoute_point_triangle_courant(float x, float y);
 
 private:
 	wxToolBar *m_toolbar;
-
-	int epaisseur_trait_courante;
-	wxColour couleur_courante; 
-	bool is_drawing;
+	ctxt_dessin contexte_dessin;
 
 	void OnNew(wxCommandEvent& event);
 	void OnQuit(wxCommandEvent& event);
@@ -60,6 +75,7 @@ private:
 	void OnToolBar(wxCommandEvent& event);
 	void OnVersion(wxCommandEvent& event);
 
+	void ajouter_tri_courant_tab_tri();
 	DECLARE_EVENT_TABLE();
 }; //MyFrame
 

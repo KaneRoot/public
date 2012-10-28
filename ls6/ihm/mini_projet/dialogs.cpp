@@ -105,21 +105,11 @@ ColorDialog::~ColorDialog()
 }
 void ColorDialog::OnChangerCouleur(wxCommandEvent& e)
 {
-	int indice_couleur = rb_couleurs->GetSelection();
-	if(indice_couleur == 0)
+	switch(rb_couleurs->GetSelection())
 	{
-		main_frame->getCouleurCourante()->Set(255,0,0);
-		std::cout << "coucou" << std::endl;
-	}
-	else if(indice_couleur == 1)
-	{
-		main_frame->getCouleurCourante()->Set(0,255,0);
-		std::cout << "coucou1" << std::endl;
-	}
-	else
-	{
-		main_frame->getCouleurCourante()->Set(0,0,255);
-		std::cout << "coucou2" << std::endl;
+		case 0 : main_frame->setCouleurCourante(255,0,0); break;
+		case 1 : main_frame->setCouleurCourante(0,255,0); break;
+		default : main_frame->setCouleurCourante(0,0,255); break;
 	}
 }
 

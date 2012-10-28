@@ -59,23 +59,41 @@ void OpenGLCanvas::Draw()
 		{
 			t = main_frame->getTri(i);
 			glColor3d(t->colour.Red(),t->colour.Green(),t->colour.Blue());
-			glVertex2i(t->p1.x,t->p1.y); 
-			glVertex2i(t->p2.x,t->p2.y); 
-			glVertex2i(t->p3.x,t->p3.y); 
+			glVertex2i(t->getPX(0),t->getPY(0)); 
+			glVertex2i(t->getPX(1),t->getPY(1)); 
+			glVertex2i(t->getPX(2),t->getPY(2)); 
 
 			glLineWidth((float) t->thickness);
-			glVertex2i(t->p1.x,t->p1.y); 
-			glVertex2i(t->p2.x,t->p2.y); 
-			glVertex2i(t->p3.x,t->p3.y); 
+			glVertex2i(t->getPX(0),t->getPY(0)); 
+			glVertex2i(t->getPX(1),t->getPY(1)); 
+			glVertex2i(t->getPX(2),t->getPY(2)); 
 		}
+		// TODO : afficher le triangle en cours de construction
 	glEnd();
 }
+
 void OpenGLCanvas::OnMouseMove(wxMouseEvent& e)
 {
+	//std::cout << "mouse : " << e.GetX() << " :: " << e.GetY() << std::endl;
+	if(main_frame->isDrawing())
+	{
+		main_frame->setPointCourant(e.GetX(), e.GetY());
+		Draw();
+	}
 }
+
 void OpenGLCanvas::OnLeftDown(wxMouseEvent& e)
 {
 }
+
 void OpenGLCanvas::OnLeftUp(wxMouseEvent& e)
 {
+	if(! main_frame->isDrawing())
+	{
+		main_frame->setDrawing(true);
+	}
+	else
+	{
+	}
+	main_frame->ajoute_point_triangle_courant(e.GetX(),e.GetY());
 }

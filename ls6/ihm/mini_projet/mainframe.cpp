@@ -70,14 +70,17 @@ void CMainFrame::OnOpen(wxCommandEvent& event)
 		msg.ShowModal();
 		return ;
 	}
-	int i, r,g,b;
+	int i, r,g,b, x[3], y[3];
 	fo >> num_tri;
 	for( i = 0 ; i < num_tri ; i++)
 	{
 		//tab_tri[i] = Triangle();
-		fo  >> tab_tri[i].p1.x >> tab_tri[i].p1.y 
-			>> tab_tri[i].p2.x >> tab_tri[i].p2.y 
-			>> tab_tri[i].p3.x >> tab_tri[i].p3.y;
+		fo  >> x[0]>> y[0]
+			>> x[1]>> y[1]
+			>> x[2]>> y[2];
+		tab_tri[i].setP(0, x[0],y[0]);
+		tab_tri[i].setP(1, x[1],y[1]);
+		tab_tri[i].setP(2, x[2],y[2]);
 		fo	>> r >> g >> b;
 		tab_tri[i].colour.Set(r,g,b);
 		fo >> tab_tri[i].thickness;
@@ -106,6 +109,12 @@ void CMainFrame::supprimerTriangle(int i)
 		num_tri--;
 }
 
+void CMainFrame::setPointCourant(float x, float y)
+{
+	contexte_dessin.point_courant.x = x;
+	contexte_dessin.point_courant.y = y;
+}
+
 void CMainFrame::activerGestionTriangles(bool b)
 {
 	m_toolbar->EnableTool(M_GESTION_TRIANGLES, b);
@@ -132,9 +141,9 @@ void CMainFrame::OnSave(wxCommandEvent& event)
 	int i, r,g,b;
 	for( i = 0 ; i < num_tri ; i++)
 	{
-		fs  << tab_tri[i].p1.x << " " << tab_tri[i].p1.y << " "
-			<< tab_tri[i].p2.x << " " << tab_tri[i].p2.y << " "
-			<< tab_tri[i].p3.x << " " << tab_tri[i].p3.y << std::endl;
+		fs  << tab_tri[i].getPX(0) << " " << tab_tri[i].getPY(0) << " "
+			<< tab_tri[i].getPX(1) << " " << tab_tri[i].getPY(1) << " "
+			<< tab_tri[i].getPX(2) << " " << tab_tri[i].getPY(2) << std::endl;
 		r = tab_tri[i].colour.Red();
 		g = tab_tri[i].colour.Green();
 		b = tab_tri[i].colour.Blue();
@@ -203,4 +212,46 @@ bool CMainFrame::existeTriangle()
 int CMainFrame::getNombreTriangles() { return num_tri; }
 void CMainFrame::setNombreTriangles(int n) { num_tri = n; }
 Triangle * CMainFrame::getTri(int n) { return &tab_tri[n]; }
-wxColour * CMainFrame::getCouleurCourante() { return &couleur_courante; }
+wxColour * CMainFrame::getCouleurCourante() { return &contexte_dessin.couleur_courante; }
+void CMainFrame::setCouleurCourante(int r, int g, int b) { contexte_dessin.couleur_courante.Set(r,g,b); }
+void CMainFrame::setDrawing(bool b) { contexte_dessin.is_drawing = b; }
+bool CMainFrame::isDrawing() { return contexte_dessin.is_drawing; }
+Triangle * CMainFrame::getTriangleCourant() { return &contexte_dessin.triangle_courant; }
+
+void CMainFrame::ajoute_point_triangle_courant(float x, float y)
+{
+	Triangle * t = getTriangleCourant();
+	switch( contexte_dessin.nb_points_definis)
+	{
+		case 0 : 
+		case 1 :
+			t->setP(contexte_dessin.nb_points_definis, x, y);
+			contexte_dessin.nb_points_definis++;
+			break;
+		case 2 :
+			t->setP(contexte_dessin.nb_points_definis, x, y);
+			contexte_dessin.nb_points_definis = 0;
+			setDrawing(false);
+			ajouter_tri_courant_tab_tri();
+			break;
+		default :
+			std::cout << "erreur : nb de points dans le triangle courant > 3 " << std::endl;
+			break;
+	}
+}
+void CMainFrame::ajouter_tri_courant_tab_tri()
+{
+	int i;
+	bool b = false;
+	if(num_tri < NOMBRE_TRIANGLES_MAX)
+	{
+		num_tri++;
+		for(i = 0 ; i < NOMBRE_TRIANGLES_MAX && b == false; i++)
+			if(tab_tri[i].existe == 0)
+				b = true;
+		Triangle * t = getTriangleCourant();
+		tab_tri[i].setP(0,t->getPX(0),t->getPY(0));
+		tab_tri[i].setP(1,t->getPX(1),t->getPY(1));
+		tab_tri[i].setP(2,t->getPX(2),t->getPY(2));
+	}
+}
