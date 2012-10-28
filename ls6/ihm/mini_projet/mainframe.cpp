@@ -4,11 +4,12 @@
 #include <fstream>
 #include <string>
 
-#include "openglcanvas.h"
 #include <wx/wx.h>
 #include <wx/accel.h>
 #include <wx/toolbar.h>
+#include <wx/glcanvas.h>
 
+#include "openglcanvas.h"
 #include "triangle.h"
 #include "dialogs.h"
 #include "mainframe.h"

@@ -1,7 +1,3 @@
-
-#include <wx/dialog.h>
-#include <wx/glcanvas.h>
-#include <wx/dcclient.h>
 #include "openglcanvas.h"
 
 
@@ -14,6 +10,7 @@ END_EVENT_TABLE ()
 OpenGLCanvas::OpenGLCanvas(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name): 
 wxGLCanvas(parent, id, pos, size, style, name)
 {
+	main_frame = (CMainFrame *) parent;
 }
 
 OpenGLCanvas::~OpenGLCanvas(void)

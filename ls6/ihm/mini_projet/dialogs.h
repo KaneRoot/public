@@ -4,9 +4,15 @@
 #include <wx/wx.h> 
 #include <wx/button.h>
 #include <wx/stattext.h>
-#include <wx/sizer.h>
 #include <wx/textctrl.h>
 #include <wx/spinctrl.h>
+#include <wx/dynarray.h>
+#include <wx/listctrl.h>
+#include <wx/listbox.h>
+#include <wx/combobox.h>
+#include <wx/colour.h>
+#include <wx/sizer.h>
+
 #include "mainframe.h"
 
 enum { V_ID_TEXTE = 10000, SLIDER_EPAISSEUR_TRAIT, COULEUR_RD_BOX, 

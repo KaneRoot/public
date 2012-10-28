@@ -2,6 +2,7 @@
 #include <wx/menu.h>
 #include "dialogs.h"
 #include "mainframe.h"
+#include "openglcanvas.h"
 
 class MyApp: public wxApp 
 {
