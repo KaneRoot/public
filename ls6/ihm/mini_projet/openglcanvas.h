@@ -21,6 +21,9 @@ class OpenGLCanvas: public wxGLCanvas {
 		void OnPaint( wxPaintEvent& event );
 		void OnSize( wxSizeEvent& event );
 		void OnEraseBackground( wxEraseEvent& event );
+		void OnMouseMove(wxMouseEvent& e);
+		void OnLeftDown(wxMouseEvent& e);
+		void OnLeftUp(wxMouseEvent& e);
 		DECLARE_EVENT_TABLE()
 };
 
