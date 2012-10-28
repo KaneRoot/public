@@ -76,7 +76,7 @@ void OpenGLCanvas::Draw()
 	switch(main_frame->getNbPointsDefinis())
 	{
 		case 1 : 
-			//std::cout << "case 1 :: px0 : " << main_frame->getTriangleCourant()->getPX(0) << " :: py0 : " << main_frame->getTriangleCourant()->getPY(0) << " :: pcourant x : " << main_frame->getPointCourant().x << " :: pcourant y : " << main_frame->getPointCourant().y << std::endl;
+			std::cout << "case 1 :: px0 : " << main_frame->getTriangleCourant()->getPX(0) << " :: py0 : " << main_frame->getTriangleCourant()->getPY(0) << " :: pcourant x : " << main_frame->getPointCourant().x << " :: pcourant y : " << main_frame->getPointCourant().y << std::endl;
 			glBegin(GL_LINES);
 				glColor3d(1,0,0);
 				glVertex2i(main_frame->getTriangleCourant()->getPX(0), main_frame->getTriangleCourant()->getPY(0));
@@ -97,13 +97,20 @@ void OpenGLCanvas::Draw()
 void OpenGLCanvas::OnMouseMove(wxMouseEvent& e)
 {
 	//std::cout << "mouse : " << e.GetX() << " :: " << e.GetY() << std::endl;
-	main_frame->setPointCourant(e.GetX(), e.GetY());
+	int h,w;
+	GetClientSize(&w,&h);
+	glOrtho(-w/2., w/2., -h/2., h/2., -1., 3.);
+	glViewport(0,0,(GLint)w,(GLint)h);
+	int x, y;
+	x = e.GetX() - w/2;
+	y = h/2 - e.GetY();
+	main_frame->setPointCourant(x, y);
 	if(main_frame->isDrawing())
 	{
+		//std::cout << "px0 : " << main_frame->getTriangleCourant()->getPX(0) << " :: py0 : " << main_frame->getTriangleCourant()->getPY(0) << " :: pcourant x : " << main_frame->getPointCourant().x << " :: pcourant y : " << main_frame->getPointCourant().y << std::endl;
 		Draw();					// fonction de dessins
 		SwapBuffers();
 	}
-	std::cout << "px0 : " << main_frame->getTriangleCourant()->getPX(0) << " :: py0 : " << main_frame->getTriangleCourant()->getPY(0) << " :: pcourant x : " << main_frame->getPointCourant().x << " :: pcourant y : " << main_frame->getPointCourant().y << std::endl;
 }
 
 void OpenGLCanvas::OnLeftDown(wxMouseEvent& e)
@@ -114,10 +121,18 @@ void OpenGLCanvas::OnLeftUp(wxMouseEvent& e)
 {
 	if(! main_frame->isDrawing())
 	{
+		std::cout << "e.GetX : " << e.GetX() << " e.GetY : " << e.GetY() << std::endl;
 		main_frame->setDrawing(true);
 	}
 	else
 	{
 	}
-	main_frame->ajoute_point_triangle_courant(e.GetX(),e.GetY());
+	int h,w;
+	GetClientSize(&w,&h);
+	glOrtho(-w/2., w/2., -h/2., h/2., -1., 3.);
+	glViewport(0,0,(GLint)w,(GLint)h);
+	int x, y;
+	x = e.GetX() - w/2;
+	y = h/2 - e.GetY();
+	main_frame->ajoute_point_triangle_courant(x,y);
 }
