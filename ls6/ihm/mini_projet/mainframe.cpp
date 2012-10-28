@@ -247,6 +247,7 @@ void CMainFrame::ajoute_point_triangle_courant(float x, float y)
 
 void CMainFrame::ajouter_tri_courant_tab_tri()
 {
+	activerGestionTriangles(true);
 	int i;
 	if(num_tri < NOMBRE_TRIANGLES_MAX)
 	{
@@ -265,5 +266,7 @@ void CMainFrame::ajouter_tri_courant_tab_tri()
 				contexte_dessin.couleur_courante.Blue());
 		tab_tri[i].thickness = contexte_dessin.epaisseur_trait_courante;
 		tab_tri[i].existe = 1;
+		tab_tri[i].nom = wxT("triangle ");
+		tab_tri[i].nom << i;
 	}
 }
