@@ -45,7 +45,7 @@ void OpenGLCanvas::Draw()
 	glMatrixMode( GL_PROJECTION );
 	glLoadIdentity();
 
-	int w, h;
+	int w, h, k(0);
 	Triangle *t;
 	GetClientSize(&w, &h);
 	glOrtho(-w/2., w/2., -h/2., h/2., -1., 3.);
@@ -57,7 +57,10 @@ void OpenGLCanvas::Draw()
 	glBegin(GL_TRIANGLES);
 		for(int i(0); i < main_frame->getNombreTriangles() ; i++)
 		{
-			t = main_frame->getTri(i);
+			t = main_frame->getTri(i + k);
+			while(t->existe != 1)
+				t = main_frame->getTri(i + ++k);
+
 			glColor3d(t->colour.Red(),t->colour.Green(),t->colour.Blue());
 			glVertex2i(t->getPX(0),t->getPY(0)); 
 			glVertex2i(t->getPX(1),t->getPY(1)); 
@@ -68,18 +71,39 @@ void OpenGLCanvas::Draw()
 			glVertex2i(t->getPX(1),t->getPY(1)); 
 			glVertex2i(t->getPX(2),t->getPY(2)); 
 		}
-		// TODO : afficher le triangle en cours de construction
 	glEnd();
+	// TODO : afficher le triangle en cours de construction
+	switch(main_frame->getNbPointsDefinis())
+	{
+		case 1 : 
+			//std::cout << "case 1 :: px0 : " << main_frame->getTriangleCourant()->getPX(0) << " :: py0 : " << main_frame->getTriangleCourant()->getPY(0) << " :: pcourant x : " << main_frame->getPointCourant().x << " :: pcourant y : " << main_frame->getPointCourant().y << std::endl;
+			glBegin(GL_LINES);
+				glColor3d(1,0,0);
+				glVertex2i(main_frame->getTriangleCourant()->getPX(0), main_frame->getTriangleCourant()->getPY(0));
+				glVertex2i(main_frame->getPointCourant().x, main_frame->getPointCourant().y);
+			glEnd();
+			break;
+		case 2 :
+			std::cout << "case 2" << std::endl;
+			glBegin(GL_TRIANGLES);
+			glEnd();
+			break;
+		default :
+			std::cout << "case 3" << std::endl;
+			break;
+	}
 }
 
 void OpenGLCanvas::OnMouseMove(wxMouseEvent& e)
 {
 	//std::cout << "mouse : " << e.GetX() << " :: " << e.GetY() << std::endl;
+	main_frame->setPointCourant(e.GetX(), e.GetY());
 	if(main_frame->isDrawing())
 	{
-		main_frame->setPointCourant(e.GetX(), e.GetY());
-		Draw();
+		Draw();					// fonction de dessins
+		SwapBuffers();
 	}
+	std::cout << "px0 : " << main_frame->getTriangleCourant()->getPX(0) << " :: py0 : " << main_frame->getTriangleCourant()->getPY(0) << " :: pcourant x : " << main_frame->getPointCourant().x << " :: pcourant y : " << main_frame->getPointCourant().y << std::endl;
 }
 
 void OpenGLCanvas::OnLeftDown(wxMouseEvent& e)

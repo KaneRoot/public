@@ -58,8 +58,10 @@ public:
 	void setDrawing(bool b);
 	bool isDrawing();
 	void setPointCourant(float x, float y);
+	point getPointCourant();
 	Triangle * getTriangleCourant();
 	void ajoute_point_triangle_courant(float x, float y);
+	int getNbPointsDefinis();
 
 private:
 	wxToolBar *m_toolbar;

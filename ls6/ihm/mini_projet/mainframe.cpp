@@ -217,6 +217,8 @@ void CMainFrame::setCouleurCourante(int r, int g, int b) { contexte_dessin.coule
 void CMainFrame::setDrawing(bool b) { contexte_dessin.is_drawing = b; }
 bool CMainFrame::isDrawing() { return contexte_dessin.is_drawing; }
 Triangle * CMainFrame::getTriangleCourant() { return &contexte_dessin.triangle_courant; }
+int CMainFrame::getNbPointsDefinis() { return contexte_dessin.nb_points_definis; }
+point CMainFrame::getPointCourant() { return contexte_dessin.point_courant; }
 
 void CMainFrame::ajoute_point_triangle_courant(float x, float y)
 {
@@ -239,6 +241,7 @@ void CMainFrame::ajoute_point_triangle_courant(float x, float y)
 			break;
 	}
 }
+
 void CMainFrame::ajouter_tri_courant_tab_tri()
 {
 	int i;
@@ -253,5 +256,10 @@ void CMainFrame::ajouter_tri_courant_tab_tri()
 		tab_tri[i].setP(0,t->getPX(0),t->getPY(0));
 		tab_tri[i].setP(1,t->getPX(1),t->getPY(1));
 		tab_tri[i].setP(2,t->getPX(2),t->getPY(2));
+		tab_tri[i].colour.Set(
+				contexte_dessin.couleur_courante.Red(),
+				contexte_dessin.couleur_courante.Green(),
+				contexte_dessin.couleur_courante.Blue());
+		tab_tri[i].thickness = contexte_dessin.epaisseur_trait_courante;
 	}
 }
