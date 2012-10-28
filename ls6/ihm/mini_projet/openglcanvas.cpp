@@ -58,8 +58,8 @@ void OpenGLCanvas::Draw()
 		for(int i(0); i < main_frame->getNombreTriangles() ; i++)
 		{
 			t = main_frame->getTri(i + k);
-			while(t->existe != 1)
-				t = main_frame->getTri(i + ++k);
+			while(t->existe == 0)
+				t = main_frame->getTri(i + (++k));
 
 			glColor3d(t->colour.Red(),t->colour.Green(),t->colour.Blue());
 			glVertex2i(t->getPX(0),t->getPY(0)); 
@@ -72,13 +72,16 @@ void OpenGLCanvas::Draw()
 			glVertex2i(t->getPX(2),t->getPY(2)); 
 		}
 	glEnd();
+	wxColour * couleur_cour;
 	// TODO : afficher le triangle en cours de construction
 	switch(main_frame->getNbPointsDefinis())
 	{
 		case 1 : 
-			std::cout << "case 1 :: px0 : " << main_frame->getTriangleCourant()->getPX(0) << " :: py0 : " << main_frame->getTriangleCourant()->getPY(0) << " :: pcourant x : " << main_frame->getPointCourant().x << " :: pcourant y : " << main_frame->getPointCourant().y << std::endl;
+			//std::cout << "case 1 :: px0 : " << main_frame->getTriangleCourant()->getPX(0) << " :: py0 : " << main_frame->getTriangleCourant()->getPY(0) << " :: pcourant x : " << main_frame->getPointCourant().x << " :: pcourant y : " << main_frame->getPointCourant().y << std::endl;
 			glBegin(GL_LINES);
-				glColor3d(1,0,0);
+				couleur_cour = main_frame->getCouleurCourante();
+				glColor3f(couleur_cour->Red(),couleur_cour->Green(), couleur_cour->Blue());
+				glLineWidth(main_frame->getEpaisseurTraitCourante());
 				glVertex2i(main_frame->getTriangleCourant()->getPX(0), main_frame->getTriangleCourant()->getPY(0));
 				glVertex2i(main_frame->getPointCourant().x, main_frame->getPointCourant().y);
 			glEnd();
@@ -86,6 +89,12 @@ void OpenGLCanvas::Draw()
 		case 2 :
 			std::cout << "case 2" << std::endl;
 			glBegin(GL_TRIANGLES);
+				couleur_cour = main_frame->getCouleurCourante();
+				glColor3f(couleur_cour->Red(),couleur_cour->Green(), couleur_cour->Blue());
+				glLineWidth(main_frame->getEpaisseurTraitCourante());
+				glVertex2i(main_frame->getTriangleCourant()->getPX(0), main_frame->getTriangleCourant()->getPY(0));
+				glVertex2i(main_frame->getTriangleCourant()->getPX(1), main_frame->getTriangleCourant()->getPY(1));
+				glVertex2i(main_frame->getPointCourant().x, main_frame->getPointCourant().y);
 			glEnd();
 			break;
 		default :
@@ -121,11 +130,8 @@ void OpenGLCanvas::OnLeftUp(wxMouseEvent& e)
 {
 	if(! main_frame->isDrawing())
 	{
-		std::cout << "e.GetX : " << e.GetX() << " e.GetY : " << e.GetY() << std::endl;
+		//std::cout << "e.GetX : " << e.GetX() << " e.GetY : " << e.GetY() << std::endl;
 		main_frame->setDrawing(true);
-	}
-	else
-	{
 	}
 	int h,w;
 	GetClientSize(&w,&h);

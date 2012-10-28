@@ -62,6 +62,8 @@ public:
 	Triangle * getTriangleCourant();
 	void ajoute_point_triangle_courant(float x, float y);
 	int getNbPointsDefinis();
+	void setEpaisseurTraitCourante(int x);
+	int getEpaisseurTraitCourante();
 
 private:
 	wxToolBar *m_toolbar;

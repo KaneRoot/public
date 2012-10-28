@@ -18,6 +18,7 @@ CMainFrame::CMainFrame(const wxString& title, const wxPoint& pos, const wxSize& 
 {
 	canvas_opengl = new OpenGLCanvas(this,CANVAS_OPENGL, wxDefaultPosition, wxDefaultSize, 
 			0, wxT("MonGLCanvas"));
+	setCouleurCourante(0,255,0);
 } //constructor
 
 void CMainFrame::CreateMyToolBar()
@@ -219,6 +220,8 @@ bool CMainFrame::isDrawing() { return contexte_dessin.is_drawing; }
 Triangle * CMainFrame::getTriangleCourant() { return &contexte_dessin.triangle_courant; }
 int CMainFrame::getNbPointsDefinis() { return contexte_dessin.nb_points_definis; }
 point CMainFrame::getPointCourant() { return contexte_dessin.point_courant; }
+int CMainFrame::getEpaisseurTraitCourante() { return contexte_dessin.epaisseur_trait_courante; }
+void CMainFrame::setEpaisseurTraitCourante(int x) { contexte_dessin.epaisseur_trait_courante = x; }
 
 void CMainFrame::ajoute_point_triangle_courant(float x, float y)
 {
@@ -245,13 +248,13 @@ void CMainFrame::ajoute_point_triangle_courant(float x, float y)
 void CMainFrame::ajouter_tri_courant_tab_tri()
 {
 	int i;
-	bool b = false;
 	if(num_tri < NOMBRE_TRIANGLES_MAX)
 	{
 		num_tri++;
-		for(i = 0 ; i < NOMBRE_TRIANGLES_MAX && b == false; i++)
+		for(i = 0 ; i < NOMBRE_TRIANGLES_MAX ; i++)
 			if(tab_tri[i].existe == 0)
-				b = true;
+				break;
+		std::cout << "num trouvé : " << i << std::endl;
 		Triangle * t = getTriangleCourant();
 		tab_tri[i].setP(0,t->getPX(0),t->getPY(0));
 		tab_tri[i].setP(1,t->getPX(1),t->getPY(1));
@@ -261,5 +264,6 @@ void CMainFrame::ajouter_tri_courant_tab_tri()
 				contexte_dessin.couleur_courante.Green(),
 				contexte_dessin.couleur_courante.Blue());
 		tab_tri[i].thickness = contexte_dessin.epaisseur_trait_courante;
+		tab_tri[i].existe = 1;
 	}
 }
