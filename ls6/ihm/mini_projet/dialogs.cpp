@@ -12,6 +12,7 @@ BEGIN_EVENT_TABLE(TriangleDialog, wxDialog)
 	EVT_BUTTON(TEXTE_SUPPRIMER, TriangleDialog::OnSupprimer)
 END_EVENT_TABLE ()
 BEGIN_EVENT_TABLE(ProprietesDialog, wxDialog)
+	EVT_RADIOBOX(COULEUR_RD_BOX, ProprietesDialog::ChangerCouleurTriangle)
 END_EVENT_TABLE ()
 
 VersionDialog::VersionDialog( wxWindow *parent, wxWindowID id, const wxString &title) : wxDialog( parent, id, title)
@@ -156,27 +157,26 @@ void TriangleDialog::OnProprietes(wxCommandEvent& event)
 {
 	int i(0), j(0);
 
-	ProprietesDialog vdlg( this, -1, wxT("Proprietes"));
 	wxString nouveau_texte( liste_triangles->GetStringSelection() );
 
 	for(i = 0, j = -1 ; j < liste_triangles->GetSelection() ; i++)
 	{
-		if(main_frame->tab_tri[i].existe())
+		if(main_frame->getTri(i)->existe())
 			j++;
 	}
 
-	//std::cout<<main_frame->tab_tri[j].p1.x<<std::endl;
-	
+	ProprietesDialog vdlg( this, -1, wxT("Proprietes"), main_frame->getTri(j));
+	/*
 	// Choix couleur 
-	if(main_frame->tab_tri[j].colour.Red() == 255)
+	if(main_frame->getTri(j)->colour.Red() == 255)
 		vdlg.radiobox_couleur->SetSelection(0);
-	else if(main_frame->tab_tri[j].colour.Green() == 255)
+	if(main_frame->getTri(j)->colour.Green() == 255)
 		vdlg.radiobox_couleur->SetSelection(1);
 	else
 		vdlg.radiobox_couleur->SetSelection(2);
-
-	vdlg.spinctl_epaisseur_trait->SetValue(main_frame->tab_tri[j].thickness);
-
+	*/
+	vdlg.spinctl_epaisseur_trait->SetValue(main_frame->getTri(j)->thickness);
+	
 	vdlg.ChangerTexteIdTriangle(nouveau_texte); // Mettre le nouveau texte
 	vdlg.ShowModal();
 }
@@ -205,8 +205,10 @@ void TriangleDialog::OnSupprimer(wxCommandEvent& event)
 	}
 }
 
-ProprietesDialog::ProprietesDialog( wxWindow *parent, wxWindowID id, const wxString &title) : wxDialog( parent, id, title)
+ProprietesDialog::ProprietesDialog( wxWindow *parent, wxWindowID id, const wxString &title, Triangle* ptriangle) : wxDialog( parent, id, title)
 {
+	tri = (Triangle *) ptriangle;
+	main_frame = (CMainFrame *) parent;
 	// Conteneurs
 	conteneur[0] = new wxBoxSizer( wxVERTICAL );
 	conteneur[1] = new wxBoxSizer( wxHORIZONTAL );
@@ -246,6 +248,17 @@ ProprietesDialog::ProprietesDialog( wxWindow *parent, wxWindowID id, const wxStr
 	this->SetSizer( conteneur[0] );
 	conteneur[0]->Fit( this );
 	conteneur[0]->SetSizeHints( this );
+	
+	// Choix couleur 
+	if(tri->colour.Red() == 255)
+		radiobox_couleur->SetSelection(0);
+	if(tri->colour.Green() == 255)
+		radiobox_couleur->SetSelection(1);
+	else
+		radiobox_couleur->SetSelection(2);
+
+	spinctl_epaisseur_trait->SetValue(tri->thickness);
+	ChangerTexteIdTriangle(tri->nom);
 }
 
 ProprietesDialog::~ProprietesDialog()
@@ -268,10 +281,20 @@ void ProprietesDialog::ChangerTexteIdTriangle(wxString& idTriangle)
 	textctrl_id_boite_texte->AppendText(idTriangle);
 }
 
-void ProprietesDialog::ChangerEpaisseurTrait(int epaisseur)
+void ProprietesDialog::ChangerEpaisseurTrait(wxCommandEvent& e)
 {
 }
 
-void ProprietesDialog::ChangerCouleurTriangle(int couleur)
+void ProprietesDialog::ChangerCouleurTriangle(wxCommandEvent& e)
 {
+	std::cout << "couleur sélectionnée : " << e.GetInt() << std::endl;
+	switch(e.GetInt())
+	{
+		case 0 : tri->colour.Set(255,0,0); break;
+		case 1 : tri->colour.Set(0,255,0); break;
+		case 2 : tri->colour.Set(0,0,255); break;
+		default :
+			std::cout << "erreur sélection couleur " << std::endl;
+			break;
+	}
 }

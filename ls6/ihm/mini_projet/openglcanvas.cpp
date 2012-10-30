@@ -208,6 +208,8 @@ int OpenGLCanvas::est_dans_triangle(int x, int y)
 
 void OpenGLCanvas::OnContextPptes(wxCommandEvent& e)
 {
+	ProprietesDialog vdlg( this, -1, wxT("Proprietes"), main_frame->getTri(selected_tri));
+	vdlg.ShowModal();
 }
 
 void OpenGLCanvas::OnContextSuppr(wxCommandEvent& e)

@@ -69,15 +69,17 @@ class TriangleDialog: public wxDialog {
 };
 class ProprietesDialog: public wxDialog {
 	public :
-		    ProprietesDialog(wxWindow *parent, wxWindowID id, const wxString &title);
+		    ProprietesDialog(wxWindow *parent, wxWindowID id, const wxString &title, Triangle* ptriangle);
 			virtual ~ProprietesDialog();
 			void ChangerTexteIdTriangle(wxString& idTriangle);
-			void ChangerEpaisseurTrait(int epaisseur);
-			void ChangerCouleurTriangle(int couleur);
+			void ChangerEpaisseurTrait(wxCommandEvent& e);
+			void ChangerCouleurTriangle(wxCommandEvent& e);
 			wxRadioBox *radiobox_couleur;
 			wxSpinCtrl *spinctl_epaisseur_trait;
 
 	private :
+			Triangle * tri;
+			CMainFrame *main_frame;
 			wxBoxSizer *conteneur[3];
 			wxStaticText *texte_epaisseur_trait;
 			wxStaticText *texte_id_triangle;
