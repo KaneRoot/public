@@ -54,24 +54,27 @@ void OpenGLCanvas::Draw()
 	glClearColor( 1.f, 1.f, 1.f, 1 );
 	glClear( GL_COLOR_BUFFER_BIT);
 	glEnable(GL_LINE_SMOOTH);
-	glBegin(GL_TRIANGLES);
-		for(int i(0); i < main_frame->getNombreTriangles() ; i++)
-		{
-			t = main_frame->getTri(i + k);
-			while(t->existe == 0)
-				t = main_frame->getTri(i + (++k));
+	for(int i(0); i < main_frame->getNombreTriangles() ; i++)
+	{
+		t = main_frame->getTri(i + k);
+		while(t->existe == 0)
+			t = main_frame->getTri(i + (++k));
 
+		glBegin(GL_TRIANGLES);
 			glColor3d(t->colour.Red(),t->colour.Green(),t->colour.Blue());
 			glVertex2i(t->getPX(0),t->getPY(0)); 
 			glVertex2i(t->getPX(1),t->getPY(1)); 
 			glVertex2i(t->getPX(2),t->getPY(2)); 
+		glEnd();
 
-			glLineWidth((float) t->thickness);
+		glColor3d(0,0,0);
+		glLineWidth((float) t->thickness);
+		glBegin(GL_LINE_LOOP);
 			glVertex2i(t->getPX(0),t->getPY(0)); 
 			glVertex2i(t->getPX(1),t->getPY(1)); 
 			glVertex2i(t->getPX(2),t->getPY(2)); 
-		}
-	glEnd();
+		glEnd();
+	}
 	wxColour * couleur_cour;
 	// TODO : afficher le triangle en cours de construction
 	switch(main_frame->getNbPointsDefinis())
