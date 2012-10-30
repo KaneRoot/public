@@ -12,7 +12,6 @@ class Triangle
 		point p[3];
 
 		wxColour colour;
-		int existe;
 		wxString nom;
 
 		int thickness; // epaisseur de trait 
@@ -20,6 +19,12 @@ class Triangle
 		float getPX(int n);
 		float getPY(int n);
 		bool IsPointInTriangle(int x, int y);
+		bool existe();
+		void supprimer();
+		void creer();
+
+	private:
+		bool existe_var;
 };
 
 #endif // #ifndef __TRIANGLE_H__

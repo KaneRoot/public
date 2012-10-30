@@ -86,7 +86,7 @@ void CMainFrame::OnOpen(wxCommandEvent& event)
 		fo	>> r >> g >> b;
 		tab_tri[i].colour.Set(r,g,b);
 		fo >> tab_tri[i].thickness;
-		tab_tri[i].existe = 1;
+		tab_tri[i].creer();
 		tab_tri[i].nom = wxT("");
 		tab_tri[i].nom << wxT("triangle ");
 	   	tab_tri[i].nom = tab_tri[i].nom << i;
@@ -106,9 +106,11 @@ void CMainFrame::supprimerTousTriangles()
 
 void CMainFrame::supprimerTriangle(int i)
 {
-	tab_tri[i].existe = 0;
+	tab_tri[i].supprimer();
 	if( num_tri != 0)
 		num_tri--;
+	if(num_tri == 0)
+		activerGestionTriangles(false);
 }
 
 void CMainFrame::setPointCourant(float x, float y)
@@ -177,7 +179,7 @@ void CMainFrame::OnGestionTriangles(wxCommandEvent& event)
 	int i ; 
 	for(i = 0 ; i < NOMBRE_TRIANGLES_MAX ; i++)
 	{
-		if(tab_tri[i].existe != 0)
+		if(tab_tri[i].existe())
 		{
 			vdlg.liste_triangles->Append(tab_tri[i].nom);
 		}
@@ -206,7 +208,7 @@ bool CMainFrame::existeTriangle()
 {
 	bool res = false;
 	for(int i(0) ; i < NOMBRE_TRIANGLES_MAX && res == false ; i++)
-		if( tab_tri[i].existe == 1 )
+		if( tab_tri[i].existe() )
 			res = true;
 	return res;
 }
@@ -254,9 +256,9 @@ void CMainFrame::ajouter_tri_courant_tab_tri()
 	{
 		num_tri++;
 		for(i = 0 ; i < NOMBRE_TRIANGLES_MAX ; i++)
-			if(tab_tri[i].existe == 0)
+			if( ! tab_tri[i].existe())
 				break;
-		std::cout << "num trouvé : " << i << std::endl;
+		//std::cout << "num trouvé : " << i << std::endl;
 		Triangle * t = getTriangleCourant();
 		tab_tri[i].setP(0,t->getPX(0),t->getPY(0));
 		tab_tri[i].setP(1,t->getPX(1),t->getPY(1));
@@ -266,7 +268,7 @@ void CMainFrame::ajouter_tri_courant_tab_tri()
 				contexte_dessin.couleur_courante.Green(),
 				contexte_dessin.couleur_courante.Blue());
 		tab_tri[i].thickness = contexte_dessin.epaisseur_trait_courante;
-		tab_tri[i].existe = 1;
+		tab_tri[i].creer();
 		tab_tri[i].nom = wxT("triangle ");
 		tab_tri[i].nom << i;
 	}

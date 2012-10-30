@@ -9,7 +9,8 @@ class CMainFrame;
 #include <wx/dcclient.h>
 #include "mainframe.h"
 
-enum { POPUP_FICHIER = 1000, POPUP_GESTION, POPUP_VAL_COURANTES };
+enum { POPUP_FICHIER = 1000, POPUP_GESTION, POPUP_VAL_COURANTES,
+	POPUP_PROPRIETES, POPUP_SUPPRIMER};
 
 class OpenGLCanvas: public wxGLCanvas {
 	public :
@@ -19,6 +20,7 @@ class OpenGLCanvas: public wxGLCanvas {
 		CMainFrame * main_frame;
 
 	private :
+		int selected_tri;
 		void Draw();
 		void OnPaint( wxPaintEvent& event );
 		void OnSize( wxSizeEvent& event );
@@ -27,6 +29,9 @@ class OpenGLCanvas: public wxGLCanvas {
 		void OnLeftDown(wxMouseEvent& e);
 		void OnRightDown(wxMouseEvent& e);
 		void OnLeftUp(wxMouseEvent& e);
+		int est_dans_triangle(int x, int y);
+		void OnContextPptes(wxCommandEvent& e);
+		void OnContextSuppr(wxCommandEvent& e);
 		DECLARE_EVENT_TABLE()
 };
 

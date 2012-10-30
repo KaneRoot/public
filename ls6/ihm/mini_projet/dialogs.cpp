@@ -161,7 +161,7 @@ void TriangleDialog::OnProprietes(wxCommandEvent& event)
 
 	for(i = 0, j = -1 ; j < liste_triangles->GetSelection() ; i++)
 	{
-		if(main_frame->tab_tri[i].existe == 1)
+		if(main_frame->tab_tri[i].existe())
 			j++;
 	}
 
@@ -192,7 +192,7 @@ void TriangleDialog::OnSupprimer(wxCommandEvent& event)
 		while( j < selections.Item(i))
 		{
 			k++;
-			if(main_frame->tab_tri[k].existe == 1)
+			if(main_frame->tab_tri[k].existe())
 				j++;
 		}
 		liste_triangles->Delete(selections.Item(i));

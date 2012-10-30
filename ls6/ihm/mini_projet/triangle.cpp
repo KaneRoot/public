@@ -9,6 +9,19 @@ void Triangle::setP(int n, float x, float y)
 float Triangle::getPX(int n) { return p[n].x; }
 float Triangle::getPY(int n) { return p[n].y; } 
 
+void Triangle::supprimer()
+{
+	existe_var = false;
+}
+void Triangle::creer()
+{
+	existe_var = true;
+}
+bool Triangle::existe() 
+{
+	return existe_var;
+}
+
 bool Triangle::IsPointInTriangle(int x, int y)
 {
 	int fAB = (y-getPY(0))*(getPX(1)-getPX(0)) - (x-getPX(0))*(getPY(1)-getPY(0));

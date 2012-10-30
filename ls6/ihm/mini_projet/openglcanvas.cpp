@@ -9,6 +9,8 @@ BEGIN_EVENT_TABLE(OpenGLCanvas, wxGLCanvas)
 	EVT_RIGHT_DOWN(OpenGLCanvas::OnRightDown)
 	EVT_LEFT_UP(OpenGLCanvas::OnLeftUp)
 	EVT_MOTION(OpenGLCanvas::OnMouseMove)
+	EVT_MENU(POPUP_PROPRIETES, OpenGLCanvas::OnContextPptes)
+	EVT_MENU(POPUP_SUPPRIMER, OpenGLCanvas::OnContextSuppr)
 END_EVENT_TABLE()
 
 OpenGLCanvas::OpenGLCanvas(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name): 
@@ -58,7 +60,7 @@ void OpenGLCanvas::Draw()
 	for(int i(0); i < main_frame->getNombreTriangles() ; i++)
 	{
 		t = main_frame->getTri(i + k);
-		while(t->existe == 0)
+		while(! t->existe())
 			t = main_frame->getTri(i + (++k));
 
 		glBegin(GL_TRIANGLES);
@@ -158,17 +160,57 @@ void OpenGLCanvas::OnLeftUp(wxMouseEvent& e)
 
 void OpenGLCanvas::OnRightDown(wxMouseEvent& e)
 {
+	int h,w;
+	int x, y;
 	wxMenu popupmenu;
-	wxMenu * fichier = new wxMenu;
-	wxMenu * gestion = new wxMenu;
-	wxMenu * valeurs_courantes = new wxMenu;
-	fichier->Append(M_OUVRIR, wxT("Ouvrir fichier"));
-	fichier->Append(M_SAUVEGARDER, wxT("Sauvegarder"));
-	gestion->Append(M_GESTION_TRIANGLES, wxT("Gestion des triangles"));
-	valeurs_courantes->Append(M_COULEUR, wxT("Couleur courante"));
-	valeurs_courantes->Append(M_EPAISSEUR_TRAIT, wxT("Epaisseur trait"));
-	popupmenu.Append(POPUP_FICHIER, wxT("Fichier") ,fichier);
-	popupmenu.Append(POPUP_GESTION, wxT("Gestion") ,gestion);
-	popupmenu.Append(POPUP_VAL_COURANTES, wxT("Valeurs courantes") ,valeurs_courantes);
+
+	GetClientSize(&w,&h);
+	x = e.GetX() - w/2;
+	y = h/2 - e.GetY();
+	selected_tri = est_dans_triangle(x, y);
+	if(selected_tri != -1)
+	{
+		popupmenu.Append(POPUP_PROPRIETES, wxT("Propriétés"));
+		popupmenu.Append(POPUP_SUPPRIMER, wxT("Supprimer"));
+	}
+	else
+	{
+		wxMenu * fichier = new wxMenu;
+		wxMenu * gestion = new wxMenu;
+		wxMenu * valeurs_courantes = new wxMenu;
+		fichier->Append(M_OUVRIR, wxT("Ouvrir fichier"));
+		fichier->Append(M_SAUVEGARDER, wxT("Sauvegarder"));
+		gestion->Append(M_GESTION_TRIANGLES, wxT("Gestion des triangles"));
+		valeurs_courantes->Append(M_COULEUR, wxT("Couleur courante"));
+		valeurs_courantes->Append(M_EPAISSEUR_TRAIT, wxT("Epaisseur trait"));
+		popupmenu.Append(POPUP_FICHIER, wxT("Fichier") ,fichier);
+		popupmenu.Append(POPUP_GESTION, wxT("Gestion") ,gestion);
+		popupmenu.Append(POPUP_VAL_COURANTES, wxT("Valeurs courantes") ,valeurs_courantes);
+	}
 	PopupMenu( &popupmenu, e.GetX(), e.GetY() );
+}
+
+int OpenGLCanvas::est_dans_triangle(int x, int y)
+{
+	std::cout << "x : " << x << " y : " << y << std::endl;
+	int k(0);
+	Triangle *t;
+	for(int i(0); i < main_frame->getNombreTriangles() ; i++)
+	{
+		t = main_frame->getTri(i + k);
+		while(! t->existe())
+			t = main_frame->getTri(i + (++k));
+		if(t->IsPointInTriangle(x,y))
+			return i + k ;
+	}
+	return -1;
+}
+
+void OpenGLCanvas::OnContextPptes(wxCommandEvent& e)
+{
+}
+
+void OpenGLCanvas::OnContextSuppr(wxCommandEvent& e)
+{
+	main_frame->supprimerTriangle(selected_tri);
 }
