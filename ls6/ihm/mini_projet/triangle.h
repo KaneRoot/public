@@ -19,6 +19,7 @@ class Triangle
 		void setP(int n, float x, float y);
 		float getPX(int n);
 		float getPY(int n);
+		bool IsPointInTriangle(int x, int y);
 };
 
 #endif // #ifndef __TRIANGLE_H__
