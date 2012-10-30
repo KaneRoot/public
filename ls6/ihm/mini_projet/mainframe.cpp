@@ -19,6 +19,7 @@ CMainFrame::CMainFrame(const wxString& title, const wxPoint& pos, const wxSize& 
 	canvas_opengl = new OpenGLCanvas(this,CANVAS_OPENGL, wxDefaultPosition, wxDefaultSize, 
 			0, wxT("MonGLCanvas"));
 	setCouleurCourante(0,255,0);
+	setEpaisseurTraitCourante(2);
 } //constructor
 
 void CMainFrame::CreateMyToolBar()

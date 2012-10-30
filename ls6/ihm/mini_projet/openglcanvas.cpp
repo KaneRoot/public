@@ -6,6 +6,7 @@ BEGIN_EVENT_TABLE(OpenGLCanvas, wxGLCanvas)
 	EVT_SIZE(OpenGLCanvas::OnSize)
 	EVT_ERASE_BACKGROUND(OpenGLCanvas::OnEraseBackground)
 	EVT_LEFT_DOWN(OpenGLCanvas::OnLeftDown)
+	EVT_RIGHT_DOWN(OpenGLCanvas::OnRightDown)
 	EVT_LEFT_UP(OpenGLCanvas::OnLeftUp)
 	EVT_MOTION(OpenGLCanvas::OnMouseMove)
 END_EVENT_TABLE()
@@ -76,11 +77,15 @@ void OpenGLCanvas::Draw()
 		glEnd();
 	}
 	wxColour * couleur_cour;
-	// TODO : afficher le triangle en cours de construction
 	switch(main_frame->getNbPointsDefinis())
 	{
 		case 1 : 
-			//std::cout << "case 1 :: px0 : " << main_frame->getTriangleCourant()->getPX(0) << " :: py0 : " << main_frame->getTriangleCourant()->getPY(0) << " :: pcourant x : " << main_frame->getPointCourant().x << " :: pcourant y : " << main_frame->getPointCourant().y << std::endl;
+			/* 
+			 std::cout << "case 1 :: px0 : " << main_frame->getTriangleCourant()->getPX(0) << " :: 
+			 py0 : " << main_frame->getTriangleCourant()->getPY(0) << " :: pcourant x : " 
+			 << main_frame->getPointCourant().x << " :: pcourant y : " << 
+			 main_frame->getPointCourant().y << std::endl; 
+			*/
 			glBegin(GL_LINES);
 				couleur_cour = main_frame->getCouleurCourante();
 				glColor3f(couleur_cour->Red(),couleur_cour->Green(), couleur_cour->Blue());
@@ -90,11 +95,16 @@ void OpenGLCanvas::Draw()
 			glEnd();
 			break;
 		case 2 :
-			std::cout << "case 2" << std::endl;
+			couleur_cour = main_frame->getCouleurCourante();
 			glBegin(GL_TRIANGLES);
-				couleur_cour = main_frame->getCouleurCourante();
 				glColor3f(couleur_cour->Red(),couleur_cour->Green(), couleur_cour->Blue());
-				glLineWidth(main_frame->getEpaisseurTraitCourante());
+				//glLineWidth(main_frame->getEpaisseurTraitCourante());
+				glVertex2i(main_frame->getTriangleCourant()->getPX(0), main_frame->getTriangleCourant()->getPY(0));
+				glVertex2i(main_frame->getTriangleCourant()->getPX(1), main_frame->getTriangleCourant()->getPY(1));
+				glVertex2i(main_frame->getPointCourant().x, main_frame->getPointCourant().y);
+			glEnd();
+			glLineWidth((float) main_frame->getEpaisseurTraitCourante());
+			glBegin(GL_LINE_LOOP);
 				glVertex2i(main_frame->getTriangleCourant()->getPX(0), main_frame->getTriangleCourant()->getPY(0));
 				glVertex2i(main_frame->getTriangleCourant()->getPX(1), main_frame->getTriangleCourant()->getPY(1));
 				glVertex2i(main_frame->getPointCourant().x, main_frame->getPointCourant().y);
@@ -144,4 +154,21 @@ void OpenGLCanvas::OnLeftUp(wxMouseEvent& e)
 	x = e.GetX() - w/2;
 	y = h/2 - e.GetY();
 	main_frame->ajoute_point_triangle_courant(x,y);
+}
+
+void OpenGLCanvas::OnRightDown(wxMouseEvent& e)
+{
+	wxMenu popupmenu;
+	wxMenu * fichier = new wxMenu;
+	wxMenu * gestion = new wxMenu;
+	wxMenu * valeurs_courantes = new wxMenu;
+	fichier->Append(M_OUVRIR, wxT("Ouvrir fichier"));
+	fichier->Append(M_SAUVEGARDER, wxT("Sauvegarder"));
+	gestion->Append(M_GESTION_TRIANGLES, wxT("Gestion des triangles"));
+	valeurs_courantes->Append(M_COULEUR, wxT("Couleur courante"));
+	valeurs_courantes->Append(M_EPAISSEUR_TRAIT, wxT("Epaisseur trait"));
+	popupmenu.Append(POPUP_FICHIER, wxT("Fichier") ,fichier);
+	popupmenu.Append(POPUP_GESTION, wxT("Gestion") ,gestion);
+	popupmenu.Append(POPUP_VAL_COURANTES, wxT("Valeurs courantes") ,valeurs_courantes);
+	PopupMenu( &popupmenu, e.GetX(), e.GetY() );
 }
