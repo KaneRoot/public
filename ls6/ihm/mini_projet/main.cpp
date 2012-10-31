@@ -1,5 +1,6 @@
 #include "wx/wx.h" 
 #include <wx/menu.h>
+#include <wx/html/helpctrl.h>
 #include "dialogs.h"
 #include "mainframe.h"
 #include "openglcanvas.h"
@@ -41,16 +42,19 @@ bool MyApp::OnInit()
 
 	// aide
 	menu_bar->Append(aide_menu, wxT("Aide"));
+	aide_menu->Append(M_AIDE, wxT("Ouvrir aide\tCtrl-A"));
 	aide_menu->Append(M_VERSION, wxT("Version\tCtrl-V"));
 
 	m_MainFrame->SetMenuBar(menu_bar);
 	m_MainFrame->CreateMyToolBar();
 
-	m_MainFrame->Show(TRUE);
+	if(! m_MainFrame->help.Initialize(wxT("HELP")))
+	{
+		wxLogError(wxT("Cannot initialize the help system, aborting."));
+		return FALSE;
+	}
 
-	// Test des boîtes de dialogue
-	//	ProprietesDialog vdlg(m_MainFrame, -1, wxT("Proprietes"));
-	//	vdlg.ShowModal();
+	m_MainFrame->Show(TRUE);
 
 	return TRUE;
 } 

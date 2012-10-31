@@ -11,6 +11,7 @@ BEGIN_EVENT_TABLE(CMainFrame, wxFrame)
 	EVT_MENU(M_GESTION_TRIANGLES, CMainFrame::OnGestionTriangles)
 	EVT_MENU(M_TOOLBAR, CMainFrame::OnToolBar)
 	EVT_MENU(M_VERSION, CMainFrame::OnVersion)
+	EVT_MENU(M_AIDE, CMainFrame::OnHelp)
 END_EVENT_TABLE()
 
 CMainFrame::CMainFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
@@ -18,8 +19,8 @@ CMainFrame::CMainFrame(const wxString& title, const wxPoint& pos, const wxSize& 
 {
 	canvas_opengl = new OpenGLCanvas(this,CANVAS_OPENGL, wxDefaultPosition, wxDefaultSize, 
 			0, wxT("MonGLCanvas"));
-	setCouleurCourante(0,255,0);
-	setEpaisseurTraitCourante(2);
+	setCouleurCourante(0,255,0);	// valeur totalement arbitraire
+	setEpaisseurTraitCourante(2);	// valeur totalement arbitraire
 } //constructor
 
 void CMainFrame::CreateMyToolBar()
@@ -201,6 +202,11 @@ void CMainFrame::OnVersion(wxCommandEvent& event)
 {
 	VersionDialog vdlg(this, -1, wxT("Version"));
 	vdlg.ShowModal();
+}
+
+void CMainFrame::OnHelp(wxCommandEvent& event)
+{
+	help.DisplayContents();
 }
 
 // S'il existe un triangle

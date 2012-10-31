@@ -11,6 +11,7 @@
 #include <wx/accel.h>
 #include <wx/toolbar.h>
 #include <wx/glcanvas.h>
+#include <wx/html/helpctrl.h>
 
 class OpenGLCanvas;
 
@@ -33,7 +34,7 @@ enum { NOMBRE_TRIANGLES_MAX = 5 };
 
 enum { M_NOUVEAU_FICHIER, M_OUVRIR, M_SAUVEGARDER, M_QUITTER, 
 	M_EPAISSEUR_TRAIT, M_COULEUR, M_GESTION_TRIANGLES, M_TOOLBAR,
-	M_VERSION, TOOLBAR_TOOLS,
+	M_VERSION, M_AIDE, TOOLBAR_TOOLS,
 	CANVAS_OPENGL
 };
 
@@ -64,6 +65,7 @@ public:
 	int getNbPointsDefinis();
 	void setEpaisseurTraitCourante(int x);
 	int getEpaisseurTraitCourante();
+	wxHtmlHelpController help;
 
 private:
 	wxToolBar *m_toolbar;
@@ -78,6 +80,7 @@ private:
 	void OnGestionTriangles(wxCommandEvent& event);
 	void OnToolBar(wxCommandEvent& event);
 	void OnVersion(wxCommandEvent& event);
+	void OnHelp(wxCommandEvent& event);
 
 	void ajouter_tri_courant_tab_tri();
 	DECLARE_EVENT_TABLE();

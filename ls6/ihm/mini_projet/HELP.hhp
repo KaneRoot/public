@@ -1,0 +1,19 @@
+
+[OPTIONS]
+Compatibility=1.1 or later
+Compiled file=HELP.CHM
+Contents file=HELP.hhc
+Default topic=Introduction.htm
+Default Window=win
+Error log file=Errlog.txt
+Language=0x040C
+
+[FILES]
+
+C:\EasyHelp\Projects\Introduction.htm
+C:\EasyHelp\Projects\Demarrage.htm
+C:\EasyHelp\Projects\Raccourcis.htm
+
+[MERGE FILES]
+
+[INFOTYPES]
