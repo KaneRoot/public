@@ -105,6 +105,7 @@ void OpenGLCanvas::Draw()
 				glVertex2i(main_frame->getTriangleCourant()->getPX(1), main_frame->getTriangleCourant()->getPY(1));
 				glVertex2i(main_frame->getPointCourant().x, main_frame->getPointCourant().y);
 			glEnd();
+			glColor3d(0,0,0);
 			glLineWidth((float) main_frame->getEpaisseurTraitCourante());
 			glBegin(GL_LINE_LOOP);
 				glVertex2i(main_frame->getTriangleCourant()->getPX(0), main_frame->getTriangleCourant()->getPY(0));
@@ -113,7 +114,7 @@ void OpenGLCanvas::Draw()
 			glEnd();
 			break;
 		default :
-			std::cout << "case 3" << std::endl;
+			//std::cout << "case 3" << std::endl;
 			break;
 	}
 }
@@ -192,7 +193,7 @@ void OpenGLCanvas::OnRightDown(wxMouseEvent& e)
 
 int OpenGLCanvas::est_dans_triangle(int x, int y)
 {
-	std::cout << "x : " << x << " y : " << y << std::endl;
+	//std::cout << "x : " << x << " y : " << y << std::endl;
 	int k(0);
 	Triangle *t;
 	for(int i(0); i < main_frame->getNombreTriangles() ; i++)
@@ -208,7 +209,8 @@ int OpenGLCanvas::est_dans_triangle(int x, int y)
 
 void OpenGLCanvas::OnContextPptes(wxCommandEvent& e)
 {
-	ProprietesDialog vdlg( this, -1, wxT("Proprietes"), main_frame->getTri(selected_tri));
+	Triangle *t = main_frame->getTri(selected_tri);
+	ProprietesDialog vdlg( this, -1, wxT("Proprietes"), t);
 	vdlg.ShowModal();
 }
 

@@ -6,6 +6,8 @@ void Triangle::setP(int n, float x, float y)
 	p[n].y = y;
 }
 
+void Triangle::setThickness(int x) { thickness = x; }
+int Triangle::getThickness() { return thickness; }
 float Triangle::getPX(int n) { return p[n].x; }
 float Triangle::getPY(int n) { return p[n].y; } 
 

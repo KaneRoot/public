@@ -72,7 +72,7 @@ class ProprietesDialog: public wxDialog {
 		    ProprietesDialog(wxWindow *parent, wxWindowID id, const wxString &title, Triangle* ptriangle);
 			virtual ~ProprietesDialog();
 			void ChangerTexteIdTriangle(wxString& idTriangle);
-			void ChangerEpaisseurTrait(wxCommandEvent& e);
+			void ChangerEpaisseurTrait(wxSpinEvent& e);
 			void ChangerCouleurTriangle(wxCommandEvent& e);
 			wxRadioBox *radiobox_couleur;
 			wxSpinCtrl *spinctl_epaisseur_trait;

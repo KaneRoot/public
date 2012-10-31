@@ -12,6 +12,7 @@ BEGIN_EVENT_TABLE(TriangleDialog, wxDialog)
 	EVT_BUTTON(TEXTE_SUPPRIMER, TriangleDialog::OnSupprimer)
 END_EVENT_TABLE ()
 BEGIN_EVENT_TABLE(ProprietesDialog, wxDialog)
+	EVT_SPINCTRL(ID_EPAISSEUR_TRAIT_SPINCTRL, ProprietesDialog::ChangerEpaisseurTrait)
 	EVT_RADIOBOX(COULEUR_RD_BOX, ProprietesDialog::ChangerCouleurTriangle)
 END_EVENT_TABLE ()
 
@@ -252,7 +253,7 @@ ProprietesDialog::ProprietesDialog( wxWindow *parent, wxWindowID id, const wxStr
 	// Choix couleur 
 	if(tri->colour.Red() == 255)
 		radiobox_couleur->SetSelection(0);
-	if(tri->colour.Green() == 255)
+	else if(tri->colour.Green() == 255)
 		radiobox_couleur->SetSelection(1);
 	else
 		radiobox_couleur->SetSelection(2);
@@ -281,13 +282,14 @@ void ProprietesDialog::ChangerTexteIdTriangle(wxString& idTriangle)
 	textctrl_id_boite_texte->AppendText(idTriangle);
 }
 
-void ProprietesDialog::ChangerEpaisseurTrait(wxCommandEvent& e)
+void ProprietesDialog::ChangerEpaisseurTrait(wxSpinEvent& e)
 {
+	//std::cout << "Epaisseur Trait : " << e.GetInt() << std::endl;
+	tri->setThickness(e.GetInt());
 }
 
 void ProprietesDialog::ChangerCouleurTriangle(wxCommandEvent& e)
 {
-	std::cout << "couleur sélectionnée : " << e.GetInt() << std::endl;
 	switch(e.GetInt())
 	{
 		case 0 : tri->colour.Set(255,0,0); break;

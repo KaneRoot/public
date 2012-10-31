@@ -22,6 +22,8 @@ class Triangle
 		bool existe();
 		void supprimer();
 		void creer();
+		void setThickness(int x);
+		int getThickness();
 
 	private:
 		bool existe_var;
