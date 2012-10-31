@@ -1,4 +1,4 @@
-FICHIER = assignment_3
+FICHIER = global
 all : compilation affichage
 
 compilation :
@@ -8,6 +8,7 @@ affichage :
 	evince $(FICHIER).pdf
 
 clean :
-	rm $(FICHIER).log $(FICHIER).aux
+	@-rm $(FICHIER).log $(FICHIER).aux
+
 distclean : clean
-	rm $(FICHIER).pdf
+	@-rm $(FICHIER).pdf
