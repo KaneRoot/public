@@ -196,13 +196,13 @@ int OpenGLCanvas::est_dans_triangle(int x, int y)
 	//std::cout << "x : " << x << " y : " << y << std::endl;
 	int k(0);
 	Triangle *t;
-	for(int i(0); i < main_frame->getNombreTriangles() ; i++)
+	for(int i(NOMBRE_TRIANGLES_MAX -1), k = 0; (i - k) >= 0; i--)
 	{
-		t = main_frame->getTri(i + k);
+		t = main_frame->getTri(i - k);
 		while(! t->existe())
-			t = main_frame->getTri(i + (++k));
+			t = main_frame->getTri(i - (++k));
 		if(t->IsPointInTriangle(x,y))
-			return i + k ;
+			return i - k ;
 	}
 	return -1;
 }
