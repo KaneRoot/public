@@ -27,8 +27,7 @@ void OpenGLCanvas::OnPaint( wxPaintEvent& event )
 {
 	wxPaintDC dc(this);
 	SetCurrent();
-	Draw();					// fonction de dessins
-	SwapBuffers();
+	redessiner();
 }
 
 void OpenGLCanvas::OnSize( wxSizeEvent& event )
@@ -41,6 +40,12 @@ void OpenGLCanvas::OnSize( wxSizeEvent& event )
 
 void OpenGLCanvas::OnEraseBackground( wxEraseEvent& event )
 {
+}
+
+void OpenGLCanvas::redessiner()
+{
+	Draw();
+	SwapBuffers();
 }
 
 void OpenGLCanvas::Draw()
@@ -133,8 +138,7 @@ void OpenGLCanvas::OnMouseMove(wxMouseEvent& e)
 	if(main_frame->isDrawing())
 	{
 		//std::cout << "px0 : " << main_frame->getTriangleCourant()->getPX(0) << " :: py0 : " << main_frame->getTriangleCourant()->getPY(0) << " :: pcourant x : " << main_frame->getPointCourant().x << " :: pcourant y : " << main_frame->getPointCourant().y << std::endl;
-		Draw();					// fonction de dessins
-		SwapBuffers();
+		redessiner();
 	}
 }
 

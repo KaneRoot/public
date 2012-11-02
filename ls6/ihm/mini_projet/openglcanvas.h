@@ -18,6 +18,7 @@ class OpenGLCanvas: public wxGLCanvas {
 		const wxPoint& pos, const wxSize& size, long style, const wxString& name);
 		~OpenGLCanvas(void);
 		CMainFrame * main_frame;
+		void redessiner();
 
 	private :
 		int selected_tri;

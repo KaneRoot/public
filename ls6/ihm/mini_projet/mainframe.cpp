@@ -49,6 +49,7 @@ void CMainFrame::OnNew(wxCommandEvent& event)
 {
 	supprimerTousTriangles();
 	activerGestionTriangles(false);
+	canvas_opengl->redessiner();
 }
 
 void CMainFrame::OnQuit(wxCommandEvent& event)
