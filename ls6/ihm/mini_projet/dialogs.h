@@ -12,6 +12,7 @@
 #include <wx/combobox.h>
 #include <wx/colour.h>
 #include <wx/sizer.h>
+#include <wx/slider.h>
 
 #include "mainframe.h"
 
@@ -34,6 +35,8 @@ class EpaisseurDialog: public wxDialog {
 		    EpaisseurDialog(wxWindow *parent, wxWindowID id, const wxString &title);
 			virtual ~EpaisseurDialog();
 	private :
+			void OnScroll(wxScrollEvent& e);
+			CMainFrame *main_frame;
 			wxBoxSizer *conteneur;
 			wxStaticText *texte;
 			wxSlider *slider;

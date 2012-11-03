@@ -6,6 +6,7 @@ BEGIN_EVENT_TABLE(ColorDialog, wxDialog)
 	EVT_RADIOBOX(COULEUR_RD_BOX, ColorDialog::OnChangerCouleur)
 END_EVENT_TABLE ()
 BEGIN_EVENT_TABLE(EpaisseurDialog, wxDialog)
+	EVT_SCROLL(EpaisseurDialog::OnScroll)
 END_EVENT_TABLE ()
 BEGIN_EVENT_TABLE(TriangleDialog, wxDialog)
 	EVT_BUTTON(TEXTE_PROPRIETES, TriangleDialog::OnProprietes)
@@ -43,6 +44,7 @@ VersionDialog::~VersionDialog()
 
 EpaisseurDialog::EpaisseurDialog( wxWindow *parent, wxWindowID id, const wxString &title) : wxDialog( parent, id, title)
 {
+	main_frame = (CMainFrame *) parent;
 	conteneur = new wxBoxSizer( wxVERTICAL );
 	texte = new wxStaticText( this, V_ID_TEXTE, wxT("Choisir la nouvelle épaisseur de trait"));
 
@@ -61,6 +63,12 @@ EpaisseurDialog::EpaisseurDialog( wxWindow *parent, wxWindowID id, const wxStrin
 	 
 }
 
+
+void EpaisseurDialog::OnScroll(wxScrollEvent& e)
+{
+	//std::cout << "coucou " << slider->GetValue() << std::endl;
+	main_frame->setEpaisseurTraitCourante(slider->GetValue());
+}
 EpaisseurDialog::~EpaisseurDialog()
 {
 	/*
