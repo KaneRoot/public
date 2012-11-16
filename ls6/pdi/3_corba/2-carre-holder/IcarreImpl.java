@@ -1,11 +1,10 @@
 import org.omg.CORBA.* ;
 
-public class IcarreImpl
-  extends _IcarreImplBase
+public class IcarreImpl extends _IcarreImplBase
 {
-  public int carre (int source)
-  {
-    System.out.println( "carre : requete recue pour le nombre : " + source ) ;
-    return source * source ;
-  }
+	public void carre (int source, LongHolder resultat)
+	{
+		System.out.println( "carre : requete recue pour le nombre : " + source ) ;
+		resultat.value = source * source ;
+	}
 }
