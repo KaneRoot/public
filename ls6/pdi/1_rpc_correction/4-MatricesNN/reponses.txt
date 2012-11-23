@@ -1,0 +1,16 @@
+NFS limite la taille des appels RPC via le protocole UDP par défaut.
+Cette taille doit être un multiple de 1024 et est au moins 8Ko.
+La valeur par défaut sur ubuntu est 9*1024 = 9216.
+
+Ainsi, un appel avec deux matrices de taille 33*33, cela donne une transmission de :
+33*33 float = 1089 float
++ 1 entier = 1090 * 4 octets = 4360 octets
+* 2 matrices = 8720 octets
+CONCLUSION : ça passe
+
+Un appel avec deux matrices de taille 34*34 :
+34*34 float = 1156 float
++ 1 entier = 1157 * 4 octets = 4628
+* 2 matrices = 9256 octets
+CONCLUSION : ça ne passe pas.
+
