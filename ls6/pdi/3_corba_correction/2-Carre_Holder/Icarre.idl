@@ -1,0 +1,4 @@
+interface Icarre
+{
+	void carre(in long source, out long resultat) ;
+} ;

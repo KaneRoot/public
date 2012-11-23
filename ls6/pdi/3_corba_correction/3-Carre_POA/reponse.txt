@@ -1,0 +1,2 @@
+Désormais, idlj génère un Stub ainsi qu'un fichier POA.
+C'est le fichier POA qu'il faut implémenter.

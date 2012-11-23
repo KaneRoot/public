@@ -1,0 +1,6 @@
+interface Compte {
+      boolean deposeBillets(in float montant); 
+      boolean retireBillets(in float montant); 
+      float afficheMontant(); 
+      boolean virementCompteaCompte(in Compte compte); 
+};

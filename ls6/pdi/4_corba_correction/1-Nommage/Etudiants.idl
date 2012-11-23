@@ -1,0 +1,8 @@
+module Etudiants
+{
+  interface  Etudiant
+	{
+    readonly attribute string nom ;
+    readonly attribute string prenom ;
+  } ;
+} ;

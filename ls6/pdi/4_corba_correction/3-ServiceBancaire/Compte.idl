@@ -1,0 +1,7 @@
+interface Compte
+{
+  boolean deposeLiquide(in float montant) ;
+  boolean retireLiquide(in float montant) ;
+  float afficheMontant() ;
+  boolean virementCompteaCompte(in Compte compte, in float montant) ; 
+} ;

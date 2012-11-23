@@ -1,0 +1,113 @@
+En bref :
+ - Une classe Holder s'occupe de la gestion de paramètres modifiables (de type out ou inout) ; là où le language Java ne le permet pas.
+ - Une classe Holder est automatiquement générée par la projection IDL pour tout type ou toute classe qui y est définie.
+ - On a besoin d'une classe Holder lorsque l'on spécifie des types out ou inout dans les paramètres de l'interface IDL. 
+
+En détail (rien de mieux que les explications de l'API corba) :
+
+Support for out and inout parameter passing modes requires the use of additional holder classes.
+Because the Java programming language does not support out or inout parameters, holder classes are needed as a means of passing a parameter that can be modified.
+To support portable stubs and skeletons, holder classes also implement the org.omg.CORBA.portable.Streamable interface.
+
+Holder classes are named by appending "Holder" to the name of the type.
+The name of the type refers to its name in the Java programming language.
+For example, a holder class for the interface named Account in the Java programming language would be named AccountHolder.
+
+Holder classes are available for all of the basic IDL datatypes in the org.omg.CORBA package.
+So, for example, there are already-defined classes for LongHolder, ShortHolder, FloatHolder, and so on.
+Classes are also generated for all named user-defined IDL types except those defined by typedefs. (Note that in this context user defined includes types that are defined in OMG specifications such as those for the Interface Repository, and other OMG services.)
+
+Each holder class has:
+
+    * a constructor from an instance
+    * a default constructor
+    * a public instance member, value which is the typed value.
+    * a method for reading an input stream and assigning the contents to the type's value field
+    * a method for writing the value of the value field to an output stream
+    * a method for getting the typecode of the type 
+
+The default constructor sets the value field to the default value for the type as defined by the Java language:
+
+    * false for boolean
+    * 0 for numeric and char types
+    * null for strings and object references 
+
+As an example, if the interface Account, defined in OMG IDL, were mapped to the Java programming language, the following holder class would be generated:
+
+public final class AccountHolder implements 
+    org.omg.CORBA.portable.Streamable
+{
+  // field that holds an Account object
+  public Account value = null;
+
+  // default constructor
+  public AccountHolder ()
+  {
+  }
+  
+  // creates a new AccountHolder from initialValue
+  public AccountHolder (Account initialValue)
+  {
+    value = initialValue;
+  }
+  
+  // reads the contents of i and assigns the contents to value
+  public void _read (org.omg.CORBA.portable.InputStream i)
+  {
+    value = AccountHelper.read (i);
+  }
+
+  // writes value to o
+  public void _write (org.omg.CORBA.portable.OutputStream o)
+  {
+    AccountHelper.write (o, value);
+  }
+ 
+  // returns the typecode for Account
+  public org.omg.CORBA.TypeCode _type ()
+  {
+    return AccountHelper.type ();
+  }
+
+}
+
+For more information on Holder classes, see Chapter 1.4, Mapping for Basic Types in the OMG IDL to Java Language Mapping. The Holder classes defined in the package org.omg.CORBA are:
+
+     AnyHolder
+     AnySeqHolder
+     BooleanHolder
+     BooleanSeqHolder
+     ByteHolder
+     CharHolder
+     CharSeqHolder
+     CurrentHolder
+     DoubleHolder
+     DoubleSeqHolder
+     FixedHolder
+     FloatHolder
+     FloatSeqHolder
+     IntHolder
+     LongHolder
+     LongLongSeqHolder
+     LongSeqHolder
+     ObjectHolder
+     OctetSeqHolder
+     ParameterModeHolder
+     PolicyErrorHolder
+     PolicyListHolder
+     PrincipalHolder
+     ServiceInformationHolder
+     ShortHolder
+     ShortSeqHolder
+     StringHolder
+     StringSeqHolder
+     TypeCodeHolder
+     ULongLongSeqHolder
+     ULongSeqHolder
+     UnknownUserExceptionHolder
+     UShortSeqHolder
+     ValueBaseHolder
+     WCharSeqHolder
+     WrongTransactionHolder
+     WStringSeqHolder
+

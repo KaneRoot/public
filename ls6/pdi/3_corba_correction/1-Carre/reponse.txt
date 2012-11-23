@@ -1,0 +1,5 @@
+Un IOR minimal (tel que spécifié par le General Inter-ORB protocol) encode les éléments suivants :
+ - l'adresse IP de la machine hôte ;
+ - le numéro de port sur lequel l'application CORBA est en écoute sur cette machine ;
+ - une chaîne de caractères définissant la classe de l'objet distant sur laquelle la méthode sera invoquée ;
+ - La clé de l'objet, qui est utilisée par l'ORB du serveur pour identifier l'objet.

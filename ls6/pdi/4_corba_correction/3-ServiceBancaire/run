@@ -1,0 +1,14 @@
+case $1 in
+1)
+tnameserv -ORBInitialPort 1050 &
+;;
+2)
+java Serveur localhost 1050
+;;
+3)
+java Client1 localhost 1050
+;;
+4)
+java Client2 agence1 localhost 1050
+;;
+esac
