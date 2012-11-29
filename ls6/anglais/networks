@@ -1,0 +1,44 @@
+Is networking discipline or a domain ?
+Neither. It's a notion, so it's really near to the discipline but includes a lot of domains.
+So, in my opinion this is a huge set of disciplines and domains. 
+We cannot choose one of them, it's both and more. 
+Networking could not be assimilated to the computer science, we have a network whenever we have an interaction.
+
+What is the difference between networking and distributed systems ?
+There is no difference.
+Distributed systems is a networking usage. 
+We know and we work with the fact that a system is connected to others.
+Networking is the fact that systems are in interaction.
+Why this interaction ? To work together and provide a service (like e-mail service) to people or speak more technically to share data.
+Sharing data allows to share more (or more specific in the computing science) like calculation time.
+And it's the definition of distributed systems !
+
+Could you find your own recipe for writing a paper on a networking problem ?
+Obviously. Presently I'm the president of an associative Internet Service Provider, so I could talk a lot about the networking.
+And if technically I'm not as good as we could expect, I think I've a lot to say about the social aspect, and more specifically about some kind of censorship we face everyday even in France.
+
+What is "definition and placement of function" ?
+It's the separation between what an host or the network should do.
+I'm very concerned about this subject, in particular about some functionalities that I don't want to see on Internet network.
+Like the possibility to know what is shared between people, to control who can access to a website and who can't.
+This access control should be on the host (the server) and not on the network. There is a lot to say about this.
+
+What is the major change due to recent innovations ?
+Cloud computing is a marketing term, nothing more, but there are some real innovations like the virtual machines, and others.
+To talk about the virtual machines, it allows us to manage more efficiently our services, and this could widespread the use of services at home, instant installation service, hardware agnostic.
+This is an improvement but can we talk about major change ? I don't really know.
+
+In my opinion, the major change is the hardware improvement. 
+With this change, some companies have drawn people attention to their services (like e-mailing, Google with Gmail for instance) and they are able to provide these services freely but this is a totally centralized architecture.
+Before that, people had their e-mailing service on their own computer because nobody could do it for you efficiently and it was logic. 
+You don't give your letters to La Poste to keep them.
+So even if every single laptop can nowadays be sufficient to build an ISP, manage e-mails for thousand people and a lot more at the same time, people still use a centralized service that watches their own letters.
+In conclusion, the hardware improvement allows to re-create the minitel, people are becoming « eye balls », passive.
+
+What are we doing ?
+The future of Internet, and more.
+
+Why networking is so cool ?
+Networking is not only the Internet, but 
+
+How to understand the Internet from this article ?
