@@ -9,13 +9,14 @@ There is no difference.
 Distributed systems is a networking usage. 
 We know and we work with the fact that a system is connected to others.
 Networking is the fact that systems are in interaction.
-Why this interaction ? To work together and provide a service (like e-mail service) to people or speak more technically to share data.
-Sharing data allows to share more (or more specific in the computing science) like calculation time.
+Why this interaction ? To work together and provide a service (like e-mail service) to people or to speak more technically to share data.
+Sharing data allows to share more than data, like calculation time (in computing science).
 And it's the definition of distributed systems !
 
 Could you find your own recipe for writing a paper on a networking problem ?
 Obviously. Presently I'm the president of an associative Internet Service Provider, so I could talk a lot about the networking.
 And if technically I'm not as good as we could expect, I think I've a lot to say about the social aspect, and more specifically about some kind of censorship we face everyday even in France.
+If I have to do a philosophic paper, I could talk about how I see the Internet and what are the research we should do to get it even more decentralized.
 
 What is "definition and placement of function" ?
 It's the separation between what an host or the network should do.
@@ -36,9 +37,21 @@ So even if every single laptop can nowadays be sufficient to build an ISP, manag
 In conclusion, the hardware improvement allows to re-create the minitel, people are becoming « eye balls », passive.
 
 What are we doing ?
-The future of Internet, and more.
+The future of Internet, and a lot more. Some research could change the way we live, the manner we talk, share information, or learn.
+Presently, networking is a lot of domains or disciplines and there are improvements to do, in algorithms we use every day to send, to crypt, to compress data for instance. 
+But there are also a lot to think about, like we talked 2 weeks ago : the Internet of things.
 
 Why networking is so cool ?
-Networking is not only the Internet, but 
+Networking is not only the Internet, but it's something that everybody know, and use. 
+Why networking is so cool ? Because it's concrete, tangible. 
+It's a field of research that bring new technologies instantly usable and relevant to our needs.
+We build real things that affect the world during our own lifetime.
+There are also a lot of interesting research with a lot of artifacts, and it's interesting to work on a power or storage efficiency of an electronic object you can touch. 
+It's not only a brunch of mathematical problems, without discredited the pure-science. I just think it's a kind of bonus.
 
 How to understand the Internet from this article ?
+Internet is an artifact. It was not something really interesting theoretically speaking but it's relevant to use it to access to some whole new kind of theoretical problems (algorithm optimizations and so on).
+Internet is a set of computers, routers, switches that compute paths algorithms and allow the creation of a lot of new services.
+Routers can be divided into three « planes » (it's can be a part of a software), and one of them could represent a problem.
+If the architecture of the Internet is virtually unbreakable, the fact that every entity that possess a router can choose arbitrary where the data flow will go brings a new business market : the transit.
+Transit is to go through a network to reach another. On the internet, it's not free. If you don't pay, you can't reach every Autonomous Systems, even if it's virtually possible.
