@@ -1,8 +1,11 @@
 Is networking discipline or a domain ?
 Neither. It's a notion, so it's really near to the discipline but includes a lot of domains.
 So, in my opinion this is a huge set of disciplines and domains. 
-We cannot choose one of them, it's both and more. 
-Networking could not be assimilated to the computer science, we have a network whenever we have an interaction.
+We cannot choose one of them, it's both.
+There are a lot of hardwares of softwares that solves practical problems, but there are a lot of theoretical problems still in suspend in cryptography or graph theory that are not only relevant to networking.
+The word « Network » could not be assimilated only to the computer science, we have a network whenever we have an interaction.
+Between people, computers, animals… and we can use our technologies (in computer network) to study theses networks.
+The question is too open.
 
 What is the difference between networking and distributed systems ?
 There is no difference.
@@ -17,6 +20,7 @@ Could you find your own recipe for writing a paper on a networking problem ?
 Obviously. Presently I'm the president of an associative Internet Service Provider, so I could talk a lot about the networking.
 And if technically I'm not as good as we could expect, I think I've a lot to say about the social aspect, and more specifically about some kind of censorship we face everyday even in France.
 If I have to do a philosophic paper, I could talk about how I see the Internet and what are the research we should do to get it even more decentralized.
+Presently, the Domain Name Service is barely centralized, maybe we could found another system to don't have what I call a point of failure, because it works the opposite the way the rest of Internet works.
 
 What is "definition and placement of function" ?
 It's the separation between what an host or the network should do.
@@ -28,7 +32,6 @@ What is the major change due to recent innovations ?
 Cloud computing is a marketing term, nothing more, but there are some real innovations like the virtual machines, and others.
 To talk about the virtual machines, it allows us to manage more efficiently our services, and this could widespread the use of services at home, instant installation service, hardware agnostic.
 This is an improvement but can we talk about major change ? I don't really know.
-
 In my opinion, the major change is the hardware improvement. 
 With this change, some companies have drawn people attention to their services (like e-mailing, Google with Gmail for instance) and they are able to provide these services freely but this is a totally centralized architecture.
 Before that, people had their e-mailing service on their own computer because nobody could do it for you efficiently and it was logic. 
@@ -40,6 +43,9 @@ What are we doing ?
 The future of Internet, and a lot more. Some research could change the way we live, the manner we talk, share information, or learn.
 Presently, networking is a lot of domains or disciplines and there are improvements to do, in algorithms we use every day to send, to crypt, to compress data for instance. 
 But there are also a lot to think about, like we talked 2 weeks ago : the Internet of things.
+Networking is simple : it's an interaction between two things.
+With that, we can use our imagination to build new kind of objects, tools or gadgets with mutual interactions.
+For instance, we can have sensors under our skin that transmit our feelings to other objects, like our music player that plays something relevant to your feelings at the moment.
 
 Why networking is so cool ?
 Networking is not only the Internet, but it's something that everybody know, and use. 
@@ -54,4 +60,4 @@ Internet is an artifact. It was not something really interesting theoretically s
 Internet is a set of computers, routers, switches that compute paths algorithms and allow the creation of a lot of new services.
 Routers can be divided into three « planes » (it's can be a part of a software), and one of them could represent a problem.
 If the architecture of the Internet is virtually unbreakable, the fact that every entity that possess a router can choose arbitrary where the data flow will go brings a new business market : the transit.
-Transit is to go through a network to reach another. On the internet, it's not free. If you don't pay, you can't reach every Autonomous Systems, even if it's virtually possible.
+Transit is to go through a network to reach another. On the internet, it's not free. If you don't pay, you can't reach every Autonomous Systems, even if it's virtually or technically possible.
