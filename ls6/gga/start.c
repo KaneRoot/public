@@ -66,19 +66,21 @@ void drawQuad(Point p1, Point p2, Point p3, Point p4)
 
 void drawCube()
 {
-	/*
-	Point p1 = pt(0.5,-0.5,-0.5);
-	Point p2 = pt(-0.5,-0.5,-0.5);
-	Point p3 = pt(-0.5,-0.5,0.5);
-	Point p4 = pt(0.5,-0.5,0.5);
-	Point p5 = pt(0.5,0.5,-0.5);
-	Point p6 = pt(-0.5,0.5,-0.5);
-	Point p7 = pt(-0.5,0.5,0.5);
-	Point p8 = pt(0.5,0.5,0.5);
-	drawQuad(p4,p1,p5,p8);
+	Point p1 = pt( ctxt.cube_dim,	-ctxt.cube_dim,	-ctxt.cube_dim);
+	Point p2 = pt( -ctxt.cube_dim,	-ctxt.cube_dim,	-ctxt.cube_dim);
+	Point p3 = pt( -ctxt.cube_dim,	-ctxt.cube_dim,	ctxt.cube_dim);
+	Point p4 = pt( ctxt.cube_dim,	-ctxt.cube_dim,	ctxt.cube_dim);
+	Point p5 = pt( ctxt.cube_dim,	ctxt.cube_dim,	-ctxt.cube_dim);
+	Point p6 = pt( -ctxt.cube_dim,	ctxt.cube_dim,	-ctxt.cube_dim);
+	Point p7 = pt( -ctxt.cube_dim,	ctxt.cube_dim,	ctxt.cube_dim);
+	Point p8 = pt( ctxt.cube_dim,	ctxt.cube_dim,	ctxt.cube_dim);
+	drawQuad(p1,p2,p3,p4);
 	drawQuad(p5,p6,p7,p8);
-	*/
-	glutSolidCube(ctxt.cube_dim);
+	drawQuad(p1,p5,p8,p4);
+	drawQuad(p1,p5,p6,p2);
+	drawQuad(p3,p7,p6,p2);
+	drawQuad(p3,p4,p8,p7);
+	//glutSolidCube(ctxt.cube_dim);
 	// à ecrire
 }
 
@@ -106,8 +108,8 @@ void display()
 
 	// ** Dessinez ici **
 
-	glTranslatef (-1.0, -1.0, -3.0);
-	glRotatef(-70.0f, 1.0f, 0.0f, 0.0f);
+	glTranslatef (-4.0, -2.0, -5.0);
+	glRotatef(-90.0f, 1.0f, 0.0f, 0.0f);
 	glColor3f (1.0f, 0.0f, 0.0f);			// rouge
 	drawLine(0,0,0,1,0,0);					// x
 	glColor3f (0.0f, 1.0f, 0.0f);			// vert 
@@ -115,32 +117,68 @@ void display()
 	glColor3f (0.0f, 0.0f, 1.0f);			// bleu
 	drawLine(0,0,0,0,0,1);					// z
 	glColor3f (1.0f, 1.0f, 1.0f);
-	//glutSolidCube ( 0.5 ); // Cube Size on screen
 	for(i = 0 ; i < 10 ; i++)
 	{
 		glColor3f(0.5f,0.0,0.5f);
 		drawLine(0,i,0,10,i,0);
 		drawLine(i,0,0,i,10,0);
 	}
+	// Repere du monde
 	glColor3f(0.0,0.0,1.0);
-	glTranslatef (2.0, 2.0, 1.0);
+	glTranslatef(4.5,1.5,2.5);
 	glPushMatrix();
+	// Torse
 	glScalef(1,1,2);
-	ctxt.cube_dim = 1.0;
+	ctxt.cube_dim = 0.5;
 	drawCube();
 
 	// dessin de la tête par rapport au torse
 	glPopMatrix();
+	glPushMatrix();
 	glTranslatef (0.0, 0.0, 1.25);
-	ctxt.cube_dim = 0.5;
+	ctxt.cube_dim = 0.2;
 	drawCube();
-	glEnd ();
-	glFlush();
-	// Repere du monde
-
-	// Torse
 
 	// Autres membres
+	// bras gauche
+	glPopMatrix();
+	glPushMatrix();
+	glColor3f(1.0,0.0,0.0);
+	glTranslatef (-0.8, 0.0, 0.0);
+	glRotatef(10.0f, 0.0f, 1.0f, 0.0f);
+	glScalef(0.3,0.3,2.0);
+	ctxt.cube_dim = 0.5;
+	drawCube();
+	// bras droit
+	glPopMatrix();
+	glPushMatrix();
+	glColor3f(1.0,0.0,0.0);
+	glTranslatef (0.8, 0.0, 0.0);
+	glRotatef(-10.0f, 0.0f, 1.0f, 0.0f);
+	glScalef(0.3,0.3,2.0);
+	ctxt.cube_dim = 0.5;
+	drawCube();
+
+	// jambe gauche
+	glPopMatrix();
+	glPushMatrix();
+	glColor3f(0.0,1.0,0.0);
+	glTranslatef (-0.2, 0.0, -1.5);
+	//glRotatef(10.0f, 0.0f, 1.0f, 0.0f);
+	glScalef(0.3,0.3,2.0);
+	ctxt.cube_dim = 0.5;
+	drawCube();
+	
+
+	// jambe droite
+	glPopMatrix();
+	glPushMatrix();
+	glColor3f(0.0,1.0,0.0);
+	glTranslatef (0.2, 0.0, -1.5);
+	//glRotatef(10.0f, 0.0f, 1.0f, 0.0f);
+	glScalef(0.3,0.3,2.0);
+	ctxt.cube_dim = 0.5;
+	drawCube();
 
 	glutSwapBuffers();
 }
@@ -153,16 +191,28 @@ void keyboard(unsigned char keycode, int x, int y)
 	/* touche ECHAP */
 	if (keycode=='z')
 	{
-		printf("Touche z enfoncée\n");
+		//printf("Touche z enfoncée\n");
+		glPopMatrix();
+		glTranslatef(0.0,0.5,0.0);
+		glPushMatrix();
 	}
 	if (keycode=='s')
 	{
+		glPopMatrix();
+		glTranslatef(0.0,-0.5,0.0);
+		glPushMatrix();
 	}
 	if (keycode=='q')
 	{
+		glPopMatrix();
+		glTranslatef(-0.5,0.0,0.0);
+		glPushMatrix();
 	}
 	if (keycode=='d')
 	{
+		glPopMatrix();
+		glTranslatef(0.5,0.0,0.0);
+		glPushMatrix();
 	}
 
 	if (keycode=='a')
@@ -176,7 +226,8 @@ void keyboard(unsigned char keycode, int x, int y)
 }
 
 void reshape(int w, int h)
-{}
+{
+}
 
 void mouse(int button, int state, int x, int y)
 {
@@ -191,7 +242,11 @@ void mouse(int button, int state, int x, int y)
 void idle()
 {
 	// animation du personnage ici
-
+	/*
+	glPopMatrix();
+	glRotatef(10.0f, 0.0f, 0.0f, 1.0f);
+	glPushMatrix();
+	*/
 	glutPostRedisplay();
 }
 

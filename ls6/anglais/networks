@@ -2,9 +2,9 @@ Is networking discipline or a domain ?
 Neither. It's a notion, so it's really near to the discipline but includes a lot of domains.
 So, in my opinion this is a huge set of disciplines and domains. 
 We cannot choose one of them, it's both.
-There are a lot of hardwares of softwares that solves practical problems, but there are a lot of theoretical problems still in suspend in cryptography or graph theory that are not only relevant to networking.
+There are a lot of hardwares or softwares that solve practical problems, but there are a lot of theoretical problems still in suspend in cryptography or graph theory that are not only relevant to networking.
 The word « Network » could not be assimilated only to the computer science, we have a network whenever we have an interaction.
-Between people, computers, animals… and we can use our technologies (in computer network) to study theses networks.
+Between people, computers, animals… and we can use our technologies (in computer network) to study these networks.
 The question is too open.
 
 What is the difference between networking and distributed systems ?
@@ -19,14 +19,17 @@ And it's the definition of distributed systems !
 Could you find your own recipe for writing a paper on a networking problem ?
 Obviously. Presently I'm the president of an associative Internet Service Provider, so I could talk a lot about the networking.
 And if technically I'm not as good as we could expect, I think I've a lot to say about the social aspect, and more specifically about some kind of censorship we face everyday even in France.
-If I have to do a philosophic paper, I could talk about how I see the Internet and what are the research we should do to get it even more decentralized.
-Presently, the Domain Name Service is barely centralized, maybe we could found another system to don't have what I call a point of failure, because it works the opposite the way the rest of Internet works.
+If I have to do a philosophic paper, I could talk about how I see the Internet and what are the researches we should do to get it even more decentralized.
+Presently, the Domain Name Service is barely centralized, maybe we could find another system in order not to have what I call a point of failure, because it works in the opposite way the rest of Internet works.
 
 What is "definition and placement of function" ?
 It's the separation between what an host or the network should do.
 I'm very concerned about this subject, in particular about some functionalities that I don't want to see on Internet network.
 Like the possibility to know what is shared between people, to control who can access to a website and who can't.
-This access control should be on the host (the server) and not on the network. There is a lot to say about this.
+This access control should be on the host (the server) and not on the network. 
+So we need a dumb network that doesn't know what's on the wire and can't perform distinction between packets (like if streaming video packets were different from web packets).
+If we let ISP doing something like that (and they will do), we are surely going to loss the Internet as we know it, not for the better.
+There is a lot to say about this.
 
 What is the major change due to recent innovations ?
 Cloud computing is a marketing term, nothing more, but there are some real innovations like the virtual machines, and others.
@@ -40,7 +43,7 @@ So even if every single laptop can nowadays be sufficient to build an ISP, manag
 In conclusion, the hardware improvement allows to re-create the minitel, people are becoming « eye balls », passive.
 
 What are we doing ?
-The future of Internet, and a lot more. Some research could change the way we live, the manner we talk, share information, or learn.
+The future of Internet, and a lot more. Some researches could change the way we live, the manner we talk, share information, or learn.
 Presently, networking is a lot of domains or disciplines and there are improvements to do, in algorithms we use every day to send, to crypt, to compress data for instance. 
 But there are also a lot to think about, like we talked 2 weeks ago : the Internet of things.
 Networking is simple : it's an interaction between two things.
@@ -50,14 +53,14 @@ For instance, we can have sensors under our skin that transmit our feelings to o
 Why networking is so cool ?
 Networking is not only the Internet, but it's something that everybody know, and use. 
 Why networking is so cool ? Because it's concrete, tangible. 
-It's a field of research that bring new technologies instantly usable and relevant to our needs.
+It's a field of research that brings new technologies instantly usable and relevant to our needs.
 We build real things that affect the world during our own lifetime.
-There are also a lot of interesting research with a lot of artifacts, and it's interesting to work on a power or storage efficiency of an electronic object you can touch. 
+There are also a lot of interesting researches with a lot of artifacts, and it's interesting to work on a power or storage efficiency of an electronic object you can touch. 
 It's not only a brunch of mathematical problems, without discredited the pure-science. I just think it's a kind of bonus.
 
 How to understand the Internet from this article ?
 Internet is an artifact. It was not something really interesting theoretically speaking but it's relevant to use it to access to some whole new kind of theoretical problems (algorithm optimizations and so on).
-Internet is a set of computers, routers, switches that compute paths algorithms and allow the creation of a lot of new services.
-Routers can be divided into three « planes » (it's can be a part of a software), and one of them could represent a problem.
-If the architecture of the Internet is virtually unbreakable, the fact that every entity that possess a router can choose arbitrary where the data flow will go brings a new business market : the transit.
+Internet is a set of computers, routers, switches that computes path algorithms and allows the creation of a lot of new services.
+Routers can be divided into three « planes » (it can be a part of a software), and one of them could represent a problem.
+If the architecture of the Internet is virtually unbreakable, the fact that every entity that possesses a router can choose arbitrary where the data flow will go brings a new business market : the transit.
 Transit is to go through a network to reach another. On the internet, it's not free. If you don't pay, you can't reach every Autonomous Systems, even if it's virtually or technically possible.
