@@ -12,6 +12,11 @@ typedef struct
 	float x, y, z;
 } Point;
 
+typedef struct
+{
+	float cube_dim;
+} contexte_s;
+
 Point pt(float x, float y, float z)
 {
 	Point p;
@@ -21,7 +26,7 @@ Point pt(float x, float y, float z)
 	return p;
 }
 
-
+contexte_s ctxt;
 /*************************************************************************/
 /* Fonctions de dessin */
 /*************************************************************************/
@@ -73,7 +78,7 @@ void drawCube()
 	drawQuad(p4,p1,p5,p8);
 	drawQuad(p5,p6,p7,p8);
 	*/
-	glutSolidCube(0.5);
+	glutSolidCube(ctxt.cube_dim);
 	// à ecrire
 }
 
@@ -118,13 +123,16 @@ void display()
 		drawLine(i,0,0,i,10,0);
 	}
 	glColor3f(0.0,0.0,1.0);
+	glTranslatef (2.0, 2.0, 1.0);
 	glPushMatrix();
-	glScalef(1,1,3);
-	glTranslatef (1.0, 2.0, 0.0);
+	glScalef(1,1,2);
+	ctxt.cube_dim = 1.0;
 	drawCube();
 
 	// dessin de la tête par rapport au torse
 	glPopMatrix();
+	glTranslatef (0.0, 0.0, 1.25);
+	ctxt.cube_dim = 0.5;
 	drawCube();
 	glEnd ();
 	glFlush();

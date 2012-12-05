@@ -16,4 +16,4 @@ prog:$(OBJS) $(SRCS)
 	$(CC) $(CCINCPATH) $(CCOPTS) -c -o $@ $<
 
 clean:
-	rm -f $(CURVE_OBJS) $(PATCH_OBJS) $(CURVE_NAME) $(PATCH_NAME)
+	rm -f *.o $(NAME) $(CURVE_OBJS) $(PATCH_OBJS) $(CURVE_NAME) $(PATCH_NAME)
