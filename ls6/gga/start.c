@@ -49,8 +49,8 @@ void drawLine(double x1, double  y1, double z1, double x2, double y2, double z2)
 
 void drawQuad(Point p1, Point p2, Point p3, Point p4)
 {
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glBegin(GL_QUADS);
 	glVertex3f(p1.x,p1.y,p1.z);
 	glVertex3f(p2.x,p2.y,p2.z);
@@ -61,6 +61,19 @@ void drawQuad(Point p1, Point p2, Point p3, Point p4)
 
 void drawCube()
 {
+	/*
+	Point p1 = pt(0.5,-0.5,-0.5);
+	Point p2 = pt(-0.5,-0.5,-0.5);
+	Point p3 = pt(-0.5,-0.5,0.5);
+	Point p4 = pt(0.5,-0.5,0.5);
+	Point p5 = pt(0.5,0.5,-0.5);
+	Point p6 = pt(-0.5,0.5,-0.5);
+	Point p7 = pt(-0.5,0.5,0.5);
+	Point p8 = pt(0.5,0.5,0.5);
+	drawQuad(p4,p1,p5,p8);
+	drawQuad(p5,p6,p7,p8);
+	*/
+	glutSolidCube(0.5);
 	// à ecrire
 }
 
@@ -72,7 +85,7 @@ void drawCube()
 void display()
 {
 	int i,j;
-	
+
 	glEnable(GL_DEPTH_TEST);
 	glDepthMask(GL_TRUE);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -82,16 +95,45 @@ void display()
 	gluPerspective( 60, (float)width/height, 1, 100);
 
 	glMatrixMode(GL_MODELVIEW);
+
+	// Pour garantir qu'au départ M (ModelView) est l'identité
 	glLoadIdentity();
 
 	// ** Dessinez ici **
-	
+
+	glTranslatef (-1.0, -1.0, -3.0);
+	glRotatef(-70.0f, 1.0f, 0.0f, 0.0f);
+	glColor3f (1.0f, 0.0f, 0.0f);			// rouge
+	drawLine(0,0,0,1,0,0);					// x
+	glColor3f (0.0f, 1.0f, 0.0f);			// vert 
+	drawLine(0,0,0,0,1,0);					// y 
+	glColor3f (0.0f, 0.0f, 1.0f);			// bleu
+	drawLine(0,0,0,0,0,1);					// z
+	glColor3f (1.0f, 1.0f, 1.0f);
+	//glutSolidCube ( 0.5 ); // Cube Size on screen
+	for(i = 0 ; i < 10 ; i++)
+	{
+		glColor3f(0.5f,0.0,0.5f);
+		drawLine(0,i,0,10,i,0);
+		drawLine(i,0,0,i,10,0);
+	}
+	glColor3f(0.0,0.0,1.0);
+	glPushMatrix();
+	glScalef(1,1,3);
+	glTranslatef (1.0, 2.0, 0.0);
+	drawCube();
+
+	// dessin de la tête par rapport au torse
+	glPopMatrix();
+	drawCube();
+	glEnd ();
+	glFlush();
 	// Repere du monde
-	
+
 	// Torse
-	
+
 	// Autres membres
-	
+
 	glutSwapBuffers();
 }
 
@@ -141,7 +183,7 @@ void mouse(int button, int state, int x, int y)
 void idle()
 {
 	// animation du personnage ici
-	
+
 	glutPostRedisplay();
 }
 
@@ -155,28 +197,28 @@ int main(int argc, char *argv[])
 	glutInit(&argc, argv);
 
 	/* Définition des attributs de la fenetre OpenGL */
-    glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
+	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
 
 	/* Placement de la fenetre */
 	glutInitWindowSize(width, height);
 	glutInitWindowPosition(50, 50);
-	
+
 	/* Création de la fenetre */
-    glutCreateWindow("Transformations matricielles");
+	glutCreateWindow("Transformations matricielles");
 
 	/* Choix de la fonction d'affichage */
 	glutDisplayFunc(display);
 
 	/* Choix de la fonction de redimensionnement de la fenetre */
-//	glutReshapeFunc(reshape);
-	
+	//	glutReshapeFunc(reshape);
+
 	/* Choix des fonctions de gestion du clavier */
 	glutKeyboardFunc(keyboard);
 	//glutSpecialFunc(special);
-	
+
 	/* Choix de la fonction de gestion de la souris */
 	glutMouseFunc(mouse);
-	
+
 	/* Choix de la fonction "oisive" */
 	glutIdleFunc(idle);
 
@@ -184,6 +226,6 @@ int main(int argc, char *argv[])
 	glutMainLoop();
 
 	/* Même si glutMainLoop ne rends JAMAIS la main, il faut définir le return, sinon
-	le compilateur risque de crier */
-    return 0;
+	   le compilateur risque de crier */
+	return 0;
 }
