@@ -1,0 +1,29 @@
+Flat shading :
+Flat shading is a lighting technique.
+It's used in 3D computer graphics to shade each polygon of an object based on the angle between the polygon's surface normal and the direction of the light source, their respective colors and the intensity of the light source. 
+It is usually used for high speed rendering, because of the simplicity of this algorithm. 
+
+Gouraud shading :
+Gouraud shading, is like flat shading but to produce continuous shading of surfaces represented by polygon meshes.
+It is most often used to achieve continuous lighting on triangle surfaces by computing the lighting at the corners of each triangle and linearly interpolating the resulting colours for each pixel covered by the triangle.
+It's faster than Phong shading, so it's used on an high-speed environment.
+
+Phong shading :
+Phong shading is an interpolation technique, like the Gouraud shading, for surface shading in 3D computer graphics.
+It interpolates surface normals across rasterized polygons and computes pixel colors based on the interpolated normals and a reflection model.
+It provides a better approximation of the shading of a smooth surface than the Gouraud shading but this technique is slow.
+
+SIGGRAPH :
+It's an annual conference which started in 1973.
+
+Z-buffer :
+Z-buffering is used in computer graphics to know if an object is to show or to hide. 
+If an object A is behind an object B, it is hidden (at least partially). 
+To know that, we give a value to each object which represents the distance between the object and the « camera » which see the scene.
+
+Texture mapping :
+
+Bump mapping :
+
+Environment mapping :
+
