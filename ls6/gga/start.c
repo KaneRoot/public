@@ -171,6 +171,13 @@ void display()
 	ctxt.cube_dim = 0.2;
 	drawCube();
 
+	// points sur la tête
+	glColor3f(0.7,0.5,0.7);
+	drawPoint(0.3,0.3,0.3);
+	drawPoint(-0.3,0.3,0.3);
+	drawPoint(0.3,-0.3,0.3);
+	drawPoint(-0.3,-0.3,0.3);
+
 	// Autres membres
 	// bras gauche
 	glPopMatrix();
@@ -181,6 +188,7 @@ void display()
 	glScalef(0.3,0.3,2.0);
 	ctxt.cube_dim = 0.5;
 	drawCube();
+
 	// bras droit
 	glPopMatrix();
 	glPushMatrix();
