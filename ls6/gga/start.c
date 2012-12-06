@@ -88,11 +88,6 @@ void drawCube()
 	glutSolidCube(ctxt.cube_dim * 2);
 }
 
-
-/*************************************************************************/
-/* Fonctions callback */
-/*************************************************************************/
-
 void ctxt_rot(int x, int y, int z)
 {
 	ctxt.rotation.x = x;
@@ -108,6 +103,11 @@ void ctxt_dep(int x, int y, int z)
 	ctxt.deplacement.y = y;
 	ctxt.deplacement.z = z;
 }
+
+
+/*************************************************************************/
+/* Fonctions callback */
+/*************************************************************************/
 
 void display()
 {
@@ -143,6 +143,7 @@ void display()
 		drawLine(0,i,0,10,i,0);
 		drawLine(i,0,0,i,10,0);
 	}
+
 	// Repere du monde
 	glColor3f(0.0,0.0,1.0);
 	glTranslatef(4.5 + ctxt.deplacement.x, 
@@ -156,7 +157,6 @@ void display()
 	glPushMatrix();
 
 	// Torse
-
 	glPopMatrix();
 	glPushMatrix();
 	glScalef(1,1,2);
@@ -204,18 +204,15 @@ void display()
 	glPushMatrix();
 	glColor3f(0.0,1.0,0.0);
 	glTranslatef (-0.2, 0.0, -1.5);
-	//glRotatef(10.0f, 0.0f, 1.0f, 0.0f);
 	glScalef(0.3,0.3,2.0);
 	ctxt.cube_dim = 0.5;
 	drawCube();
-	
 
 	// jambe droite
 	glPopMatrix();
 	glPushMatrix();
 	glColor3f(0.0,1.0,0.0);
 	glTranslatef (0.2, 0.0, -1.5);
-	//glRotatef(10.0f, 0.0f, 1.0f, 0.0f);
 	glScalef(0.3,0.3,2.0);
 	ctxt.cube_dim = 0.5;
 	drawCube();
