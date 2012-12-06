@@ -15,6 +15,9 @@ typedef struct
 typedef struct
 {
 	float cube_dim;
+	Point deplacement;
+	Point rotation;
+	Point angle;
 } contexte_s;
 
 Point pt(float x, float y, float z)
@@ -81,13 +84,19 @@ void drawCube()
 	drawQuad(p3,p7,p6,p2);
 	drawQuad(p3,p4,p8,p7);
 	//glutSolidCube(ctxt.cube_dim);
-	// à ecrire
 }
 
 
 /*************************************************************************/
 /* Fonctions callback */
 /*************************************************************************/
+
+void ctxt_dep(int x, int y, int z)
+{
+	ctxt.deplacement.x = x;
+	ctxt.deplacement.y = y;
+	ctxt.deplacement.z = z;
+}
 
 void display()
 {
@@ -125,9 +134,20 @@ void display()
 	}
 	// Repere du monde
 	glColor3f(0.0,0.0,1.0);
-	glTranslatef(4.5,1.5,2.5);
+	glTranslatef(4.5 + ctxt.deplacement.x, 
+			1.5 + ctxt.deplacement.y,
+			2.5 + ctxt.deplacement.z);
+
+	glRotatef(ctxt.angle.x, 1.0, 0.0, 0.0);
+   	glRotatef(ctxt.angle.y, 0.0, 1.0, 0.0); 
+   	glRotatef(ctxt.angle.z, 0.0, 0.0, 1.0 ); 
+
 	glPushMatrix();
+
 	// Torse
+
+	glPopMatrix();
+	glPushMatrix();
 	glScalef(1,1,2);
 	ctxt.cube_dim = 0.5;
 	drawCube();
@@ -135,6 +155,7 @@ void display()
 	// dessin de la tête par rapport au torse
 	glPopMatrix();
 	glPushMatrix();
+	glColor3f(1.0, 0.2, 0.4);
 	glTranslatef (0.0, 0.0, 1.25);
 	ctxt.cube_dim = 0.2;
 	drawCube();
@@ -180,6 +201,7 @@ void display()
 	ctxt.cube_dim = 0.5;
 	drawCube();
 
+	glPopMatrix();
 	glutSwapBuffers();
 }
 
@@ -191,37 +213,52 @@ void keyboard(unsigned char keycode, int x, int y)
 	/* touche ECHAP */
 	if (keycode=='z')
 	{
-		//printf("Touche z enfoncée\n");
-		glPopMatrix();
-		glTranslatef(0.0,0.5,0.0);
-		glPushMatrix();
+		ctxt.deplacement.y += 0.5;
 	}
 	if (keycode=='s')
 	{
-		glPopMatrix();
-		glTranslatef(0.0,-0.5,0.0);
-		glPushMatrix();
+		ctxt.deplacement.y -= 0.5;
 	}
 	if (keycode=='q')
 	{
-		glPopMatrix();
-		glTranslatef(-0.5,0.0,0.0);
-		glPushMatrix();
+		ctxt.deplacement.x -= 0.5;
 	}
 	if (keycode=='d')
 	{
-		glPopMatrix();
-		glTranslatef(0.5,0.0,0.0);
-		glPushMatrix();
+		ctxt.deplacement.x += 0.5;
 	}
 
 	if (keycode=='a')
 	{
-	}
-	if (keycode=='e')
-	{
+		ctxt.rotation.x = 1;
+		ctxt.angle.x += 10;
 	}
 
+	if (keycode=='e')
+	{
+		ctxt.rotation.x = 1;
+		ctxt.angle.x -= 10;
+	}
+	
+	if( keycode == 't')
+	{
+		ctxt.rotation.y = ((int)(ctxt.rotation.y + 1.0)) %2;
+	}
+
+	if( keycode == 'f')
+	{
+		ctxt.rotation.y = ((int)(ctxt.rotation.y - 1.0)) %2;
+	}
+
+	if( keycode == 'y')
+	{
+		ctxt.rotation.z = ((int)(ctxt.rotation.z + 1.0)) %2;
+	}
+
+	if( keycode == 'g')
+	{
+		ctxt.rotation.z = ((int)(ctxt.rotation.z - 1.0)) %2;
+	}
 	glutPostRedisplay();
 }
 
@@ -241,6 +278,23 @@ void mouse(int button, int state, int x, int y)
 
 void idle()
 {
+	if(ctxt.rotation.y < 0)
+	{
+		ctxt.angle.y -= 10;
+	}
+	else if(ctxt.rotation.y > 0)
+	{
+		ctxt.angle.y += 10;
+	}
+
+	if(ctxt.rotation.z < 0)
+	{
+		ctxt.angle.z -= 10;
+	}
+	else if(ctxt.rotation.z > 0)
+	{
+		ctxt.angle.z += 10;
+	}
 	// animation du personnage ici
 	/*
 	glPopMatrix();
