@@ -69,6 +69,7 @@ void drawQuad(Point p1, Point p2, Point p3, Point p4)
 
 void drawCube()
 {
+	/*
 	Point p1 = pt( ctxt.cube_dim,	-ctxt.cube_dim,	-ctxt.cube_dim);
 	Point p2 = pt( -ctxt.cube_dim,	-ctxt.cube_dim,	-ctxt.cube_dim);
 	Point p3 = pt( -ctxt.cube_dim,	-ctxt.cube_dim,	ctxt.cube_dim);
@@ -82,8 +83,9 @@ void drawCube()
 	drawQuad(p1,p5,p8,p4);
 	drawQuad(p1,p5,p6,p2);
 	drawQuad(p3,p7,p6,p2);
-	drawQuad(p3,p4,p8,p7);
-	//glutSolidCube(ctxt.cube_dim);
+	drawQuad(p3,p4,p8,p7); 
+	*/
+	glutSolidCube(ctxt.cube_dim * 2);
 }
 
 
@@ -91,6 +93,15 @@ void drawCube()
 /* Fonctions callback */
 /*************************************************************************/
 
+void ctxt_rot(int x, int y, int z)
+{
+	ctxt.rotation.x = x;
+	ctxt.rotation.y = y;
+	ctxt.rotation.z = z;
+	ctxt.angle.x = x;
+	ctxt.angle.y = y;
+	ctxt.angle.z = z;
+}
 void ctxt_dep(int x, int y, int z)
 {
 	ctxt.deplacement.x = x;
@@ -258,6 +269,12 @@ void keyboard(unsigned char keycode, int x, int y)
 	if( keycode == 'g')
 	{
 		ctxt.rotation.z = ((int)(ctxt.rotation.z - 1.0)) %2;
+	}
+
+	if( keycode == 'n')
+	{
+		ctxt_dep(0,0,0);
+		ctxt_rot(0,0,0);
 	}
 	glutPostRedisplay();
 }
