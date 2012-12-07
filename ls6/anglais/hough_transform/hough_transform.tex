@@ -52,7 +52,7 @@
 \pagestyle{fancy} % All pages have headers and footers
 \fancyhead{} % Blank out the default header
 \fancyfoot{} % Blank out the default footer
-\fancyhead[C]{Hough Transform$\bullet$ November 2012} % Custom header text
+\fancyhead[C]{Hough Transform$\bullet$ December 2012} % Custom header text
 \fancyfoot[RO,LE]{\thepage} % Custom footer text
 
 %----------------------------------------------------------------------------------------
@@ -82,18 +82,35 @@
 %	ARTICLE CONTENTS
 %----------------------------------------------------------------------------------------
 
-%\begin{multicols}{1} % Two-column layout throughout the main article text
+\section{What is the purpose of the Hough transform ?}
+The Hough transform is a technique used in many domains that can find imperfect instances of objects within a certain class of shapes.
+It's was originally used to identifying lines on images, now it has been extended to identifying positions of arbitrary shapes.
+\subsection{On which type of images is it used ?}
+It's used on images with edges that can be well detected with as less noise as possible to be efficient (the wikipedia and the other article don't seem to agree on that point, they probably talk about different conditions or usage of the algorithm).
 
-\section{}
+\section{How is the Hough transform used to detect linear alignments ?}
+The purpose of the Hough transform is to address this problem by making it possible to perform groupings of edge points into object candidates by performing an explicit voting procedure over a set of parameterized image objects.
 
-%\lettrine[nindent=0em,lines=3]{L} orem ipsum dolor sit amet, consectetur adipiscing elit.
-%\lipsum[2-3] % Dummy text
+\subsection{The parametrization of lines.}
+The main idea is to consider the characteristics of the straight line not as image points $(x1, y1), (x2, y2)$, etc., 
+but instead, in terms of its parameters, for instance the slope parameter $m$ and the intercept parameter $b$. 
+So, the straight line $y = mx + b$ can be represented as a point $(b, m)$ in the parameter space. 
+However, one faces the problem that vertical lines give rise to unbounded values of the parameters $m$ and $b$. 
+For computational reasons, it is therefore better to use a different pair of parameters, denoted $r$ and $\theta$, for the lines in the Hough transform. 
+These are the Polar Coordinates.
 
-%\includegraphics{SimpleBayesNetNodes.png}
+The parameter $r$ represents the distance between the line and the origin, $\theta$ is the angle of the vector from the origin to this closest point. 
+Using this parameterization, the equation of the line can be written as $y = \left(-{\cos\theta\over\sin\theta}\right)x + \left({r\over{\sin\theta}}\right)$ which can be rearranged to $r = x \cos \theta+y\sin \theta$.
 
-%------------------------------------------------
+\section{How are the best candidates for lines selected ? }
+The best candidates that could be chosen are a perfect line without any noise.
 
+\subsection{What technique does one use to limit the computing load ?}
+The Hough Transform is only efficient if a high number of votes fall in the right bin, so that the bin can be easily detected amid the background noise. 
+This means that the bin must not be too small, or else some votes will fall in the neighboring bins, thus reducing the visibility of the main bin.
 
-%\end{multicols}
+\section{Can other shapes be detected by a type of Hough transform ?}
+There are few more shapes that can be detected by this algorithm like planes, cylinders, and other analytical and non-analytical shapes.
+Even a circle can be transformed into a set of three parameters, and the Hough transform can be adapted to accept three parameters and to detect this shape.
 
 \end{document}
