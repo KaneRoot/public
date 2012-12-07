@@ -84,33 +84,35 @@
 
 \section{What is the purpose of the Hough transform ?}
 The Hough transform is a technique used in many domains that can find imperfect instances of objects within a certain class of shapes.
-It's was originally used to identifying lines on images, now it has been extended to identifying positions of arbitrary shapes.
+It was originally used to identify lines on images, now it has been extended to identify positions of arbitrary shapes.
+
 \subsection{On which type of images is it used ?}
-It's used on images with edges that can be well detected with as less noise as possible to be efficient (the wikipedia and the other article don't seem to agree on that point, they probably talk about different conditions or usage of the algorithm).
+It's used on images with edges that can be well detected with as less noise as possible to be efficient (the wikipedia and the other articles don't seem to agree on that point, they probably talk about different conditions or usage of the algorithm).
+It could be used on an image with a point cloud.
 
 \section{How is the Hough transform used to detect linear alignments ?}
-The purpose of the Hough transform is to address this problem by making it possible to perform groupings of edge points into object candidates by performing an explicit voting procedure over a set of parameterized image objects.
+The Hough transform aims to address the shape detection problem by succeeding in performing groupings of edge points into object candidates thanks to a kind of voting procedure.
+The votes fall in different bins (computer array) according to detect the existence of a line as $y = mx + b$.
+The value of a bin increases whenever the Hough transform algorithm determines that there is enough evidence of an edge at a pixel or their neighbors.
 
 \subsection{The parametrization of lines.}
-The main idea is to consider the characteristics of the straight line not as image points $(x1, y1), (x2, y2)$, etc., 
-but instead, in terms of its parameters, for instance the slope parameter $m$ and the intercept parameter $b$. 
-So, the straight line $y = mx + b$ can be represented as a point $(b, m)$ in the parameter space. 
-However, one faces the problem that vertical lines give rise to unbounded values of the parameters $m$ and $b$. 
-For computational reasons, it is therefore better to use a different pair of parameters, denoted $r$ and $\theta$, for the lines in the Hough transform. 
-These are the Polar Coordinates.
+The main idea is to consider the characteristics of the straight line not as image points $(x1, y1), (x2, y2)$, etc.,
+but to use instead a different pair of parameters, $r$ and $\theta$, for the lines in the Hough transform, called the Polar Coordinates.
+The parameter $r$ represents the distance between the line and the origin, $\theta$ is the angle of the vector from the origin to this closest point.
+The equation of the line can be written as $r = x \cos \theta+y\sin \theta$.
 
-The parameter $r$ represents the distance between the line and the origin, $\theta$ is the angle of the vector from the origin to this closest point. 
-Using this parameterization, the equation of the line can be written as $y = \left(-{\cos\theta\over\sin\theta}\right)x + \left({r\over{\sin\theta}}\right)$ which can be rearranged to $r = x \cos \theta+y\sin \theta$.
-
-\section{How are the best candidates for lines selected ? }
-The best candidates that could be chosen are a perfect line without any noise.
+\section{How are the best candidates for lines selected ?}
+The best candidates that could be chosen are points that form perfect lines without any noises, so that the algorithm will be the most efficient as possible.
+Each vote will fall in an unique bin.
+Otherwise, if it is too noisy, a de-noising stage will have to be done before starting the procedure.
 
 \subsection{What technique does one use to limit the computing load ?}
-The Hough Transform is only efficient if a high number of votes fall in the right bin, so that the bin can be easily detected amid the background noise. 
-This means that the bin must not be too small, or else some votes will fall in the neighboring bins, thus reducing the visibility of the main bin.
+The Hough Transform is only efficient if, during the voting procedure, a high number of votes fall in the right bin, so that the bin can be easily detected among the background noise. 
+This means that the bin must not be too small. If it is, some votes will fall in the neighboring bins, and that will reduce the visibility of the main bin.
+One way to limit the computing load could be to arrange to have as less noise as possible.
 
 \section{Can other shapes be detected by a type of Hough transform ?}
-There are few more shapes that can be detected by this algorithm like planes, cylinders, and other analytical and non-analytical shapes.
+There are few more shapes that can be detected thanks to this algorithm, such as planes, cylinders, and other analytical and non-analytical shapes.
 Even a circle can be transformed into a set of three parameters, and the Hough transform can be adapted to accept three parameters and to detect this shape.
 
 \end{document}
